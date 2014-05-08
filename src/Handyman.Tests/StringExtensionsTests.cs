@@ -1,0 +1,223 @@
+﻿using System;
+using System.Text.RegularExpressions;
+using Shouldly;
+
+namespace Handyman.Tests
+{
+    public class StringExtensionsTests
+    {
+        public void ShouldJoinStrings()
+        {
+            new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
+        }
+
+        public void ShouldFormatString()
+        {
+            "{0} {1}!".FormatWith("Hello", "world").ShouldBe("Hello world!");
+        }
+
+        public void ShouldCheckIfStringEqualsWildcard()
+        {
+            "Hello".EqualsWildcard("*e*o").ShouldBe(false);
+            "Hello".EqualsWildcard("*e*o", StringComparison.CurrentCultureIgnoreCase).ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringContainsValue()
+        {
+            "Hello world".Contains("hello", StringComparison.CurrentCulture).ShouldBe(false);
+            "Hello world".Contains("hello", StringComparison.CurrentCultureIgnoreCase).ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringContainsWildcardValue()
+        {
+            "ohe".ContainsWildcard("he*o").ShouldBe(false);
+            "Hello world".ContainsWildcard("he*o").ShouldBe(false);
+            "Hello world".ContainsWildcard("he*o", StringComparison.CurrentCultureIgnoreCase).ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringContainsAllValues()
+        {
+            "Hello world".ContainsAll("hello", "world").ShouldBe(false);
+            "Hello world".ContainsAll(StringComparison.CurrentCultureIgnoreCase, "hello", "world").ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringContainsAnyValue()
+        {
+            "Hello world".ContainsAny("hello", "you").ShouldBe(false);
+            "Hello world".ContainsAny(StringComparison.CurrentCultureIgnoreCase, "hello", "you").ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringIsMatch()
+        {
+            "Hello world".IsMatch("^hello").ShouldBe(false);
+            "Hello world".IsMatch("^hello", RegexOptions.IgnoreCase).ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringIsNull()
+        {
+            ((string)null).IsNull().ShouldBe(true);
+            "".IsNull().ShouldBe(false);
+        }
+
+        public void ShouldCheckIfStringIsEmpty()
+        {
+            ((string)null).IsEmpty().ShouldBe(false);
+            "".IsEmpty().ShouldBe(true);
+            " ".IsEmpty().ShouldBe(false);
+            "x".IsEmpty().ShouldBe(false);
+        }
+
+        public void ShouldCheckIfStringIsWhiteSpace()
+        {
+            ((string)null).IsWhiteSpace().ShouldBe(false);
+            "".IsWhiteSpace().ShouldBe(true);
+            " ".IsWhiteSpace().ShouldBe(true);
+            "x".IsWhiteSpace().ShouldBe(false);
+        }
+
+        public void ShouldCheckIfStringIsNullOrEmpty()
+        {
+            ((string)null).IsNullOrEmpty().ShouldBe(true);
+            "".IsNullOrEmpty().ShouldBe(true);
+            " ".IsNullOrEmpty().ShouldBe(false);
+            "x".IsNullOrEmpty().ShouldBe(false);
+        }
+
+        public void ShouldCheckIfStringIsNullOrWhiteSpace()
+        {
+            ((string)null).IsNullOrWhiteSpace().ShouldBe(true);
+            "".IsNullOrWhiteSpace().ShouldBe(true);
+            " ".IsNullOrWhiteSpace().ShouldBe(true);
+            "x".IsNullOrWhiteSpace().ShouldBe(false);
+        }
+
+        public void ShouldCheckIfStringIsNotNull()
+        {
+            ((string)null).IsNotNull().ShouldBe(false);
+            "".IsNotNull().ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringIsNotEmpty()
+        {
+            ((string)null).IsNotEmpty().ShouldBe(true);
+            "".IsNotEmpty().ShouldBe(false);
+            " ".IsNotEmpty().ShouldBe(true);
+            "x".IsNotEmpty().ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringIsNotWhiteSpace()
+        {
+            ((string)null).IsNotWhiteSpace().ShouldBe(true);
+            "".IsNotWhiteSpace().ShouldBe(false);
+            " ".IsNotWhiteSpace().ShouldBe(false);
+            "x".IsNotWhiteSpace().ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringIsNotNullOrEmpty()
+        {
+            ((string)null).IsNotNullOrEmpty().ShouldBe(false);
+            "".IsNotNullOrEmpty().ShouldBe(false);
+            " ".IsNotNullOrEmpty().ShouldBe(true);
+            "x".IsNotNullOrEmpty().ShouldBe(true);
+        }
+
+        public void ShouldCheckIfStringIsNotNullOrWhiteSpace()
+        {
+            ((string)null).IsNotNullOrWhiteSpace().ShouldBe(false);
+            "".IsNotNullOrWhiteSpace().ShouldBe(false);
+            " ".IsNotNullOrWhiteSpace().ShouldBe(false);
+            "x".IsNotNullOrWhiteSpace().ShouldBe(true);
+        }
+
+        public void ShouldGetSubstring()
+        {
+            "".SubstringSafe(1).ShouldBe(string.Empty);
+            "".SubstringSafe(1, 1).ShouldBe(string.Empty);
+            "Hello".SubstringSafe(1).ShouldBe("ello");
+            "Hello".SubstringSafe(1, 1).ShouldBe("e");
+        }
+
+        public void ShouldReverseTheString()
+        {
+            "Hello".Reverse().ShouldBe("olleH");
+        }
+
+        public void ShouldConvertStringToEnumOrThrow()
+        {
+            Should.Throw<ArgumentException>(() => "yes".ToEnum<IgnoreCase>());
+            "yes".ToEnum<IgnoreCase>(IgnoreCase.Yes).ShouldBe(IgnoreCase.Yes);
+        }
+
+        public void ShouldConvertStringToEnumOrNull()
+        {
+            "yes".ToEnumOrNull<IgnoreCase>().ShouldBe(null);
+            "yes".ToEnumOrNull<IgnoreCase>(IgnoreCase.Yes).ShouldBe(IgnoreCase.Yes);
+        }
+
+        public void ShouldConvertStringToEnumOrDefault()
+        {
+            "yes".ToEnumOrDefault(IgnoreCase.No).ShouldBe(IgnoreCase.No);
+            "yes".ToEnumOrDefault(() => IgnoreCase.No).ShouldBe(IgnoreCase.No);
+        }
+
+        public void ShouldGetValueIfNull()
+        {
+            ((string)null).IfNull("value").ShouldBe("value");
+            ((string)null).IfNull(() => "value").ShouldBe("value");
+            "".IfNull("value").ShouldBe("");
+            "".IfNull(() => "value").ShouldBe("");
+            " ".IfNull("value").ShouldBe(" ");
+            " ".IfNull(() => "value").ShouldBe(" ");
+            "foobar".IfNull("value").ShouldBe("foobar");
+            "foobar".IfNull(() => "value").ShouldBe("foobar");
+        }
+
+        public void ShouldGetValueIfEmpty()
+        {
+            ((string)null).IfEmpty("value").ShouldBe(null);
+            ((string)null).IfEmpty(() => "value").ShouldBe(null);
+            "".IfEmpty("value").ShouldBe("value");
+            "".IfEmpty(() => "value").ShouldBe("value");
+            " ".IfEmpty("value").ShouldBe(" ");
+            " ".IfEmpty(() => "value").ShouldBe(" ");
+            "foobar".IfEmpty("value").ShouldBe("foobar");
+            "foobar".IfEmpty(() => "value").ShouldBe("foobar");
+        }
+
+        public void ShouldGetValueIfWhiteSpace()
+        {
+            ((string)null).IfWhiteSpace("value").ShouldBe(null);
+            ((string)null).IfWhiteSpace(() => "value").ShouldBe(null);
+            "".IfWhiteSpace("value").ShouldBe("value");
+            "".IfWhiteSpace(() => "value").ShouldBe("value");
+            " ".IfWhiteSpace("value").ShouldBe("value");
+            " ".IfWhiteSpace(() => "value").ShouldBe("value");
+            "foobar".IfWhiteSpace("value").ShouldBe("foobar");
+            "foobar".IfWhiteSpace(() => "value").ShouldBe("foobar");
+        }
+
+        public void ShouldGetValueIfNullOrEmpty()
+        {
+            ((string)null).IfNullOrEmpty("value").ShouldBe("value");
+            ((string)null).IfNullOrEmpty(() => "value").ShouldBe("value");
+            "".IfNullOrEmpty("value").ShouldBe("value");
+            "".IfNullOrEmpty(() => "value").ShouldBe("value");
+            " ".IfNullOrEmpty("value").ShouldBe(" ");
+            " ".IfNullOrEmpty(() => "value").ShouldBe(" ");
+            "foobar".IfNullOrEmpty("value").ShouldBe("foobar");
+            "foobar".IfNullOrEmpty(() => "value").ShouldBe("foobar");
+        }
+
+        public void ShouldGetValueIfNullOrWhiteSpace()
+        {
+            ((string)null).IfNullOrWhiteSpace("value").ShouldBe("value");
+            ((string)null).IfNullOrWhiteSpace(() => "value").ShouldBe("value");
+            "".IfNullOrWhiteSpace("value").ShouldBe("value");
+            "".IfNullOrWhiteSpace(() => "value").ShouldBe("value");
+            " ".IfNullOrWhiteSpace("value").ShouldBe("value");
+            " ".IfNullOrWhiteSpace(() => "value").ShouldBe("value");
+            "foobar".IfNullOrWhiteSpace("value").ShouldBe("foobar");
+            "foobar".IfNullOrWhiteSpace(() => "value").ShouldBe("foobar");
+        }
+    }
+}
