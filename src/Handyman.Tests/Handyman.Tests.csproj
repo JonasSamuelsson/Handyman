@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="BoolExtensionsTests.cs" />
     <Compile Include="Int64ExtensionsTests.cs" />
-    <Compile Include="ClassExtensionsTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
     <Compile Include="DateTimeExtensionsTests.cs" />
     <Compile Include="DateTimeOffsetExtensionsTests.cs" />
