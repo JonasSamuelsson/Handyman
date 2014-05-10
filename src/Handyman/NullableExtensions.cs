@@ -19,5 +19,15 @@ namespace Handyman
             // ReSharper disable once PossibleInvalidOperationException
             return nullable.Value;
         }
+
+        public static bool IsNull<T>(this T? nullable) where T : struct
+        {
+            return !nullable.HasValue;
+        }
+
+        public static bool IsNotNull<T>(this T? nullable) where T : struct
+        {
+            return nullable.HasValue;
+        }
     }
 }
