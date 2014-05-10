@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,14 +25,6 @@ namespace Handyman.Tests
             sum.ShouldBe(6);
         }
 
-        public void IsEmptyShouldDetermineIfEnumerableIsEmpty()
-        {
-            var list = new List<int>();
-            list.IsEmpty().ShouldBe(true);
-            list.Add(0);
-            list.IsEmpty().ShouldBe(false);
-        }
-
         public void ShouldAppend()
         {
             new[] { 1, 2, 3 }.Append(4, 5, 6).ShouldBe(new[] { 1, 2, 3, 4, 5, 6 });
@@ -42,6 +35,30 @@ namespace Handyman.Tests
         {
             new[] { 1, 2, 3 }.Prepend(4, 5, 6).ShouldBe(new[] { 4, 5, 6, 1, 2, 3 });
             new[] { 1, 2, 3 }.Prepend(new List<int> { 4, 5, 6 }).ShouldBe(new[] { 4, 5, 6, 1, 2, 3 });
+        }
+
+        public void ShouldCheckIsEmpty()
+        {
+            var list = default(List<int>);
+            Should.Throw<ArgumentNullException>(() => list.IsEmpty());
+
+            list = new List<int>();
+            list.IsEmpty().ShouldBe(true);
+
+            list.Add(0);
+            list.IsEmpty().ShouldBe(false);
+        }
+
+        public void ShouldCheckIsNullOrEmpty()
+        {
+            var list = default(List<int>);
+            list.IsNullOrEmpty().ShouldBe(true);
+
+            list = new List<int>();
+            list.IsNullOrEmpty().ShouldBe(true);
+
+            list.Add(0);
+            list.IsNullOrEmpty().ShouldBe(false);
         }
     }
 }

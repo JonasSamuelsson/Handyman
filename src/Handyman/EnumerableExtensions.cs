@@ -22,11 +22,6 @@ namespace Handyman
             }
         }
 
-        public static bool IsEmpty(this IEnumerable enumerable)
-        {
-            return !enumerable.Cast<object>().Any();
-        }
-
         public static IEnumerable<T> Append<T>(this IEnumerable<T> source, params T[] enumerable)
         {
             return source.Append(enumerable.AsEnumerable());
@@ -46,6 +41,18 @@ namespace Handyman
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, IEnumerable<T> enumerable)
         {
             return enumerable.Append(source);
+        }
+
+        public static bool IsEmpty<T>(this IEnumerable<T> enumerable)
+        {
+            return !enumerable.Any();
+        }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            return enumerable.IsNull() || enumerable.IsEmpty();
+            // ReSharper restore PossibleMultipleEnumeration
         }
     }
 }
