@@ -26,5 +26,26 @@ namespace Handyman
         {
             return !enumerable.Cast<object>().Any();
         }
+
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, params T[] enumerable)
+        {
+            return source.Append(enumerable.AsEnumerable());
+        }
+
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, IEnumerable<T> enumerable)
+        {
+            foreach (var element in source) yield return element;
+            foreach (var element in enumerable) yield return element;
+        }
+
+        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, params T[] enumerable)
+        {
+            return source.Prepend(enumerable.AsEnumerable());
+        }
+
+        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, IEnumerable<T> enumerable)
+        {
+            return enumerable.Append(source);
+        }
     }
 }
