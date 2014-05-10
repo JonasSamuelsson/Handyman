@@ -2,7 +2,7 @@
 
 namespace Handyman
 {
-    public static class IntExtensions
+    public static class Int32Extensions
     {
         public static TimeSpan Ticks(this int ticks)
         {
@@ -37,6 +37,16 @@ namespace Handyman
         public static TimeSpan Weeks(this int weeks)
         {
             return TimeSpan.FromDays(weeks * 7);
+        }
+
+        public static bool IsBetween(this int number, int min, int max)
+        {
+            return min < number && number < max;
+        }
+
+        public static bool IsInRange(this int number, int min, int max)
+        {
+            return min <= number && number <= max;
         }
     }
 }

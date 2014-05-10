@@ -51,11 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoolExtensionsTests.cs" />
+    <Compile Include="Int64ExtensionsTests.cs" />
+    <Compile Include="TypeExtensionsTests.cs" />
     <Compile Include="DateTimeExtensionsTests.cs" />
     <Compile Include="DateTimeOffsetExtensionsTests.cs" />
+    <Compile Include="DecimalExtensionsTests.cs" />
     <Compile Include="DoubleExtensionsTests.cs" />
     <Compile Include="EnumerableExtensionsTests.cs" />
-    <Compile Include="IntExtensionsTests.cs" />
+    <Compile Include="Int32ExtensionsTests.cs" />
     <Compile Include="NullableExtensionsTests.cs" />
     <Compile Include="ReflectionUtilTests.cs" />
     <Compile Include="StringExtensionsTests.cs" />

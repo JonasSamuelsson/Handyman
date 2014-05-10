@@ -33,5 +33,15 @@ namespace Handyman
         {
             return TimeSpan.FromDays(weeks * 7);
         }
+
+        public static bool IsBetween(this double number, double min, double max)
+        {
+            return min < number && number < max;
+        }
+
+        public static bool IsInRange(this double number, double min, double max)
+        {
+            return min <= number && number <= max;
+        }
     }
 }

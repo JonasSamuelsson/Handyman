@@ -34,5 +34,23 @@ namespace Handyman.Tests
         {
             2.0.Weeks().ShouldBe(TimeSpan.FromDays(14));
         }
+
+        public void ShouldCheckIfNumberIsBetween()
+        {
+            0.0.IsBetween(1, 3).ShouldBe(false);
+            1.0.IsBetween(1, 3).ShouldBe(false);
+            2.0.IsBetween(1, 3).ShouldBe(true);
+            3.0.IsBetween(1, 3).ShouldBe(false);
+            4.0.IsBetween(1, 3).ShouldBe(false);
+        }
+
+        public void ShouldCheckIfNumberIsInRange()
+        {
+            0.0.IsInRange(1, 3).ShouldBe(false);
+            1.0.IsInRange(1, 3).ShouldBe(true);
+            2.0.IsInRange(1, 3).ShouldBe(true);
+            3.0.IsInRange(1, 3).ShouldBe(true);
+            4.0.IsInRange(1, 3).ShouldBe(false);
+        }
     }
 }
