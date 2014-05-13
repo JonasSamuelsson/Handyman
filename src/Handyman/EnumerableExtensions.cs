@@ -109,7 +109,12 @@ namespace Handyman
 
         public static TimeSpan Sum<T>(this IEnumerable<T> source, Func<T, TimeSpan> selector)
         {
-            return TimeSpan.FromTicks(source.Sum(x => selector(x).Ticks));
+            return source.Select(selector).Sum();
+        }
+
+        public static TimeSpan Sum(this IEnumerable<TimeSpan> source)
+        {
+            return TimeSpan.FromTicks(source.Sum(x => x.Ticks));
         }
     }
 }

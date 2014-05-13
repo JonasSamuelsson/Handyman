@@ -105,7 +105,8 @@ namespace Handyman.Tests
 
         public void ShouldSumTimespans()
         {
-            new[] { 1.Seconds(), 2.Seconds() }.Sum(x => x).ShouldBe(3.Seconds());
+            new[] { 1.Seconds(), 2.Seconds() }.Sum().ShouldBe(3.Seconds());
+            new[] { 1, 2 }.Sum(x => x.Seconds()).ShouldBe(3.Seconds());
         }
 
         private class Ints : IEnumerable<int>
