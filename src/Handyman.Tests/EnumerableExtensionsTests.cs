@@ -96,6 +96,13 @@ namespace Handyman.Tests
             Enumerable.Empty<int>().IfNullOrEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
         }
 
+        public void ShouldEnumerateEnumerable()
+        {
+            var ints = new Ints(1,2,3);
+            ints.Enumerate();
+            ints.EnumerationCount.ShouldBe(1);
+        }
+
         private class Ints : IEnumerable<int>
         {
             private List<int> _ints;

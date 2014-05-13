@@ -99,5 +99,12 @@ namespace Handyman
         {
             return source == null ? factory() : source.IfEmpty(factory);
         }
+
+        public static void Enumerate<T>(this IEnumerable<T> source)
+        {
+            // ReSharper disable once EmptyEmbeddedStatement
+            // ReSharper disable once UnusedVariable
+            foreach (var element in source) ;
+        }
     }
 }
