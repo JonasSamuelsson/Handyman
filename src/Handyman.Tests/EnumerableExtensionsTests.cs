@@ -1,6 +1,6 @@
-﻿using System;
-using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,6 +59,89 @@ namespace Handyman.Tests
 
             list.Add(0);
             list.IsNullOrEmpty().ShouldBe(false);
+        }
+
+        public void ShouldReturnDefaultIfSourceIsNull()
+        {
+            default(IEnumerable<int>).IfNull(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+            default(IEnumerable<int>).IfNull(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+        }
+
+        public void ShouldReturnDefaultIfSourceIsEmpty()
+        {
+            Enumerable.Empty<int>().IfEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+            Enumerable.Empty<int>().IfEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+
+            var ints = new Ints(1, 2, 3);
+            ints.IfEmpty(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
+            ints.EnumerationCount.ShouldBe(1);
+            ints = new Ints(1, 2, 3);
+            ints.IfEmpty(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
+            ints.EnumerationCount.ShouldBe(1);
+        }
+
+        public void ShouldReturnDefaultIfSourceIsNullOrEmpty()
+        {
+            var ints = new Ints(1, 2, 3);
+            ints.IfNullOrEmpty(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
+            ints.EnumerationCount.ShouldBe(1);
+            ints = new Ints(1, 2, 3);
+            ints.IfNullOrEmpty(() => new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
+            ints.EnumerationCount.ShouldBe(1);
+
+            default(IEnumerable<int>).IfNullOrEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+            default(IEnumerable<int>).IfNullOrEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+
+            Enumerable.Empty<int>().IfNullOrEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+            Enumerable.Empty<int>().IfNullOrEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
+        }
+
+        private class Ints : IEnumerable<int>
+        {
+            private List<int> _ints;
+
+            public Ints() : this(new int[0]) { }
+
+            public Ints(params int[] ints)
+            {
+                _ints = ints.ToList();
+            }
+
+            public int EnumerationCount { get; private set; }
+
+            public IEnumerator<int> GetEnumerator()
+            {
+                EnumerationCount++;
+                return _ints.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
+        private class Enumerable<T> : IEnumerable<T>
+        {
+            private readonly List<T> _elements;
+            private bool _throwOnGetEnumerator;
+
+            public Enumerable(params T[] elements)
+            {
+                _elements = elements.ToList();
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                if (_throwOnGetEnumerator) throw new InvalidOperationException();
+                _throwOnGetEnumerator = true;
+                return _elements.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
     }
 }

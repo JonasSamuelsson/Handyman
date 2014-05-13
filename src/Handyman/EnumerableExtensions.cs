@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,9 +49,55 @@ namespace Handyman
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
         {
-            // ReSharper disable PossibleMultipleEnumeration
-            return enumerable.IsNull() || enumerable.IsEmpty();
-            // ReSharper restore PossibleMultipleEnumeration
+            return enumerable == null || enumerable.IsEmpty();
+        }
+
+        public static IEnumerable<T> IfNull<T>(this IEnumerable<T> source, IEnumerable<T> @default)
+        {
+            return source ?? @default;
+        }
+
+        public static IEnumerable<T> IfNull<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
+        {
+            return source ?? factory();
+        }
+
+        public static IEnumerable<T> IfEmpty<T>(this IEnumerable<T> source, IEnumerable<T> @default)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            // ReSharper disable once PossibleMultipleEnumeration
+            return source.IfEmpty(() => @default);
+        }
+
+        public static IEnumerable<T> IfEmpty<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            using (var enumerator = source.GetEnumerator())
+            {
+                if (enumerator.MoveNext())
+                {
+                    do
+                    {
+                        yield return enumerator.Current;
+                    } while (enumerator.MoveNext());
+                }
+                else
+                {
+                    foreach (var element in factory())
+                        yield return element;
+                }
+            }
+        }
+
+        public static IEnumerable<T> IfNullOrEmpty<T>(this IEnumerable<T> source, IEnumerable<T> @default)
+        {
+            // ReSharper disable once PossibleMultipleEnumeration
+            return source.IfNullOrEmpty(() => @default);
+        }
+
+        public static IEnumerable<T> IfNullOrEmpty<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
+        {
+            return source == null ? factory() : source.IfEmpty(factory);
         }
     }
 }
