@@ -98,9 +98,14 @@ namespace Handyman.Tests
 
         public void ShouldEnumerateEnumerable()
         {
-            var ints = new Ints(1,2,3);
+            var ints = new Ints(1, 2, 3);
             ints.Enumerate();
             ints.EnumerationCount.ShouldBe(1);
+        }
+
+        public void ShouldSumTimespans()
+        {
+            new[] { 1.Seconds(), 2.Seconds() }.Sum(x => x).ShouldBe(3.Seconds());
         }
 
         private class Ints : IEnumerable<int>
