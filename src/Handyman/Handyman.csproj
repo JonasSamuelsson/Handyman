@@ -51,6 +51,7 @@
     <Compile Include="IgnoreCase.cs" />
     <Compile Include="Int32Extensions.cs" />
     <Compile Include="Int64Extensions.cs" />
+    <Compile Include="MemberInfoExtensions.cs" />
     <Compile Include="NullableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionUtil.cs" />
