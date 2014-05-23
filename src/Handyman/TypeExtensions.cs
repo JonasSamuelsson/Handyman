@@ -1,31 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Handyman
 {
     public static class TypeExtensions
     {
-        public static bool CanCastTo<T>(this Type type)
+        public static bool IsConcreteClass(this Type type)
         {
-            return type.CanCastTo(typeof(T));
-        }
-
-        public static bool CanCastTo(this Type type, Type targetType)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static IEnumerable<Type> GetClasses(this Type @class)
-        {
-            if (!@class.IsClass)
-                throw new InvalidOperationException();
-
-            do
-            {
-                yield return @class;
-                @class = @class.BaseType;
-            } while (@class != null);
+            return type.IsClass && !type.IsAbstract;
         }
 
         public static bool IsConcreteClosedClass(this Type type)
@@ -58,8 +42,12 @@ namespace Handyman
             if (!type.IsConcreteClosedClass())
                 return false;
 
-            var types = genericTypeDefinition.IsClass ? type.GetClasses() : type.GetInterfaces();
-            foreach (var prospect in types)
+            var supertypes = from supertype in type.GetSuperTypes()
+                where genericTypeDefinition.IsClass
+                          ? supertype.IsClass
+                          : supertype.IsInterface
+                select supertype;
+            foreach (var prospect in supertypes)
             {
                 if (!prospect.IsGenericType) continue;
                 if (prospect.GetGenericTypeDefinition() != genericTypeDefinition) continue;
@@ -70,40 +58,73 @@ namespace Handyman
             return false;
         }
 
-        public static bool IsConcreteClass(this Type type)
+        public static bool IsConcreteSubClassOf(this Type subClassCandidate, Type type)
         {
-            return type.IsClass && !type.IsAbstract;
+            return subClassCandidate.IsConcreteClass() && subClassCandidate.IsSubTypeOf(type);
         }
 
-        public static bool IsConcreteSubClassOf(this Type type, Type basetype)
+        public static bool IsConcreteSubClassOf<T>(this Type subClassCandidate)
         {
-            if (type == basetype)
+            return subClassCandidate.IsConcreteSubClassOf(typeof(T));
+        }
+
+        public static bool IsOfType(this Type sameOrSubTypeCandidate, Type type)
+        {
+            return sameOrSubTypeCandidate == type || sameOrSubTypeCandidate.IsSubTypeOf(type);
+        }
+
+        public static bool IsOfType<T>(this Type sameOrSubTypeCandidate)
+        {
+            return sameOrSubTypeCandidate.IsOfType(typeof(T));
+        }
+
+        public static bool IsSubTypeOf(this Type subTypeCandidate, Type type)
+        {
+            if (subTypeCandidate == type)
                 return false;
 
-            if (type.IsAbstract || !type.IsClass)
-                return false;
+            if (type == typeof(object))
+                return true;
 
-            if (type.IsGenericTypeDefinition ^ basetype.IsGenericTypeDefinition)
-                return false;
+            if (!subTypeCandidate.IsGenericTypeDefinition && !type.IsGenericTypeDefinition)
+                return type.IsAssignableFrom(subTypeCandidate);
 
-            if (!basetype.IsGenericTypeDefinition)
-                return basetype.IsAssignableFrom(type);
+            return subTypeCandidate.GetSuperTypes()
+                .Where(x => x != subTypeCandidate)
+                .Contains(type);
+        }
 
-            var args = basetype.GetGenericArguments();
-            var typeArgs = type.GetGenericArguments();
+        public static bool IsSubTypeOf<T>(this Type subTypeCandidate)
+        {
+            return subTypeCandidate.IsSubTypeOf(typeof(T));
+        }
 
-            if (args.Length != typeArgs.Length)
-                return false;
+        public static bool IsSuperTypeOf(this Type superTypeCandidate, Type type)
+        {
+            return type.IsSubTypeOf(superTypeCandidate);
+        }
 
-            var typeDefinitions =
-                from t in basetype.IsClass ? type.GetClasses() : type.GetInterfaces()
-                where t.IsGenericType
-                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                let tArgs = t.GetGenericArguments().Where(x => x.FullName == null).Distinct().ToArray()
-                where args.Length == tArgs.Length
-                select t.GetGenericTypeDefinition();
+        public static bool IsSuperTypeOf<T>(this Type superTypeCandidate)
+        {
+            return superTypeCandidate.IsSuperTypeOf(typeof(T));
+        }
 
-            return typeDefinitions.Any(x => x == basetype);
+        public static IEnumerable<Type> GetSuperTypes(this Type type)
+        {
+            var list = new List<Type>();
+            GetAllSuperTypes(type, list);
+            return list.Where(x => x != type).Where(x => x.FullName != null);
+        }
+
+        private static void GetAllSuperTypes(Type type, ICollection<Type> result)
+        {
+            for (var t = type; t != null; t = t.BaseType)
+            {
+                if (result.Contains(t)) continue;
+                result.Add(t);
+                t.GetInterfaces().ForEach(x => GetAllSuperTypes(x, result));
+                if (t.IsGenericType && !t.IsGenericTypeDefinition) GetAllSuperTypes(t.GetGenericTypeDefinition(), result);
+            }
         }
     }
 }
