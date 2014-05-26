@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Shouldly;
+using System;
 using System.Text.RegularExpressions;
-using Shouldly;
 
 namespace Handyman.Tests
 {
@@ -218,6 +218,33 @@ namespace Handyman.Tests
             " ".IfNullOrWhiteSpace(() => "value").ShouldBe("value");
             "foobar".IfNullOrWhiteSpace("value").ShouldBe("foobar");
             "foobar".IfNullOrWhiteSpace(() => "value").ShouldBe("foobar");
+        }
+
+        public void ShouldTryConvertStringToEnum()
+        {
+            int @int;
+            Should.Throw<ArgumentException>(() => "one".TryToEnum(out @int));
+            Should.Throw<ArgumentException>(() => "one".TryToEnum(IgnoreCase.Yes, out @int));
+
+            // ReSharper disable once RedundantAssignment
+            var number = Number.One;
+
+            "one".TryToEnum(out number).ShouldBe(false);
+            number.ShouldBe(Number.Zero);
+
+            "one".TryToEnum(IgnoreCase.Yes, out number).ShouldBe(true);
+            number.ShouldBe(Number.One);
+
+            // ReSharper disable once RedundantAssignment
+            number = Number.Zero;
+            "1".TryToEnum(out number).ShouldBe(true);
+            number.ShouldBe(Number.One);
+        }
+
+        private enum Number
+        {
+            Zero = 0,
+            One = 1
         }
     }
 }

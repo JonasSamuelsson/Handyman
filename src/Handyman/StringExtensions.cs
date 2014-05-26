@@ -154,13 +154,15 @@ namespace Handyman
 
         public static T ToEnum<T>(this string s, IgnoreCase? ignoreCase = null) where T : struct
         {
-            return (T)Enum.Parse(typeof(T), s, ignoreCase.GetValueOrDefault(IgnoreCase.No) == IgnoreCase.Yes);
+            T value;
+            if (!s.TryToEnum(ignoreCase ?? IgnoreCase.No, out value)) throw new ArgumentException();
+            return value;
         }
 
         public static T? ToEnumOrNull<T>(this string s, IgnoreCase? ignoreCase = null) where T : struct
         {
             T value;
-            return Enum.TryParse(s, ignoreCase.GetValueOrDefault(IgnoreCase.No) == IgnoreCase.Yes, out value)
+            return s.TryToEnum(ignoreCase ?? IgnoreCase.No, out value)
                        ? value
                        : default(T?);
         }
@@ -223,6 +225,19 @@ namespace Handyman
         public static string IfNullOrWhiteSpace(this string s, Func<string> factory)
         {
             return s.IsNullOrWhiteSpace() ? factory() : s;
+        }
+
+        public static bool TryToEnum<T>(this string s, out T value) where T : struct
+        {
+            return s.TryToEnum(IgnoreCase.No, out value);
+        }
+
+        public static bool TryToEnum<T>(this string s, IgnoreCase ignoreCase, out T value) where T : struct
+        {
+            var type = typeof(T);
+            if (!type.IsEnum) throw new ArgumentException();
+            value = default(T);
+            return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
         }
     }
 }
