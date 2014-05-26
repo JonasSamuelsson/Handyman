@@ -1,5 +1,6 @@
 ﻿using Shouldly;
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Handyman.Tests
@@ -245,6 +246,56 @@ namespace Handyman.Tests
         {
             Zero = 0,
             One = 1
+        }
+
+        public void TryToInt()
+        {
+            // ReSharper disable once RedundantAssignment
+            var result = 1;
+            "".TryToInt(out result).ShouldBe(false);
+            result.ShouldBe(0);
+
+            // ReSharper disable once RedundantAssignment
+            result = 1;
+            "".TryToInt(CultureInfo.CurrentCulture, out result).ShouldBe(false);
+            result.ShouldBe(0);
+
+            "1".TryToInt(out result).ShouldBe(true);
+            result.ShouldBe(1);
+
+            "2".TryToInt(CultureInfo.CurrentCulture, out result).ShouldBe(true);
+            result.ShouldBe(2);
+        }
+
+        public void ToInt()
+        {
+            Should.Throw<ArgumentException>(() => "".ToInt());
+            Should.Throw<ArgumentException>(() => "".ToInt(CultureInfo.CurrentCulture));
+
+            "1".ToInt().ShouldBe(1);
+            "2".ToInt(CultureInfo.CurrentCulture).ShouldBe(2);
+        }
+
+        public void ToIntOrZero()
+        {
+            "one".ToIntOrZero().ShouldBe(0);
+            "two".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
+
+            "1".ToIntOrZero().ShouldBe(1);
+            "2".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
+        }
+
+        public void ToIntOrDefault()
+        {
+            "one".ToIntOrDefault(0).ShouldBe(0);
+            "two".ToIntOrDefault(() => 0).ShouldBe(0);
+            "three".ToIntOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(0);
+            "four".ToIntOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(0);
+
+            "1".ToIntOrDefault(0).ShouldBe(1);
+            "2".ToIntOrDefault(() => 0).ShouldBe(2);
+            "3".ToIntOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
+            "4".ToIntOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
         }
     }
 }

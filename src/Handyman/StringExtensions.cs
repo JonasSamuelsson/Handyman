@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -236,8 +237,64 @@ namespace Handyman
         {
             var type = typeof(T);
             if (!type.IsEnum) throw new ArgumentException();
+            // ReSharper disable once RedundantAssignment
             value = default(T);
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
+        }
+
+        public static bool TryToInt(this string s, out int result)
+        {
+            return s.TryToInt(Configuration.FormatProvider(), out result);
+        }
+
+        public static bool TryToInt(this string s, IFormatProvider formatProvider, out int result)
+        {
+            return int.TryParse(s, NumberStyles.Integer, formatProvider, out result);
+        }
+
+        public static int ToInt(this string s)
+        {
+            return s.ToInt(Configuration.FormatProvider());
+        }
+
+        public static int ToInt(this string s, IFormatProvider formatProvider)
+        {
+            int result;
+            if (!s.TryToInt(formatProvider, out result)) throw new ArgumentException();
+            return result;
+        }
+
+        public static int ToIntOrDefault(this string s, int @default)
+        {
+            return s.ToIntOrDefault(Configuration.FormatProvider(), () => @default);
+        }
+
+        public static int ToIntOrDefault(this string s, Func<int> factory)
+        {
+            return s.ToIntOrDefault(Configuration.FormatProvider(), factory());
+        }
+
+        public static int ToIntOrDefault(this string s, IFormatProvider formatProvider, int @default)
+        {
+            return s.ToIntOrDefault(formatProvider, () => @default);
+        }
+
+        public static int ToIntOrDefault(this string s, IFormatProvider formatProvider, Func<int> factory)
+        {
+            int result;
+            return s.TryToInt(formatProvider, out result)
+                       ? result
+                       : factory();
+        }
+
+        public static int ToIntOrZero(this string s)
+        {
+            return s.ToIntOrZero(Configuration.FormatProvider());
+        }
+
+        public static int ToIntOrZero(this string s, IFormatProvider formatProvider)
+        {
+            return s.ToIntOrDefault(formatProvider, 0);
         }
     }
 }
