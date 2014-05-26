@@ -242,6 +242,61 @@ namespace Handyman
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
         }
 
+        public static bool TryToShort(this string s, out short result)
+        {
+            return s.TryToShort(Configuration.FormatProvider(), out result);
+        }
+
+        public static bool TryToShort(this string s, IFormatProvider formatProvider, out short result)
+        {
+            return short.TryParse(s, NumberStyles.Integer, formatProvider, out result);
+        }
+
+        public static short ToShort(this string s)
+        {
+            return s.ToShort(Configuration.FormatProvider());
+        }
+
+        public static short ToShort(this string s, IFormatProvider formatProvider)
+        {
+            short result;
+            if (!s.TryToShort(formatProvider, out result)) throw new ArgumentException();
+            return result;
+        }
+
+        public static short ToShortOrDefault(this string s, short @default)
+        {
+            return s.ToShortOrDefault(Configuration.FormatProvider(), () => @default);
+        }
+
+        public static short ToShortOrDefault(this string s, Func<short> factory)
+        {
+            return s.ToShortOrDefault(Configuration.FormatProvider(), factory());
+        }
+
+        public static short ToShortOrDefault(this string s, IFormatProvider formatProvider, short @default)
+        {
+            return s.ToShortOrDefault(formatProvider, () => @default);
+        }
+
+        public static short ToShortOrDefault(this string s, IFormatProvider formatProvider, Func<short> factory)
+        {
+            short result;
+            return s.TryToShort(formatProvider, out result)
+                       ? result
+                       : factory();
+        }
+
+        public static short ToShortOrZero(this string s)
+        {
+            return s.ToShortOrZero(Configuration.FormatProvider());
+        }
+
+        public static short ToShortOrZero(this string s, IFormatProvider formatProvider)
+        {
+            return s.ToShortOrDefault(formatProvider, 0);
+        }
+
         public static bool TryToInt(this string s, out int result)
         {
             return s.TryToInt(Configuration.FormatProvider(), out result);

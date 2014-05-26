@@ -248,6 +248,56 @@ namespace Handyman.Tests
             One = 1
         }
 
+        public void TryToShort()
+        {
+            // ReSharper disable once RedundantAssignment
+            short result = 1;
+            "".TryToShort(out result).ShouldBe(false);
+            result.ShouldBe((short)0);
+
+            // ReSharper disable once RedundantAssignment
+            result = 1;
+            "".TryToShort(CultureInfo.CurrentCulture, out result).ShouldBe(false);
+            result.ShouldBe((short)0);
+
+            "1".TryToShort(out result).ShouldBe(true);
+            result.ShouldBe((short)1);
+
+            "2".TryToShort(CultureInfo.CurrentCulture, out result).ShouldBe(true);
+            result.ShouldBe((short)2);
+        }
+
+        public void ToShort()
+        {
+            Should.Throw<ArgumentException>(() => "".ToShort());
+            Should.Throw<ArgumentException>(() => "".ToShort(CultureInfo.CurrentCulture));
+
+            "1".ToShort().ShouldBe((short)1);
+            "2".ToShort(CultureInfo.CurrentCulture).ShouldBe((short)2);
+        }
+
+        public void ToShortOrDefault()
+        {
+            "one".ToShortOrDefault(0).ShouldBe((short)0);
+            "two".ToShortOrDefault(() => 0).ShouldBe((short)0);
+            "three".ToShortOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe((short)0);
+            "four".ToShortOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe((short)0);
+
+            "1".ToShortOrDefault(0).ShouldBe((short)1);
+            "2".ToShortOrDefault(() => 0).ShouldBe((short)2);
+            "3".ToShortOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe((short)3);
+            "4".ToShortOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe((short)4);
+        }
+
+        public void ToShortOrZero()
+        {
+            "one".ToShortOrZero().ShouldBe((short)0);
+            "two".ToShortOrZero(CultureInfo.CurrentCulture).ShouldBe((short)0);
+
+            "1".ToShortOrZero().ShouldBe((short)1);
+            "2".ToShortOrZero(CultureInfo.CurrentCulture).ShouldBe((short)2);
+        }
+
         public void TryToInt()
         {
             // ReSharper disable once RedundantAssignment
@@ -276,15 +326,6 @@ namespace Handyman.Tests
             "2".ToInt(CultureInfo.CurrentCulture).ShouldBe(2);
         }
 
-        public void ToIntOrZero()
-        {
-            "one".ToIntOrZero().ShouldBe(0);
-            "two".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
-
-            "1".ToIntOrZero().ShouldBe(1);
-            "2".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
-        }
-
         public void ToIntOrDefault()
         {
             "one".ToIntOrDefault(0).ShouldBe(0);
@@ -296,6 +337,15 @@ namespace Handyman.Tests
             "2".ToIntOrDefault(() => 0).ShouldBe(2);
             "3".ToIntOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
             "4".ToIntOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
+        }
+
+        public void ToIntOrZero()
+        {
+            "one".ToIntOrZero().ShouldBe(0);
+            "two".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
+
+            "1".ToIntOrZero().ShouldBe(1);
+            "2".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
         }
 
         public void TryToLong()
@@ -326,15 +376,6 @@ namespace Handyman.Tests
             "2".ToLong(CultureInfo.CurrentCulture).ShouldBe(2);
         }
 
-        public void ToLongOrZero()
-        {
-            "one".ToLongOrZero().ShouldBe(0);
-            "two".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
-
-            "1".ToLongOrZero().ShouldBe(1);
-            "2".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
-        }
-
         public void ToLongOrDefault()
         {
             "one".ToLongOrDefault(0).ShouldBe(0);
@@ -346,6 +387,15 @@ namespace Handyman.Tests
             "2".ToLongOrDefault(() => 0).ShouldBe(2);
             "3".ToLongOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
             "4".ToLongOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
+        }
+
+        public void ToLongOrZero()
+        {
+            "one".ToLongOrZero().ShouldBe(0);
+            "two".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
+
+            "1".ToLongOrZero().ShouldBe(1);
+            "2".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
         }
     }
 }
