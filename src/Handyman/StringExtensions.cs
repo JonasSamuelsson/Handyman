@@ -296,5 +296,60 @@ namespace Handyman
         {
             return s.ToIntOrDefault(formatProvider, 0);
         }
+
+        public static bool TryToLong(this string s, out long result)
+        {
+            return s.TryToLong(Configuration.FormatProvider(), out result);
+        }
+
+        public static bool TryToLong(this string s, IFormatProvider formatProvider, out long result)
+        {
+            return long.TryParse(s, NumberStyles.Integer, formatProvider, out result);
+        }
+
+        public static long ToLong(this string s)
+        {
+            return s.ToLong(Configuration.FormatProvider());
+        }
+
+        public static long ToLong(this string s, IFormatProvider formatProvider)
+        {
+            long result;
+            if (!s.TryToLong(formatProvider, out result)) throw new ArgumentException();
+            return result;
+        }
+
+        public static long ToLongOrDefault(this string s, long @default)
+        {
+            return s.ToLongOrDefault(Configuration.FormatProvider(), () => @default);
+        }
+
+        public static long ToLongOrDefault(this string s, Func<long> factory)
+        {
+            return s.ToLongOrDefault(Configuration.FormatProvider(), factory());
+        }
+
+        public static long ToLongOrDefault(this string s, IFormatProvider formatProvider, long @default)
+        {
+            return s.ToLongOrDefault(formatProvider, () => @default);
+        }
+
+        public static long ToLongOrDefault(this string s, IFormatProvider formatProvider, Func<long> factory)
+        {
+            long result;
+            return s.TryToLong(formatProvider, out result)
+                       ? result
+                       : factory();
+        }
+
+        public static long ToLongOrZero(this string s)
+        {
+            return s.ToLongOrZero(Configuration.FormatProvider());
+        }
+
+        public static long ToLongOrZero(this string s, IFormatProvider formatProvider)
+        {
+            return s.ToLongOrDefault(formatProvider, 0);
+        }
     }
 }

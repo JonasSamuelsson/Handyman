@@ -297,5 +297,55 @@ namespace Handyman.Tests
             "3".ToIntOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
             "4".ToIntOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
         }
+
+        public void TryToLong()
+        {
+            // ReSharper disable once RedundantAssignment
+            var result = 1L;
+            "".TryToLong(out result).ShouldBe(false);
+            result.ShouldBe(0);
+
+            // ReSharper disable once RedundantAssignment
+            result = 1;
+            "".TryToLong(CultureInfo.CurrentCulture, out result).ShouldBe(false);
+            result.ShouldBe(0);
+
+            "1".TryToLong(out result).ShouldBe(true);
+            result.ShouldBe(1);
+
+            "2".TryToLong(CultureInfo.CurrentCulture, out result).ShouldBe(true);
+            result.ShouldBe(2);
+        }
+
+        public void ToLong()
+        {
+            Should.Throw<ArgumentException>(() => "".ToLong());
+            Should.Throw<ArgumentException>(() => "".ToLong(CultureInfo.CurrentCulture));
+
+            "1".ToLong().ShouldBe(1);
+            "2".ToLong(CultureInfo.CurrentCulture).ShouldBe(2);
+        }
+
+        public void ToLongOrZero()
+        {
+            "one".ToLongOrZero().ShouldBe(0);
+            "two".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
+
+            "1".ToLongOrZero().ShouldBe(1);
+            "2".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
+        }
+
+        public void ToLongOrDefault()
+        {
+            "one".ToLongOrDefault(0).ShouldBe(0);
+            "two".ToLongOrDefault(() => 0).ShouldBe(0);
+            "three".ToLongOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(0);
+            "four".ToLongOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(0);
+
+            "1".ToLongOrDefault(0).ShouldBe(1);
+            "2".ToLongOrDefault(() => 0).ShouldBe(2);
+            "3".ToLongOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
+            "4".ToLongOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
+        }
     }
 }
