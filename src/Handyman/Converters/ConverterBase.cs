@@ -20,14 +20,14 @@ namespace Handyman.Converters
         }
     }
 
-    public abstract class ConverterBase<TIn, TOut> : ConverterBase
+    public abstract class ConverterBase<TIn, TOut> : MarkupExtension, IValueConverter
     {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return Convert((TIn)value, targetType, parameter, culture);
         }
 
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return ConvertBack((TOut)value, targetType, parameter, culture);
         }
@@ -37,6 +37,11 @@ namespace Handyman.Converters
         public virtual TIn ConvertBack(TOut value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return null;
         }
     }
 }
