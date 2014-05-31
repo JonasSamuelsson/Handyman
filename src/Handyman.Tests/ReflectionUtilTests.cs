@@ -22,10 +22,19 @@ namespace Handyman.Tests
             var instance = new Parent { Child = { Text = "foo" } };
             ReflectionUtil.GetPropertyValue(instance, "Child").ShouldBe(Child.Instance);
             ReflectionUtil.GetPropertyValue<Child>(instance, "Child").ShouldBe(Child.Instance);
-            ReflectionUtil.GetPropertyValue(instance, "Child", "Text").ShouldBe("foo");
-            ReflectionUtil.GetPropertyValue<string>(instance, "Child", "Text").ShouldBe("foo");
             ReflectionUtil.GetPropertyValue(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
             ReflectionUtil.GetPropertyValue<int>(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
+        }
+
+        public void ShouldSetPropertyValue()
+        {
+            var child = new Child();
+            ReflectionUtil.SetPropertyValue(child, "Text", "foo");
+            child.Text.ShouldBe("foo");
+
+            var parent = new Parent();
+            ReflectionUtil.SetPropertyValue(parent, new[] { "Child", "Text" }, "bar");
+            parent.Child.Text.ShouldBe("bar");
         }
 
         private class Parent

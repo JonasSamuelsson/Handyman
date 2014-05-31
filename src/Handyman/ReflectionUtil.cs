@@ -32,14 +32,14 @@ namespace Handyman
                 .ToList();
         }
 
-        public static object GetPropertyValue(object instance, string property, params string[] properties)
+        public static object GetPropertyValue(object instance, string property)
         {
-            return GetPropertyValue(instance, properties.Prepend(property));
+            return GetPropertyValue(instance, new[] { property });
         }
 
-        public static T GetPropertyValue<T>(object instance, string property, params string[] properties)
+        public static T GetPropertyValue<T>(object instance, string property)
         {
-            return (T)GetPropertyValue(instance, properties.Prepend(property));
+            return (T)GetPropertyValue(instance, new[] { property });
         }
 
         public static object GetPropertyValue(object instance, IEnumerable<string> properties)
@@ -62,14 +62,27 @@ namespace Handyman
             return (T)GetPropertyValue(instance, properties);
         }
 
-        public static void SetPropertyValue(object instance, string property, object targetValue)
+        public static void SetPropertyValue(object instance, string property, object value)
         {
-            throw new NotImplementedException();
+            if (instance == null) throw new ArgumentNullException("instance");
+            if (property.IsNullOrWhiteSpace()) throw new ArgumentException("Must have a value", "property");
+            var type = instance.GetType();
+            var propertyInfo = type.GetProperty(property);
+            propertyInfo.SetValue(instance, value);
         }
 
-        public static void SetPropertyValue(object instance, IEnumerable<string> properties, object targetValue)
+        public static void SetPropertyValue(object instance, IEnumerable<string> properties, object value)
         {
-            throw new NotImplementedException();
+            if (instance == null) throw new ArgumentNullException("instance");
+            // ReSharper disable once PossibleMultipleEnumeration
+            if (properties.IsNullOrEmpty()) throw new ArgumentException();
+            // ReSharper disable once PossibleMultipleEnumeration
+            properties = properties.ToList();
+            var getters = properties.Take(properties.Count() - 1).ToList();
+            instance = getters.Any()
+                           ? GetPropertyValue(instance, getters)
+                           : instance;
+            SetPropertyValue(instance, properties.Last(), value);
         }
 
         private static IReadOnlyList<PropertyInfo> GetPropertyInfos(Expression expression)
