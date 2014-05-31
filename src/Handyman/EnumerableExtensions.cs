@@ -116,5 +116,19 @@ namespace Handyman
         {
             return TimeSpan.FromTicks(source.Sum(x => x.Ticks));
         }
+
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+        {
+            var random = new Random();
+            var list = source.ToList();
+            for (var i = list.Count; i > 1; i--)
+            {
+                var j = random.Next(i);
+                var temp = list[j];
+                list[j] = list[i - 1];
+                list[i - 1] = temp;
+            }
+            return list;
+        }
     }
 }

@@ -156,5 +156,12 @@ namespace Handyman.Tests
                 return GetEnumerator();
             }
         }
+
+        public void ShouldShuffle()
+        {
+            var shuffled = new[] { 1, 2, 3 }.Shuffle().ToArray();
+            shuffled.ShouldNotBe(new[] { 1, 2, 3 });
+            shuffled.OrderBy(x => x).ShouldBe(new[] { 1, 2, 3 });
+        }
     }
 }
