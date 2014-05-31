@@ -32,17 +32,17 @@ namespace Handyman
                 .ToList();
         }
 
-        public static object GetPropertyValue(object instance, string property)
+        public static object GetProperty(object instance, string property)
         {
-            return GetPropertyValue(instance, new[] { property });
+            return GetProperty(instance, new[] { property });
         }
 
-        public static T GetPropertyValue<T>(object instance, string property)
+        public static T GetProperty<T>(object instance, string property)
         {
-            return (T)GetPropertyValue(instance, new[] { property });
+            return (T)GetProperty(instance, new[] { property });
         }
 
-        public static object GetPropertyValue(object instance, IEnumerable<string> properties)
+        public static object GetProperty(object instance, IEnumerable<string> properties)
         {
             if (instance == null) throw new ArgumentNullException("instance");
             if (properties == null) throw new ArgumentNullException("properties");
@@ -57,12 +57,12 @@ namespace Handyman
             return instance;
         }
 
-        public static T GetPropertyValue<T>(object instance, IEnumerable<string> properties)
+        public static T GetProperty<T>(object instance, IEnumerable<string> properties)
         {
-            return (T)GetPropertyValue(instance, properties);
+            return (T)GetProperty(instance, properties);
         }
 
-        public static void SetPropertyValue(object instance, string property, object value)
+        public static void SetProperty(object instance, string property, object value)
         {
             if (instance == null) throw new ArgumentNullException("instance");
             if (property.IsNullOrWhiteSpace()) throw new ArgumentException("Must have a value", "property");
@@ -71,7 +71,7 @@ namespace Handyman
             propertyInfo.SetValue(instance, value);
         }
 
-        public static void SetPropertyValue(object instance, IEnumerable<string> properties, object value)
+        public static void SetProperty(object instance, IEnumerable<string> properties, object value)
         {
             if (instance == null) throw new ArgumentNullException("instance");
             // ReSharper disable once PossibleMultipleEnumeration
@@ -80,9 +80,9 @@ namespace Handyman
             properties = properties.ToList();
             var getters = properties.Take(properties.Count() - 1).ToList();
             instance = getters.Any()
-                           ? GetPropertyValue(instance, getters)
+                           ? GetProperty(instance, getters)
                            : instance;
-            SetPropertyValue(instance, properties.Last(), value);
+            SetProperty(instance, properties.Last(), value);
         }
 
         private static IReadOnlyList<PropertyInfo> GetPropertyInfos(Expression expression)

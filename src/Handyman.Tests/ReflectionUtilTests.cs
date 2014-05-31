@@ -17,23 +17,23 @@ namespace Handyman.Tests
             ReflectionUtil.GetPropertyNames<Parent>(x => x.Child.Text).ShouldBe(result);
         }
 
-        public void ShouldGetPropertyValue()
+        public void ShouldGetProperty()
         {
             var instance = new Parent { Child = { Text = "foo" } };
-            ReflectionUtil.GetPropertyValue(instance, "Child").ShouldBe(Child.Instance);
-            ReflectionUtil.GetPropertyValue<Child>(instance, "Child").ShouldBe(Child.Instance);
-            ReflectionUtil.GetPropertyValue(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
-            ReflectionUtil.GetPropertyValue<int>(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
+            ReflectionUtil.GetProperty(instance, "Child").ShouldBe(Child.Instance);
+            ReflectionUtil.GetProperty<Child>(instance, "Child").ShouldBe(Child.Instance);
+            ReflectionUtil.GetProperty(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
+            ReflectionUtil.GetProperty<int>(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
         }
 
-        public void ShouldSetPropertyValue()
+        public void ShouldSetProperty()
         {
             var child = new Child();
-            ReflectionUtil.SetPropertyValue(child, "Text", "foo");
+            ReflectionUtil.SetProperty(child, "Text", "foo");
             child.Text.ShouldBe("foo");
 
             var parent = new Parent();
-            ReflectionUtil.SetPropertyValue(parent, new[] { "Child", "Text" }, "bar");
+            ReflectionUtil.SetProperty(parent, new[] { "Child", "Text" }, "bar");
             parent.Child.Text.ShouldBe("bar");
         }
 
