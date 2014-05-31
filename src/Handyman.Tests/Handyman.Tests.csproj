@@ -56,6 +56,7 @@
     <Compile Include="BoolExtensionsTests.cs" />
     <Compile Include="ClassExtensionsTests.cs" />
     <Compile Include="Converters\Bool2VisibilityConverterTests.cs" />
+    <Compile Include="Converters\InvertBoolConverterTests.cs" />
     <Compile Include="Int64ExtensionsTests.cs" />
     <Compile Include="MemberInfoExtensionsTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
