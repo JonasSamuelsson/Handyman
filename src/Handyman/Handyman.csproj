@@ -33,8 +33,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +48,8 @@
     <Compile Include="BoolExtensions.cs" />
     <Compile Include="ClassExtensions.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Converters\Bool2VisibilityConverter.cs" />
+    <Compile Include="Converters\ConverterBase.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DateTimeOffsetExtensions.cs" />
     <Compile Include="DecimalExtensions.cs" />
