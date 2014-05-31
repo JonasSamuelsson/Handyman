@@ -55,16 +55,15 @@
   <ItemGroup>
     <Compile Include="BoolExtensionsTests.cs" />
     <Compile Include="ClassExtensionsTests.cs" />
+    <Compile Include="ComparableTests.cs" />
     <Compile Include="Converters\Bool2VisibilityConverterTests.cs" />
     <Compile Include="Converters\CompoundConverterTests.cs" />
     <Compile Include="Converters\HasValueConverterTests.cs" />
     <Compile Include="Converters\InvertBoolConverterTests.cs" />
-    <Compile Include="Int64ExtensionsTests.cs" />
     <Compile Include="MemberInfoExtensionsTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
     <Compile Include="DateTimeExtensionsTests.cs" />
     <Compile Include="DateTimeOffsetExtensionsTests.cs" />
-    <Compile Include="DecimalExtensionsTests.cs" />
     <Compile Include="DoubleExtensionsTests.cs" />
     <Compile Include="EnumerableExtensionsTests.cs" />
     <Compile Include="Int32ExtensionsTests.cs" />

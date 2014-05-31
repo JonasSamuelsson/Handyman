@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="BoolExtensions.cs" />
     <Compile Include="ClassExtensions.cs" />
+    <Compile Include="ComparableExtensions.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Converters\Bool2VisibilityConverter.cs" />
     <Compile Include="Converters\CompoundConverter.cs" />
@@ -55,12 +56,10 @@
     <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DateTimeOffsetExtensions.cs" />
-    <Compile Include="DecimalExtensions.cs" />
     <Compile Include="DoubleExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IgnoreCase.cs" />
     <Compile Include="Int32Extensions.cs" />
-    <Compile Include="Int64Extensions.cs" />
     <Compile Include="MemberInfoExtensions.cs" />
     <Compile Include="NullableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
