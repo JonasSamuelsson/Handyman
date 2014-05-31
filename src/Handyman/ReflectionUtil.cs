@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -9,43 +10,26 @@ namespace Handyman
     {
         public static string GetPropertyName(Expression<Func<object>> expression)
         {
-            return GetPropertyInfo(expression).Name;
-        }
-
-        private static PropertyInfo GetPropertyInfo(Expression expression)
-        {
-            var lambda = expression as LambdaExpression;
-            if (lambda == null) throw new NotSupportedException();
-            var member = lambda.Body as MemberExpression;
-            if (member == null) throw new NotSupportedException();
-            var property = member.Member as PropertyInfo;
-            if (property == null) throw new NotSupportedException();
-            return property;
+            return GetPropertyNames(expression).Single();
         }
 
         public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
         {
-            return GetPropertyInfo(expression).Name;
+            return GetPropertyNames(expression).Single();
         }
 
-        public static string GetPropertyName<T, TProperty>(Expression<Func<T, TProperty>> expression)
+        public static IReadOnlyList<string> GetPropertyNames(Expression<Func<object>> expression)
         {
-            throw new NotImplementedException();
+            return GetPropertyInfos(expression)
+                .Select(x => x.Name)
+                .ToList();
         }
 
-        public static IEnumerable<string> GetPropertyNames(Expression<Func<object>> expression)
+        public static IReadOnlyList<string> GetPropertyNames<T>(Expression<Func<T, object>> expression)
         {
-            throw new NotImplementedException();
-        }
-
-        public static IEnumerable<string> GetPropertyNames<T>(Expression<Func<T, object>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static IEnumerable<string> GetPropertyNames<T, TProperty>(Expression<Func<T, TProperty>> expression)
-        {
-            throw new NotImplementedException();
+            return GetPropertyInfos(expression)
+                .Select(x => x.Name)
+                .ToList();
         }
 
         public static object GetPropertyValue(object instance, string property)
@@ -76,6 +60,20 @@ namespace Handyman
         public static void SetPropertyValue(object instance, IEnumerable<string> properties, object targetValue)
         {
             throw new NotImplementedException();
+        }
+
+        private static IReadOnlyList<PropertyInfo> GetPropertyInfos(Expression expression)
+        {
+            var lambda = expression as LambdaExpression;
+            if (lambda == null) throw new NotSupportedException();
+            var member = (lambda.Body is UnaryExpression
+                              ? ((UnaryExpression)lambda.Body).Operand
+                              : lambda.Body) as MemberExpression;
+            if (member == null) throw new NotSupportedException();
+            var properties = new List<PropertyInfo>();
+            for (; member != null; member = member.Expression as MemberExpression)
+                properties.Insert(0, (PropertyInfo)member.Member);
+            return properties;
         }
     }
 }
