@@ -32,19 +32,29 @@ namespace Handyman
                 .ToList();
         }
 
-        public static object GetPropertyValue(object instance, string property)
+        public static object GetPropertyValue(object instance, string property, params string[] properties)
         {
-            throw new NotImplementedException();
+            return GetPropertyValue(instance, properties.Prepend(property));
         }
 
-        public static T GetPropertyValue<T>(object instance, string property)
+        public static T GetPropertyValue<T>(object instance, string property, params string[] properties)
         {
-            return (T)GetPropertyValue(instance, property);
+            return (T)GetPropertyValue(instance, properties.Prepend(property));
         }
 
         public static object GetPropertyValue(object instance, IEnumerable<string> properties)
         {
-            throw new NotImplementedException();
+            if (instance == null) throw new ArgumentNullException("instance");
+            if (properties == null) throw new ArgumentNullException("properties");
+            properties = properties.ToList();
+            if (properties.IsEmpty()) throw new ArgumentException();
+            foreach (var property in properties)
+            {
+                var type = instance.GetType();
+                var propertyInfo = type.GetProperty(property);
+                instance = propertyInfo.GetValue(instance, null);
+            }
+            return instance;
         }
 
         public static T GetPropertyValue<T>(object instance, IEnumerable<string> properties)
