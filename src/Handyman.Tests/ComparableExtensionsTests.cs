@@ -2,7 +2,7 @@
 
 namespace Handyman.Tests
 {
-    public class ComparableTests
+    public class ComparableExtensionsTests
     {
         public void ShouldCheckIfValueIsBetween()
         {
@@ -17,12 +17,6 @@ namespace Handyman.Tests
             1.3.IsBetween(1.2, 1.4).ShouldBe(true);
             1.4.IsBetween(1.2, 1.4).ShouldBe(false);
             1.5.IsBetween(1.2, 1.4).ShouldBe(false);
-
-            "a".IsBetween("b", "d").ShouldBe(false);
-            "b".IsBetween("b", "d").ShouldBe(false);
-            "c".IsBetween("b", "d").ShouldBe(true);
-            "d".IsBetween("b", "d").ShouldBe(false);
-            "e".IsBetween("b", "d").ShouldBe(false);
         }
 
         public void ShouldCheckIfValueIsInRange()
@@ -38,12 +32,6 @@ namespace Handyman.Tests
             1.3.IsInRange(1.2, 1.4).ShouldBe(true);
             1.4.IsInRange(1.2, 1.4).ShouldBe(true);
             1.5.IsInRange(1.2, 1.4).ShouldBe(false);
-
-            "a".IsInRange("b", "d").ShouldBe(false);
-            "b".IsInRange("b", "d").ShouldBe(true);
-            "c".IsInRange("b", "d").ShouldBe(true);
-            "d".IsInRange("b", "d").ShouldBe(true);
-            "e".IsInRange("b", "d").ShouldBe(false);
         }
     }
 }

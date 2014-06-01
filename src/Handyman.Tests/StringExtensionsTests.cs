@@ -397,5 +397,47 @@ namespace Handyman.Tests
             "1".ToLongOrZero().ShouldBe(1);
             "2".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
         }
+
+        public void ShouldCheckIfStringIsBetween()
+        {
+            "a".IsBetween("b", "d").ShouldBe(false);
+            "b".IsBetween("b", "d").ShouldBe(false);
+            "c".IsBetween("b", "d").ShouldBe(true);
+            "d".IsBetween("b", "d").ShouldBe(false);
+            "e".IsBetween("b", "d").ShouldBe(false);
+
+            "A".IsBetween("b", "d").ShouldBe(false);
+            "B".IsBetween("b", "d").ShouldBe(false);
+            "C".IsBetween("b", "d").ShouldBe(false);
+            "D".IsBetween("b", "d").ShouldBe(false);
+            "E".IsBetween("b", "d").ShouldBe(false);
+
+            "A".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "B".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "C".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "D".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "E".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+        }
+
+        public void ShouldCheckIfStringIsInRange()
+        {
+            "a".IsInRange("b", "d").ShouldBe(false);
+            "b".IsInRange("b", "d").ShouldBe(true);
+            "c".IsInRange("b", "d").ShouldBe(true);
+            "d".IsInRange("b", "d").ShouldBe(true);
+            "e".IsInRange("b", "d").ShouldBe(false);
+
+            "A".IsInRange("b", "d").ShouldBe(false);
+            "B".IsInRange("b", "d").ShouldBe(false);
+            "C".IsInRange("b", "d").ShouldBe(false);
+            "D".IsInRange("b", "d").ShouldBe(false);
+            "E".IsInRange("b", "d").ShouldBe(false);
+
+            "A".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "B".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "C".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "D".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "E".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+        }
     }
 }
