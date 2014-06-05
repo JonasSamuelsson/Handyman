@@ -159,9 +159,10 @@ namespace Handyman.Tests
 
         public void ShouldShuffle()
         {
-            var shuffled = new[] { 1, 2, 3 }.Shuffle().ToArray();
-            shuffled.ShouldNotBe(new[] { 1, 2, 3 });
-            shuffled.OrderBy(x => x).ShouldBe(new[] { 1, 2, 3 });
+            var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var shuffled = numbers.Shuffle().ToArray();
+            shuffled.ShouldNotBe(numbers);
+            shuffled.OrderBy(x => x).ShouldBe(numbers);
         }
     }
 }
