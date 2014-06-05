@@ -257,45 +257,45 @@ namespace Handyman.Tests
 
             // ReSharper disable once RedundantAssignment
             result = 1;
-            "".TryToShort(CultureInfo.CurrentCulture, out result).ShouldBe(false);
+            "".TryToShort(Configuration.FormatProvider(), out result).ShouldBe(false);
             result.ShouldBe((short)0);
 
             "1".TryToShort(out result).ShouldBe(true);
             result.ShouldBe((short)1);
 
-            "2".TryToShort(CultureInfo.CurrentCulture, out result).ShouldBe(true);
+            "2".TryToShort(Configuration.FormatProvider(), out result).ShouldBe(true);
             result.ShouldBe((short)2);
         }
 
         public void ToShort()
         {
             Should.Throw<ArgumentException>(() => "".ToShort());
-            Should.Throw<ArgumentException>(() => "".ToShort(CultureInfo.CurrentCulture));
+            Should.Throw<ArgumentException>(() => "".ToShort(Configuration.FormatProvider()));
 
             "1".ToShort().ShouldBe((short)1);
-            "2".ToShort(CultureInfo.CurrentCulture).ShouldBe((short)2);
+            "2".ToShort(Configuration.FormatProvider()).ShouldBe((short)2);
         }
 
         public void ToShortOrDefault()
         {
             "one".ToShortOrDefault(0).ShouldBe((short)0);
             "two".ToShortOrDefault(() => 0).ShouldBe((short)0);
-            "three".ToShortOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe((short)0);
-            "four".ToShortOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe((short)0);
+            "three".ToShortOrDefault(Configuration.FormatProvider(), 0).ShouldBe((short)0);
+            "four".ToShortOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe((short)0);
 
             "1".ToShortOrDefault(0).ShouldBe((short)1);
             "2".ToShortOrDefault(() => 0).ShouldBe((short)2);
-            "3".ToShortOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe((short)3);
-            "4".ToShortOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe((short)4);
+            "3".ToShortOrDefault(Configuration.FormatProvider(), 0).ShouldBe((short)3);
+            "4".ToShortOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe((short)4);
         }
 
         public void ToShortOrZero()
         {
             "one".ToShortOrZero().ShouldBe((short)0);
-            "two".ToShortOrZero(CultureInfo.CurrentCulture).ShouldBe((short)0);
+            "two".ToShortOrZero(Configuration.FormatProvider()).ShouldBe((short)0);
 
             "1".ToShortOrZero().ShouldBe((short)1);
-            "2".ToShortOrZero(CultureInfo.CurrentCulture).ShouldBe((short)2);
+            "2".ToShortOrZero(Configuration.FormatProvider()).ShouldBe((short)2);
         }
 
         public void TryToInt()
@@ -307,45 +307,45 @@ namespace Handyman.Tests
 
             // ReSharper disable once RedundantAssignment
             result = 1;
-            "".TryToInt(CultureInfo.CurrentCulture, out result).ShouldBe(false);
+            "".TryToInt(Configuration.FormatProvider(), out result).ShouldBe(false);
             result.ShouldBe(0);
 
             "1".TryToInt(out result).ShouldBe(true);
             result.ShouldBe(1);
 
-            "2".TryToInt(CultureInfo.CurrentCulture, out result).ShouldBe(true);
+            "2".TryToInt(Configuration.FormatProvider(), out result).ShouldBe(true);
             result.ShouldBe(2);
         }
 
         public void ToInt()
         {
             Should.Throw<ArgumentException>(() => "".ToInt());
-            Should.Throw<ArgumentException>(() => "".ToInt(CultureInfo.CurrentCulture));
+            Should.Throw<ArgumentException>(() => "".ToInt(Configuration.FormatProvider()));
 
             "1".ToInt().ShouldBe(1);
-            "2".ToInt(CultureInfo.CurrentCulture).ShouldBe(2);
+            "2".ToInt(Configuration.FormatProvider()).ShouldBe(2);
         }
 
         public void ToIntOrDefault()
         {
             "one".ToIntOrDefault(0).ShouldBe(0);
             "two".ToIntOrDefault(() => 0).ShouldBe(0);
-            "three".ToIntOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(0);
-            "four".ToIntOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(0);
+            "three".ToIntOrDefault(Configuration.FormatProvider(), 0).ShouldBe(0);
+            "four".ToIntOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(0);
 
             "1".ToIntOrDefault(0).ShouldBe(1);
             "2".ToIntOrDefault(() => 0).ShouldBe(2);
-            "3".ToIntOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
-            "4".ToIntOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
+            "3".ToIntOrDefault(Configuration.FormatProvider(), 0).ShouldBe(3);
+            "4".ToIntOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(4);
         }
 
         public void ToIntOrZero()
         {
             "one".ToIntOrZero().ShouldBe(0);
-            "two".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
+            "two".ToIntOrZero(Configuration.FormatProvider()).ShouldBe(0);
 
             "1".ToIntOrZero().ShouldBe(1);
-            "2".ToIntOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
+            "2".ToIntOrZero(Configuration.FormatProvider()).ShouldBe(2);
         }
 
         public void TryToLong()
@@ -357,45 +357,45 @@ namespace Handyman.Tests
 
             // ReSharper disable once RedundantAssignment
             result = 1;
-            "".TryToLong(CultureInfo.CurrentCulture, out result).ShouldBe(false);
+            "".TryToLong(Configuration.FormatProvider(), out result).ShouldBe(false);
             result.ShouldBe(0);
 
             "1".TryToLong(out result).ShouldBe(true);
             result.ShouldBe(1);
 
-            "2".TryToLong(CultureInfo.CurrentCulture, out result).ShouldBe(true);
+            "2".TryToLong(Configuration.FormatProvider(), out result).ShouldBe(true);
             result.ShouldBe(2);
         }
 
         public void ToLong()
         {
             Should.Throw<ArgumentException>(() => "".ToLong());
-            Should.Throw<ArgumentException>(() => "".ToLong(CultureInfo.CurrentCulture));
+            Should.Throw<ArgumentException>(() => "".ToLong(Configuration.FormatProvider()));
 
             "1".ToLong().ShouldBe(1);
-            "2".ToLong(CultureInfo.CurrentCulture).ShouldBe(2);
+            "2".ToLong(Configuration.FormatProvider()).ShouldBe(2);
         }
 
         public void ToLongOrDefault()
         {
             "one".ToLongOrDefault(0).ShouldBe(0);
             "two".ToLongOrDefault(() => 0).ShouldBe(0);
-            "three".ToLongOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(0);
-            "four".ToLongOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(0);
+            "three".ToLongOrDefault(Configuration.FormatProvider(), 0).ShouldBe(0);
+            "four".ToLongOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(0);
 
             "1".ToLongOrDefault(0).ShouldBe(1);
             "2".ToLongOrDefault(() => 0).ShouldBe(2);
-            "3".ToLongOrDefault(CultureInfo.CurrentCulture, 0).ShouldBe(3);
-            "4".ToLongOrDefault(CultureInfo.CurrentCulture, () => 0).ShouldBe(4);
+            "3".ToLongOrDefault(Configuration.FormatProvider(), 0).ShouldBe(3);
+            "4".ToLongOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(4);
         }
 
         public void ToLongOrZero()
         {
             "one".ToLongOrZero().ShouldBe(0);
-            "two".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(0);
+            "two".ToLongOrZero(Configuration.FormatProvider()).ShouldBe(0);
 
             "1".ToLongOrZero().ShouldBe(1);
-            "2".ToLongOrZero(CultureInfo.CurrentCulture).ShouldBe(2);
+            "2".ToLongOrZero(Configuration.FormatProvider()).ShouldBe(2);
         }
 
         public void ShouldCheckIfStringIsBetween()
