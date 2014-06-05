@@ -400,6 +400,8 @@ namespace Handyman.Tests
 
         public void ShouldCheckIfStringIsBetween()
         {
+            Configuration.StringComparison = () => StringComparison.Ordinal;
+
             "a".IsBetween("b", "d").ShouldBe(false);
             "b".IsBetween("b", "d").ShouldBe(false);
             "c".IsBetween("b", "d").ShouldBe(true);
@@ -421,6 +423,8 @@ namespace Handyman.Tests
 
         public void ShouldCheckIfStringIsInRange()
         {
+            Configuration.StringComparison = () => StringComparison.Ordinal;
+
             "a".IsInRange("b", "d").ShouldBe(false);
             "b".IsInRange("b", "d").ShouldBe(true);
             "c".IsInRange("b", "d").ShouldBe(true);

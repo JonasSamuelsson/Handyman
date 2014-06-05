@@ -409,7 +409,7 @@ namespace Handyman
 
         public static bool IsBetween(this string value, string min, string max)
         {
-            return value.IsBetween(min, max, StringComparison.Ordinal);
+            return value.IsBetween(min, max, Configuration.StringComparison());
         }
 
         public static bool IsBetween(this string value, string min, string max, StringComparison comparison)
@@ -419,7 +419,7 @@ namespace Handyman
 
         public static bool IsInRange(this string value, string min, string max)
         {
-            return value.IsInRange(min, max, StringComparison.Ordinal);
+            return value.IsInRange(min, max, Configuration.StringComparison());
         }
 
         public static bool IsInRange(this string value, string min, string max, StringComparison comparison)

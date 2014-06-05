@@ -6,6 +6,7 @@
         {
             Classes.NameEndsWith("Tests");
             Methods.Where(x => x.IsPublic);
+            CaseExecution.SetUp((execution, instance) => Configuration.Reset());
         }
     }
 }
