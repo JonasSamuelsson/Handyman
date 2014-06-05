@@ -414,11 +414,14 @@ namespace Handyman.Tests
             "D".IsBetween("b", "d").ShouldBe(false);
             "E".IsBetween("b", "d").ShouldBe(false);
 
-            "A".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "B".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "C".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-            "D".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "E".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "A".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+            "B".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+            "C".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
+            "D".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+            "E".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+
+            "C".IsBetween("b", "d", CultureInfo.InvariantCulture).ShouldBe(true);
+            "C".IsBetween("b", "d", CultureInfo.InvariantCulture, CompareOptions.Ordinal).ShouldBe(false);
         }
 
         public void ShouldCheckIfStringIsInRange()
@@ -437,11 +440,14 @@ namespace Handyman.Tests
             "D".IsInRange("b", "d").ShouldBe(false);
             "E".IsInRange("b", "d").ShouldBe(false);
 
-            "A".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "B".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-            "C".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-            "D".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-            "E".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "A".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+            "B".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
+            "C".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
+            "D".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
+            "E".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+
+            "C".IsInRange("b", "d", CultureInfo.InvariantCulture).ShouldBe(true);
+            "C".IsInRange("b", "d", CultureInfo.InvariantCulture, CompareOptions.Ordinal).ShouldBe(false);
         }
     }
 }
