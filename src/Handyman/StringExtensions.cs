@@ -15,7 +15,22 @@ namespace Handyman
 
         public static bool Contains(this string s, string value, StringComparison comparison)
         {
-            return s.IndexOf(value, comparison) != -1;
+            return s.Contains(value, (x, y) => x.IndexOf(y, comparison));
+        }
+
+        public static bool Contains(this string s, string value, CultureInfo cultureInfo)
+        {
+            return s.Contains(value, cultureInfo, CompareOptions.None);
+        }
+
+        public static bool Contains(this string s, string value, CultureInfo cultureInfo, CompareOptions options)
+        {
+            return s.Contains(value, (x, y) => cultureInfo.CompareInfo.IndexOf(s, value, options));
+        }
+
+        private static bool Contains(this string s, string value, Comparison<string> comparer)
+        {
+            return comparer(s, value) != -1;
         }
 
         public static bool ContainsWildcard(this string s, string pattern)
@@ -35,24 +50,14 @@ namespace Handyman
             return true;
         }
 
-        public static bool ContainsAll(this string s, params string[] values)
+        public static bool EqualsString(this string s, string value, CultureInfo cultureInfo)
         {
-            return s.ContainsAll(StringComparison.CurrentCulture, values);
+            return s.EqualsString(value, cultureInfo, IgnoreCase.No);
         }
 
-        public static bool ContainsAll(this string s, StringComparison comparison, params string[] values)
+        public static bool EqualsString(this string s, string value, CultureInfo cultureInfo, IgnoreCase ignoreCase)
         {
-            return values.All(x => s.Contains(x, comparison));
-        }
-
-        public static bool ContainsAny(this string s, params string[] values)
-        {
-            return s.ContainsAny(StringComparison.CurrentCulture, values);
-        }
-
-        public static bool ContainsAny(this string s, StringComparison comparison, params string[] values)
-        {
-            return values.Any(x => s.Contains(x, comparison));
+            return cultureInfo.CompareInfo.Compare(s, value, ignoreCase == IgnoreCase.Yes ? CompareOptions.IgnoreCase : CompareOptions.None) == 0;
         }
 
         public static bool EqualsWildcard(this string s, string value)

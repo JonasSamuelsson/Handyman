@@ -17,35 +17,32 @@ namespace Handyman.Tests
             "{0} {1}!".FormatWith("Hello", "world").ShouldBe("Hello world!");
         }
 
+        public void ShouldCheckIfStringEquals()
+        {
+            "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture).ShouldBe(false);
+            "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture, IgnoreCase.Yes).ShouldBe(true);
+        }
+
         public void ShouldCheckIfStringEqualsWildcard()
         {
             "Hello".EqualsWildcard("*e*o").ShouldBe(false);
-            "Hello".EqualsWildcard("*e*o", StringComparison.CurrentCultureIgnoreCase).ShouldBe(true);
+            "Hello".EqualsWildcard("*e*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
         }
 
         public void ShouldCheckIfStringContainsValue()
         {
-            "Hello world".Contains("hello", StringComparison.CurrentCulture).ShouldBe(false);
-            "Hello world".Contains("hello", StringComparison.CurrentCultureIgnoreCase).ShouldBe(true);
+            "Hello World".Contains("lo wo", StringComparison.InvariantCulture).ShouldBe(false);
+            "Hello World".Contains("lo wo", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "Hello World".Contains("lo wo", CultureInfo.InvariantCulture).ShouldBe(false);
+            "Hello World".Contains("lo wo", CultureInfo.InvariantCulture, CompareOptions.IgnoreCase).ShouldBe(true);
+
         }
 
         public void ShouldCheckIfStringContainsWildcardValue()
         {
             "ohe".ContainsWildcard("he*o").ShouldBe(false);
             "Hello world".ContainsWildcard("he*o").ShouldBe(false);
-            "Hello world".ContainsWildcard("he*o", StringComparison.CurrentCultureIgnoreCase).ShouldBe(true);
-        }
-
-        public void ShouldCheckIfStringContainsAllValues()
-        {
-            "Hello world".ContainsAll("hello", "world").ShouldBe(false);
-            "Hello world".ContainsAll(StringComparison.CurrentCultureIgnoreCase, "hello", "world").ShouldBe(true);
-        }
-
-        public void ShouldCheckIfStringContainsAnyValue()
-        {
-            "Hello world".ContainsAny("hello", "you").ShouldBe(false);
-            "Hello world".ContainsAny(StringComparison.CurrentCultureIgnoreCase, "hello", "you").ShouldBe(true);
+            "Hello world".ContainsWildcard("he*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
         }
 
         public void ShouldCheckIfStringIsMatch()
@@ -414,11 +411,11 @@ namespace Handyman.Tests
             "D".IsBetween("b", "d").ShouldBe(false);
             "E".IsBetween("b", "d").ShouldBe(false);
 
-            "A".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
-            "B".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
-            "C".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
-            "D".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
-            "E".IsBetween("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+            "A".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "B".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "C".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "D".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "E".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
 
             "C".IsBetween("b", "d", CultureInfo.InvariantCulture).ShouldBe(true);
             "C".IsBetween("b", "d", CultureInfo.InvariantCulture, CompareOptions.Ordinal).ShouldBe(false);
@@ -440,11 +437,11 @@ namespace Handyman.Tests
             "D".IsInRange("b", "d").ShouldBe(false);
             "E".IsInRange("b", "d").ShouldBe(false);
 
-            "A".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
-            "B".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
-            "C".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
-            "D".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(true);
-            "E".IsInRange("b", "d", StringComparison.OrdinalIgnoreCase).ShouldBe(false);
+            "A".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
+            "B".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "C".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "D".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
+            "E".IsInRange("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
 
             "C".IsInRange("b", "d", CultureInfo.InvariantCulture).ShouldBe(true);
             "C".IsInRange("b", "d", CultureInfo.InvariantCulture, CompareOptions.Ordinal).ShouldBe(false);
