@@ -441,5 +441,70 @@ namespace Handyman
         {
             return string.Compare(min, value, cultureInfo, options) <= 0 && string.Compare(value, max, cultureInfo, options) <= 0;
         }
+
+        public static double ToDouble(this string s)
+        {
+            return s.ToDouble(Configuration.FormatProvider());
+        }
+
+        public static double ToDouble(this string s, IFormatProvider formatProvider)
+        {
+            double result;
+            if (s.TryToDouble(formatProvider, out result)) return result;
+            throw new FormatException();
+        }
+
+        public static double? ToDoubleOrNull(this string s)
+        {
+            return s.ToDoubleOrNull(Configuration.FormatProvider());
+        }
+
+        public static double? ToDoubleOrNull(this string s, IFormatProvider formatProvider)
+        {
+            double result;
+            return s.TryToDouble(formatProvider, out result)
+                       ? result
+                       : default(double?);
+        }
+
+        public static double ToDoubleOrZero(this string s)
+        {
+            return s.ToDoubleOrZero(Configuration.FormatProvider());
+        }
+
+        public static double ToDoubleOrZero(this string s, IFormatProvider formatProvider)
+        {
+            return s.ToDoubleOrDefault(formatProvider, 0);
+        }
+
+        public static double ToDoubleOrDefault(this string s, double @default)
+        {
+            return s.ToDoubleOrDefault(Configuration.FormatProvider(), @default);
+        }
+
+        public static double ToDoubleOrDefault(this string s, IFormatProvider formatProvider, double @default)
+        {
+            return s.ToDoubleOrDefault(formatProvider, () => @default);
+        }
+
+        public static double ToDoubleOrDefault(this string s, Func<double> factory)
+        {
+            return s.ToDoubleOrDefault(Configuration.FormatProvider(), factory());
+        }
+
+        public static double ToDoubleOrDefault(this string s, IFormatProvider formatProvider, Func<double> factory)
+        {
+            return s.ToDoubleOrNull(formatProvider) ?? factory();
+        }
+
+        public static bool TryToDouble(this string s, out double result)
+        {
+            return s.TryToDouble(Configuration.FormatProvider(), out result);
+        }
+
+        public static bool TryToDouble(this string s, IFormatProvider formatProvider, out double result)
+        {
+            return double.TryParse(s, NumberStyles.Float, formatProvider, out result);
+        }
     }
 }
