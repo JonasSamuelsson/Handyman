@@ -75,6 +75,7 @@
     <Compile Include="StringExtensionsTests.cs" />
     <Compile Include="TimespanExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wpf\ObservableTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
