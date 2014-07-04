@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Handyman.Wpf
 {
-    public class Observable<T> : INotifyPropertyChanged, IObservable<T>
+    public class Observable<T> : IObservable<T>
     {
         private T _value;
 
@@ -33,15 +33,5 @@ namespace Handyman.Wpf
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public interface IObservable<T> : IReadOnlyObservable<T>
-    {
-        new T Value { get; set; }
-    }
-
-    public interface IReadOnlyObservable<T>
-    {
-        T Value { get; }
     }
 }

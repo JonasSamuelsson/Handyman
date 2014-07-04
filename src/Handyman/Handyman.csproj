@@ -69,7 +69,11 @@
     <Compile Include="TimespanExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="WeakReference.cs" />
+    <Compile Include="Wpf\ICommandManager.cs" />
+    <Compile Include="Wpf\IObservable.cs" />
+    <Compile Include="Wpf\IReadOnlyObservable.cs" />
     <Compile Include="Wpf\Observable.cs" />
+    <Compile Include="Wpf\RelayCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
