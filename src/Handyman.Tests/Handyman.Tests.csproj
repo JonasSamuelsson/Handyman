@@ -76,6 +76,7 @@
     <Compile Include="TimespanExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wpf\ObservableTests.cs" />
+    <Compile Include="Wpf\ReadOnyObservableTests.cs" />
     <Compile Include="Wpf\RelayCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>

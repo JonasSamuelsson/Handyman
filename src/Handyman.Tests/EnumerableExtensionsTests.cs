@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Handyman.Tests
@@ -163,6 +164,22 @@ namespace Handyman.Tests
             var shuffled = numbers.Shuffle().ToArray();
             shuffled.ShouldNotBe(numbers);
             shuffled.OrderBy(x => x).ShouldBe(numbers);
+        }
+
+        public void ShouldCreateSetFromEnumerable()
+        {
+            var numbers = new[] { 1, 2, 3 };
+            var set = numbers.ToSet();
+            set.ShouldBeAssignableTo<ISet<int>>();
+            set.ShouldBe(numbers);
+        }
+
+        public void ShouldCreateObservableColectionFromEnumerable()
+        {
+            var numbers = new[] { 1, 2, 3 };
+            var set = numbers.ToObservableCollection();
+            set.ShouldBeAssignableTo<ObservableCollection<int>>();
+            set.ShouldBe(numbers);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Handyman
@@ -129,6 +130,16 @@ namespace Handyman
                 list[i - 1] = temp;
             }
             return list;
+        }
+
+        public static ISet<T> ToSet<T>(this IEnumerable<T> source)
+        {
+            return new HashSet<T>(source);
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        {
+            return new ObservableCollection<T>(source);
         }
     }
 }
