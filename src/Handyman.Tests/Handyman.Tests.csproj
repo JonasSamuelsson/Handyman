@@ -64,6 +64,7 @@
     <Compile Include="Converters\InvertBoolConverterTests.cs" />
     <Compile Include="CultureAttribute.cs" />
     <Compile Include="MemberInfoExtensionsTests.cs" />
+    <Compile Include="TempTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
     <Compile Include="DateTimeExtensionsTests.cs" />
     <Compile Include="DateTimeOffsetExtensionsTests.cs" />
@@ -75,7 +76,8 @@
     <Compile Include="StringExtensionsTests.cs" />
     <Compile Include="TimespanExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Wpf\ObservableTests.cs" />
+    <Compile Include="Wpf\ObservableOf1Tests.cs" />
+    <Compile Include="Wpf\ObservableOf2Tests.cs" />
     <Compile Include="Wpf\ReadOnyObservableTests.cs" />
     <Compile Include="Wpf\RelayCommandTests.cs" />
   </ItemGroup>

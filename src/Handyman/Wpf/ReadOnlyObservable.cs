@@ -12,14 +12,14 @@ namespace Handyman.Wpf
     public static class ReadOnlyObservable
     {
         public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(IEnumerable<TItem> items,
-                                                                              Func<IEnumerable<TItem>, TValue> valueProvider)
+                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider)
             where TItem : INotifyPropertyChanged
         {
             return new ReadOnlyObservable<TItem, TValue>(items, valueProvider);
         }
 
         public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(ObservableCollection<TItem> items,
-                                                                              Func<IEnumerable<TItem>, TValue> valueProvider)
+                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider)
             where TItem : INotifyPropertyChanged
         {
             return new ReadOnlyObservable<TItem, TValue>(items, valueProvider);
@@ -30,10 +30,10 @@ namespace Handyman.Wpf
         where TItem : INotifyPropertyChanged
     {
         private readonly ObservableCollection<TItem> _collection;
-        private readonly Func<IEnumerable<TItem>, TValue> _valueProvider;
+        private readonly Func<IReadOnlyList<TItem>, TValue> _valueProvider;
         private TValue _value;
 
-        public ReadOnlyObservable(IEnumerable<TItem> items, Func<IEnumerable<TItem>, TValue> valueProvider)
+        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueProvider)
         {
             _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
             _collection.CollectionChanged += OnCollectionChanged;

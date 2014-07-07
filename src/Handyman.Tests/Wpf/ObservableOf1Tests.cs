@@ -3,7 +3,7 @@ using Shouldly;
 
 namespace Handyman.Tests.Wpf
 {
-    public class ObservableTests
+    public class ObservableOf1Tests
     {
         public void AssigningNewValueShouldTriggerPropertyChangedEvent()
         {

@@ -7,26 +7,18 @@ namespace Handyman.Tests.Wpf
 {
     public class ReadOnyObservableTests
     {
-        public void ShouldProvideValueFromSourceCollection()
+        public void ShouldProvideValueFromSource()
         {
-            var observable = ReadOnlyObservable.Create(new[]
-            {
-                new Observable<int>(1),
-                new Observable<int>(2)
-            },
+            var observable = ReadOnlyObservable.Create(new[] { new Observable<int>(1), new Observable<int>(2) },
                                                        x => x.Sum(y => y.Value));
 
             observable.Value.ShouldBe(3);
         }
 
-        public void ChangesToTheUnderlyingObjectsShouldAffectValue()
+        public void ChangesToTheUnderlyingItemShouldAffectValue()
         {
             var sourceObservable = new Observable<int>(1);
-            var observable = ReadOnlyObservable.Create(new[]
-            {
-                sourceObservable,
-                new Observable<int>(2)
-            },
+            var observable = ReadOnlyObservable.Create(new[] { sourceObservable, new Observable<int>(2) },
                                                        x => x.Sum(y => y.Value));
             var propertyChanged = false;
             observable.PropertyChanged += delegate { propertyChanged = true; };
@@ -39,13 +31,9 @@ namespace Handyman.Tests.Wpf
             observable.Value.ShouldBe(4);
         }
 
-        public void ChangesToUnderlyingObservableCollecionShouldAffectValue()
+        public void ChangesToUnderlyingCollectionShouldAffectValue()
         {
-            var collection = new ObservableCollection<Observable<int>>(new[]
-            {
-                new Observable<int>(1),
-                new Observable<int>(2)
-            });
+            var collection = new ObservableCollection<Observable<int>>(new[] { new Observable<int>(1), new Observable<int>(2) });
             var observable = ReadOnlyObservable.Create(collection, x => x.Sum(y => y.Value));
             var propertyChanged = false;
             observable.PropertyChanged += delegate { propertyChanged = true; };
