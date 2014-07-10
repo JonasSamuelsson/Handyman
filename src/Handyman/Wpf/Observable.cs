@@ -160,7 +160,7 @@ namespace Handyman.Wpf
             }
         }
 
-        private void Configure(Action<Observable<TValue>.ValidationExpression> configuration)
+        public void Configure(Action<Observable<TValue>.ValidationExpression> configuration)
         {
             var expression = new Observable<TValue>.ValidationExpression
             {
