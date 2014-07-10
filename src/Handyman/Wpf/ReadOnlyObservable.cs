@@ -27,6 +27,7 @@ namespace Handyman.Wpf
         private Func<IReadOnlyList<TItem>, TValue> _valueGetter;
         private TValue _value;
         private readonly List<Func<TValue, string>> _validators;
+        private bool _ignoreCollectionChanged;
 
         internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<ObservableValidationExpression<TValue>> configuration)
         {
@@ -50,14 +51,11 @@ namespace Handyman.Wpf
                 Validators = _validators,
                 ValueGetter = _valueGetter
             };
-            configuration(expression);
+            using (new Temp(() => _ignoreCollectionChanged = true, () => _ignoreCollectionChanged = false))
+                configuration(expression);
 
-            if (expression.ValueGetter != _valueGetter)
-            {
-                _valueGetter = expression.ValueGetter;
-                _value = _valueGetter(_items);
-            }
-
+            _valueGetter = expression.ValueGetter;
+            _value = _valueGetter(_items);
             OnPropertyChanged("Value");
         }
 
@@ -73,6 +71,7 @@ namespace Handyman.Wpf
                 args.OldItems.Cast<TItem>().ForEach(x => x.PropertyChanged -= OnItemPropertyChanged);
             if (args.NewItems != null)
                 args.NewItems.Cast<TItem>().ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
+            if (_ignoreCollectionChanged) return;
             Value = _valueGetter(_items);
         }
 

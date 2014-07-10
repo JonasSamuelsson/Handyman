@@ -68,25 +68,28 @@ namespace Handyman.Tests.Wpf
 
         public void ShouldBeAbleToChangeUnderlyingItemsAfterConstruction()
         {
-            var item1 = new Observable<int>();
+            var item1 = new Observable<int>(1);
+            var item2 = new Observable<int>(2);
             var observable = ReadOnlyObservable.Create(new[] { item1 }, x => x.Sum(y => y.Value));
 
-            var item2 = new Observable<int>();
+
+            var propertyChangedCount = 0;
+            observable.PropertyChanged += delegate { propertyChangedCount++; };
             observable.Configure(x =>
             {
-                x.Items.Clear();
+                x.Items.Remove(item1);
                 x.Items.Add(item2);
             });
 
-            var propertyChanged = false;
-            observable.PropertyChanged += delegate { propertyChanged = true; };
+            propertyChangedCount.ShouldBe(1);
+            observable.Value.ShouldBe(2);
 
             item1.Value = 1;
-            propertyChanged.ShouldBe(false);
-            observable.Value.ShouldBe(0);
+            propertyChangedCount.ShouldBe(1);
+            observable.Value.ShouldBe(2);
 
             item2.Value = 1;
-            propertyChanged.ShouldBe(true);
+            propertyChangedCount.ShouldBe(2);
             observable.Value.ShouldBe(1);
         }
 
