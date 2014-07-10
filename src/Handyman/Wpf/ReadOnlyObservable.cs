@@ -13,22 +13,14 @@ namespace Handyman.Wpf
     {
         public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(IEnumerable<TItem> items,
                                                                               Func<IReadOnlyList<TItem>, TValue> valueProvider,
-            Action<Observable<TValue>.ValidationExpression> configuration = null)
-            where TItem : INotifyPropertyChanged
-        {
-            return new ReadOnlyObservable<TItem, TValue>(items, valueProvider, configuration ?? delegate { });
-        }
-
-        public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(ObservableCollection<TItem> items,
-                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider,
-            Action<Observable<TValue>.ValidationExpression> configuration = null)
+                                                                              Action<ObservableValidationExpression<TValue>> configuration = null)
             where TItem : INotifyPropertyChanged
         {
             return new ReadOnlyObservable<TItem, TValue>(items, valueProvider, configuration ?? delegate { });
         }
     }
 
-    public class ReadOnlyObservable<TItem, TValue> : IReadOnlyObservable<TValue>, IDataErrorInfo
+    public class ReadOnlyObservable<TItem, TValue> : IReadOnlyObservable<TValue>
         where TItem : INotifyPropertyChanged
     {
         private readonly ObservableCollection<TItem> _collection;
@@ -36,7 +28,7 @@ namespace Handyman.Wpf
         private TValue _value;
         private readonly List<Func<TValue, string>> _validators;
 
-        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueProvider, Action<Observable<TValue>.ValidationExpression> configuration)
+        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueProvider, Action<ObservableValidationExpression<TValue>> configuration)
         {
             _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
             _collection.CollectionChanged += OnCollectionChanged;
@@ -47,9 +39,9 @@ namespace Handyman.Wpf
             Configure(configuration);
         }
 
-        public void Configure(Action<Observable<TValue>.ValidationExpression> configuration)
+        public void Configure(Action<ObservableValidationExpression<TValue>> configuration)
         {
-            var expression = new Observable<TValue>.ValidationExpression
+            var expression = new ObservableValidationExpression<TValue>
             {
                 Validators = _validators
             };

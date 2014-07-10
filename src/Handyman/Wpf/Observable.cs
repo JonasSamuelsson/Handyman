@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace Handyman.Wpf
 {
-    public class Observable<T> : IObservable<T>, IDataErrorInfo
+    public class Observable<T> : IObservable<T>
     {
         private T _value;
         private readonly List<Func<T, string>> _validators = new List<Func<T, string>>();
@@ -19,7 +19,7 @@ namespace Handyman.Wpf
         {
         }
 
-        public Observable(T value, Action<ValidationExpression> configuration)
+        public Observable(T value, Action<ObservableValidationExpression<T>> configuration)
         {
             _value = value;
             Configure(configuration);
@@ -60,20 +60,15 @@ namespace Handyman.Wpf
             }
         }
 
-        public class ValidationExpression
+        public void Configure(Action<ObservableValidationExpression<T>> configuration)
         {
-            public List<Func<T, string>> Validators { get; set; }
-        }
-
-        public void Configure(Action<ValidationExpression> configuration)
-        {
-            var expression = new ValidationExpression { Validators = _validators };
+            var expression = new ObservableValidationExpression<T> { Validators = _validators };
             configuration(expression);
             OnPropertyChanged("Value");
         }
     }
 
-    public class Observable<TItem, TValue> : IObservable<TValue>, IDataErrorInfo
+    public class Observable<TItem, TValue> : IObservable<TValue>
         where TItem : INotifyPropertyChanged
     {
         private readonly ObservableCollection<TItem> _collection;
@@ -83,7 +78,7 @@ namespace Handyman.Wpf
         private bool _isValueChanging;
         private readonly List<Func<TValue, string>> _validators;
 
-        internal Observable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<IList<TItem>, TValue> valueSetter, Action<Observable<TValue>.ValidationExpression> configuration)
+        internal Observable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<IList<TItem>, TValue> valueSetter, Action<ObservableValidationExpression<TValue>> configuration)
         {
             _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
             _collection.CollectionChanged += OnCollectionChanged;
@@ -160,9 +155,9 @@ namespace Handyman.Wpf
             }
         }
 
-        public void Configure(Action<Observable<TValue>.ValidationExpression> configuration)
+        public void Configure(Action<ObservableValidationExpression<TValue>> configuration)
         {
-            var expression = new Observable<TValue>.ValidationExpression
+            var expression = new ObservableValidationExpression<TValue>
             {
                 Validators = _validators
             };
@@ -176,17 +171,7 @@ namespace Handyman.Wpf
         public static Observable<TItem, TValue> Create<TItem, TValue>(IEnumerable<TItem> items,
                                                                       Func<IReadOnlyList<TItem>, TValue> valueGetter,
                                                                       Action<IList<TItem>, TValue> valueSetter,
-                                                                      Action<Observable<TValue>.ValidationExpression>
-                                                                          configuration = null)
-            where TItem : INotifyPropertyChanged
-        {
-            return new Observable<TItem, TValue>(items, valueGetter, valueSetter, configuration ?? delegate { });
-        }
-
-        public static Observable<TItem, TValue> Create<TItem, TValue>(ObservableCollection<TItem> items,
-                                                                      Func<IReadOnlyList<TItem>, TValue> valueGetter,
-                                                                      Action<IList<TItem>, TValue> valueSetter,
-                                                                      Action<Observable<TValue>.ValidationExpression>
+                                                                      Action<ObservableValidationExpression<TValue>>
                                                                           configuration = null)
             where TItem : INotifyPropertyChanged
         {
