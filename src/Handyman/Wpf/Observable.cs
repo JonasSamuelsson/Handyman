@@ -9,13 +9,20 @@ using System.Runtime.CompilerServices;
 
 namespace Handyman.Wpf
 {
-    public class Observable<T> : IObservable<T>
+    public class Observable<T> : IObservable<T>, IDataErrorInfo
     {
         private T _value;
+        private readonly List<Func<T, string>> _validators = new List<Func<T, string>>();
 
         public Observable(T value = default (T))
+            : this(value, delegate { })
+        {
+        }
+
+        public Observable(T value, Action<ValidationExpression> configuration)
         {
             _value = value;
+            Configure(configuration);
         }
 
         public T Value
@@ -36,6 +43,35 @@ namespace Handyman.Wpf
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public string this[string columnName]
+        {
+            get { return columnName == "Value" ? Error : string.Empty; }
+        }
+
+        public string Error
+        {
+            get
+            {
+                return _validators.Select(validator => validator(_value))
+                                  .Where(x => !x.IsNullOrWhiteSpace())
+                                  .Join(Environment.NewLine);
+            }
+        }
+
+        public class ValidationExpression
+        {
+            public ValidationExpression() { }
+
+            public List<Func<T, string>> Validators { get; set; }
+        }
+
+        public void Configure(Action<ValidationExpression> configuration)
+        {
+            var expression = new ValidationExpression { Validators = _validators };
+            configuration(expression);
+            OnPropertyChanged("Value");
         }
     }
 

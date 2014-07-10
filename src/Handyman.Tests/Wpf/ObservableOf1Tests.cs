@@ -22,5 +22,34 @@ namespace Handyman.Tests.Wpf
             observable.Value = 1;
             propertyChanged.ShouldBe(false);
         }
+
+        public void ValidValueShouldNotResultInAnyValidationErrors()
+        {
+            var observable = new Observable<int>();
+
+            observable.Error.ShouldBe(string.Empty);
+            observable["Value"].ShouldBe(string.Empty);
+        }
+
+        public void BrokenValidationRuleShouldResultInValidationError()
+        {
+            var errorMessage = "Value can't be zero.";
+            var observable = new Observable<int>(0, x => x.Validators.Add(i => i == 0 ? errorMessage : string.Empty));
+
+            observable.Error.ShouldBe(errorMessage);
+            observable["Value"].ShouldBe(errorMessage);
+
+            observable["value"].ShouldBe(string.Empty);
+        }
+
+        public void ShouldBeAbleToConfigureValidationAfterInstantiation()
+        {
+            var observable = new Observable<int>();
+
+            var errorMessage = "Value can't be zero.";
+            observable.Configure(x => x.Validators.Add(i => i == 0 ? errorMessage : string.Empty));
+
+            observable.Error.ShouldBe(errorMessage);
+        }
     }
 }
