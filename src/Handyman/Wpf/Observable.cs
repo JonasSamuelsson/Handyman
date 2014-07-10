@@ -55,15 +55,13 @@ namespace Handyman.Wpf
             get
             {
                 return _validators.Select(validator => validator(_value))
-                                  .Where(x => !x.IsNullOrWhiteSpace())
+                                  .Where(x => x.IsNotNullOrWhiteSpace())
                                   .Join(Environment.NewLine);
             }
         }
 
         public class ValidationExpression
         {
-            public ValidationExpression() { }
-
             public List<Func<T, string>> Validators { get; set; }
         }
 
@@ -75,7 +73,7 @@ namespace Handyman.Wpf
         }
     }
 
-    public class Observable<TItem, TValue> : IObservable<TValue>
+    public class Observable<TItem, TValue> : IObservable<TValue>, IDataErrorInfo
         where TItem : INotifyPropertyChanged
     {
         private readonly ObservableCollection<TItem> _collection;
@@ -83,8 +81,9 @@ namespace Handyman.Wpf
         private readonly Action<IList<TItem>, TValue> _valueSetter;
         private TValue _value;
         private bool _isValueChanging;
+        private readonly List<Func<TValue, string>> _validators;
 
-        internal Observable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<IList<TItem>, TValue> valueSetter)
+        internal Observable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<IList<TItem>, TValue> valueSetter, Action<Observable<TValue>.ValidationExpression> configuration)
         {
             _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
             _collection.CollectionChanged += OnCollectionChanged;
@@ -92,6 +91,8 @@ namespace Handyman.Wpf
             _valueGetter = valueGetter;
             _valueSetter = valueSetter;
             _value = _valueGetter(_collection);
+            _validators = new List<Func<TValue, string>>();
+            Configure(configuration);
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -143,24 +144,53 @@ namespace Handyman.Wpf
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public string this[string columnName]
+        {
+            get { return columnName == "Value" ? Error : string.Empty; }
+        }
+
+        public string Error
+        {
+            get
+            {
+                return _validators.Select(x => x(_value))
+                                  .Where(x => x.IsNotNullOrWhiteSpace())
+                                  .Join(Environment.NewLine);
+            }
+        }
+
+        private void Configure(Action<Observable<TValue>.ValidationExpression> configuration)
+        {
+            var expression = new Observable<TValue>.ValidationExpression
+            {
+                Validators = _validators
+            };
+            configuration(expression);
+            OnPropertyChanged("Value");
+        }
     }
 
     public static class Observable
     {
         public static Observable<TItem, TValue> Create<TItem, TValue>(IEnumerable<TItem> items,
                                                                       Func<IReadOnlyList<TItem>, TValue> valueGetter,
-                                                                      Action<IList<TItem>, TValue> valueSetter)
+                                                                      Action<IList<TItem>, TValue> valueSetter,
+                                                                      Action<Observable<TValue>.ValidationExpression>
+                                                                          configuration = null)
             where TItem : INotifyPropertyChanged
         {
-            return new Observable<TItem, TValue>(items, valueGetter, valueSetter);
+            return new Observable<TItem, TValue>(items, valueGetter, valueSetter, configuration ?? delegate { });
         }
 
         public static Observable<TItem, TValue> Create<TItem, TValue>(ObservableCollection<TItem> items,
                                                                       Func<IReadOnlyList<TItem>, TValue> valueGetter,
-                                                                      Action<IList<TItem>, TValue> valueSetter)
+                                                                      Action<IList<TItem>, TValue> valueSetter,
+                                                                      Action<Observable<TValue>.ValidationExpression>
+                                                                          configuration = null)
             where TItem : INotifyPropertyChanged
         {
-            return new Observable<TItem, TValue>(items, valueGetter, valueSetter);
+            return new Observable<TItem, TValue>(items, valueGetter, valueSetter, configuration ?? delegate { });
         }
     }
 }

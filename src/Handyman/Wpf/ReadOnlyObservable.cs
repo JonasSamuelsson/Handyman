@@ -12,34 +12,49 @@ namespace Handyman.Wpf
     public static class ReadOnlyObservable
     {
         public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(IEnumerable<TItem> items,
-                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider)
+                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider,
+            Action<Observable<TValue>.ValidationExpression> configuration = null)
             where TItem : INotifyPropertyChanged
         {
-            return new ReadOnlyObservable<TItem, TValue>(items, valueProvider);
+            return new ReadOnlyObservable<TItem, TValue>(items, valueProvider, configuration ?? delegate { });
         }
 
         public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(ObservableCollection<TItem> items,
-                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider)
+                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider,
+            Action<Observable<TValue>.ValidationExpression> configuration = null)
             where TItem : INotifyPropertyChanged
         {
-            return new ReadOnlyObservable<TItem, TValue>(items, valueProvider);
+            return new ReadOnlyObservable<TItem, TValue>(items, valueProvider, configuration ?? delegate { });
         }
     }
 
-    public class ReadOnlyObservable<TItem, TValue> : IReadOnlyObservable<TValue>
+    public class ReadOnlyObservable<TItem, TValue> : IReadOnlyObservable<TValue>, IDataErrorInfo
         where TItem : INotifyPropertyChanged
     {
         private readonly ObservableCollection<TItem> _collection;
         private readonly Func<IReadOnlyList<TItem>, TValue> _valueProvider;
         private TValue _value;
+        private readonly List<Func<TValue, string>> _validators;
 
-        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueProvider)
+        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueProvider, Action<Observable<TValue>.ValidationExpression> configuration)
         {
             _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
             _collection.CollectionChanged += OnCollectionChanged;
             _collection.ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
             _valueProvider = valueProvider;
             _value = _valueProvider(_collection);
+            _validators = new List<Func<TValue, string>>();
+            Configure(configuration);
+        }
+
+        private void Configure(Action<Observable<TValue>.ValidationExpression> configuration)
+        {
+            var expression = new Observable<TValue>.ValidationExpression
+            {
+                Validators = _validators
+            };
+            configuration(expression);
+            OnPropertyChanged("Value");
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -74,6 +89,21 @@ namespace Handyman.Wpf
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public string this[string columnName]
+        {
+            get { return columnName == "Value" ? Error : string.Empty; }
+        }
+
+        public string Error
+        {
+            get
+            {
+                return _validators.Select(x => x(_value))
+                                  .Where(x => x.IsNotNullOrWhiteSpace())
+                                  .Join(Environment.NewLine);
+            }
         }
     }
 }

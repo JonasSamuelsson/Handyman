@@ -64,5 +64,17 @@ namespace Handyman.Tests.Wpf
             propertyChangedCount.ShouldBe(1);
             observable.Value.ShouldBe(3);
         }
+
+        public void BrokenValidationRuleShouldResultInValidationError()
+        {
+            var errorMessage = "Value can't be zero";
+            var observable = Observable.Create(new[] { new Observable<int>() },
+                                               x => x.Sum(y => y.Value),
+                                               delegate { throw new NotImplementedException(); },
+                                               x => x.Validators.Add(i => i == 0 ? errorMessage : string.Empty));
+
+            observable.Error.ShouldBe(errorMessage);
+            observable["Value"].ShouldBe(errorMessage);
+        }
     }
 }
