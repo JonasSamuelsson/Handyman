@@ -38,8 +38,6 @@ namespace Handyman.Tests.Wpf
 
             observable.Error.ShouldBe(errorMessage);
             observable["Value"].ShouldBe(errorMessage);
-
-            observable["value"].ShouldBe(string.Empty);
         }
 
         public void ShouldBeAbleToConfigureValidationAfterInstantiation()

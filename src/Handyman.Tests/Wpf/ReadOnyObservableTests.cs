@@ -46,12 +46,32 @@ namespace Handyman.Tests.Wpf
             observable.Value.ShouldBe(6);
         }
 
+        public void ValidValueShouldNotResultInAnyValidationErrors()
+        {
+            var observable = ReadOnlyObservable.Create(new[] { new Observable<int>() },
+                                                          x => x.Sum(y => y.Value));
+
+            observable.Error.ShouldBe(string.Empty);
+            observable["Value"].ShouldBe(string.Empty);
+        }
+
         public void BrokenValidationRuleShouldResultInValidationError()
         {
             var errorMessage = "Value can't be zero";
             var observable = ReadOnlyObservable.Create(new[] { new Observable<int>() },
                                                        x => x.Sum(y => y.Value),
                                                        x => x.Validators.Add(i => i == 0 ? errorMessage : string.Empty));
+
+            observable.Error.ShouldBe(errorMessage);
+            observable["Value"].ShouldBe(errorMessage);
+        }
+
+        public void ShouldBeAbleToAddValidationAfterConstruction()
+        {
+            var errorMessage = "Value can't be zero";
+            var observable = ReadOnlyObservable.Create(new[] { new Observable<int>() },
+                                               x => x.Sum(y => y.Value));
+            observable.Configure(x => x.Validators.Add(i => i == 0 ? errorMessage : string.Empty));
 
             observable.Error.ShouldBe(errorMessage);
             observable["Value"].ShouldBe(errorMessage);
