@@ -12,41 +12,59 @@ namespace Handyman.Wpf
     public static class ReadOnlyObservable
     {
         public static ReadOnlyObservable<TItem, TValue> Create<TItem, TValue>(IEnumerable<TItem> items,
-                                                                              Func<IReadOnlyList<TItem>, TValue> valueProvider,
+                                                                              Func<IReadOnlyList<TItem>, TValue> valueGetter,
                                                                               Action<ObservableValidationExpression<TValue>> configuration = null)
             where TItem : INotifyPropertyChanged
         {
-            return new ReadOnlyObservable<TItem, TValue>(items, valueProvider, configuration ?? delegate { });
+            return new ReadOnlyObservable<TItem, TValue>(items, valueGetter, configuration ?? delegate { });
         }
     }
 
     public class ReadOnlyObservable<TItem, TValue> : IReadOnlyObservable<TValue>
         where TItem : INotifyPropertyChanged
     {
-        private readonly ObservableCollection<TItem> _collection;
-        private readonly Func<IReadOnlyList<TItem>, TValue> _valueProvider;
+        private readonly ObservableCollection<TItem> _items;
+        private Func<IReadOnlyList<TItem>, TValue> _valueGetter;
         private TValue _value;
         private readonly List<Func<TValue, string>> _validators;
 
-        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueProvider, Action<ObservableValidationExpression<TValue>> configuration)
+        internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<ObservableValidationExpression<TValue>> configuration)
         {
-            _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
-            _collection.CollectionChanged += OnCollectionChanged;
-            _collection.ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
-            _valueProvider = valueProvider;
-            _value = _valueProvider(_collection);
+            _items = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
+            _items.CollectionChanged += OnCollectionChanged;
+            _items.ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
+            _valueGetter = valueGetter;
             _validators = new List<Func<TValue, string>>();
-            Configure(configuration);
+
+            if (configuration != null)
+                configuration(new ConfigurationExpression { Validators = _validators });
+
+            _value = _valueGetter(_items);
         }
 
-        public void Configure(Action<ObservableValidationExpression<TValue>> configuration)
+        public void Configure(Action<ConfigurationExpression> configuration)
         {
-            var expression = new ObservableValidationExpression<TValue>
+            var expression = new ConfigurationExpression
             {
-                Validators = _validators
+                Items = _items,
+                Validators = _validators,
+                ValueGetter = _valueGetter
             };
             configuration(expression);
+
+            if (expression.ValueGetter != _valueGetter)
+            {
+                _valueGetter = expression.ValueGetter;
+                _value = _valueGetter(_items);
+            }
+
             OnPropertyChanged("Value");
+        }
+
+        public class ConfigurationExpression : ObservableValidationExpression<TValue>
+        {
+            public IList<TItem> Items { get; internal set; }
+            public Func<IReadOnlyList<TItem>, TValue> ValueGetter { get; set; }
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -55,12 +73,12 @@ namespace Handyman.Wpf
                 args.OldItems.Cast<TItem>().ForEach(x => x.PropertyChanged -= OnItemPropertyChanged);
             if (args.NewItems != null)
                 args.NewItems.Cast<TItem>().ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
-            Value = _valueProvider(_collection);
+            Value = _valueGetter(_items);
         }
 
         private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Value = _valueProvider(_collection);
+            Value = _valueGetter(_items);
         }
 
         public TValue Value

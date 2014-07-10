@@ -5,6 +5,6 @@ namespace Handyman.Wpf
 {
     public class ObservableValidationExpression<T>
     {
-        public List<Func<T, string>> Validators { get; set; }
+        public IList<Func<T, string>> Validators { get; internal set; }
     }
 }

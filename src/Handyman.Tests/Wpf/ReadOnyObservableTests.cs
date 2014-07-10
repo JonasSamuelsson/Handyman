@@ -66,6 +66,40 @@ namespace Handyman.Tests.Wpf
             observable["Value"].ShouldBe(errorMessage);
         }
 
+        public void ShouldBeAbleToChangeUnderlyingItemsAfterConstruction()
+        {
+            var item1 = new Observable<int>();
+            var observable = ReadOnlyObservable.Create(new[] { item1 }, x => x.Sum(y => y.Value));
+
+            var item2 = new Observable<int>();
+            observable.Configure(x =>
+            {
+                x.Items.Clear();
+                x.Items.Add(item2);
+            });
+
+            var propertyChanged = false;
+            observable.PropertyChanged += delegate { propertyChanged = true; };
+
+            item1.Value = 1;
+            propertyChanged.ShouldBe(false);
+            observable.Value.ShouldBe(0);
+
+            item2.Value = 1;
+            propertyChanged.ShouldBe(true);
+            observable.Value.ShouldBe(1);
+        }
+
+        public void ShouldBeAbleToChangeValueGetterAfterConstruction()
+        {
+            var observable = ReadOnlyObservable.Create(new[] { new Observable<double>(1), new Observable<double>(1) },
+                                                       x => x.Sum(i => i.Value));
+
+            observable.Configure(x => x.ValueGetter = y => y.Average(i => i.Value));
+
+            observable.Value.ShouldBe(1);
+        }
+
         public void ShouldBeAbleToAddValidationAfterConstruction()
         {
             var errorMessage = "Value can't be zero";
