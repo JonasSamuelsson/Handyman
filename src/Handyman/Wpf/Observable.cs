@@ -66,6 +66,11 @@ namespace Handyman.Wpf
             configuration(expression);
             OnPropertyChanged("Value");
         }
+
+        public static implicit operator T(Observable<T> observable)
+        {
+            return observable.Value;
+        }
     }
 
     public class Observable<TItem, TValue> : IObservable<TValue>
@@ -163,6 +168,11 @@ namespace Handyman.Wpf
             };
             configuration(expression);
             OnPropertyChanged("Value");
+        }
+
+        public static implicit operator TValue(Observable<TItem, TValue> observable)
+        {
+            return observable.Value;
         }
     }
 

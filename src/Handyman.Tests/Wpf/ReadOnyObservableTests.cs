@@ -113,5 +113,12 @@ namespace Handyman.Tests.Wpf
             observable.Error.ShouldBe(errorMessage);
             observable["Value"].ShouldBe(errorMessage);
         }
+
+        public void ShouldImplicitlyConvertToTValue()
+        {
+            var observable = ReadOnlyObservable.Create(new[] { new Observable<int>(5) }, x => x.Sum(y => y.Value));
+            int value = observable;
+            value.ShouldBe(observable.Value);
+        }
     }
 }

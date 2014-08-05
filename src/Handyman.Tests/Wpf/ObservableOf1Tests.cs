@@ -49,5 +49,12 @@ namespace Handyman.Tests.Wpf
 
             observable.Error.ShouldBe(errorMessage);
         }
+
+        public void ShouldImplicitlyConvertToTypeOfT()
+        {
+            var observable = new Observable<int>(5);
+            int value = observable;
+            value.ShouldBe(observable.Value);
+        }
     }
 }

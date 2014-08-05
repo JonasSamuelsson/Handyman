@@ -114,5 +114,10 @@ namespace Handyman.Wpf
                                   .Join(Environment.NewLine);
             }
         }
+
+        public static implicit operator TValue(ReadOnlyObservable<TItem, TValue> observable)
+        {
+            return observable.Value;
+        }
     }
 }

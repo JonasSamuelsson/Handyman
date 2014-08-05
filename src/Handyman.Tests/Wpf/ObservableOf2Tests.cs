@@ -1,4 +1,5 @@
-﻿using Handyman.Wpf;
+﻿using System.Collections.Generic;
+using Handyman.Wpf;
 using Shouldly;
 using System;
 using System.Collections.ObjectModel;
@@ -97,6 +98,13 @@ namespace Handyman.Tests.Wpf
 
             observable.Error.ShouldBe(errorMessage);
             observable["Value"].ShouldBe(errorMessage);
+        }
+
+        public void ShouldImplicitlyConvertToTypeOfTValue()
+        {
+            var observable = Observable.Create(new[] { new Observable<int>(5) }, x => x.Sum(y => y.Value), delegate { });
+            int value = observable;
+            value.ShouldBe(observable.Value);
         }
     }
 }
