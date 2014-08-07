@@ -141,5 +141,40 @@ namespace Handyman
         {
             return new ObservableCollection<T>(source);
         }
+
+        public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
+        {
+            return source as IReadOnlyList<T> ?? source.ToList();
+        }
+
+        public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> source, int count)
+        {
+            var list = source.ToReadOnlyList();
+            return list.Take(list.Count - count);
+        }
+
+        public static IEnumerable<T> SkipLastWhile<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var list = source.ToReadOnlyList();
+            var i = 1;
+            for (; i <= list.Count; i++)
+                if (!predicate(list[list.Count - i])) break;
+            return list.SkipLast(i - 1);
+        }
+
+        public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int count)
+        {
+            var list = source.ToReadOnlyList();
+            return list.Skip(list.Count - count);
+        }
+
+        public static IEnumerable<T> TakeLastWhile<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var list = source.ToReadOnlyList();
+            var i = 1;
+            for (; i <= list.Count; i++)
+                if (!predicate(list[list.Count - i])) break;
+            return list.TakeLast(i - 1);
+        }
     }
 }

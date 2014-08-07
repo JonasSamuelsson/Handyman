@@ -181,5 +181,29 @@ namespace Handyman.Tests
             set.ShouldBeAssignableTo<ObservableCollection<int>>();
             set.ShouldBe(numbers);
         }
+
+        public void ShouldSkipLast()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            ints.SkipLast(2).ShouldBe(new[] { 1, 2, 3 });
+        }
+
+        public void ShouldSkipLastWhile()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            ints.SkipLastWhile(i => i == 5).ShouldBe(new[] { 1, 2, 3, 4 });
+        }
+
+        public void ShouldTakeLast()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            ints.TakeLast(2).ShouldBe(new[] { 4, 5 });
+        }
+
+        public void ShouldTakeLastWhile()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            ints.TakeLastWhile(i => i == 5).ShouldBe(new[] { 5 });
+        }
     }
 }
