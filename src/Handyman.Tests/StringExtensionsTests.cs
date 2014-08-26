@@ -509,5 +509,17 @@ namespace Handyman.Tests
             "3.3".ToDoubleOrZero().ShouldBe(3.3);
             "4.4".ToDoubleOrZero(CultureInfo.InvariantCulture).ShouldBe(4.4);
         }
+
+        public void ShouldShiftLeft()
+        {
+            "12345".ShiftLeft(1).ShouldBe("23451");
+            "12345".ShiftLeft(7).ShouldBe("34512");
+        }
+
+        public void ShouldShiftRight()
+        {
+            "12345".ShiftRight(2).ShouldBe("45123");
+            "12345".ShiftRight(8).ShouldBe("34512");
+        }
     }
 }

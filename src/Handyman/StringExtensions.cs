@@ -506,5 +506,21 @@ namespace Handyman
         {
             return double.TryParse(s, NumberStyles.Float, formatProvider, out result);
         }
+
+        public static string ShiftLeft(this string s, int positions)
+        {
+            positions = positions % s.Length;
+            return positions == 0
+                ? s
+                : s.Substring(positions) + s.Substring(0, positions);
+        }
+
+        public static string ShiftRight(this string s, int positions)
+        {
+            positions = s.Length - (positions % s.Length);
+            return positions == 0
+                ? s
+                : s.Substring(positions) + s.Substring(0, positions);
+        }
     }
 }
