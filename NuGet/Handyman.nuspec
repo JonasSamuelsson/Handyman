@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Handyman</id>
-        <version>1.0.0-beta2</version>
+        <version>1.0.0-beta3</version>
         <title>Handyman</title>
         <authors>Jonas Samuelsson</authors>
         <owners>JonasSamuelsson</owners>
