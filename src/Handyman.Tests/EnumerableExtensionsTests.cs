@@ -1,9 +1,9 @@
-﻿using Shouldly;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Shouldly;
 
 namespace Handyman.Tests
 {
@@ -204,6 +204,16 @@ namespace Handyman.Tests
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
             ints.TakeLastWhile(i => i == 5).ShouldBe(new[] { 5 });
+        }
+
+        public void ShouldChunk()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var chunks = ints.Chunk(2).ToList();
+            chunks.Count.ShouldBe(3);
+            chunks[0].ShouldBe(new[] { 1, 2 });
+            chunks[1].ShouldBe(new[] { 3, 4 });
+            chunks[2].ShouldBe(new[] { 5 });
         }
     }
 }

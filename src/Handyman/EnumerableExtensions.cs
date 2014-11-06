@@ -176,5 +176,18 @@ namespace Handyman
                 if (!predicate(list[list.Count - i])) break;
             return list.TakeLast(i - 1);
         }
+
+        public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunkSize)
+        {
+            var buffer = new List<T>(chunkSize);
+            foreach (var item in source)
+            {
+                buffer.Add(item);
+                if (buffer.Count != chunkSize) continue;
+                yield return buffer;
+                buffer = new List<T>(chunkSize);
+            }
+            if (buffer.Count != 0) yield return buffer;
+        }
     }
 }
