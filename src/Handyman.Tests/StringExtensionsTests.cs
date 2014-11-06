@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Linq;
+using Shouldly;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -520,6 +521,15 @@ namespace Handyman.Tests
         {
             "12345".ShiftRight(2).ShouldBe("45123");
             "12345".ShiftRight(8).ShouldBe("34512");
+        }
+
+        public void ShouldChunk()
+        {
+            var chunks = "12345".Chunk(2).ToList();
+            chunks.Count.ShouldBe(3);
+            chunks[0].ShouldBe("12");
+            chunks[1].ShouldBe("34");
+            chunks[2].ShouldBe("5");
         }
     }
 }

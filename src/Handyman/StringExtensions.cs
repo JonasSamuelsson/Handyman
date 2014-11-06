@@ -522,5 +522,17 @@ namespace Handyman
                 ? s
                 : s.Substring(positions) + s.Substring(0, positions);
         }
+
+        public static IEnumerable<string> Chunk(this string s, int chunkLength)
+        {
+            var start = 0;
+            while (true)
+            {
+                var chunk = s.SubstringSafe(start, chunkLength);
+                if (chunk == string.Empty) yield break;
+                start += chunkLength;
+                yield return chunk;
+            }
+        }
     }
 }
