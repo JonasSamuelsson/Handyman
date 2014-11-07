@@ -189,5 +189,21 @@ namespace Handyman
             }
             if (buffer.Count != 0) yield return buffer;
         }
+
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+        {
+            var index = 0;
+            foreach (var item in source) action(item, index++);
+        }
+
+        public static IEnumerable<T> ForEachYield<T>(this IEnumerable<T> source, Action<T, int> action)
+        {
+            var index = 0;
+            foreach (var item in source)
+            {
+                action(item, index++);
+                yield return item;
+            }
+        }
     }
 }

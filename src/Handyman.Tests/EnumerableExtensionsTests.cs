@@ -215,5 +215,31 @@ namespace Handyman.Tests
             chunks[1].ShouldBe(new[] { 3, 4 });
             chunks[2].ShouldBe(new[] { 5 });
         }
+
+        public void ForEachWithIndexShouldExecuteProvidedActionForEachItem()
+        {
+            var source = new[] { "zero", "one", "two" };
+            var result = new List<string>();
+            source.ForEach((s, i) => result.Add(s + i));
+            result.Count.ShouldBe(3);
+            result[0].ShouldBe("zero0");
+            result[1].ShouldBe("one1");
+            result[2].ShouldBe("two2");
+        }
+
+        public void ForEachYieldWithIndexShouldExecuteProvidedActionForEachItem()
+        {
+            var source = new[] { "zero", "one", "two" };
+            var result = new List<string>();
+            
+            source.ForEachYield((s, i) => result.Add(s + i));
+            result.Count.ShouldBe(0);
+
+            source.ForEachYield((s, i) => result.Add(s + i)).ToList();
+            result.Count.ShouldBe(3);
+            result[0].ShouldBe("zero0");
+            result[1].ShouldBe("one1");
+            result[2].ShouldBe("two2");
+        }
     }
 }
