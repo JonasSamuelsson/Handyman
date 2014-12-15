@@ -1,21 +1,40 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Fixie;
 
 namespace Handyman.Tests
 {
-    public class Convention : Fixie.Conventions.Convention
+    public class Convention : Fixie.Convention
     {
         public Convention()
         {
             Classes.NameEndsWith("Tests");
             Methods.Where(x => x.IsPublic);
-            CaseExecution.SetUp((execution, instance) =>
+            CaseExecution.Wrap<CustomCultureBehavior>();
+        }
+
+        public class CustomCultureBehavior : CaseBehavior
+        {
+            public void Execute(Case context, Action next)
             {
-                Configuration.Reset();
-                var cultureAttribute = execution.Case.Method.Get<CultureAttribute>().SingleOrDefault();
-                if (cultureAttribute == null) return;
-                var cultureInfo = cultureAttribute.GetCulture();
-                Configuration.FormatProvider = () => cultureInfo;
-            });
+                try
+                {
+                    Configuration.Reset();
+                    var cultureAttribute = context.Method.Get<CultureAttribute>().SingleOrDefault();
+                    if (cultureAttribute != null)
+                    {
+                        var cultureInfo = cultureAttribute.GetCulture();
+                        Configuration.FormatProvider = () => cultureInfo;
+                    }
+
+                    next();
+                }
+                catch
+                {
+                    Configuration.Reset();
+                    throw;
+                }
+            }
         }
     }
 }
