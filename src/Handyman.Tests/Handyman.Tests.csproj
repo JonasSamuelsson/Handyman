@@ -63,6 +63,8 @@
     <Compile Include="Converters\HasValueConverterTests.cs" />
     <Compile Include="Converters\InvertBoolConverterTests.cs" />
     <Compile Include="CultureAttribute.cs" />
+    <Compile Include="DictionaryExtensionsTests.cs" />
+    <Compile Include="LookupExtensionsTests.cs" />
     <Compile Include="MemberInfoExtensionsTests.cs" />
     <Compile Include="TempTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />

@@ -56,10 +56,12 @@
     <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DateTimeOffsetExtensions.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DoubleExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IgnoreCase.cs" />
     <Compile Include="Int32Extensions.cs" />
+    <Compile Include="LookupExtensions.cs" />
     <Compile Include="MemberInfoExtensions.cs" />
     <Compile Include="NullableExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
