@@ -13,7 +13,13 @@ namespace Handyman
                 action(item);
         }
 
+        [Obsolete("Use enumerable.Visit(action).")]
         public static IEnumerable<T> ForEachYield<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            return collection.Visit(action);
+        }
+
+        public static IEnumerable<T> Visit<T>(this IEnumerable<T> collection, Action<T> action)
         {
             foreach (var item in collection)
             {
@@ -191,7 +197,13 @@ namespace Handyman
             foreach (var item in source) action(item, index++);
         }
 
+        [Obsolete("Use enumerable.Visit(action).")]
         public static IEnumerable<T> ForEachYield<T>(this IEnumerable<T> source, Action<T, int> action)
+        {
+            return source.Visit(action);
+        }
+
+        public static IEnumerable<T> Visit<T>(this IEnumerable<T> source, Action<T, int> action)
         {
             var index = 0;
             foreach (var item in source)

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Handyman.Wpf;
 using Shouldly;
 
 namespace Handyman.Tests.Core
@@ -15,6 +14,16 @@ namespace Handyman.Tests.Core
             var sum = 0;
             var ints = new[] { 1, 2, 3 };
             ints.ForEachYield(i => sum += i);
+            sum.ShouldBe(0);
+            ints.ForEachYield(i => sum += i).ToList();
+            sum.ShouldBe(6);
+        }
+
+        public void VisitShouldExecuteProvidedActionForEachItemWhenTheReturnedEnumerableIsTraversed()
+        {
+            var sum = 0;
+            var ints = new[] { 1, 2, 3 };
+            ints.Visit(i => sum += i);
             sum.ShouldBe(0);
             ints.ForEachYield(i => sum += i).ToList();
             sum.ShouldBe(6);
@@ -237,6 +246,21 @@ namespace Handyman.Tests.Core
             result.Count.ShouldBe(0);
 
             source.ForEachYield((s, i) => result.Add(s + i)).ToList();
+            result.Count.ShouldBe(3);
+            result[0].ShouldBe("zero0");
+            result[1].ShouldBe("one1");
+            result[2].ShouldBe("two2");
+        }
+
+        public void VisitWithIndexShouldExecuteProvidedActionForEachItem()
+        {
+            var source = new[] { "zero", "one", "two" };
+            var result = new List<string>();
+
+            source.Visit((s, i) => result.Add(s + i));
+            result.Count.ShouldBe(0);
+
+            source.Visit((s, i) => result.Add(s + i)).ToList();
             result.Count.ShouldBe(3);
             result[0].ShouldBe("zero0");
             result[1].ShouldBe("one1");
