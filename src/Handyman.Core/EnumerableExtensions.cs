@@ -217,5 +217,23 @@ namespace Handyman
         {
             return new ObservableCollection<T>(source);
         }
+
+        public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var buffer = new List<T>();
+            foreach (var item in source)
+            {
+                if (predicate(item) && buffer.Count != 0)
+                {
+                    yield return buffer;
+                    buffer = new List<T>();
+                }
+
+                buffer.Add(item);
+            }
+
+            if (buffer.Count != 0)
+                yield return buffer;
+        }
     }
 }

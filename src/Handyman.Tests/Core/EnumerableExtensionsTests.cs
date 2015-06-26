@@ -216,7 +216,7 @@ namespace Handyman.Tests.Core
             ints.TakeLastWhile(i => i == 5).ShouldBe(new[] { 5 });
         }
 
-        public void ShouldChunk()
+        public void ShouldChunkToFixedChunkSize()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
             var chunks = ints.Chunk(2).ToList();
@@ -224,6 +224,17 @@ namespace Handyman.Tests.Core
             chunks[0].ShouldBe(new[] { 1, 2 });
             chunks[1].ShouldBe(new[] { 3, 4 });
             chunks[2].ShouldBe(new[] { 5 });
+        }
+
+        public void ShouldChunkByPredicate()
+        {
+            var ints = new[] { 1, 1, 2, 1, 2, 3, 1, 2, 3, 4 };
+            var chunks = ints.Chunk(i => i == 1).ToList();
+            chunks.Count.ShouldBe(4);
+            chunks[0].ShouldBe(new[] { 1 });
+            chunks[1].ShouldBe(new[] { 1, 2 });
+            chunks[2].ShouldBe(new[] { 1, 2, 3 });
+            chunks[3].ShouldBe(new[] { 1, 2, 3, 4 });
         }
 
         public void ForEachWithIndexShouldExecuteProvidedActionForEachItem()
