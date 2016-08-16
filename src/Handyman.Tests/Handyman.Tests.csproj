@@ -89,6 +89,10 @@
       <Project>{5eef1fc9-0186-440b-afda-e09ceb3685f3}</Project>
       <Name>Handyman.Wpf</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Handyman\Handyman.xproj">
+      <Project>{e88b71f6-e656-4d04-b3f8-fb914e931fa6}</Project>
+      <Name>Handyman</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
