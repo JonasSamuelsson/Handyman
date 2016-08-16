@@ -175,3 +175,6 @@ FakesAssemblies/
 
 # dot net core
 project.lock.json
+
+# vs
+*/.vs
