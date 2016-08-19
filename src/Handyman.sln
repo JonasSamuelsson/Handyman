@@ -3,15 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman", "Handyman\Handyman.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Core", "Handyman.Core\Handyman.Core.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Tests", "Handyman.Tests\Handyman.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "Handyman.Wpf\Handyman.Wpf.csproj", "{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D84F2948-95E8-4832-B022-24B73ACBA33C} = {D84F2948-95E8-4832-B022-24B73ACBA33C}
 	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Handyman", "Handyman\Handyman.xproj", "{E88B71F6-E656-4D04-B3F8-FB914E931FA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
