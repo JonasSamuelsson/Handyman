@@ -15,5 +15,11 @@ namespace Handyman.Tests.Core
             false.IsTrue().ShouldBe(false);
             true.IsTrue().ShouldBe(true);
         }
+
+        public void ShouldInvertValue()
+        {
+            false.Not().ShouldBe(true);
+            true.Not().ShouldBe(false);
+        }
     }
 }
