@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Handyman</RootNamespace>
-    <AssemblyName>Handyman.Core</AssemblyName>
+    <AssemblyName>Handyman</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,7 +35,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="BoolExtensions.cs" />
     <Compile Include="ClassExtensions.cs" />
     <Compile Include="ComparableExtensions.cs" />
@@ -47,6 +46,7 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IgnoreCase.cs" />
     <Compile Include="Int32Extensions.cs" />
+    <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="LookupExtensions.cs" />
     <Compile Include="MemberInfoExtensions.cs" />
     <Compile Include="NullableExtensions.cs" />
@@ -57,12 +57,6 @@
     <Compile Include="Temp.cs" />
     <Compile Include="TimespanExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Handyman\Handyman.xproj">
-      <Project>{e88b71f6-e656-4d04-b3f8-fb914e931fa6}</Project>
-      <Name>Handyman</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
