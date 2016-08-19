@@ -2,14 +2,19 @@
 {
     public static class BoolExtensions
     {
-        public static bool IsFalse(this bool b)
+        public static bool IsFalse(this bool value)
         {
-            return !b.IsTrue();
+            return value == false;
         }
     
-        public static bool IsTrue(this bool b)
+        public static bool IsTrue(this bool value)
         {
-            return b;
+            return value;
+        }
+
+        public static bool Not(this bool value)
+        {
+            return !value;
         }
     }
 }
