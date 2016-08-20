@@ -1,11 +1,16 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Handyman
 {
     public static class ComparableExtensions
     {
-        public static T Clamp<T>(this T value, T lower, T upper) where T : IComparable<T>
+        public static T Clamp<T>([NotNull] this T value, [NotNull] T lower, [NotNull] T upper) where T : IComparable<T>
         {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (lower == null) throw new ArgumentNullException(nameof(lower));
+            if (upper == null) throw new ArgumentNullException(nameof(upper));
+
             if (lower.CompareTo(upper) == 1)
             {
                 var temp = lower;
