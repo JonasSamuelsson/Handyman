@@ -20,8 +20,12 @@ namespace Handyman
                     : value);
         }
 
-        public static bool IsInRange<T>(this T value, T lower, T upper) where T : IComparable<T>
+        public static bool IsInRange<T>([NotNull] this T value, [NotNull] T lower, [NotNull] T upper) where T : IComparable<T>
         {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (lower == null) throw new ArgumentNullException(nameof(lower));
+            if (upper == null) throw new ArgumentNullException(nameof(upper));
+
             Order(ref lower, ref upper);
 
             return typeof(T) == typeof(string)
