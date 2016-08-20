@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System;
+using Shouldly;
 
 namespace Handyman.Tests.Core
 {
@@ -19,7 +20,7 @@ namespace Handyman.Tests.Core
             1.5.IsInRange(1.2, 1.4).ShouldBe(false);
         }
 
-        public void ShouldClamp()
+        public void Clamp()
         {
             1.Clamp(2, 4).ShouldBe(2);
             2.Clamp(2, 4).ShouldBe(2);
@@ -32,6 +33,15 @@ namespace Handyman.Tests.Core
             3.Clamp(4, 2).ShouldBe(3);
             4.Clamp(4, 2).ShouldBe(4);
             5.Clamp(4, 2).ShouldBe(4);
+        }
+
+        public void ClampShouldThrowIfAnyParameterIsNull()
+        {
+            string @null = null;
+
+            Should.Throw<ArgumentNullException>(() => @null.Clamp("", ""));
+            Should.Throw<ArgumentNullException>(() => "".Clamp(@null, ""));
+            Should.Throw<ArgumentNullException>(() => "".Clamp("", @null));
         }
     }
 }
