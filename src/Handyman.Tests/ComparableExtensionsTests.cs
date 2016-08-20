@@ -20,6 +20,24 @@ namespace Handyman.Tests.Core
             5.IsInRange(4, 2).ShouldBe(false);
         }
 
+        public void IsInRangeShouldThrowIfAnyParameterIsNull()
+        {
+            Comparable @null = null;
+            Comparable instance = new Comparable();
+
+            Should.Throw<ArgumentNullException>(() => @null.IsInRange(instance, instance));
+            Should.Throw<ArgumentNullException>(() => instance.IsInRange(@null, instance));
+            Should.Throw<ArgumentNullException>(() => instance.IsInRange(instance, @null));
+        }
+
+        private class Comparable:IComparable<Comparable>
+        {
+            public int CompareTo(Comparable other)
+            {
+                return 0;
+            }
+        }
+
         public void Clamp()
         {
             1.Clamp(2, 4).ShouldBe(2);
