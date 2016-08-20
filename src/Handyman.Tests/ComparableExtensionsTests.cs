@@ -13,11 +13,11 @@ namespace Handyman.Tests.Core
             4.IsInRange(2, 4).ShouldBe(true);
             5.IsInRange(2, 4).ShouldBe(false);
 
-            1.1.IsInRange(1.2, 1.4).ShouldBe(false);
-            1.2.IsInRange(1.2, 1.4).ShouldBe(true);
-            1.3.IsInRange(1.2, 1.4).ShouldBe(true);
-            1.4.IsInRange(1.2, 1.4).ShouldBe(true);
-            1.5.IsInRange(1.2, 1.4).ShouldBe(false);
+            1.IsInRange(4, 2).ShouldBe(false);
+            2.IsInRange(4, 2).ShouldBe(true);
+            3.IsInRange(4, 2).ShouldBe(true);
+            4.IsInRange(4, 2).ShouldBe(true);
+            5.IsInRange(4, 2).ShouldBe(false);
         }
 
         public void Clamp()
