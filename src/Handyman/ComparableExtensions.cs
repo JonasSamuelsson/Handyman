@@ -11,12 +11,7 @@ namespace Handyman
             if (lower == null) throw new ArgumentNullException(nameof(lower));
             if (upper == null) throw new ArgumentNullException(nameof(upper));
 
-            if (lower.CompareTo(upper) == 1)
-            {
-                var temp = lower;
-                lower = upper;
-                upper = temp;
-            }
+            Order(ref lower, ref upper);
 
             return value.CompareTo(lower) == -1
                 ? lower
@@ -25,11 +20,23 @@ namespace Handyman
                     : value);
         }
 
-        public static bool IsInRange<T>(this T value, T min, T max) where T : IComparable
+        public static bool IsInRange<T>(this T value, T lower, T upper) where T : IComparable<T>
         {
+            Order(ref lower, ref upper);
+
             return typeof(T) == typeof(string)
-                       ? StringExtensions.IsInRange(value as string, min as string, max as string)
-                       : min.CompareTo(value) <= 0 && value.CompareTo(max) <= 0;
+                       ? StringExtensions.IsInRange(value as string, lower as string, upper as string)
+                       : lower.CompareTo(value) <= 0 && value.CompareTo(upper) <= 0;
+        }
+
+        private static void Order<T>(ref T lower, ref T upper) where T : IComparable<T>
+        {
+            if (lower.CompareTo(upper) == 1)
+            {
+                var temp = lower;
+                lower = upper;
+                upper = temp;
+            }
         }
     }
 }
