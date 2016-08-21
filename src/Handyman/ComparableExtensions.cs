@@ -22,15 +22,35 @@ namespace Handyman
 
         public static bool IsInRange<T>([NotNull] this T value, [NotNull] T lower, [NotNull] T upper) where T : IComparable<T>
         {
+            return value.IsInRange(lower, upper, RangeBounds.Inclusive);
+        }
+
+        public static bool IsInRange<T>([NotNull] this T value, [NotNull] T lower, [NotNull] T upper, RangeBounds bounds) where T : IComparable<T>
+        {
             if (value == null) throw new ArgumentNullException(nameof(value));
             if (lower == null) throw new ArgumentNullException(nameof(lower));
             if (upper == null) throw new ArgumentNullException(nameof(upper));
 
             Order(ref lower, ref upper);
 
-            return typeof(T) == typeof(string)
-                       ? StringExtensions.IsInRange(value as string, lower as string, upper as string)
-                       : lower.CompareTo(value) <= 0 && value.CompareTo(upper) <= 0;
+            if (typeof(T) == typeof(string))
+            {
+                return (value as string).IsInRange(lower as string, upper as string);
+            }
+
+            var comparand = bounds == RangeBounds.Inclusive || bounds == RangeBounds.IncludeLower ? 0 : 1;
+            if (value.CompareTo(lower) < comparand)
+            {
+                return false;
+            }
+
+            comparand = bounds == RangeBounds.Inclusive || bounds == RangeBounds.IncludeUpper ? 0 : -1;
+            if (value.CompareTo(upper) > comparand)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static void Order<T>(ref T lower, ref T upper) where T : IComparable<T>
