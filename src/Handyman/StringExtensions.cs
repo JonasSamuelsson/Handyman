@@ -412,21 +412,6 @@ namespace Handyman
             return s.ToLongOrDefault(formatProvider, 0);
         }
 
-        public static bool IsBetween(this string value, string min, string max)
-        {
-            return value.IsBetween(min, max, Configuration.StringComparison());
-        }
-
-        public static bool IsBetween(this string value, string min, string max, StringComparison comparison)
-        {
-            return string.Compare(min, value, comparison) < 0 && string.Compare(value, max, comparison) < 0;
-        }
-
-        public static bool IsBetween(this string value, string min, string max, CultureInfo cultureInfo, CompareOptions options = CompareOptions.None)
-        {
-            return string.Compare(min, value, cultureInfo, options) < 0 && string.Compare(value, max, cultureInfo, options) < 0;
-        }
-
         public static bool IsInRange(this string value, string min, string max)
         {
             return value.IsInRange(min, max, Configuration.StringComparison());

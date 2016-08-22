@@ -395,33 +395,7 @@ namespace Handyman.Tests.Core
             "1".ToLongOrZero().ShouldBe(1);
             "2".ToLongOrZero(Configuration.FormatProvider()).ShouldBe(2);
         }
-
-        public void ShouldCheckIfStringIsBetween()
-        {
-            Configuration.StringComparison = () => StringComparison.Ordinal;
-
-            "a".IsBetween("b", "d").ShouldBe(false);
-            "b".IsBetween("b", "d").ShouldBe(false);
-            "c".IsBetween("b", "d").ShouldBe(true);
-            "d".IsBetween("b", "d").ShouldBe(false);
-            "e".IsBetween("b", "d").ShouldBe(false);
-
-            "A".IsBetween("b", "d").ShouldBe(false);
-            "B".IsBetween("b", "d").ShouldBe(false);
-            "C".IsBetween("b", "d").ShouldBe(false);
-            "D".IsBetween("b", "d").ShouldBe(false);
-            "E".IsBetween("b", "d").ShouldBe(false);
-
-            "A".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "B".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "C".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-            "D".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-            "E".IsBetween("b", "d", StringComparison.InvariantCultureIgnoreCase).ShouldBe(false);
-
-            "C".IsBetween("b", "d", CultureInfo.InvariantCulture).ShouldBe(true);
-            "C".IsBetween("b", "d", CultureInfo.InvariantCulture, CompareOptions.Ordinal).ShouldBe(false);
-        }
-
+        
         public void ShouldCheckIfStringIsInRange()
         {
             Configuration.StringComparison = () => StringComparison.Ordinal;
