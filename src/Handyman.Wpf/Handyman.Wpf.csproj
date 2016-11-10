@@ -38,7 +38,7 @@
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Handyman\Properties\SharedAssemblyInfo.cs">
+    <Compile Include="..\Handyman.Extensions\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Converters\Bool2VisibilityConverter.cs" />
@@ -56,9 +56,9 @@
     <Compile Include="RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Handyman\Handyman.csproj">
+    <ProjectReference Include="..\Handyman.Extensions\Handyman.Extensions.csproj">
       <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
-      <Name>Handyman</Name>
+      <Name>Handyman.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

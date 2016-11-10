@@ -7,8 +7,8 @@
     <ProjectGuid>{D84F2948-95E8-4832-B022-24B73ACBA33C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Handyman</RootNamespace>
-    <AssemblyName>Handyman</AssemblyName>
+    <RootNamespace>Handyman.Extensions</RootNamespace>
+    <AssemblyName>Handyman.Extensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
