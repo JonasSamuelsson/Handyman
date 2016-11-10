@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class DictionaryExtensionsTests
     {
+        [Fact]
         public void GetValueOrDefault()
         {
             var dictionary = new Dictionary<int, string>();
@@ -21,6 +23,7 @@ namespace Handyman.Tests.Extensions
             dictionary.GetValueOrDefault(0, () => "default").ShouldBe("zero");
         }
 
+        [Fact]
         public void GetOrAdd()
         {
             var dictionary = new Dictionary<int, string> { { 0, "Zero" } };

@@ -3,23 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class TypeExtensionsTests
     {
+        [Fact]
         public void ShouldCheckIfTypeIsConcreteClass()
         {
             typeof(Abstract).IsConcreteClass().ShouldBe(false);
             typeof(Concrete).IsConcreteClass().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfTypeIsConcreteClosedClass()
         {
             typeof(Concrete<>).IsConcreteClosedClass().ShouldBe(false);
             typeof(Concrete<string>).IsConcreteClosedClass().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfTypeIsConcreteClassClosing()
         {
             typeof(Concrete<>).IsConcreteClassClosing(typeof(Concrete<>)).ShouldBe(false);
@@ -34,6 +38,7 @@ namespace Handyman.Tests.Extensions
             genericType.ShouldBe(typeof(Concrete<object>));
         }
 
+        [Fact]
         public void ShouldCheckIfTypeIsOfType()
         {
             typeof(object).IsOfType(typeof(object)).ShouldBe(true);
@@ -79,6 +84,7 @@ namespace Handyman.Tests.Extensions
             typeof(IEnumerable<string>).IsOfType<IEnumerable<object>>().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfTypeIsSubType()
         {
             typeof(object).IsSubTypeOf(typeof(object)).ShouldBe(false);
@@ -124,6 +130,7 @@ namespace Handyman.Tests.Extensions
             typeof(IEnumerable<string>).IsSubTypeOf<IEnumerable<object>>().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfTypeIsSuperType()
         {
             typeof(object).IsSuperTypeOf(typeof(object)).ShouldBe(false);
@@ -169,6 +176,7 @@ namespace Handyman.Tests.Extensions
             typeof(IEnumerable<object>).IsSuperTypeOf<IEnumerable<string>>().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldGetSuperTypes()
         {
             var expextedTypes = new[]
@@ -186,6 +194,7 @@ namespace Handyman.Tests.Extensions
             typeof(ConcreteOfObject).GetSuperTypes().OrderBy(x => x.FullName, StringComparer.Ordinal).ShouldBe(expextedTypes);
         }
 
+        [Fact]
         public void ShouldCheckIsConcreteSubClassOf()
         {
             typeof(Abstract).IsConcreteSubClassOf(typeof(IInterface)).ShouldBe(false);

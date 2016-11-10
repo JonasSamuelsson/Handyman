@@ -1,11 +1,13 @@
 ﻿using System;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class TimespanExtensionsTests
     {
+        [Fact]
         public void ShouldGetDateTimeOffsetInThePast()
         {
             var now = DateTimeOffset.Now;
@@ -13,6 +15,7 @@ namespace Handyman.Tests.Extensions
             10.Minutes().Ago().ShouldBe(Configuration.Now().Subtract(10.Minutes()));
         }
 
+        [Fact]
         public void ShouldGetDateTimeOffsetInTheFuture()
         {
             var now = DateTimeOffset.Now;

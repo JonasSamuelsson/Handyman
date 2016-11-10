@@ -1,11 +1,13 @@
 ﻿using System;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class ComparableExtensionsTests
     {
+        [Fact]
         public void ShouldCheckIfValueIsInRange()
         {
             1.IsInRange(2, 4, RangeBounds.Inclusive).ShouldBe(false);
@@ -69,6 +71,7 @@ namespace Handyman.Tests.Extensions
             5.IsInRange(4, 2).ShouldBe(false);
         }
 
+        [Fact]
         public void IsInRangeShouldThrowIfAnyParameterIsNull()
         {
             Comparable @null = null;
@@ -87,6 +90,7 @@ namespace Handyman.Tests.Extensions
             }
         }
 
+        [Fact]
         public void Clamp()
         {
             1.Clamp(2, 4).ShouldBe(2);
@@ -102,6 +106,7 @@ namespace Handyman.Tests.Extensions
             5.Clamp(4, 2).ShouldBe(4);
         }
 
+        [Fact]
         public void ClampShouldThrowIfAnyParameterIsNull()
         {
             string @null = null;

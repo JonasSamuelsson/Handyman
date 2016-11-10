@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using Handyman.Wpf;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Handyman.Extensions;
+using Handyman.Wpf;
+using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Wpf
 {
     public class ObservableOf2Tests
     {
+        [Fact]
         public void ShouldProvideValueFromSource()
         {
             var observable = Observable.Create(new[] { new Observable<double>(1), new Observable<double>(2) },
@@ -19,6 +20,7 @@ namespace Handyman.Tests.Wpf
             observable.Value.ShouldBe(1.5);
         }
 
+        [Fact]
         public void ChangesToTheUnderlyingItemShouldAffectValue()
         {
             var sourceObservable = new Observable<double>(1);
@@ -36,6 +38,7 @@ namespace Handyman.Tests.Wpf
             observable.Value.ShouldBe(2);
         }
 
+        [Fact]
         public void ChangesToUnderlyingCollectionShouldAffectValue()
         {
             var collection = new ObservableCollection<Observable<double>>(new[] { new Observable<double>(1), new Observable<double>(2) });
@@ -53,6 +56,7 @@ namespace Handyman.Tests.Wpf
             observable.Value.ShouldBe(2);
         }
 
+        [Fact]
         public void AssigningValueShouldInvokeValueSetter()
         {
             var observable = Observable.Create(new[] { new Observable<double>(1), new Observable<double>(2) },
@@ -67,6 +71,7 @@ namespace Handyman.Tests.Wpf
             observable.Value.ShouldBe(3);
         }
 
+        [Fact]
         public void ValidValueShouldNotResultInAnyValidationErrors()
         {
             var observable = Observable.Create(new[] { new Observable<int>() },
@@ -77,6 +82,7 @@ namespace Handyman.Tests.Wpf
             observable["Value"].ShouldBe(string.Empty);
         }
 
+        [Fact]
         public void BrokenValidationRuleShouldResultInValidationError()
         {
             var errorMessage = "Value can't be zero";
@@ -89,6 +95,7 @@ namespace Handyman.Tests.Wpf
             observable["Value"].ShouldBe(errorMessage);
         }
 
+        [Fact]
         public void ShouldBeAbleToAddValidationAfterConstruction()
         {
             var errorMessage = "Value can't be zero";
@@ -101,6 +108,7 @@ namespace Handyman.Tests.Wpf
             observable["Value"].ShouldBe(errorMessage);
         }
 
+        [Fact]
         public void ShouldImplicitlyConvertToTypeOfTValue()
         {
             var observable = Observable.Create(new[] { new Observable<int>(5) }, x => x.Sum(y => y.Value), delegate { });

@@ -48,18 +48,35 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.1.0\lib\dotnet\xunit.assert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.1.0\lib\dotnet\xunit.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.1.0\lib\net45\xunit.execution.desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CultureAttribute.cs" />
+    <Compile Include="CustomCultureBehavior.cs" />
     <Compile Include="Extensions\BoolExtensionsTests.cs" />
     <Compile Include="Extensions\ClassExtensionsTests.cs" />
     <Compile Include="Extensions\ComparableExtensionsTests.cs" />
     <Compile Include="Extensions\ConfigurationTests.cs" />
-    <Compile Include="Extensions\Convention.cs" />
+    <Compile Include="Convention.cs" />
     <Compile Include="Wpf\Converters\Bool2VisibilityConverterTests.cs" />
     <Compile Include="Wpf\Converters\CompoundConverterTests.cs" />
     <Compile Include="Wpf\Converters\HasValueConverterTests.cs" />
     <Compile Include="Wpf\Converters\InvertBoolConverterTests.cs" />
-    <Compile Include="Extensions\CultureAttribute.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
     <Compile Include="Extensions\LookupExtensionsTests.cs" />
     <Compile Include="Extensions\MemberInfoExtensionsTests.cs" />

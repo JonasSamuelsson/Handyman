@@ -3,17 +3,20 @@ using System.Globalization;
 using System.Windows;
 using Handyman.Wpf.Converters;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Wpf.Converters
 {
     public class CompoundConverterTests
     {
+        [Fact]
         public void ShouldConvert()
         {
             new CompoundConverter(new String2BoolConverter(), new Bool2VisibilityConverter())
                 .Convert("true", null, null, null).ShouldBe(Visibility.Visible);
         }
 
+        [Fact]
         public void ShouldConvertBack()
         {
             new CompoundConverter(new String2BoolConverter(), new Bool2VisibilityConverter())

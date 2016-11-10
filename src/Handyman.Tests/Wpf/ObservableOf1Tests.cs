@@ -1,10 +1,12 @@
 ﻿using Handyman.Wpf;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Wpf
 {
     public class ObservableOf1Tests
     {
+        [Fact]
         public void AssigningNewValueShouldTriggerPropertyChangedEvent()
         {
             var observable = new Observable<int>();
@@ -14,6 +16,7 @@ namespace Handyman.Tests.Wpf
             changedProperty.ShouldBe("Value");
         }
 
+        [Fact]
         public void AssigningSameValueShouldTriggerPropertyChangedEvent()
         {
             var observable = new Observable<int>(1);
@@ -23,6 +26,7 @@ namespace Handyman.Tests.Wpf
             propertyChanged.ShouldBe(false);
         }
 
+        [Fact]
         public void ValidValueShouldNotResultInAnyValidationErrors()
         {
             var observable = new Observable<int>();
@@ -31,6 +35,7 @@ namespace Handyman.Tests.Wpf
             observable["Value"].ShouldBe(string.Empty);
         }
 
+        [Fact]
         public void BrokenValidationRuleShouldResultInValidationError()
         {
             var errorMessage = "Value can't be zero.";
@@ -40,6 +45,7 @@ namespace Handyman.Tests.Wpf
             observable["Value"].ShouldBe(errorMessage);
         }
 
+        [Fact]
         public void ShouldBeAbleToConfigureValidationAfterInstantiation()
         {
             var observable = new Observable<int>();
@@ -50,6 +56,7 @@ namespace Handyman.Tests.Wpf
             observable.Error.ShouldBe(errorMessage);
         }
 
+        [Fact]
         public void ShouldImplicitlyConvertToTypeOfT()
         {
             var observable = new Observable<int>(5);

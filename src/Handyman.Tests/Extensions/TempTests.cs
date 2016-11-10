@@ -1,10 +1,12 @@
 ﻿using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class TempTests
     {
+        [Fact]
         public void ShouldModifyAndRestore()
         {
             var number = 0;

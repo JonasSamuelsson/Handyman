@@ -4,33 +4,39 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class StringExtensionsTests
     {
+        [Fact]
         public void ShouldJoinStrings()
         {
             new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
         }
 
+        [Fact]
         public void ShouldFormatString()
         {
             "{0} {1}!".FormatWith("Hello", "world").ShouldBe("Hello world!");
         }
 
+        [Fact]
         public void ShouldCheckIfStringEquals()
         {
             "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture).ShouldBe(false);
             "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture, IgnoreCase.Yes).ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringEqualsWildcard()
         {
             "Hello".EqualsWildcard("*e*o").ShouldBe(false);
             "Hello".EqualsWildcard("*e*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringContainsValue()
         {
             "Hello World".Contains("lo wo", StringComparison.InvariantCulture).ShouldBe(false);
@@ -40,6 +46,7 @@ namespace Handyman.Tests.Extensions
 
         }
 
+        [Fact]
         public void ShouldCheckIfStringContainsWildcardValue()
         {
             "ohe".ContainsWildcard("he*o").ShouldBe(false);
@@ -47,18 +54,21 @@ namespace Handyman.Tests.Extensions
             "Hello world".ContainsWildcard("he*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsMatch()
         {
             "Hello world".IsMatch("^hello").ShouldBe(false);
             "Hello world".IsMatch("^hello", RegexOptions.IgnoreCase).ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNull()
         {
             ((string)null).IsNull().ShouldBe(true);
             "".IsNull().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsEmpty()
         {
             ((string)null).IsEmpty().ShouldBe(false);
@@ -67,6 +77,7 @@ namespace Handyman.Tests.Extensions
             "x".IsEmpty().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsWhiteSpace()
         {
             ((string)null).IsWhiteSpace().ShouldBe(false);
@@ -75,6 +86,7 @@ namespace Handyman.Tests.Extensions
             "x".IsWhiteSpace().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNullOrEmpty()
         {
             ((string)null).IsNullOrEmpty().ShouldBe(true);
@@ -83,6 +95,7 @@ namespace Handyman.Tests.Extensions
             "x".IsNullOrEmpty().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNullOrWhiteSpace()
         {
             ((string)null).IsNullOrWhiteSpace().ShouldBe(true);
@@ -91,12 +104,14 @@ namespace Handyman.Tests.Extensions
             "x".IsNullOrWhiteSpace().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNotNull()
         {
             ((string)null).IsNotNull().ShouldBe(false);
             "".IsNotNull().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNotEmpty()
         {
             ((string)null).IsNotEmpty().ShouldBe(true);
@@ -105,6 +120,7 @@ namespace Handyman.Tests.Extensions
             "x".IsNotEmpty().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNotWhiteSpace()
         {
             ((string)null).IsNotWhiteSpace().ShouldBe(true);
@@ -113,6 +129,7 @@ namespace Handyman.Tests.Extensions
             "x".IsNotWhiteSpace().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNotNullOrEmpty()
         {
             ((string)null).IsNotNullOrEmpty().ShouldBe(false);
@@ -121,6 +138,7 @@ namespace Handyman.Tests.Extensions
             "x".IsNotNullOrEmpty().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldCheckIfStringIsNotNullOrWhiteSpace()
         {
             ((string)null).IsNotNullOrWhiteSpace().ShouldBe(false);
@@ -129,6 +147,7 @@ namespace Handyman.Tests.Extensions
             "x".IsNotNullOrWhiteSpace().ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldGetSubstring()
         {
             "".SubstringSafe(1).ShouldBe(string.Empty);
@@ -137,29 +156,34 @@ namespace Handyman.Tests.Extensions
             "Hello".SubstringSafe(1, 1).ShouldBe("e");
         }
 
+        [Fact]
         public void ShouldReverseTheString()
         {
             "Hello".Reverse().ShouldBe("olleH");
         }
 
+        [Fact]
         public void ShouldConvertStringToEnumOrThrow()
         {
             Should.Throw<ArgumentException>(() => "yes".ToEnum<IgnoreCase>());
             "yes".ToEnum<IgnoreCase>(IgnoreCase.Yes).ShouldBe(IgnoreCase.Yes);
         }
 
+        [Fact]
         public void ShouldConvertStringToEnumOrNull()
         {
             "yes".ToEnumOrNull<IgnoreCase>().ShouldBe(null);
             "yes".ToEnumOrNull<IgnoreCase>(IgnoreCase.Yes).ShouldBe(IgnoreCase.Yes);
         }
 
+        [Fact]
         public void ShouldConvertStringToEnumOrDefault()
         {
             "yes".ToEnumOrDefault(IgnoreCase.No).ShouldBe(IgnoreCase.No);
             "yes".ToEnumOrDefault(() => IgnoreCase.No).ShouldBe(IgnoreCase.No);
         }
 
+        [Fact]
         public void ShouldGetValueIfNull()
         {
             ((string)null).IfNull("value").ShouldBe("value");
@@ -172,6 +196,7 @@ namespace Handyman.Tests.Extensions
             "foobar".IfNull(() => "value").ShouldBe("foobar");
         }
 
+        [Fact]
         public void ShouldGetValueIfEmpty()
         {
             ((string)null).IfEmpty("value").ShouldBe(null);
@@ -184,6 +209,7 @@ namespace Handyman.Tests.Extensions
             "foobar".IfEmpty(() => "value").ShouldBe("foobar");
         }
 
+        [Fact]
         public void ShouldGetValueIfWhiteSpace()
         {
             ((string)null).IfWhiteSpace("value").ShouldBe(null);
@@ -196,6 +222,7 @@ namespace Handyman.Tests.Extensions
             "foobar".IfWhiteSpace(() => "value").ShouldBe("foobar");
         }
 
+        [Fact]
         public void ShouldGetValueIfNullOrEmpty()
         {
             ((string)null).IfNullOrEmpty("value").ShouldBe("value");
@@ -208,6 +235,7 @@ namespace Handyman.Tests.Extensions
             "foobar".IfNullOrEmpty(() => "value").ShouldBe("foobar");
         }
 
+        [Fact]
         public void ShouldGetValueIfNullOrWhiteSpace()
         {
             ((string)null).IfNullOrWhiteSpace("value").ShouldBe("value");
@@ -220,6 +248,7 @@ namespace Handyman.Tests.Extensions
             "foobar".IfNullOrWhiteSpace(() => "value").ShouldBe("foobar");
         }
 
+        [Fact]
         public void ShouldTryConvertStringToEnum()
         {
             int @int;
@@ -247,6 +276,7 @@ namespace Handyman.Tests.Extensions
             One = 1
         }
 
+        [Fact]
         public void TryToShort()
         {
             // ReSharper disable once RedundantAssignment
@@ -266,6 +296,7 @@ namespace Handyman.Tests.Extensions
             result.ShouldBe((short)2);
         }
 
+        [Fact]
         public void ToShort()
         {
             Should.Throw<ArgumentException>(() => "".ToShort());
@@ -275,6 +306,7 @@ namespace Handyman.Tests.Extensions
             "2".ToShort(Configuration.FormatProvider()).ShouldBe((short)2);
         }
 
+        [Fact]
         public void ToShortOrDefault()
         {
             "one".ToShortOrDefault(0).ShouldBe((short)0);
@@ -288,6 +320,7 @@ namespace Handyman.Tests.Extensions
             "4".ToShortOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe((short)4);
         }
 
+        [Fact]
         public void ToShortOrZero()
         {
             "one".ToShortOrZero().ShouldBe((short)0);
@@ -297,6 +330,7 @@ namespace Handyman.Tests.Extensions
             "2".ToShortOrZero(Configuration.FormatProvider()).ShouldBe((short)2);
         }
 
+        [Fact]
         public void TryToInt()
         {
             // ReSharper disable once RedundantAssignment
@@ -316,6 +350,7 @@ namespace Handyman.Tests.Extensions
             result.ShouldBe(2);
         }
 
+        [Fact]
         public void ToInt()
         {
             Should.Throw<ArgumentException>(() => "".ToInt());
@@ -325,6 +360,7 @@ namespace Handyman.Tests.Extensions
             "2".ToInt(Configuration.FormatProvider()).ShouldBe(2);
         }
 
+        [Fact]
         public void ToIntOrDefault()
         {
             "one".ToIntOrDefault(0).ShouldBe(0);
@@ -338,6 +374,7 @@ namespace Handyman.Tests.Extensions
             "4".ToIntOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(4);
         }
 
+        [Fact]
         public void ToIntOrZero()
         {
             "one".ToIntOrZero().ShouldBe(0);
@@ -347,6 +384,7 @@ namespace Handyman.Tests.Extensions
             "2".ToIntOrZero(Configuration.FormatProvider()).ShouldBe(2);
         }
 
+        [Fact]
         public void TryToLong()
         {
             // ReSharper disable once RedundantAssignment
@@ -366,6 +404,7 @@ namespace Handyman.Tests.Extensions
             result.ShouldBe(2);
         }
 
+        [Fact]
         public void ToLong()
         {
             Should.Throw<ArgumentException>(() => "".ToLong());
@@ -375,6 +414,7 @@ namespace Handyman.Tests.Extensions
             "2".ToLong(Configuration.FormatProvider()).ShouldBe(2);
         }
 
+        [Fact]
         public void ToLongOrDefault()
         {
             "one".ToLongOrDefault(0).ShouldBe(0);
@@ -388,6 +428,7 @@ namespace Handyman.Tests.Extensions
             "4".ToLongOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(4);
         }
 
+        [Fact]
         public void ToLongOrZero()
         {
             "one".ToLongOrZero().ShouldBe(0);
@@ -396,7 +437,8 @@ namespace Handyman.Tests.Extensions
             "1".ToLongOrZero().ShouldBe(1);
             "2".ToLongOrZero(Configuration.FormatProvider()).ShouldBe(2);
         }
-        
+
+        [Fact]
         public void ShouldCheckIfStringIsInRange()
         {
             Configuration.StringComparison = () => StringComparison.Ordinal;
@@ -423,7 +465,7 @@ namespace Handyman.Tests.Extensions
             "C".IsInRange("b", "d", CultureInfo.InvariantCulture, CompareOptions.Ordinal).ShouldBe(false);
         }
 
-        [Culture("en-US")]
+        [Culture("en-US"), Fact]
         public void ShouldTryConvertStringToDouble()
         {
             double result;
@@ -440,7 +482,7 @@ namespace Handyman.Tests.Extensions
             result.ShouldBe(4.4);
         }
 
-        [Culture("en-US")]
+        [Culture("en-US"), Fact]
         public void ShouldConvertToDoubleOrThrow()
         {
             Should.Throw<FormatException>(() => "1,1".ToDouble());
@@ -450,7 +492,7 @@ namespace Handyman.Tests.Extensions
             "4.4".ToDouble(CultureInfo.InvariantCulture).ShouldBe(4.4);
         }
 
-        [Culture("en-US")]
+        [Culture("en-US"), Fact]
         public void ShouldConvertToDoubleOrNull()
         {
             "1,1".ToDoubleOrNull().ShouldBe(null);
@@ -460,7 +502,7 @@ namespace Handyman.Tests.Extensions
             "4.4".ToDoubleOrNull(CultureInfo.InvariantCulture).ShouldBe(4.4);
         }
 
-        [Culture("en-US")]
+        [Culture("en-US"), Fact]
         public void ShouldConvertToDoubleOrDefault()
         {
             "1,1".ToDoubleOrDefault(0).ShouldBe(0);
@@ -476,7 +518,7 @@ namespace Handyman.Tests.Extensions
             "4.4".ToDoubleOrDefault(CultureInfo.InvariantCulture, () => 0).ShouldBe(4.4);
         }
 
-        [Culture("en-US")]
+        [Culture("en-US"), Fact]
         public void ShouldConvertToDoubleOrZero()
         {
             "1,1".ToDoubleOrZero().ShouldBe(0);
@@ -486,18 +528,21 @@ namespace Handyman.Tests.Extensions
             "4.4".ToDoubleOrZero(CultureInfo.InvariantCulture).ShouldBe(4.4);
         }
 
+        [Fact]
         public void ShouldShiftLeft()
         {
             "12345".ShiftLeft(1).ShouldBe("23451");
             "12345".ShiftLeft(7).ShouldBe("34512");
         }
 
+        [Fact]
         public void ShouldShiftRight()
         {
             "12345".ShiftRight(2).ShouldBe("45123");
             "12345".ShiftRight(8).ShouldBe("34512");
         }
 
+        [Fact]
         public void ShouldChunk()
         {
             var chunks = "12345".Chunk(2).ToList();

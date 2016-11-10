@@ -1,16 +1,19 @@
 ﻿using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class ReflectionUtilTests
     {
+        [Fact]
         public void ShuoldGetPropertName()
         {
             ReflectionUtil.GetPropertyName(() => new Parent().Child).ShouldBe("Child");
             ReflectionUtil.GetPropertyName<Parent>(x => x.Child).ShouldBe("Child");
         }
 
+        [Fact]
         public void ShouldGetPropertyNames()
         {
             var result = new[] { "Child", "Text" };
@@ -18,6 +21,7 @@ namespace Handyman.Tests.Extensions
             ReflectionUtil.GetPropertyNames<Parent>(x => x.Child.Text).ShouldBe(result);
         }
 
+        [Fact]
         public void ShouldGetProperty()
         {
             var instance = new Parent { Child = { Text = "foo" } };
@@ -27,6 +31,7 @@ namespace Handyman.Tests.Extensions
             ReflectionUtil.GetProperty<int>(instance, new[] { "Child", "Text", "Length" }).ShouldBe(3);
         }
 
+        [Fact]
         public void ShouldSetProperty()
         {
             var child = new Child();

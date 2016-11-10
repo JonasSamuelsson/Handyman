@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class LookupExtensionsTests
     {
+        [Fact]
         public void TryGetElements()
         {
             var lookup = new Lookup<int, string>();
@@ -22,6 +24,7 @@ namespace Handyman.Tests.Extensions
             result.ShouldBe(new[] { "zero" });
         }
 
+        [Fact]
         public void GetElementsOrDefault()
         {
             var lookup = new Lookup<int, string>();
@@ -37,6 +40,7 @@ namespace Handyman.Tests.Extensions
             lookup.GetElementsOrDefault(0, () => new[] { "default" }).ShouldBe(new[] { "zero" });
         }
 
+        [Fact]
         public void GetElementsOrEmpty()
         {
             var lookup = new Lookup<int, string>();

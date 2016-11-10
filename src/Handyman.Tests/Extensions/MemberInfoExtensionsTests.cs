@@ -2,11 +2,13 @@
 using System.Linq;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class MemberInfoExtensionsTests
     {
+        [Fact]
         public void ShouldCheckIfMemberHasAttribute()
         {
             typeof(SuperType).Has<TestAttribute>().ShouldBe(true);
@@ -14,6 +16,7 @@ namespace Handyman.Tests.Extensions
             typeof(SubType).Has<TestAttribute>(true).ShouldBe(true);
         }
 
+        [Fact]
         public void ShouldGetAttributes()
         {
             typeof(SuperType).Get<TestAttribute>().Any().ShouldBe(true);

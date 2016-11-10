@@ -1,11 +1,13 @@
-﻿using Handyman.Wpf;
+﻿using System;
+using Handyman.Wpf;
 using Shouldly;
-using System;
+using Xunit;
 
 namespace Handyman.Tests.Wpf
 {
     public class RelayCommandTests
     {
+        [Fact]
         public void ReassigningTheObservableShouldTriggerCanExecuteChangedEvent()
         {
             var observable1 = new Observable<bool>();

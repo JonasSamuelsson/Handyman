@@ -5,11 +5,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class EnumerableExtensionsTests
     {
+        [Fact]
         public void ForEachYieldShouldExecuteProvidedActionForEachItemWhenTheReturnedEnumerableIsTraversed()
         {
             var sum = 0;
@@ -20,6 +22,7 @@ namespace Handyman.Tests.Extensions
             sum.ShouldBe(6);
         }
 
+        [Fact]
         public void VisitShouldExecuteProvidedActionForEachItemWhenTheReturnedEnumerableIsTraversed()
         {
             var sum = 0;
@@ -30,6 +33,7 @@ namespace Handyman.Tests.Extensions
             sum.ShouldBe(6);
         }
 
+        [Fact]
         public void ForEachShouldExecuteProvidedActionForEachItem()
         {
             var sum = 0;
@@ -37,18 +41,21 @@ namespace Handyman.Tests.Extensions
             sum.ShouldBe(6);
         }
 
+        [Fact]
         public void ShouldAppend()
         {
             new[] { 1, 2, 3 }.Append(4, 5, 6).ShouldBe(new[] { 1, 2, 3, 4, 5, 6 });
             new[] { 1, 2, 3 }.Append(new List<int> { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3, 4, 5, 6 });
         }
 
+        [Fact]
         public void ShouldPrepend()
         {
             new[] { 1, 2, 3 }.Prepend(4, 5, 6).ShouldBe(new[] { 4, 5, 6, 1, 2, 3 });
             new[] { 1, 2, 3 }.Prepend(new List<int> { 4, 5, 6 }).ShouldBe(new[] { 4, 5, 6, 1, 2, 3 });
         }
 
+        [Fact]
         public void ShouldCheckIsEmpty()
         {
             var list = default(List<int>);
@@ -61,6 +68,7 @@ namespace Handyman.Tests.Extensions
             list.IsEmpty().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIsNullOrEmpty()
         {
             var list = default(List<int>);
@@ -73,12 +81,14 @@ namespace Handyman.Tests.Extensions
             list.IsNullOrEmpty().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldReturnDefaultIfSourceIsNull()
         {
             default(IEnumerable<int>).IfNull(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
             default(IEnumerable<int>).IfNull(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
         }
 
+        [Fact]
         public void ShouldReturnDefaultIfSourceIsEmpty()
         {
             Enumerable.Empty<int>().IfEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
@@ -92,6 +102,7 @@ namespace Handyman.Tests.Extensions
             ints.EnumerationCount.ShouldBe(1);
         }
 
+        [Fact]
         public void ShouldReturnDefaultIfSourceIsNullOrEmpty()
         {
             var ints = new Ints(1, 2, 3);
@@ -108,6 +119,7 @@ namespace Handyman.Tests.Extensions
             Enumerable.Empty<int>().IfNullOrEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
         }
 
+        [Fact]
         public void ShouldEnumerateEnumerable()
         {
             var ints = new Ints(1, 2, 3);
@@ -115,6 +127,7 @@ namespace Handyman.Tests.Extensions
             ints.EnumerationCount.ShouldBe(1);
         }
 
+        [Fact]
         public void ShouldSumTimespans()
         {
             new[] { 1.Seconds(), 2.Seconds() }.Sum().ShouldBe(3.Seconds());
@@ -169,6 +182,7 @@ namespace Handyman.Tests.Extensions
             }
         }
 
+        [Fact]
         public void ShouldShuffle()
         {
             var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -177,6 +191,7 @@ namespace Handyman.Tests.Extensions
             shuffled.OrderBy(x => x).ShouldBe(numbers);
         }
 
+        [Fact]
         public void ShouldCreateSetFromEnumerable()
         {
             var numbers = new[] { 1, 2, 3 };
@@ -185,6 +200,7 @@ namespace Handyman.Tests.Extensions
             set.ShouldBe(numbers);
         }
 
+        [Fact]
         public void ShouldCreateObservableColectionFromEnumerable()
         {
             var numbers = new[] { 1, 2, 3 };
@@ -193,30 +209,35 @@ namespace Handyman.Tests.Extensions
             set.ShouldBe(numbers);
         }
 
+        [Fact]
         public void ShouldSkipLast()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
             ints.SkipLast(2).ShouldBe(new[] { 1, 2, 3 });
         }
 
+        [Fact]
         public void ShouldSkipLastWhile()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
             ints.SkipLastWhile(i => i == 5).ShouldBe(new[] { 1, 2, 3, 4 });
         }
 
+        [Fact]
         public void ShouldTakeLast()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
             ints.TakeLast(2).ShouldBe(new[] { 4, 5 });
         }
 
+        [Fact]
         public void ShouldTakeLastWhile()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
             ints.TakeLastWhile(i => i == 5).ShouldBe(new[] { 5 });
         }
 
+        [Fact]
         public void ShouldChunkToFixedChunkSize()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
@@ -227,6 +248,7 @@ namespace Handyman.Tests.Extensions
             chunks[2].ShouldBe(new[] { 5 });
         }
 
+        [Fact]
         public void ShouldChunkByPredicate()
         {
             var ints = new[] { 1, 1, 2, 1, 2, 3, 1, 2, 3, 4 };
@@ -238,6 +260,7 @@ namespace Handyman.Tests.Extensions
             chunks[3].ShouldBe(new[] { 1, 2, 3, 4 });
         }
 
+        [Fact]
         public void ForEachWithIndexShouldExecuteProvidedActionForEachItem()
         {
             var source = new[] { "zero", "one", "two" };
@@ -249,6 +272,7 @@ namespace Handyman.Tests.Extensions
             result[2].ShouldBe("two2");
         }
 
+        [Fact]
         public void ForEachYieldWithIndexShouldExecuteProvidedActionForEachItem()
         {
             var source = new[] { "zero", "one", "two" };
@@ -264,6 +288,7 @@ namespace Handyman.Tests.Extensions
             result[2].ShouldBe("two2");
         }
 
+        [Fact]
         public void VisitWithIndexShouldExecuteProvidedActionForEachItem()
         {
             var source = new[] { "zero", "one", "two" };

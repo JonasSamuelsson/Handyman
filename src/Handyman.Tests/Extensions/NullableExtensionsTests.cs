@@ -1,22 +1,26 @@
 using System;
 using Handyman.Extensions;
 using Shouldly;
+using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
     public class NullableExtensionsTests
     {
+        [Fact]
         public void ShouldGetValueOrDefault()
         {
             default(IgnoreCase?).GetValueOrDefault(IgnoreCase.Yes).ShouldBe(IgnoreCase.Yes);
             default(IgnoreCase?).GetValueOrDefault(() => IgnoreCase.Yes).ShouldBe(IgnoreCase.Yes);
         }
 
+        [Fact]
         public void ShouldGetValueOrThrow()
         {
             Should.Throw<InvalidOperationException>(() => default(IgnoreCase?).GetValueOrThrow());
         }
 
+        [Fact]
         public void ShouldCheckIsNull()
         {
             var nullable = default(int?);
@@ -26,6 +30,7 @@ namespace Handyman.Tests.Extensions
             nullable.IsNull().ShouldBe(false);
         }
 
+        [Fact]
         public void ShouldCheckIsNotNull()
         {
             var nullable = default(int?);
