@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "Handyman.Wp
 		{D84F2948-95E8-4832-B022-24B73ACBA33C} = {D84F2948-95E8-4832-B022-24B73ACBA33C}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dispatch", "Handyman.Dispatch\Handyman.Dispatch.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Handyman.Tests</RootNamespace>
     <AssemblyName>Handyman.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +69,9 @@
   <ItemGroup>
     <Compile Include="CultureAttribute.cs" />
     <Compile Include="CustomCultureBehavior.cs" />
+    <Compile Include="Dispatch\ProcessRequestTests.cs" />
+    <Compile Include="Dispatch\PublishMessageTests.cs" />
+    <Compile Include="Dispatch\TestHandlerProvider.cs" />
     <Compile Include="Extensions\BoolExtensionsTests.cs" />
     <Compile Include="Extensions\ClassExtensionsTests.cs" />
     <Compile Include="Extensions\ComparableExtensionsTests.cs" />
@@ -98,6 +102,10 @@
     <Compile Include="Wpf\RelayCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Handyman.Dispatch\Handyman.Dispatch.csproj">
+      <Project>{cf961e0b-8f2e-46b0-b275-43783c3f1fc1}</Project>
+      <Name>Handyman.Dispatch</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Handyman.Extensions\Handyman.Extensions.csproj">
       <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
       <Name>Handyman.Extensions</Name>
