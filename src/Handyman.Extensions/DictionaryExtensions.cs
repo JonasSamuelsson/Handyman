@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Handyman
+namespace Handyman.Extensions
 {
     public static class DictionaryExtensions
     {

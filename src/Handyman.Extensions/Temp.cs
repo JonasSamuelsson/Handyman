@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Handyman
+namespace Handyman.Extensions
 {
     public class Temp : IDisposable
     {

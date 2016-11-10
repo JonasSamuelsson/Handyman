@@ -4,6 +4,7 @@ using Shouldly;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Handyman.Extensions;
 
 namespace Handyman.Tests.Wpf
 {

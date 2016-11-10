@@ -1,4 +1,4 @@
-﻿namespace Handyman
+﻿namespace Handyman.Extensions
 {
     public static class BoolExtensions
     {

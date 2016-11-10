@@ -9,7 +9,7 @@ using System.Diagnostics;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace JetBrains.Annotations
+namespace Handyman.Extensions
 {
     /// <summary>
     /// Indicates that the value of the marked element could be <c>null</c> sometimes,

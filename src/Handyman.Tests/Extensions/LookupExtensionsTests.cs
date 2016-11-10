@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Handyman.Extensions;
 using Shouldly;
 
-namespace Handyman.Tests.Core
+namespace Handyman.Tests.Extensions
 {
     public class LookupExtensionsTests
     {

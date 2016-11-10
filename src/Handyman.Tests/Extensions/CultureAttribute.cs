@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Handyman.Tests
+namespace Handyman.Tests.Extensions
 {
     public class CultureAttribute : Attribute
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Handyman
+namespace Handyman.Extensions
 {
     public static class MemberInfoExtensions
     {

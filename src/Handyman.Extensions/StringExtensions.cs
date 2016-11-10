@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Handyman
+namespace Handyman.Extensions
 {
     public static class StringExtensions
     {

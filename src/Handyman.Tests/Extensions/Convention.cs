@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Fixie;
+using Handyman.Extensions;
 
-namespace Handyman.Tests
+namespace Handyman.Tests.Extensions
 {
     public class Convention : Fixie.Convention
     {
