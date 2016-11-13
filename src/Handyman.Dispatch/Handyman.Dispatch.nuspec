@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Handyman.Dispatch</id>
+        <version>1.0.0</version>
+        <title>Handman.Dispatch</title>
+        <authors>jonassamuelsson</authors>
+        <owners>jonassamuelsson</owners>
+        <licenseUrl>https://github.com/jonassamuelsson/handyman/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/jonassamuelsson/handyman</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>This package provides loosely coupled in process communication.</description>
+        <releaseNotes />
+        <copyright>Copyright 2016</copyright>
+    </metadata>
+    <files>
+        <file src="lib\netstandard1.1\Handyman.Dispatch.dll" target="lib\netstandard1.1\Handyman.Dispatch.dll" />
+        <file src="lib\netstandard1.1\Handyman.Dispatch.pdb" target="lib\netstandard1.1\Handyman.Dispatch.pdb" />
+    </files>
+</package>
