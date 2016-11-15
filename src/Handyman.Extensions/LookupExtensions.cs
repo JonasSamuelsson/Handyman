@@ -18,7 +18,7 @@ namespace Handyman.Extensions
             return lookup.GetElementsOrDefault(key, new TElement[] { });
         }
 
-        public static IEnumerable<TElement> GetElementsOrDefault<TKey, TElement>(this ILookup<TKey, TElement> lookup, TKey key)
+        public static IEnumerable<TElement> GetElementsOrNull<TKey, TElement>(this ILookup<TKey, TElement> lookup, TKey key)
         {
             return lookup.GetElementsOrDefault(key, (IEnumerable<TElement>)null);
         }

@@ -29,15 +29,25 @@ namespace Handyman.Tests.Extensions
         {
             var lookup = new Lookup<int, string>();
 
-            lookup.GetElementsOrDefault(0).ShouldBe(null);
             lookup.GetElementsOrDefault(0, new[] { "default" }).ShouldBe(new[] { "default" });
             lookup.GetElementsOrDefault(0, () => new[] { "default" }).ShouldBe(new[] { "default" });
 
             lookup.Add(0, "zero");
 
-            lookup.GetElementsOrDefault(0).ShouldBe(new[] { "zero" });
             lookup.GetElementsOrDefault(0, new[] { "default" }).ShouldBe(new[] { "zero" });
             lookup.GetElementsOrDefault(0, () => new[] { "default" }).ShouldBe(new[] { "zero" });
+        }
+
+        [Fact]
+        public void GetElementsOrNull()
+        {
+            var lookup = new Lookup<int, string>();
+
+            lookup.GetElementsOrNull(0).ShouldBe(null);
+
+            lookup.Add(0, "zero");
+
+            lookup.GetElementsOrNull(0).ShouldBe(new[] { "zero" });
         }
 
         [Fact]
