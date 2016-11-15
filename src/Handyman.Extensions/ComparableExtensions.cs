@@ -37,13 +37,13 @@ namespace Handyman.Extensions
                 return (value as string).IsInRange(lower as string, upper as string);
             }
 
-            var comparand = bounds == RangeBounds.Inclusive || bounds == RangeBounds.IncludeLower ? 0 : 1;
+            var comparand = bounds.HasFlag(RangeBounds.IncludeLower) ? 0 : 1;
             if (value.CompareTo(lower) < comparand)
             {
                 return false;
             }
 
-            comparand = bounds == RangeBounds.Inclusive || bounds == RangeBounds.IncludeUpper ? 0 : -1;
+            comparand = bounds.HasFlag(RangeBounds.IncludeUpper) ? 0 : -1;
             if (value.CompareTo(upper) > comparand)
             {
                 return false;
