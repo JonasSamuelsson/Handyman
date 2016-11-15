@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Handyman.Extensions
 {
@@ -32,17 +31,7 @@ namespace Handyman.Extensions
         {
             return comparer(s, value) != -1;
         }
-        
-        public static bool EqualsString(this string s, string value, CultureInfo cultureInfo)
-        {
-            return s.EqualsString(value, cultureInfo, IgnoreCase.No);
-        }
 
-        public static bool EqualsString(this string s, string value, CultureInfo cultureInfo, IgnoreCase ignoreCase)
-        {
-            return cultureInfo.CompareInfo.Compare(s, value, ignoreCase == IgnoreCase.Yes ? CompareOptions.IgnoreCase : CompareOptions.None) == 0;
-        }
-        
         public static bool IsEmpty(this string s)
         {
             return !s.IsNull() && s.Length == 0;

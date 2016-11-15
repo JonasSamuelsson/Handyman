@@ -14,14 +14,7 @@ namespace Handyman.Tests.Extensions
         {
             new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
         }
-
-        [Fact]
-        public void ShouldCheckIfStringEquals()
-        {
-            "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture).ShouldBe(false);
-            "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture, IgnoreCase.Yes).ShouldBe(true);
-        }
-
+        
         [Fact]
         public void ShouldCheckIfStringContainsValue()
         {
