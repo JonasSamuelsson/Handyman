@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Handyman.Extensions;
 using Shouldly;
@@ -12,24 +11,13 @@ namespace Handyman.Tests.Extensions
     public class EnumerableExtensionsTests
     {
         [Fact]
-        public void ForEachYieldShouldExecuteProvidedActionForEachItemWhenTheReturnedEnumerableIsTraversed()
-        {
-            var sum = 0;
-            var ints = new[] { 1, 2, 3 };
-            ints.ForEachYield(i => sum += i);
-            sum.ShouldBe(0);
-            ints.ForEachYield(i => sum += i).ToList();
-            sum.ShouldBe(6);
-        }
-
-        [Fact]
         public void VisitShouldExecuteProvidedActionForEachItemWhenTheReturnedEnumerableIsTraversed()
         {
             var sum = 0;
             var ints = new[] { 1, 2, 3 };
             ints.Visit(i => sum += i);
             sum.ShouldBe(0);
-            ints.ForEachYield(i => sum += i).ToList();
+            ints.Visit(i => sum += i).ToList();
             sum.ShouldBe(6);
         }
 
@@ -266,22 +254,6 @@ namespace Handyman.Tests.Extensions
             var source = new[] { "zero", "one", "two" };
             var result = new List<string>();
             source.ForEach((s, i) => result.Add(s + i));
-            result.Count.ShouldBe(3);
-            result[0].ShouldBe("zero0");
-            result[1].ShouldBe("one1");
-            result[2].ShouldBe("two2");
-        }
-
-        [Fact]
-        public void ForEachYieldWithIndexShouldExecuteProvidedActionForEachItem()
-        {
-            var source = new[] { "zero", "one", "two" };
-            var result = new List<string>();
-
-            source.ForEachYield((s, i) => result.Add(s + i));
-            result.Count.ShouldBe(0);
-
-            source.ForEachYield((s, i) => result.Add(s + i)).ToList();
             result.Count.ShouldBe(3);
             result[0].ShouldBe("zero0");
             result[1].ShouldBe("one1");

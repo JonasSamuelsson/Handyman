@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Handyman.Extensions
@@ -11,12 +10,6 @@ namespace Handyman.Extensions
         {
             foreach (var item in collection)
                 action(item);
-        }
-
-        [Obsolete("Use enumerable.Visit(action).")]
-        public static IEnumerable<T> ForEachYield<T>(this IEnumerable<T> collection, Action<T> action)
-        {
-            return collection.Visit(action);
         }
 
         public static IEnumerable<T> Visit<T>(this IEnumerable<T> collection, Action<T> action)
@@ -195,12 +188,6 @@ namespace Handyman.Extensions
         {
             var index = 0;
             foreach (var item in source) action(item, index++);
-        }
-
-        [Obsolete("Use enumerable.Visit(action).")]
-        public static IEnumerable<T> ForEachYield<T>(this IEnumerable<T> source, Action<T, int> action)
-        {
-            return source.Visit(action);
         }
 
         public static IEnumerable<T> Visit<T>(this IEnumerable<T> source, Action<T, int> action)
