@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
 using Handyman.Extensions;
 using Shouldly;
 using Xunit;
@@ -14,14 +12,12 @@ namespace Handyman.Tests.Extensions
         {
             new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
         }
-        
+
         [Fact]
         public void ShouldCheckIfStringContainsValue()
         {
             "Hello World".Contains("lo wo", StringComparison.InvariantCulture).ShouldBe(false);
             "Hello World".Contains("lo wo", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-            "Hello World".Contains("lo wo", CultureInfo.InvariantCulture).ShouldBe(false);
-            "Hello World".Contains("lo wo", CultureInfo.InvariantCulture, CompareOptions.IgnoreCase).ShouldBe(true);
         }
 
         [Fact]

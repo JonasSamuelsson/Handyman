@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Handyman.Extensions
@@ -14,22 +13,7 @@ namespace Handyman.Extensions
 
         public static bool Contains(this string s, string value, StringComparison comparison)
         {
-            return s.Contains(value, (x, y) => x.IndexOf(y, comparison));
-        }
-
-        public static bool Contains(this string s, string value, CultureInfo cultureInfo)
-        {
-            return s.Contains(value, cultureInfo, CompareOptions.None);
-        }
-
-        public static bool Contains(this string s, string value, CultureInfo cultureInfo, CompareOptions options)
-        {
-            return s.Contains(value, (x, y) => cultureInfo.CompareInfo.IndexOf(s, value, options));
-        }
-
-        private static bool Contains(this string s, string value, Comparison<string> comparer)
-        {
-            return comparer(s, value) != -1;
+            return s.IndexOf(value, comparison) != -1;
         }
 
         public static bool IsEmpty(this string s)
