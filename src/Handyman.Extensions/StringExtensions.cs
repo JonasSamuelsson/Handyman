@@ -81,16 +81,6 @@ namespace Handyman.Extensions
             return string.Format(format, args);
         }
 
-        public static bool IsMatch(this string s, string pattern)
-        {
-            return s.IsMatch(pattern, RegexOptions.None);
-        }
-
-        public static bool IsMatch(this string s, string pattern, RegexOptions options)
-        {
-            return Regex.IsMatch(s, pattern, options);
-        }
-
         public static bool IsEmpty(this string s)
         {
             return !s.IsNull() && s.Length == 0;

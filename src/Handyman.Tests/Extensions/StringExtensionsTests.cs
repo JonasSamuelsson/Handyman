@@ -53,14 +53,7 @@ namespace Handyman.Tests.Extensions
             "Hello world".ContainsWildcard("he*o").ShouldBe(false);
             "Hello world".ContainsWildcard("he*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
         }
-
-        [Fact]
-        public void ShouldCheckIfStringIsMatch()
-        {
-            "Hello world".IsMatch("^hello").ShouldBe(false);
-            "Hello world".IsMatch("^hello", RegexOptions.IgnoreCase).ShouldBe(true);
-        }
-
+        
         [Fact]
         public void ShouldCheckIfStringIsNull()
         {
