@@ -11,7 +11,7 @@ namespace Handyman.Extensions
 
         public static T GetValueOrDefault<T>(this T? nullable, Func<T> factory) where T : struct
         {
-            return nullable.HasValue ? nullable.Value : factory();
+            return nullable ?? factory();
         }
 
         public static T GetValueOrThrow<T>(this T? nullable) where T : struct
