@@ -18,22 +18,14 @@ namespace Handyman.Extensions
 
         public static bool IsConcreteClassClosing(this Type type, Type genericTypeDefinition)
         {
-            Type genericType;
-            return type.IsConcreteClassClosing(genericTypeDefinition, out genericType);
+            IReadOnlyCollection<Type> types;
+            return type.IsConcreteClassClosing(genericTypeDefinition, out types);
         }
 
-        public static bool IsConcreteClassClosing(this Type type, Type genericTypeDefinition, out Type[] typeArguments)
-        {
-            Type genericType;
-            typeArguments = type.IsConcreteClassClosing(genericTypeDefinition, out genericType)
-                                ? genericType.GetGenericArguments()
-                                : null;
-            return typeArguments != null;
-        }
 
-        public static bool IsConcreteClassClosing(this Type type, Type genericTypeDefinition, out Type genericType)
+        public static bool IsConcreteClassClosing(this Type type, Type genericTypeDefinition, out IReadOnlyCollection<Type> genericTypes)
         {
-            genericType = null;
+            genericTypes = null;
 
             if (!genericTypeDefinition.IsGenericTypeDefinition)
                 throw new ArgumentException();
@@ -42,19 +34,24 @@ namespace Handyman.Extensions
                 return false;
 
             var supertypes = from supertype in type.GetSuperTypes()
-                where genericTypeDefinition.IsClass
-                          ? supertype.IsClass
-                          : supertype.IsInterface
-                select supertype;
-            foreach (var prospect in supertypes)
+                             where genericTypeDefinition.IsClass
+                                       ? supertype.IsClass
+                                       : supertype.IsInterface
+                             select supertype;
+
+            genericTypes = supertypes
+                .Where(x => x.IsGenericType)
+                .Where(x => !x.IsGenericTypeDefinition)
+                .Where(x => x.GetGenericTypeDefinition() == genericTypeDefinition)
+                .ToList();
+
+            if (genericTypes.Count == 0)
             {
-                if (!prospect.IsGenericType) continue;
-                if (prospect.GetGenericTypeDefinition() != genericTypeDefinition) continue;
-                genericType = prospect;
-                return true;
+                genericTypes = null;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         public static bool IsConcreteSubClassOf(this Type subClassCandidate, Type type)

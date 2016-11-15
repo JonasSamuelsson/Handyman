@@ -27,15 +27,26 @@ namespace Handyman.Tests.Extensions
         public void ShouldCheckIfTypeIsConcreteClassClosing()
         {
             typeof(Concrete<>).IsConcreteClassClosing(typeof(Concrete<>)).ShouldBe(false);
-            typeof(Concrete<object>).IsConcreteClassClosing(typeof(Concrete<>)).ShouldBe(true);
+            typeof(Concrete<object>).IsConcreteClassClosing(typeof(Concrete<>)).ShouldBe(false);
+            typeof(ConcreteOfObject).IsConcreteClassClosing(typeof(Concrete<>)).ShouldBe(true);
 
-            Type[] typeArguments;
-            typeof(ConcreteOfObject).IsConcreteClassClosing(typeof(Concrete<>), out typeArguments).ShouldBe(true);
-            typeArguments.ShouldBe(new[] { typeof(object) });
+            IReadOnlyCollection<Type> genericTypes;
 
-            Type genericType;
-            typeof(ConcreteOfObject).IsConcreteClassClosing(typeof(Concrete<>), out genericType).ShouldBe(true);
-            genericType.ShouldBe(typeof(Concrete<object>));
+            typeof(Concrete<>).IsConcreteClassClosing(typeof(Concrete<>), out genericTypes).ShouldBe(false);
+            genericTypes.ShouldBe(null);
+
+            typeof(Concrete<object>).IsConcreteClassClosing(typeof(Concrete<>), out genericTypes).ShouldBe(false);
+            genericTypes.ShouldBe(null);
+
+            typeof(ConcreteOfObject).IsConcreteClassClosing(typeof(Concrete<>), out genericTypes).ShouldBe(true);
+            genericTypes.ShouldBe(new[] { typeof(Concrete<object>) });
+
+            typeof(ClassOfIntAndString).IsConcreteClassClosing(typeof(IInterface<>)).ShouldBe(true);
+
+            typeof(ClassOfIntAndString).IsConcreteClassClosing(typeof(IInterface<>), out genericTypes).ShouldBe(true);
+            genericTypes.Count.ShouldBe(2);
+            genericTypes.ShouldContain(typeof(IInterface<int>));
+            genericTypes.ShouldContain(typeof(IInterface<string>));
         }
 
         [Fact]
@@ -211,5 +222,6 @@ namespace Handyman.Tests.Extensions
         private class Concrete : Abstract { }
         private class Concrete<T> : Abstract<T> { }
         private class ConcreteOfObject : Concrete<object> { }
+        private class ClassOfIntAndString : IInterface<int>, IInterface<string> { }
     }
 }
