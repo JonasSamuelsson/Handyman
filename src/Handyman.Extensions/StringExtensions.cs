@@ -75,12 +75,7 @@ namespace Handyman.Extensions
             value = values.Skip(1).Join("*");
             return s.ContainsWildcard(value, comparison);
         }
-
-        public static string FormatWith(this string format, params object[] args)
-        {
-            return string.Format(format, args);
-        }
-
+        
         public static bool IsEmpty(this string s)
         {
             return !s.IsNull() && s.Length == 0;

@@ -15,13 +15,7 @@ namespace Handyman.Tests.Extensions
         {
             new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
         }
-
-        [Fact]
-        public void ShouldFormatString()
-        {
-            "{0} {1}!".FormatWith("Hello", "world").ShouldBe("Hello world!");
-        }
-
+        
         [Fact]
         public void ShouldCheckIfStringEquals()
         {
