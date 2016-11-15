@@ -200,11 +200,6 @@ namespace Handyman.Extensions
             }
         }
 
-        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
-        {
-            return new ObservableCollection<T>(source);
-        }
-
         public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             var buffer = new List<T>();

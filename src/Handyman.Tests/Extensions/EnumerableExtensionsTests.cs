@@ -189,15 +189,6 @@ namespace Handyman.Tests.Extensions
         }
 
         [Fact]
-        public void ShouldCreateObservableColectionFromEnumerable()
-        {
-            var numbers = new[] { 1, 2, 3 };
-            var set = numbers.ToObservableCollection();
-            set.ShouldBeAssignableTo<ObservableCollection<int>>();
-            set.ShouldBe(numbers);
-        }
-
-        [Fact]
         public void ShouldSkipLast()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };
