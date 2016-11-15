@@ -275,59 +275,5 @@ namespace Handyman.Tests.Extensions
             Zero = 0,
             One = 1
         }
-
-        [Fact]
-        public void TryToShort()
-        {
-            // ReSharper disable once RedundantAssignment
-            short result = 1;
-            "".TryToShort(out result).ShouldBe(false);
-            result.ShouldBe((short)0);
-
-            // ReSharper disable once RedundantAssignment
-            result = 1;
-            "".TryToShort(Configuration.FormatProvider(), out result).ShouldBe(false);
-            result.ShouldBe((short)0);
-
-            "1".TryToShort(out result).ShouldBe(true);
-            result.ShouldBe((short)1);
-
-            "2".TryToShort(Configuration.FormatProvider(), out result).ShouldBe(true);
-            result.ShouldBe((short)2);
-        }
-
-        [Fact]
-        public void ToShort()
-        {
-            Should.Throw<ArgumentException>(() => "".ToShort());
-            Should.Throw<ArgumentException>(() => "".ToShort(Configuration.FormatProvider()));
-
-            "1".ToShort().ShouldBe((short)1);
-            "2".ToShort(Configuration.FormatProvider()).ShouldBe((short)2);
-        }
-
-        [Fact]
-        public void ToShortOrDefault()
-        {
-            "one".ToShortOrDefault(0).ShouldBe((short)0);
-            "two".ToShortOrDefault(() => 0).ShouldBe((short)0);
-            "three".ToShortOrDefault(Configuration.FormatProvider(), 0).ShouldBe((short)0);
-            "four".ToShortOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe((short)0);
-
-            "1".ToShortOrDefault(0).ShouldBe((short)1);
-            "2".ToShortOrDefault(() => 0).ShouldBe((short)2);
-            "3".ToShortOrDefault(Configuration.FormatProvider(), 0).ShouldBe((short)3);
-            "4".ToShortOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe((short)4);
-        }
-
-        [Fact]
-        public void ToShortOrZero()
-        {
-            "one".ToShortOrZero().ShouldBe((short)0);
-            "two".ToShortOrZero(Configuration.FormatProvider()).ShouldBe((short)0);
-
-            "1".ToShortOrZero().ShouldBe((short)1);
-            "2".ToShortOrZero(Configuration.FormatProvider()).ShouldBe((short)2);
-        }
     }
 }
