@@ -527,15 +527,5 @@ namespace Handyman.Tests.Extensions
             "3.3".ToDoubleOrZero().ShouldBe(3.3);
             "4.4".ToDoubleOrZero(CultureInfo.InvariantCulture).ShouldBe(4.4);
         }
-
-        [Fact]
-        public void ShouldChunk()
-        {
-            var chunks = "12345".Chunk(2).ToList();
-            chunks.Count.ShouldBe(3);
-            chunks[0].ShouldBe("12");
-            chunks[1].ShouldBe("34");
-            chunks[2].ShouldBe("5");
-        }
     }
 }

@@ -491,17 +491,5 @@ namespace Handyman.Extensions
         {
             return double.TryParse(s, NumberStyles.Float, formatProvider, out result);
         }
-        
-        public static IEnumerable<string> Chunk(this string s, int chunkLength)
-        {
-            var start = 0;
-            while (true)
-            {
-                var chunk = s.SubstringSafe(start, chunkLength);
-                if (chunk == string.Empty) yield break;
-                start += chunkLength;
-                yield return chunk;
-            }
-        }
     }
 }
