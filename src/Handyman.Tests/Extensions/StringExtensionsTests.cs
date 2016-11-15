@@ -22,14 +22,7 @@ namespace Handyman.Tests.Extensions
             "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture).ShouldBe(false);
             "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture, IgnoreCase.Yes).ShouldBe(true);
         }
-
-        [Fact]
-        public void ShouldCheckIfStringEqualsWildcard()
-        {
-            "Hello".EqualsWildcard("*e*o").ShouldBe(false);
-            "Hello".EqualsWildcard("*e*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-        }
-
+        
         [Fact]
         public void ShouldCheckIfStringContainsValue()
         {

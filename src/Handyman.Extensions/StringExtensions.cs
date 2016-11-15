@@ -59,22 +59,6 @@ namespace Handyman.Extensions
         {
             return cultureInfo.CompareInfo.Compare(s, value, ignoreCase == IgnoreCase.Yes ? CompareOptions.IgnoreCase : CompareOptions.None) == 0;
         }
-
-        public static bool EqualsWildcard(this string s, string value)
-        {
-            return s.Equals(value, StringComparison.CurrentCulture);
-        }
-
-        public static bool EqualsWildcard(this string s, string value, StringComparison comparison)
-        {
-            if (value.StartsWith("*")) return s.ContainsWildcard(value, comparison);
-            var values = value.Split(new[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-            var first = values.First();
-            if (!s.StartsWith(first, comparison)) return false;
-            s = s.SubstringSafe(first.Length);
-            value = values.Skip(1).Join("*");
-            return s.ContainsWildcard(value, comparison);
-        }
         
         public static bool IsEmpty(this string s)
         {
