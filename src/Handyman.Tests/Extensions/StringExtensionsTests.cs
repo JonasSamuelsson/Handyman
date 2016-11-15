@@ -529,20 +529,6 @@ namespace Handyman.Tests.Extensions
         }
 
         [Fact]
-        public void ShouldShiftLeft()
-        {
-            "12345".ShiftLeft(1).ShouldBe("23451");
-            "12345".ShiftLeft(7).ShouldBe("34512");
-        }
-
-        [Fact]
-        public void ShouldShiftRight()
-        {
-            "12345".ShiftRight(2).ShouldBe("45123");
-            "12345".ShiftRight(8).ShouldBe("34512");
-        }
-
-        [Fact]
         public void ShouldChunk()
         {
             var chunks = "12345".Chunk(2).ToList();
