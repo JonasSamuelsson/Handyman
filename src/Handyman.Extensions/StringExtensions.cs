@@ -32,24 +32,7 @@ namespace Handyman.Extensions
         {
             return comparer(s, value) != -1;
         }
-
-        public static bool ContainsWildcard(this string s, string pattern)
-        {
-            return s.ContainsWildcard(pattern, StringComparison.CurrentCulture);
-        }
-
-        public static bool ContainsWildcard(this string s, string pattern, StringComparison comparison)
-        {
-            var values = pattern.Split(new[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-            var startIndex = 0;
-            foreach (var value in values)
-            {
-                if (s.IndexOf(value, startIndex, comparison) == -1) return false;
-                startIndex += value.Length;
-            }
-            return true;
-        }
-
+        
         public static bool EqualsString(this string s, string value, CultureInfo cultureInfo)
         {
             return s.EqualsString(value, cultureInfo, IgnoreCase.No);

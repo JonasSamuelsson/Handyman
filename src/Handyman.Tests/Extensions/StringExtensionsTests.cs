@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Handyman.Extensions;
 using Shouldly;
 using Xunit;
@@ -15,14 +14,14 @@ namespace Handyman.Tests.Extensions
         {
             new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
         }
-        
+
         [Fact]
         public void ShouldCheckIfStringEquals()
         {
             "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture).ShouldBe(false);
             "Encyclopædia".EqualsString("encyclopaedia", CultureInfo.InvariantCulture, IgnoreCase.Yes).ShouldBe(true);
         }
-        
+
         [Fact]
         public void ShouldCheckIfStringContainsValue()
         {
@@ -30,17 +29,8 @@ namespace Handyman.Tests.Extensions
             "Hello World".Contains("lo wo", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
             "Hello World".Contains("lo wo", CultureInfo.InvariantCulture).ShouldBe(false);
             "Hello World".Contains("lo wo", CultureInfo.InvariantCulture, CompareOptions.IgnoreCase).ShouldBe(true);
-
         }
 
-        [Fact]
-        public void ShouldCheckIfStringContainsWildcardValue()
-        {
-            "ohe".ContainsWildcard("he*o").ShouldBe(false);
-            "Hello world".ContainsWildcard("he*o").ShouldBe(false);
-            "Hello world".ContainsWildcard("he*o", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-        }
-        
         [Fact]
         public void ShouldCheckIfStringIsNull()
         {
