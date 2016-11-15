@@ -14,7 +14,7 @@ namespace Handyman.Wpf
         private T _value;
         private readonly List<Func<T, string>> _validators = new List<Func<T, string>>();
 
-        public Observable(T value = default (T))
+        public Observable(T value = default(T))
             : this(value, delegate { })
         {
         }
@@ -85,7 +85,7 @@ namespace Handyman.Wpf
 
         internal Observable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<IList<TItem>, TValue> valueSetter, Action<ObservableValidationExpression<TValue>> configuration)
         {
-            _collection = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
+            _collection = items as ObservableCollection<TItem> ?? new ObservableCollection<TItem>(items);
             _collection.CollectionChanged += OnCollectionChanged;
             _collection.ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
             _valueGetter = valueGetter;

@@ -31,7 +31,7 @@ namespace Handyman.Wpf
 
         internal ReadOnlyObservable(IEnumerable<TItem> items, Func<IReadOnlyList<TItem>, TValue> valueGetter, Action<ObservableValidationExpression<TValue>> configuration)
         {
-            _items = items as ObservableCollection<TItem> ?? items.ToObservableCollection();
+            _items = items as ObservableCollection<TItem> ?? new ObservableCollection<TItem>(items);
             _items.CollectionChanged += OnCollectionChanged;
             _items.ForEach(x => x.PropertyChanged += OnItemPropertyChanged);
             _valueGetter = valueGetter;
