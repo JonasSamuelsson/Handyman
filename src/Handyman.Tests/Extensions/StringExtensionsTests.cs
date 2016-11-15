@@ -329,59 +329,5 @@ namespace Handyman.Tests.Extensions
             "1".ToShortOrZero().ShouldBe((short)1);
             "2".ToShortOrZero(Configuration.FormatProvider()).ShouldBe((short)2);
         }
-
-        [Fact]
-        public void TryToInt()
-        {
-            // ReSharper disable once RedundantAssignment
-            var result = 1;
-            "".TryToInt(out result).ShouldBe(false);
-            result.ShouldBe(0);
-
-            // ReSharper disable once RedundantAssignment
-            result = 1;
-            "".TryToInt(Configuration.FormatProvider(), out result).ShouldBe(false);
-            result.ShouldBe(0);
-
-            "1".TryToInt(out result).ShouldBe(true);
-            result.ShouldBe(1);
-
-            "2".TryToInt(Configuration.FormatProvider(), out result).ShouldBe(true);
-            result.ShouldBe(2);
-        }
-
-        [Fact]
-        public void ToInt()
-        {
-            Should.Throw<ArgumentException>(() => "".ToInt());
-            Should.Throw<ArgumentException>(() => "".ToInt(Configuration.FormatProvider()));
-
-            "1".ToInt().ShouldBe(1);
-            "2".ToInt(Configuration.FormatProvider()).ShouldBe(2);
-        }
-
-        [Fact]
-        public void ToIntOrDefault()
-        {
-            "one".ToIntOrDefault(0).ShouldBe(0);
-            "two".ToIntOrDefault(() => 0).ShouldBe(0);
-            "three".ToIntOrDefault(Configuration.FormatProvider(), 0).ShouldBe(0);
-            "four".ToIntOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(0);
-
-            "1".ToIntOrDefault(0).ShouldBe(1);
-            "2".ToIntOrDefault(() => 0).ShouldBe(2);
-            "3".ToIntOrDefault(Configuration.FormatProvider(), 0).ShouldBe(3);
-            "4".ToIntOrDefault(Configuration.FormatProvider(), () => 0).ShouldBe(4);
-        }
-
-        [Fact]
-        public void ToIntOrZero()
-        {
-            "one".ToIntOrZero().ShouldBe(0);
-            "two".ToIntOrZero(Configuration.FormatProvider()).ShouldBe(0);
-
-            "1".ToIntOrZero().ShouldBe(1);
-            "2".ToIntOrZero(Configuration.FormatProvider()).ShouldBe(2);
-        }
     }
 }
