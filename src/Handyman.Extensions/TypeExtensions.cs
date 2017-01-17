@@ -22,7 +22,6 @@ namespace Handyman.Extensions
             return type.IsConcreteClassClosing(genericTypeDefinition, out types);
         }
 
-
         public static bool IsConcreteClassClosing(this Type type, Type genericTypeDefinition, out IReadOnlyCollection<Type> genericTypes)
         {
             genericTypes = null;
