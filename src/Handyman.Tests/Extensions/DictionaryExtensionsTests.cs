@@ -33,5 +33,19 @@ namespace Handyman.Tests.Extensions
             dictionary.GetOrAdd(2, () => "Two").ShouldBe("Two");
             dictionary.GetOrAdd(3, i => i.ToString()).ShouldBe("3");
         }
+
+        [Fact]
+        public void TryAdd()
+        {
+            var dictionary = new Dictionary<int, string>();
+
+            dictionary.TryAdd(0, "zero").ShouldBe(true);
+
+            dictionary[0].ShouldBe("zero");
+
+            dictionary.TryAdd(0, "0").ShouldBe(false);
+
+            dictionary[0].ShouldBe("zero");
+        }
     }
 }
