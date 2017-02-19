@@ -288,5 +288,16 @@ namespace Handyman.Tests.Extensions
             queue.ShouldBeOfType<Queue<int>>();
             queue.ShouldBe(new[] { 1, 2, 3 });
         }
+
+        [Fact]
+        public void ToStack()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var stack = ints.ToStack();
+
+            stack.ShouldBeOfType<Stack<int>>();
+            stack.ShouldBe(new[] { 3, 2, 1 });
+        }
     }
 }

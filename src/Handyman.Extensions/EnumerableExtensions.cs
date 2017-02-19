@@ -227,5 +227,10 @@ namespace Handyman.Extensions
         {
             return source as Queue<T> ?? new Queue<T>(source);
         }
+
+        public static Stack<T> ToStack<T>(this IEnumerable<T> source)
+        {
+            return source as Stack<T> ?? new Stack<T>(source);
+        }
     }
 }
