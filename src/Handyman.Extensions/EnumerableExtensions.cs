@@ -261,5 +261,10 @@ namespace Handyman.Extensions
         {
             return source as ConcurrentQueue<T> ?? new ConcurrentQueue<T>(source);
         }
+
+        public static ConcurrentStack<T> ToConcurrentStack<T>(this IEnumerable<T> source)
+        {
+            return source as ConcurrentStack<T> ?? new ConcurrentStack<T>(source);
+        }
     }
 }

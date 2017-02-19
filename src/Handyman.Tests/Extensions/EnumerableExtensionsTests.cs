@@ -363,5 +363,16 @@ namespace Handyman.Tests.Extensions
             queue.ShouldBeOfType<ConcurrentQueue<int>>();
             queue.ShouldBe(new[] { 1, 2, 3 });
         }
+
+        [Fact]
+        public void ToConcurrentStack()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var stack = ints.ToConcurrentStack();
+
+            stack.ShouldBeOfType<ConcurrentStack<int>>();
+            stack.ShouldBe(new[] { 3, 2, 1 });
+        }
     }
 }
