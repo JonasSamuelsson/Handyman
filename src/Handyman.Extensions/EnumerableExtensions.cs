@@ -256,5 +256,10 @@ namespace Handyman.Extensions
             }
             return dictionary;
         }
+
+        public static ConcurrentQueue<T> ToConcurrentQueue<T>(this IEnumerable<T> source)
+        {
+            return source as ConcurrentQueue<T> ?? new ConcurrentQueue<T>(source);
+        }
     }
 }

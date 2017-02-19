@@ -352,5 +352,16 @@ namespace Handyman.Tests.Extensions
             Should.Throw<InvalidOperationException>(() => ints.ToConcurrentDictionary(i => i));
             Should.Throw<InvalidOperationException>(() => ints.ToConcurrentDictionary(i => i, i => i));
         }
+
+        [Fact]
+        public void ToConcurrentQueue()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var queue = ints.ToConcurrentQueue();
+
+            queue.ShouldBeOfType<ConcurrentQueue<int>>();
+            queue.ShouldBe(new[] { 1, 2, 3 });
+        }
     }
 }
