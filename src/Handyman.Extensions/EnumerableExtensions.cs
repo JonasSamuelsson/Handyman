@@ -222,5 +222,10 @@ namespace Handyman.Extensions
         {
             return source as IReadOnlyCollection<T> ?? source.ToList();
         }
+
+        public static Queue<T> ToQueue<T>(this IEnumerable<T> source)
+        {
+            return source as Queue<T> ?? new Queue<T>(source);
+        }
     }
 }

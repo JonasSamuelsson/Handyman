@@ -277,5 +277,16 @@ namespace Handyman.Tests.Extensions
             readOnlyCollection.ShouldBeAssignableTo<IReadOnlyCollection<int>>();
             readOnlyCollection.ShouldBe(new[] { 1, 2, 3 });
         }
+
+        [Fact]
+        public void ToQueue()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var queue = ints.ToQueue();
+
+            queue.ShouldBeOfType<Queue<int>>();
+            queue.ShouldBe(new[] { 1, 2, 3 });
+        }
     }
 }
