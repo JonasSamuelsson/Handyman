@@ -311,5 +311,46 @@ namespace Handyman.Tests.Extensions
             bag.ShouldBeOfType<ConcurrentBag<int>>();
             bag.OrderBy(i => i).ShouldBe(new[] { 1, 2, 3 });
         }
+
+        [Fact]
+        public void ToConcurrentDictionary()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var dictionary = ints.ToConcurrentDictionary(i => i);
+
+            dictionary.ShouldBeOfType<ConcurrentDictionary<int, int>>();
+            ints.ForEach(i =>
+            {
+                int value;
+                dictionary.TryGetValue(i, out value).ShouldBe(true);
+                value.ShouldBe(i);
+            });
+        }
+
+        [Fact]
+        public void ToConcurrentDictionaryWithValueSelector()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var dictionary = ints.ToConcurrentDictionary(i => i, i => i.ToString());
+
+            dictionary.ShouldBeOfType<ConcurrentDictionary<int, string>>();
+            ints.ForEach(i =>
+            {
+                string value;
+                dictionary.TryGetValue(i, out value).ShouldBe(true);
+                value.ShouldBe(i.ToString());
+            });
+        }
+
+        [Fact]
+        public void ToConcurrentDictionaryShopuldThrowOnDuplicateKeys()
+        {
+            var ints = new[] { 1, 1 };
+
+            Should.Throw<InvalidOperationException>(() => ints.ToConcurrentDictionary(i => i));
+            Should.Throw<InvalidOperationException>(() => ints.ToConcurrentDictionary(i => i, i => i));
+        }
     }
 }

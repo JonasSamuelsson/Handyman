@@ -238,5 +238,23 @@ namespace Handyman.Extensions
         {
             return source as ConcurrentBag<T> ?? new ConcurrentBag<T>(source);
         }
+
+        public static ConcurrentDictionary<TKey, T> ToConcurrentDictionary<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
+        {
+            return source.ToConcurrentDictionary(keySelector, x => x);
+        }
+
+        public static ConcurrentDictionary<TKey, TValue> ToConcurrentDictionary<T, TKey, TValue>(this IEnumerable<T> source, Func<T, TKey> keySelector, Func<T, TValue> valueSelector)
+        {
+            var dictionary = new ConcurrentDictionary<TKey, TValue>();
+            foreach (var item in source)
+            {
+                var key = keySelector(item);
+                var value = valueSelector(item);
+                if (dictionary.TryAdd(key, value)) continue;
+                throw new InvalidOperationException();
+            }
+            return dictionary;
+        }
     }
 }
