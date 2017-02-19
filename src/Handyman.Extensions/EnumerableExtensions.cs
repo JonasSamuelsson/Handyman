@@ -217,5 +217,10 @@ namespace Handyman.Extensions
             if (buffer.Count != 0)
                 yield return buffer;
         }
+
+        public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
+        {
+            return source as IReadOnlyCollection<T> ?? source.ToList();
+        }
     }
 }

@@ -266,5 +266,16 @@ namespace Handyman.Tests.Extensions
             result[1].ShouldBe("one1");
             result[2].ShouldBe("two2");
         }
+
+        [Fact]
+        public void ToReadOnlyCollection()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var readOnlyCollection = ints.ToReadOnlyCollection();
+
+            readOnlyCollection.ShouldBeAssignableTo<IReadOnlyCollection<int>>();
+            readOnlyCollection.ShouldBe(new[] { 1, 2, 3 });
+        }
     }
 }
