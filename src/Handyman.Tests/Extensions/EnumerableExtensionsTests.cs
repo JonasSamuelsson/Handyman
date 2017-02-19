@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Handyman.Extensions;
@@ -298,6 +299,17 @@ namespace Handyman.Tests.Extensions
 
             stack.ShouldBeOfType<Stack<int>>();
             stack.ShouldBe(new[] { 3, 2, 1 });
+        }
+
+        [Fact]
+        public void ToConcurrentBag()
+        {
+            var ints = new[] { 1, 2, 3 };
+
+            var bag = ints.ToConcurrentBag();
+
+            bag.ShouldBeOfType<ConcurrentBag<int>>();
+            bag.OrderBy(i => i).ShouldBe(new[] { 1, 2, 3 });
         }
     }
 }

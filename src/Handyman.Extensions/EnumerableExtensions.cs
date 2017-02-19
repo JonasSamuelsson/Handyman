@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -231,6 +232,11 @@ namespace Handyman.Extensions
         public static Stack<T> ToStack<T>(this IEnumerable<T> source)
         {
             return source as Stack<T> ?? new Stack<T>(source);
+        }
+
+        public static ConcurrentBag<T> ToConcurrentBag<T>(this IEnumerable<T> source)
+        {
+            return source as ConcurrentBag<T> ?? new ConcurrentBag<T>(source);
         }
     }
 }
