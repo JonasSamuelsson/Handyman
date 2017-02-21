@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Handyman.Tests.Extensions
 {
-    public class ClassExtensionsTests
+    public class ObjectExtensionsTests
     {
         [Fact]
         public void ShouldCheckIsNull()

@@ -73,7 +73,7 @@
     <Compile Include="Dispatch\PublishMessageTests.cs" />
     <Compile Include="Dispatch\TestHandlerProvider.cs" />
     <Compile Include="Extensions\BoolExtensionsTests.cs" />
-    <Compile Include="Extensions\ClassExtensionsTests.cs" />
+    <Compile Include="Extensions\ObjectExtensionsTests.cs" />
     <Compile Include="Extensions\ComparableExtensionsTests.cs" />
     <Compile Include="Extensions\ConfigurationTests.cs" />
     <Compile Include="Convention.cs" />
