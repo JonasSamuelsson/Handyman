@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Extensions", "Handyman.Extensions\Handyman.Extensions.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
 EndProject
@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "Handyman.Wp
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dispatch", "Handyman.Dispatch\Handyman.Dispatch.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dynamics", "Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

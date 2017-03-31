@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <PackageId>Handyman.Dynamics</PackageId>
+    <Authors>Jonas Samuelsson</Authors>
+    <Version>0.1.0-alpha</Version>
+    <Company />
+    <Product>Handyman</Product>
+    <Description />
+    <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyName>Handyman.Dynamics</AssemblyName>
+    <RootNamespace>Handyman.Dynamics</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+</Project>

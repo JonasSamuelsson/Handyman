@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Handyman.Tests</RootNamespace>
     <AssemblyName>Handyman.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -34,6 +34,9 @@
     <Reference Include="Fixie, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fixie.1.0.2\lib\net45\Fixie.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -72,6 +75,11 @@
     <Compile Include="Dispatch\ProcessRequestTests.cs" />
     <Compile Include="Dispatch\PublishMessageTests.cs" />
     <Compile Include="Dispatch\TestHandlerProvider.cs" />
+    <Compile Include="Dynamics\BasicsTests.cs" />
+    <Compile Include="Dynamics\ListTests.cs" />
+    <Compile Include="Dynamics\ObjectTests.cs" />
+    <Compile Include="Dynamics\StringTests.cs" />
+    <Compile Include="Dynamics\ValueTests.cs" />
     <Compile Include="Extensions\BoolExtensionsTests.cs" />
     <Compile Include="Extensions\ObjectExtensionsTests.cs" />
     <Compile Include="Extensions\ComparableExtensionsTests.cs" />
@@ -106,6 +114,10 @@
       <Project>{cf961e0b-8f2e-46b0-b275-43783c3f1fc1}</Project>
       <Name>Handyman.Dispatch</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Handyman.Dynamics\Handyman.Dynamics.csproj">
+      <Project>{07622cc7-10a0-4bd8-9296-a08bfe6b45c2}</Project>
+      <Name>Handyman.Dynamics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Handyman.Extensions\Handyman.Extensions.csproj">
       <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
       <Name>Handyman.Extensions</Name>
@@ -121,6 +133,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
