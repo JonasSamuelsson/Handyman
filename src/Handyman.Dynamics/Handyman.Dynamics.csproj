@@ -11,7 +11,7 @@
     <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
     <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <AssemblyName>Handyman.Dynamics</AssemblyName>
     <RootNamespace>Handyman.Dynamics</RootNamespace>
   </PropertyGroup>
