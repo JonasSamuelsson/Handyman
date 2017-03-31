@@ -51,7 +51,7 @@ namespace Handyman.Extensions
             foreach (var property in properties)
             {
                 var type = instance.GetType();
-                var propertyInfo = type.GetProperty(property);
+                var propertyInfo = type.GetRuntimeProperty(property);
                 instance = propertyInfo.GetValue(instance, null);
             }
             return instance;
@@ -67,7 +67,7 @@ namespace Handyman.Extensions
             if (instance == null) throw new ArgumentNullException("instance");
             if (property.IsNullOrWhiteSpace()) throw new ArgumentException("Must have a value", "property");
             var type = instance.GetType();
-            var propertyInfo = type.GetProperty(property);
+            var propertyInfo = type.GetRuntimeProperty(property);
             propertyInfo.SetValue(instance, value);
         }
 

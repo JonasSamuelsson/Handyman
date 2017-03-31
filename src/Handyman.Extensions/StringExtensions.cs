@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Handyman.Extensions
 {
@@ -166,7 +167,7 @@ namespace Handyman.Extensions
         public static bool TryToEnum<T>(this string s, IgnoreCase ignoreCase, out T value) where T : struct
         {
             var type = typeof(T);
-            if (!type.IsEnum) throw new ArgumentException();
+            if (!type.GetTypeInfo().IsEnum) throw new ArgumentException();
             // ReSharper disable once RedundantAssignment
             value = default(T);
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);

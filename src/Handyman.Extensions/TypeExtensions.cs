@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Handyman.Extensions
 {
@@ -8,12 +9,12 @@ namespace Handyman.Extensions
     {
         public static bool IsConcreteClass(this Type type)
         {
-            return type.IsClass && !type.IsAbstract;
+            return type.GetTypeInfo().IsClass && !type.GetTypeInfo().IsAbstract;
         }
 
         public static bool IsConcreteClosedClass(this Type type)
         {
-            return type.IsConcreteClass() && !type.IsGenericTypeDefinition;
+            return type.IsConcreteClass() && !type.GetTypeInfo().IsGenericTypeDefinition;
         }
 
         public static bool IsConcreteClassClosing(this Type type, Type genericTypeDefinition)
@@ -26,21 +27,21 @@ namespace Handyman.Extensions
         {
             genericTypes = null;
 
-            if (!genericTypeDefinition.IsGenericTypeDefinition)
+            if (!genericTypeDefinition.GetTypeInfo().IsGenericTypeDefinition)
                 throw new ArgumentException();
 
             if (!type.IsConcreteClosedClass())
                 return false;
 
             var supertypes = from supertype in type.GetSuperTypes()
-                             where genericTypeDefinition.IsClass
-                                       ? supertype.IsClass
-                                       : supertype.IsInterface
+                             where genericTypeDefinition.GetTypeInfo().IsClass
+                                       ? supertype.GetTypeInfo().IsClass
+                                       : supertype.GetTypeInfo().IsInterface
                              select supertype;
 
             genericTypes = supertypes
-                .Where(x => x.IsGenericType)
-                .Where(x => !x.IsGenericTypeDefinition)
+                .Where(x => x.GetTypeInfo().IsGenericType)
+                .Where(x => !x.GetTypeInfo().IsGenericTypeDefinition)
                 .Where(x => x.GetGenericTypeDefinition() == genericTypeDefinition)
                 .ToList();
 
@@ -81,8 +82,8 @@ namespace Handyman.Extensions
             if (type == typeof(object))
                 return true;
 
-            if (!subTypeCandidate.IsGenericTypeDefinition && !type.IsGenericTypeDefinition)
-                return type.IsAssignableFrom(subTypeCandidate);
+            if (!subTypeCandidate.GetTypeInfo().IsGenericTypeDefinition && !type.GetTypeInfo().IsGenericTypeDefinition)
+                return type.GetTypeInfo().IsAssignableFrom(subTypeCandidate.GetTypeInfo());
 
             return subTypeCandidate.GetSuperTypes()
                 .Where(x => x != subTypeCandidate)
@@ -113,12 +114,12 @@ namespace Handyman.Extensions
 
         private static void GetAllSuperTypes(Type type, ICollection<Type> result)
         {
-            for (var t = type; t != null; t = t.BaseType)
+            for (var t = type; t != null; t = t.GetTypeInfo().BaseType)
             {
                 if (result.Contains(t)) continue;
                 result.Add(t);
-                t.GetInterfaces().ForEach(x => GetAllSuperTypes(x, result));
-                if (t.IsGenericType && !t.IsGenericTypeDefinition) GetAllSuperTypes(t.GetGenericTypeDefinition(), result);
+                t.GetTypeInfo().ImplementedInterfaces.ForEach(x => GetAllSuperTypes(x, result));
+                if (t.GetTypeInfo().IsGenericType && !t.GetTypeInfo().IsGenericTypeDefinition) GetAllSuperTypes(t.GetGenericTypeDefinition(), result);
             }
         }
     }
