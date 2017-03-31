@@ -85,6 +85,8 @@
     <Compile Include="Extensions\ComparableExtensionsTests.cs" />
     <Compile Include="Extensions\ConfigurationTests.cs" />
     <Compile Include="Convention.cs" />
+    <Compile Include="Net\UriBuilder_query_tests.cs" />
+    <Compile Include="Net\UriBuilder_tests.cs" />
     <Compile Include="Wpf\Converters\Bool2VisibilityConverterTests.cs" />
     <Compile Include="Wpf\Converters\CompoundConverterTests.cs" />
     <Compile Include="Wpf\Converters\HasValueConverterTests.cs" />
@@ -121,6 +123,10 @@
     <ProjectReference Include="..\Handyman.Extensions\Handyman.Extensions.csproj">
       <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
       <Name>Handyman.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Handyman.Net\Handyman.Net.csproj">
+      <Project>{b7b46d41-2b16-4e59-b9a9-31336c29b60a}</Project>
+      <Name>Handyman.UriBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="..\Handyman.Wpf\Handyman.Wpf.csproj">
       <Project>{5eef1fc9-0186-440b-afda-e09ceb3685f3}</Project>

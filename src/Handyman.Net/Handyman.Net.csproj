@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <PackageId>Handyman.Net</PackageId>
+    <Authors>Jonas Samuelsson</Authors>
+    <Version>1.0.0-alpha</Version>
+    <Company />
+    <Product>Handyman</Product>
+    <Description />
+    <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <AssemblyName>Handyman.Net</AssemblyName>
+    <RootNamespace>Handyman.Net</RootNamespace>
+  </PropertyGroup>
+
+</Project>
