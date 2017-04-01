@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
-    <PackageId>Handyman.Net</PackageId>
+    <PackageId>Handyman.UriBuilder</PackageId>
     <Authors>Jonas Samuelsson</Authors>
     <Version>1.0.0-alpha</Version>
     <Company />
@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
     <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <AssemblyName>Handyman.Net</AssemblyName>
-    <RootNamespace>Handyman.Net</RootNamespace>
+    <AssemblyName>Handyman.UriBuilder</AssemblyName>
+    <RootNamespace>Handyman</RootNamespace>
   </PropertyGroup>
 
 </Project>

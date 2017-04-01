@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Handyman.Net
+namespace Handyman
 {
     public class UriBuilder
     {
@@ -15,6 +15,8 @@ namespace Handyman.Net
         private readonly List<KeyValuePair<string, string>> _queryParams = new List<KeyValuePair<string, string>>();
         private string _fragment = string.Empty;
         private bool _isBasedOnUri;
+
+        public static string DefaultScheme { get; set; }
 
         public UriBuilder BaseAddress(string baseAddress)
         {
@@ -122,7 +124,7 @@ namespace Handyman.Net
 
             if (_host != string.Empty)
             {
-                var scheme = _scheme == string.Empty ? "http" : _scheme;
+                var scheme = _scheme == string.Empty ? (DefaultScheme ?? "http") : _scheme;
                 uri = $"{scheme}://{_host}";
 
                 if (_port.HasValue)

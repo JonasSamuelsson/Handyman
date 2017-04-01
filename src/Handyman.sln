@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dispatch", "Handym
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dynamics", "Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Net", "Handyman.Net\Handyman.Net.csproj", "{B7B46D41-2B16-4E59-B9A9-31336C29B60A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.UriBuilder", "Handyman.UriBuilder\Handyman.UriBuilder.csproj", "{B7B46D41-2B16-4E59-B9A9-31336C29B60A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,15 +1,14 @@
-﻿using Handyman.Net;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Net
+namespace Handyman.Tests.UriBuilder
 {
     public class UriBuilder_tests
     {
         [Fact]
         public void should_construct_url()
         {
-            new UriBuilder()
+            new Handyman.UriBuilder()
                .Scheme("ftp")
                .Host("foo.com")
                .Port(123)
@@ -24,7 +23,7 @@ namespace Handyman.Tests.Net
         [Fact]
         public void should_construct_url_from_baseaddress()
         {
-            new UriBuilder()
+            new Handyman.UriBuilder()
                .BaseAddress("ftp://foo.com:123")
                .Path("alpha/beta")
                .Path("gamma")
@@ -37,7 +36,7 @@ namespace Handyman.Tests.Net
         [Fact]
         public void should_encode_querystring()
         {
-            new UriBuilder()
+            new Handyman.UriBuilder()
                .Scheme("ftp")
                .Host("foo.com")
                .Port(123)
@@ -47,6 +46,32 @@ namespace Handyman.Tests.Net
                .Fragment("anchor")
                .ToString()
                .ShouldBe("ftp://foo.com:123/alpha/beta?number=1&text=hello+coderz#anchor");
+        }
+
+        [Fact]
+        public void should_use_http_as_default_scheme()
+        {
+            new Handyman.UriBuilder()
+                  .Host("test.com")
+                  .ToString()
+                  .ShouldBe("http://test.com");
+        }
+
+        [Fact]
+        public void should_use_DefaultScheme()
+        {
+            try
+            {
+                Handyman.UriBuilder.DefaultScheme = "ftp";
+                new Handyman.UriBuilder()
+                      .Host("test.com")
+                      .ToString()
+                      .ShouldBe("ftp://test.com");
+            }
+            finally
+            {
+                Handyman.UriBuilder.DefaultScheme = null;
+            }
         }
     }
 }
