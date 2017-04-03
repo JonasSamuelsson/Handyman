@@ -14,6 +14,13 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <AssemblyName>Handyman.Dispatch</AssemblyName>
     <RootNamespace>Handyman.Dispatch</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\handyman.snk" Link="handyman.snk" />
+  </ItemGroup>
 
 </Project>

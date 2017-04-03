@@ -1,26 +1,11 @@
-using System;
 using System.Linq;
 using System.Reflection;
-using Fixie;
 using Handyman.Extensions;
 
 namespace Handyman.Tests
 {
-    public class CustomCultureBehavior : CaseBehavior
+    public static class CustomCultureBehavior
     {
-        public void Execute(Case context, Action next)
-        {
-            try
-            {
-                TrySetCultureFromAttribute(context.Method);
-                next();
-            }
-            finally
-            {
-                ResetCulture();
-            }
-        }
-
         public static void TrySetCultureFromAttribute(MethodInfo method)
         {
             var cultureAttribute = method.Get<CultureAttribute>().SingleOrDefault();

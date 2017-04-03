@@ -21,6 +21,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{773C41E8-1426-4BDE-AEEB-9EFDE432A231}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		handyman.snk = handyman.snk
 	EndProjectSection
 EndProject
 Global

@@ -14,7 +14,14 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <AssemblyName>Handyman.Dynamics</AssemblyName>
     <RootNamespace>Handyman.Dynamics</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\handyman.snk" Link="handyman.snk" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
