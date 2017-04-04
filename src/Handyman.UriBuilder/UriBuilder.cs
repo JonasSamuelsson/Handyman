@@ -7,62 +7,41 @@ namespace Handyman
 {
     public class UriBuilder
     {
-        private string _scheme = string.Empty;
-        private string _host = string.Empty;
+        private string _scheme;
+        private string _host;
         private int? _port;
-        private string _path = string.Empty;
-        private string _query = string.Empty;
+        private string _path;
+        private string _query;
         private readonly List<KeyValuePair<string, string>> _queryParams = new List<KeyValuePair<string, string>>();
-        private string _fragment = string.Empty;
-        private bool _isBasedOnUri;
+        private string _fragment;
 
         public static string DefaultScheme { get; set; }
-
-        public UriBuilder BaseAddress(string baseAddress)
-        {
-            Uri uri;
-            Uri.TryCreate(baseAddress, UriKind.RelativeOrAbsolute, out uri);
-            _isBasedOnUri = uri.IsAbsoluteUri;
-
-            if (_isBasedOnUri)
-            {
-                Scheme(uri.Scheme);
-                Host(uri.Host);
-                Port(uri.IsDefaultPort ? default(int?) : uri.Port);
-                _path = uri.AbsolutePath != "/" ? uri.AbsolutePath : string.Empty;
-            }
-            else
-                Path(uri);
-            return this;
-        }
-
+        
         public UriBuilder Scheme(string scheme)
         {
-            _scheme = scheme ?? string.Empty;
-            _isBasedOnUri = true;
+            AssertNotNullOrWhitespace(scheme);
+            _scheme = scheme;
             return this;
         }
 
         public UriBuilder Host(string host)
         {
-            _host = host ?? string.Empty;
-            _isBasedOnUri = true;
+            AssertNotNullOrWhitespace(host);
+            _host = host;
             return this;
         }
 
         public UriBuilder Port(int? port)
         {
+            AssertNotNull(port);
             _port = port;
-            _isBasedOnUri = true;
             return this;
         }
 
-        public UriBuilder Path(params object[] segments)
+        public UriBuilder Path(string path)
         {
-            var path = string.Join("/", segments.Select(x => x.ToString().Trim('/')));
-            _path = $"{(_isBasedOnUri && !_path.StartsWith("/") ? "/" : string.Empty)}{_path}" == string.Empty
-               ? path
-               : $"{_path}/{path}";
+            AssertNotNullOrWhitespace(path);
+            _path = path.StartsWith("/") ? path : $"/{path}";
             return this;
         }
 
@@ -122,9 +101,9 @@ namespace Handyman
         {
             var uri = string.Empty;
 
-            if (_host != string.Empty)
+            if (_host != null)
             {
-                var scheme = _scheme == string.Empty ? (DefaultScheme ?? "http") : _scheme;
+                var scheme = _scheme ?? DefaultScheme ?? "http";
                 uri = $"{scheme}://{_host}";
 
                 if (_port.HasValue)
@@ -133,17 +112,17 @@ namespace Handyman
                 }
             }
 
-            if (_path != string.Empty)
+            if (_path != null)
             {
                 uri += _path;
             }
 
-            if (_query != string.Empty || _queryParams.Any())
+            if (_query != null || _queryParams.Any())
             {
                 uri += $"?{string.Join("&", new[] { _query, GetQueryParams(_queryParams) }.Where(s => !string.IsNullOrEmpty(s)))}";
             }
 
-            if (_fragment != string.Empty)
+            if (_fragment != null)
             {
                 uri += $"#{_fragment}";
             }
@@ -167,6 +146,16 @@ namespace Handyman
         {
             _fragment = fragment;
             return this;
+        }
+
+        private static void AssertNotNullOrWhitespace(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException();
+        }
+
+        private static void AssertNotNull(object value)
+        {
+            if (value == null) throw new ArgumentException();
         }
     }
 }

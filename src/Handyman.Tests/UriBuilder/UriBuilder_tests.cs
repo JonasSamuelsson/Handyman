@@ -13,24 +13,10 @@ namespace Handyman.Tests.UriBuilder
                .Host("foo.com")
                .Port(123)
                .Path("alpha/beta")
-               .Path("gamma")
                .Query("number=1")
                .Fragment("anchor")
                .ToString()
-               .ShouldBe("ftp://foo.com:123/alpha/beta/gamma?number=1#anchor");
-        }
-
-        [Fact]
-        public void should_construct_url_from_baseaddress()
-        {
-            new Handyman.UriBuilder()
-               .BaseAddress("ftp://foo.com:123")
-               .Path("alpha/beta")
-               .Path("gamma")
-               .Query("number=1")
-               .Fragment("anchor")
-               .ToString()
-               .ShouldBe("ftp://foo.com:123/alpha/beta/gamma?number=1#anchor");
+               .ShouldBe("ftp://foo.com:123/alpha/beta?number=1#anchor");
         }
 
         [Fact]
