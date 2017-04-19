@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
     internal class MessageHandlerAdapter<TMessage> : IMessageHandler<IMessage>
        where TMessage : IMessage

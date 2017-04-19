@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Handyman.Dispatch;
+using Handyman.Mediator;
 
-namespace Handyman.Tests.Dispatch
+namespace Handyman.Tests.Mediator
 {
     internal class TestHandlerProvider : IHandlerProvider
     {

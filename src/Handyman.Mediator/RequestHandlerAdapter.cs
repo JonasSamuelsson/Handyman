@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
    internal class RequestHandlerAdapter<TRequest, TResponse> : IRequestHandler<IRequest<TResponse>, TResponse>
       where TRequest : IRequest<TResponse>

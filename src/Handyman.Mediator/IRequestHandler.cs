@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
    public interface IRequestHandler<TRequest, TResponse>
       where TRequest : IRequest<TResponse>

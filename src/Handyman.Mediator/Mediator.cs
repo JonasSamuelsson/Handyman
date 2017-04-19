@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
-    public class Dispatcher : IDispatcher
+    public class Mediator : IMediator
     {
         private readonly Func<Type, object> _handlerProvider;
         private readonly Func<Type, IEnumerable<object>> _handlersProvider;
         private readonly ConcurrentDictionary<Type, CallContext> _contexts = new ConcurrentDictionary<Type, CallContext>();
 
-        public Dispatcher(IHandlerProvider handlerProvider)
+        public Mediator(IHandlerProvider handlerProvider)
         {
             _handlerProvider = handlerProvider.GetHandler;
             _handlersProvider = handlerProvider.GetHandlers;
         }
 
-        public Dispatcher(Func<Type, object> handlerProvider, Func<Type, IEnumerable<object>> handlersProvider)
+        public Mediator(Func<Type, object> handlerProvider, Func<Type, IEnumerable<object>> handlersProvider)
         {
             _handlerProvider = handlerProvider;
             _handlersProvider = handlersProvider;
         }
 
-        public Task<TResponse> Process<TResponse>(IRequest<TResponse> request)
+        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
         {
             var requestType = request.GetType();
             var handler = GetRequestHandler<TResponse>(requestType);
@@ -40,10 +41,9 @@ namespace Handyman.Dispatch
         public IEnumerable<Task> Publish(IMessage message)
         {
             var messageType = message.GetType();
-            foreach (var handler in GetMessageHandlers(messageType))
-            {
-                yield return handler.Handle(message);
-            }
+            return GetMessageHandlers(messageType)
+                .Select(handler => handler.Handle(message))
+                .ToList();
         }
 
         private IEnumerable<IMessageHandler<IMessage>> GetMessageHandlers(Type messageType)

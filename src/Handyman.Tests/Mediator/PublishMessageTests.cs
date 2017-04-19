@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Handyman.Dispatch;
+using Handyman.Mediator;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Dispatch
+namespace Handyman.Tests.Mediator
 {
     public class PublishMessageTests
     {
@@ -14,9 +14,9 @@ namespace Handyman.Tests.Dispatch
         {
             var message = new TestMessage();
             var handlerProvider = new TestHandlerProvider(typeof(IMessageHandler<TestMessage>), typeof(TestMessageHandler1), typeof(TestMessageHandler2));
-            var dispatcher = new Dispatcher(handlerProvider);
+            var mediator = new Handyman.Mediator.Mediator(handlerProvider);
 
-            await Task.WhenAll(dispatcher.Publish(message));
+            await Task.WhenAll(mediator.Publish(message));
 
             message.HandlerTypes.Count.ShouldBe(2);
             message.HandlerTypes.ShouldContain(typeof(TestMessageHandler1));

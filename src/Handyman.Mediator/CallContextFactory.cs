@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
     internal static class CallContextFactory
     {

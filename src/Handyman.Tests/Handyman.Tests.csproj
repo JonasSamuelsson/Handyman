@@ -74,9 +74,9 @@
   <ItemGroup>
     <Compile Include="CultureAttribute.cs" />
     <Compile Include="CustomCultureBehavior.cs" />
-    <Compile Include="Dispatch\ProcessRequestTests.cs" />
-    <Compile Include="Dispatch\PublishMessageTests.cs" />
-    <Compile Include="Dispatch\TestHandlerProvider.cs" />
+    <Compile Include="Mediator\ProcessRequestTests.cs" />
+    <Compile Include="Mediator\PublishMessageTests.cs" />
+    <Compile Include="Mediator\TestHandlerProvider.cs" />
     <Compile Include="Dynamics\BasicsTests.cs" />
     <Compile Include="Dynamics\ListTests.cs" />
     <Compile Include="Dynamics\ObjectTests.cs" />
@@ -114,10 +114,6 @@
     <Compile Include="Wpf\RelayCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Handyman.Dispatch\Handyman.Dispatch.csproj">
-      <Project>{cf961e0b-8f2e-46b0-b275-43783c3f1fc1}</Project>
-      <Name>Handyman.Dispatch</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Handyman.Dynamics\Handyman.Dynamics.csproj">
       <Project>{07622cc7-10a0-4bd8-9296-a08bfe6b45c2}</Project>
       <Name>Handyman.Dynamics</Name>
@@ -125,6 +121,10 @@
     <ProjectReference Include="..\Handyman.Extensions\Handyman.Extensions.csproj">
       <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
       <Name>Handyman.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Handyman.Mediator\Handyman.Mediator.csproj">
+      <Project>{cf961e0b-8f2e-46b0-b275-43783c3f1fc1}</Project>
+      <Name>Handyman.Mediator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Handyman.UriBuilder\Handyman.UriBuilder.csproj">
       <Project>{b7b46d41-2b16-4e59-b9a9-31336c29b60a}</Project>

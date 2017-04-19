@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
-    public interface IDispatcher
+    public interface IMediator
     {
-        Task<TResponse> Process<TResponse>(IRequest<TResponse> request);
+        Task<TResponse> Send<TResponse>(IRequest<TResponse> request);
         IEnumerable<Task> Publish(IMessage message);
     }
 }

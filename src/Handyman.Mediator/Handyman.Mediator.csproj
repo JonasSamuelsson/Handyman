@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
     <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <AssemblyName>Handyman.Dispatch</AssemblyName>
-    <RootNamespace>Handyman.Dispatch</RootNamespace>
+    <AssemblyName>Handyman.Mediator</AssemblyName>
+    <RootNamespace>Handyman.Mediator</RootNamespace>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>

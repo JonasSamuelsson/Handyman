@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
    public interface IHandlerProvider
    {

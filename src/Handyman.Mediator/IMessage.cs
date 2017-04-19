@@ -1,4 +1,4 @@
-﻿namespace Handyman.Dispatch
+﻿namespace Handyman.Mediator
 {
    public interface IMessage
    {

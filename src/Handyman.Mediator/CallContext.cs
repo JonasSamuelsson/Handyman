@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Handyman.Dispatch
+namespace Handyman.Mediator
 {
    internal class CallContext
    {
