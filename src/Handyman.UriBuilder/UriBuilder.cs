@@ -7,6 +7,9 @@ namespace Handyman
 {
     public class UriBuilder
     {
+        private static readonly string NoValue = Guid.NewGuid().ToString();
+
+        private Uri _baseAddress;
         private string _scheme;
         private string _host;
         private int? _port;
@@ -16,7 +19,7 @@ namespace Handyman
         private string _fragment;
 
         public static string DefaultScheme { get; set; }
-        
+
         public UriBuilder Scheme(string scheme)
         {
             AssertNotNullOrWhitespace(scheme);
@@ -53,7 +56,7 @@ namespace Handyman
 
         public UriBuilder QueryParams(string name)
         {
-            return AddQueryParams(name, new[] { string.Empty });
+            return AddQueryParams(name, new[] { NoValue });
         }
 
         public UriBuilder QueryParams(string name, object value)
@@ -101,21 +104,25 @@ namespace Handyman
         {
             var uri = string.Empty;
 
-            if (_host != null)
+            if (_baseAddress != null || _host != null)
             {
-                var scheme = _scheme ?? DefaultScheme ?? "http";
-                uri = $"{scheme}://{_host}";
+                var scheme = _scheme ?? _baseAddress?.Scheme ?? DefaultScheme ?? "http";
+                var host = _host ?? _baseAddress?.Host;
+                uri = $"{scheme}://{host}";
 
-                if (_port.HasValue)
+                var port = _port ?? (_baseAddress?.IsDefaultPort == false ? _baseAddress.Port : -1);
+                if (port != -1)
                 {
-                    uri += $":{_port.Value}";
+                    uri += $":{port}";
                 }
             }
 
+            uri += _baseAddress?.AbsolutePath;
             if (_path != null)
             {
                 uri += _path;
             }
+
 
             if (_query != null || _queryParams.Any())
             {
@@ -138,8 +145,10 @@ namespace Handyman
         private static string GetQueryParam(KeyValuePair<string, string> kvp)
         {
             return kvp.Value == null
-               ? kvp.Key
-               : $"{kvp.Key}={System.Net.WebUtility.UrlEncode(kvp.Value)}";
+                ? kvp.Key
+                : kvp.Value == NoValue
+                    ? kvp.Key
+                    : $"{kvp.Key}={System.Net.WebUtility.UrlEncode(kvp.Value)}";
         }
 
         public UriBuilder Fragment(string fragment)
@@ -156,6 +165,12 @@ namespace Handyman
         private static void AssertNotNull(object value)
         {
             if (value == null) throw new ArgumentException();
+        }
+
+        public UriBuilder BaseAddress(string baseAddress)
+        {
+            _baseAddress = new Uri(baseAddress, UriKind.Absolute);
+            return this;
         }
     }
 }
