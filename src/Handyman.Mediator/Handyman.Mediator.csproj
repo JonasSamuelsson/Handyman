@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
-    <PackageId>Handyman.Dispatch</PackageId>
+    <PackageId>Handyman.Mediator</PackageId>
     <Authors>Jonas Samuelsson</Authors>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.1.0-beta</Version>
     <Company />
     <Product>Handyman</Product>
     <Description />
