@@ -16,7 +16,7 @@
     <RootNamespace>Handyman.Extensions</RootNamespace>
     <SignAssembly>True</SignAssembly>
     <DelaySign>False</DelaySign>
-    <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

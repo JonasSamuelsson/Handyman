@@ -15,7 +15,7 @@
     <AssemblyName>Handyman.Mediator</AssemblyName>
     <RootNamespace>Handyman.Mediator</RootNamespace>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
     <PackageTags>mediator request response message command query event notification</PackageTags>
   </PropertyGroup>
