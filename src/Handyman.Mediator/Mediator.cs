@@ -8,20 +8,14 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly Func<Type, object> _handlerProvider;
-        private readonly Func<Type, IEnumerable<object>> _handlersProvider;
+        private readonly Func<Type, object> _getService;
+        private readonly Func<Type, IEnumerable<object>> _getServices;
         private readonly ConcurrentDictionary<Type, CallContext> _contexts = new ConcurrentDictionary<Type, CallContext>();
-
-        public Mediator(IHandlerProvider handlerProvider)
+        
+        public Mediator(Func<Type, object> getService, Func<Type, IEnumerable<object>> getServices)
         {
-            _handlerProvider = handlerProvider.GetHandler;
-            _handlersProvider = handlerProvider.GetHandlers;
-        }
-
-        public Mediator(Func<Type, object> handlerProvider, Func<Type, IEnumerable<object>> handlersProvider)
-        {
-            _handlerProvider = handlerProvider;
-            _handlersProvider = handlersProvider;
+            _getService = getService;
+            _getServices = getServices;
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
@@ -34,7 +28,7 @@ namespace Handyman.Mediator
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
         {
             var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestCallContext<TResponse>);
-            var handler = _handlerProvider.Invoke(context.HandlerInterface);
+            var handler = _getService.Invoke(context.HandlerInterface);
             return (IRequestHandler<IRequest<TResponse>, TResponse>)context.AdapterFactory.Invoke(handler);
         }
 
@@ -49,7 +43,7 @@ namespace Handyman.Mediator
         private IEnumerable<IMessageHandler<IMessage>> GetMessageHandlers(Type messageType)
         {
             var context = _contexts.GetOrAdd(messageType, CallContextFactory.GetMessageCallContext);
-            foreach (var handler in _handlersProvider.Invoke(context.HandlerInterface))
+            foreach (var handler in _getServices.Invoke(context.HandlerInterface))
             {
                 yield return (IMessageHandler<IMessage>)context.AdapterFactory.Invoke(handler);
             }

@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Handyman.Tests.Mediator
 {
-    public class ProcessRequestTests
+    public class SendRequestTests
     {
         [Fact]
         public void ShouldProcessRequest()
         {
             var request = new TestRequest();
-            var handlerProvider = new TestHandlerProvider(typeof(IRequestHandler<TestRequest, TestRequest>), typeof(TestRequestHandler));
-            var mediator = new Handyman.Mediator.Mediator(handlerProvider);
+            var serviceProvider = new ServiceProvider(typeof(IRequestHandler<TestRequest, TestRequest>), typeof(TestRequestHandler));
+            var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
             mediator.Send(request).Result.ShouldBe(request);
         }
 

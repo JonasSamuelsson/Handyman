@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Handyman.Mediator;
 using Shouldly;
@@ -13,8 +13,8 @@ namespace Handyman.Tests.Mediator
         public async Task ShouldPublishMessage()
         {
             var message = new TestMessage();
-            var handlerProvider = new TestHandlerProvider(typeof(IMessageHandler<TestMessage>), typeof(TestMessageHandler1), typeof(TestMessageHandler2));
-            var mediator = new Handyman.Mediator.Mediator(handlerProvider);
+            var serviceProvider = new ServiceProvider(typeof(IMessageHandler<TestMessage>), typeof(TestMessageHandler1), typeof(TestMessageHandler2));
+            var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
 
             await Task.WhenAll(mediator.Publish(message));
 
@@ -25,14 +25,14 @@ namespace Handyman.Tests.Mediator
 
         class TestMessage : IMessage
         {
-            public ICollection<Type> HandlerTypes { get; } = new List<Type>();
+            public ConcurrentBag<Type> HandlerTypes { get; } = new ConcurrentBag<Type>();
         }
 
         abstract class TestMessageHandler : IMessageHandler<TestMessage>
         {
             public Task Handle(TestMessage message)
             {
-                lock (message) message.HandlerTypes.Add(GetType());
+                message.HandlerTypes.Add(GetType());
                 return Task.CompletedTask;
             }
         }
