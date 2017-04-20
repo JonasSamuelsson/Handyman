@@ -7,7 +7,7 @@
     <Version>0.1.0-beta</Version>
     <Company />
     <Product>Handyman</Product>
-    <Description />
+    <Description>Mediator implementation for loose coupled in-process communication.</Description>
     <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
     <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
@@ -17,6 +17,7 @@
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
+    <PackageTags>mediator request response message command query event notification</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
