@@ -48,29 +48,82 @@ namespace Handyman.Dynamics
             Remove(fromKey);
         }
 
+        public bool TryGetString(string key, out string value)
+        {
+            return TryGetValue(key, out value);
+        }
+
         public string GetString(string key)
         {
             return GetValue<string>(key);
         }
 
+        public string GetStringOrEmpty(string key)
+        {
+            return GetStringOrDefault(key, string.Empty);
+        }
+
+        public string GetStringOrNull(string key)
+        {
+            return GetStringOrDefault(key, (string)null);
+        }
+
+        public string GetStringOrDefault(string key, string @default)
+        {
+            return GetStringOrDefault(@default, () => @default);
+        }
+
+        public string GetStringOrDefault(string key, Func<string> factory)
+        {
+            return GetValueOrDefault(key, factory);
+        }
+
         public DList<string> GetStrings(string key)
         {
-            var item = Dictionary[key];
-            var list = (List<object>)item;
-            return new DList<string>(list);
+            return GetValues<string>(key);
+        }
+
+        public DList<string> GetStringsOrEmpty(string key)
+        {
+            return GetValuesOrEmpty<string>(key);
+        }
+
+        public bool TryGetValue<T>(string key, out T value)
+        {
+            value = default(T);
+            var result = Dictionary.TryGetValue(key, out object o);
+            if (result) value = Utils.ConvertTo<T>(o);
+            return result;
         }
 
         public T GetValue<T>(string key)
         {
-            var value = Dictionary[key];
-            return Utils.ConvertTo<T>(value);
+            return TryGetValue(key, out T value) ? value : throw new KeyNotFoundException();
+        }
+
+        public T GetValueOrDefault<T>(string key)
+        {
+            return GetValueOrDefault(key, default(T));
+        }
+
+        public T GetValueOrDefault<T>(string key, T @default)
+        {
+            return GetValueOrDefault(key, () => @default);
+        }
+
+        public T GetValueOrDefault<T>(string key, Func<T> factory)
+        {
+            return TryGetValue(key, out T value) ? value : factory();
         }
 
         public DList<T> GetValues<T>(string key)
         {
-            var item = Dictionary[key];
-            var list = (List<object>)item;
-            return new DList<T>(list);
+            return GetItems<T>(key);
+        }
+
+        public DList<T> GetValuesOrEmpty<T>(string key)
+        {
+            return GetItemsOrEmpty<T>(key);
         }
 
         public DObject GetObject(string key)
@@ -80,9 +133,26 @@ namespace Handyman.Dynamics
 
         public DList<DObject> GetObjects(string key)
         {
+            return GetItems<DObject>(key);
+        }
+
+        public DList<DObject> GetObjectsOrEmpty(string key)
+        {
+            return GetItemsOrEmpty<DObject>(key);
+        }
+
+        private DList<T> GetItems<T>(string key)
+        {
             var item = Dictionary[key];
             var list = (List<object>)item;
-            return new DList<DObject>(list);
+            return new DList<T>(list);
+        }
+
+        private DList<T> GetItemsOrEmpty<T>(string key)
+        {
+            if (!Dictionary.TryGetValue(key, out object value)) return new DList<T>();
+            var list = (List<object>)value;
+            return new DList<T>(list);
         }
 
         public static DObject Create(object source)

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard1.0</TargetFramework>
     <PackageId>Handyman.Dynamics</PackageId>
     <Authors>Jonas Samuelsson</Authors>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.2.0</Version>
     <Company />
     <Product>Handyman</Product>
     <Description />
@@ -17,6 +17,7 @@
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
+    <FileVersion>0.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
