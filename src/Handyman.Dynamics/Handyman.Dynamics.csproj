@@ -15,7 +15,7 @@
     <AssemblyName>Handyman.Dynamics</AssemblyName>
     <RootNamespace>Handyman.Dynamics</RootNamespace>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>D:\Dev\GitHub\Handyman\src\handyman.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
   </PropertyGroup>
 
