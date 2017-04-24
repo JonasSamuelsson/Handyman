@@ -374,5 +374,19 @@ namespace Handyman.Tests.Extensions
             stack.ShouldBeOfType<ConcurrentStack<int>>();
             stack.ShouldBe(new[] { 3, 2, 1 });
         }
+
+        [Fact]
+        public void MinOrDefault()
+        {
+            var ints = new int[] { };
+
+            ints.MinOrDefault().ShouldBe(0);
+            ints.MinOrDefault(1).ShouldBe(1);
+            ints.MinOrDefault(() => 2).ShouldBe(2);
+
+            ints.MinOrDefault(i => i).ShouldBe(0);
+            ints.MinOrDefault(i => i, 1).ShouldBe(1);
+            ints.MinOrDefault(i => i, () => 2).ShouldBe(2);
+        }
     }
 }

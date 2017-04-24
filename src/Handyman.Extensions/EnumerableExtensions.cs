@@ -266,5 +266,35 @@ namespace Handyman.Extensions
         {
             return source as ConcurrentStack<T> ?? new ConcurrentStack<T>(source);
         }
+
+        public static T MinOrDefault<T>(this IEnumerable<T> source)
+        {
+            return source.MinOrDefault(default(T));
+        }
+
+        public static T MinOrDefault<T>(this IEnumerable<T> source, T @default)
+        {
+            return source.MinOrDefault(() => @default);
+        }
+
+        public static T MinOrDefault<T>(this IEnumerable<T> source, Func<T> factory)
+        {
+            return source.DefaultIfEmpty(factory()).Min();
+        }
+
+        public static TValue MinOrDefault<T, TValue>(this IEnumerable<T> source, Func<T, TValue> selector)
+        {
+            return source.Select(selector).MinOrDefault(default(TValue));
+        }
+
+        public static TValue MinOrDefault<T, TValue>(this IEnumerable<T> source, Func<T, TValue> selector, TValue @default)
+        {
+            return source.Select(selector).MinOrDefault(() => @default);
+        }
+
+        public static TValue MinOrDefault<T, TValue>(this IEnumerable<T> source, Func<T, TValue> selector, Func<TValue> factory)
+        {
+            return source.Select(selector).DefaultIfEmpty(factory()).Min();
+        }
     }
 }
