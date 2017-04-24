@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Handyman.Dynamics;
+﻿using Handyman.Dynamics;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Handyman.Tests.Dynamics
@@ -62,6 +62,15 @@ namespace Handyman.Tests.Dynamics
             d.Set("key", new[] { 1 });
 
             d.GetStrings("key").ShouldBe(new[] { "1" });
+        }
+
+        [Fact]
+        public void GetStringOrDefault()
+        {
+            var d = new DObject { ["foo"] = "bar" };
+
+            d.GetStringOrDefault("foo", "default").ShouldBe("bar");
+            d.GetStringOrDefault("bar", "default").ShouldBe("default");
         }
     }
 }

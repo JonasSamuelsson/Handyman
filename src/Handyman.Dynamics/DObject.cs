@@ -70,7 +70,7 @@ namespace Handyman.Dynamics
 
         public string GetStringOrDefault(string key, string @default)
         {
-            return GetStringOrDefault(@default, () => @default);
+            return GetStringOrDefault(key, () => @default);
         }
 
         public string GetStringOrDefault(string key, Func<string> factory)
@@ -126,9 +126,27 @@ namespace Handyman.Dynamics
             return GetItemsOrEmpty<T>(key);
         }
 
+        public bool TryGetObject(string key, out DObject dObject)
+        {
+            dObject = null;
+            var result = Dictionary.TryGetValue(key, out object o);
+            if (result) dObject = (DObject)o;
+            return result;
+        }
+
         public DObject GetObject(string key)
         {
-            return (DObject)Dictionary[key];
+            return TryGetObject(key, out DObject dObject) ? dObject : throw new KeyNotFoundException();
+        }
+
+        public DObject GetObjectOrEmpty(string key)
+        {
+            return TryGetObject(key, out DObject dObject) ? dObject : new DObject();
+        }
+
+        public DObject GetObjectOrNull(string key)
+        {
+            return TryGetObject(key, out DObject dObject) ? dObject : null;
         }
 
         public DList<DObject> GetObjects(string key)
