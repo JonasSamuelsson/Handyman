@@ -388,5 +388,19 @@ namespace Handyman.Tests.Extensions
             ints.MinOrDefault(i => i, 1).ShouldBe(1);
             ints.MinOrDefault(i => i, () => 2).ShouldBe(2);
         }
+
+        [Fact]
+        public void MaxOrDefault()
+        {
+            var ints = new int[] { };
+
+            ints.MaxOrDefault().ShouldBe(0);
+            ints.MaxOrDefault(1).ShouldBe(1);
+            ints.MaxOrDefault(() => 2).ShouldBe(2);
+
+            ints.MaxOrDefault(i => i).ShouldBe(0);
+            ints.MaxOrDefault(i => i, 1).ShouldBe(1);
+            ints.MaxOrDefault(i => i, () => 2).ShouldBe(2);
+        }
     }
 }

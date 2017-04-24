@@ -296,5 +296,35 @@ namespace Handyman.Extensions
         {
             return source.Select(selector).DefaultIfEmpty(factory()).Min();
         }
+
+        public static T MaxOrDefault<T>(this IEnumerable<T> source)
+        {
+            return source.MaxOrDefault(default(T));
+        }
+
+        public static T MaxOrDefault<T>(this IEnumerable<T> source, T @default)
+        {
+            return source.MaxOrDefault(() => @default);
+        }
+
+        public static T MaxOrDefault<T>(this IEnumerable<T> source, Func<T> factory)
+        {
+            return source.DefaultIfEmpty(factory()).Max();
+        }
+
+        public static TValue MaxOrDefault<T, TValue>(this IEnumerable<T> source, Func<T, TValue> selector)
+        {
+            return source.Select(selector).MaxOrDefault(default(TValue));
+        }
+
+        public static TValue MaxOrDefault<T, TValue>(this IEnumerable<T> source, Func<T, TValue> selector, TValue @default)
+        {
+            return source.Select(selector).MaxOrDefault(() => @default);
+        }
+
+        public static TValue MaxOrDefault<T, TValue>(this IEnumerable<T> source, Func<T, TValue> selector, Func<TValue> factory)
+        {
+            return source.Select(selector).DefaultIfEmpty(factory()).Max();
+        }
     }
 }
