@@ -378,21 +378,49 @@ namespace Handyman.Tests.Extensions
         [Fact]
         public void MinOrDefault()
         {
-            var ints = new int[] { };
+            var ints = new[] { 2, 1, 2 };
 
-            ints.MinOrDefault().ShouldBe(0);
+            ints.MinOrDefault().ShouldBe(1);
             ints.MinOrDefault(1).ShouldBe(1);
-            ints.MinOrDefault(() => 2).ShouldBe(2);
+            ints.MinOrDefault(() => 0).ShouldBe(1);
 
-            ints.MinOrDefault(i => i).ShouldBe(0);
-            ints.MinOrDefault(i => i, 1).ShouldBe(1);
-            ints.MinOrDefault(i => i, () => 2).ShouldBe(2);
+            ints.MinOrDefault(i => i).ShouldBe(1);
+            ints.MinOrDefault(i => i, 0).ShouldBe(1);
+            ints.MinOrDefault(i => i, () => 0).ShouldBe(1);
+
+            var empty = new int[] { };
+
+            empty.MinOrDefault().ShouldBe(0);
+            empty.MinOrDefault(1).ShouldBe(1);
+            empty.MinOrDefault(() => 2).ShouldBe(2);
+
+            empty.MinOrDefault(i => i).ShouldBe(0);
+            empty.MinOrDefault(i => i, 1).ShouldBe(1);
+            empty.MinOrDefault(i => i, () => 2).ShouldBe(2);
         }
 
         [Fact]
         public void MaxOrDefault()
         {
-            var ints = new int[] { };
+            var ints = new[] { 0, 1, 0 };
+
+            ints.MaxOrDefault().ShouldBe(1);
+            ints.MaxOrDefault(0).ShouldBe(1);
+            ints.MaxOrDefault(() => 0).ShouldBe(1);
+
+            ints.MaxOrDefault(i => i).ShouldBe(1);
+            ints.MaxOrDefault(i => i, 0).ShouldBe(1);
+            ints.MaxOrDefault(i => i, () => 0).ShouldBe(1);
+
+            var empty = new int[] { };
+
+            empty.MaxOrDefault().ShouldBe(0);
+            empty.MaxOrDefault(1).ShouldBe(1);
+            empty.MaxOrDefault(() => 2).ShouldBe(2);
+
+            empty.MaxOrDefault(i => i).ShouldBe(0);
+            empty.MaxOrDefault(i => i, 1).ShouldBe(1);
+            empty.MaxOrDefault(i => i, () => 2).ShouldBe(2);
 
             ints.MaxOrDefault().ShouldBe(0);
             ints.MaxOrDefault(1).ShouldBe(1);
