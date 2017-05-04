@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Handyman.Extensions;
+using Shouldly;
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Handyman.Extensions;
-using Shouldly;
 using Xunit;
 
 namespace Handyman.Tests.Extensions
@@ -421,14 +421,20 @@ namespace Handyman.Tests.Extensions
             empty.MaxOrDefault(i => i).ShouldBe(0);
             empty.MaxOrDefault(i => i, 1).ShouldBe(1);
             empty.MaxOrDefault(i => i, () => 2).ShouldBe(2);
+        }
 
-            ints.MaxOrDefault().ShouldBe(0);
-            ints.MaxOrDefault(1).ShouldBe(1);
-            ints.MaxOrDefault(() => 2).ShouldBe(2);
+        [Fact]
+        public void Visit()
+        {
+            var ints = new[] { 1, 2, 3, 4 };
 
-            ints.MaxOrDefault(i => i).ShouldBe(0);
-            ints.MaxOrDefault(i => i, 1).ShouldBe(1);
-            ints.MaxOrDefault(i => i, () => 2).ShouldBe(2);
+            var evens = new List<int>();
+            ints.Visit(i => i % 2 == 0, i => evens.Add(i)).ShouldBe(ints);
+            evens.ShouldBe(new[] { 2, 4 });
+
+            var numbers = new List<int>();
+            ints.Visit((index, _) => index % 2 == 0, (index, i) => numbers.Add(index + i)).ShouldBe(ints);
+            numbers.ShouldBe(new[] { 1, 5 });
         }
     }
 }

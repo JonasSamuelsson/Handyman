@@ -326,5 +326,21 @@ namespace Handyman.Extensions
         {
             return source.Select(selector).DefaultIfEmpty(factory()).Max();
         }
+
+        public static IEnumerable<T> Visit<T>(this IEnumerable<T> source, Func<T, bool> predicate, Action<T> action)
+        {
+            return source.Visit((index, item) => predicate(item), (index, item) => action(item));
+        }
+
+        public static IEnumerable<T> Visit<T>(this IEnumerable<T> source, Func<int, T, bool> predicate, Action<int, T> action)
+        {
+            var index = 0;
+            foreach (var item in source)
+            {
+                if (predicate(index, item)) action(index, item);
+                yield return item;
+                index++;
+            }
+        }
     }
 }
