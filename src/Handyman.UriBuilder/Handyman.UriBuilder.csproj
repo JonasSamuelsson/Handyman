@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFrameworks>net452;netstandard1.0</TargetFrameworks>
     <PackageId>Handyman.UriBuilder</PackageId>
     <Authors>Jonas Samuelsson</Authors>
     <Version>1.0.0-alpha</Version>
@@ -22,5 +22,19 @@
   <ItemGroup>
     <None Include="..\handyman.snk" Link="handyman.snk" />
   </ItemGroup>
+
+   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+      <Reference Include="System" />
+      <Reference Include="Microsoft.CSharp" />
+   </ItemGroup>
+
+   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.0' ">
+      <PackageReference Include="System.Collections" Version="4.3.0" />
+      <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+      <PackageReference Include="System.Linq" Version="4.3.0" />
+      <PackageReference Include="System.Reflection" Version="4.3.0" />
+      <PackageReference Include="System.Runtime" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+   </ItemGroup>
 
 </Project>

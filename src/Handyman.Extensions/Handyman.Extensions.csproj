@@ -1,26 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard1.1</TargetFramework>
-    <PackageId>Handyman.Extensions</PackageId>
-    <Authors>Jonas Samuelsson</Authors>
-    <Version>1.1.0</Version>
-    <Company />
-    <Product>Handyman</Product>
-    <Description />
-    <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <AssemblyName>Handyman.Extensions</AssemblyName>
-    <RootNamespace>Handyman.Extensions</RootNamespace>
-    <SignAssembly>True</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+   <PropertyGroup>
+      <TargetFrameworks>net452;netstandard1.1</TargetFrameworks>
+      <PackageId>Handyman.Extensions</PackageId>
+      <Authors>Jonas Samuelsson</Authors>
+      <Version>1.1.0</Version>
+      <Company />
+      <Product>Handyman</Product>
+      <Description />
+      <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
+      <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
+      <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+      <AssemblyName>Handyman.Extensions</AssemblyName>
+      <RootNamespace>Handyman.Extensions</RootNamespace>
+      <SignAssembly>True</SignAssembly>
+      <DelaySign>False</DelaySign>
+      <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
+   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\handyman.snk" Link="handyman.snk" />
-  </ItemGroup>
+   <ItemGroup>
+      <None Include="..\handyman.snk" Link="handyman.snk" />
+   </ItemGroup>
+
+   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+      <Reference Include="System" />
+      <Reference Include="Microsoft.CSharp" />
+   </ItemGroup>
+
+   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">
+      <PackageReference Include="System.Collections" Version="4.3.0" />
+      <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+      <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+      <PackageReference Include="System.Globalization" Version="4.3.0" />
+      <PackageReference Include="System.Linq" Version="4.3.0" />
+      <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
+      <PackageReference Include="System.Reflection" Version="4.3.0" />
+      <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+      <PackageReference Include="System.Runtime" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+   </ItemGroup>
 
 </Project>
