@@ -1,20 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
     internal class MessageHandlerAdapter<TMessage> : IMessageHandler<IMessage>
        where TMessage : IMessage
     {
-        private readonly IMessageHandler<TMessage> _messageHandler;
+        private readonly IMessageHandler<TMessage> _handler;
 
-        public MessageHandlerAdapter(IMessageHandler<TMessage> messageHandler)
+        public MessageHandlerAdapter(IMessageHandler<TMessage> handler)
         {
-            _messageHandler = messageHandler;
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
         public Task Handle(IMessage message)
         {
-            return _messageHandler.Handle((TMessage)message);
+            return _handler.Handle((TMessage)message);
         }
     }
 }
