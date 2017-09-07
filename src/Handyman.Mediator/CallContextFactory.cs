@@ -7,9 +7,9 @@ namespace Handyman.Mediator
 {
     internal static class CallContextFactory
     {
-        public static CallContext GetRequestCallContext<TResponse>(Type requestType)
+        public static CallContext GetRequestCallContext(Type requestType)
         {
-            var adapterType = GetRequestHandlerAdapterType<TResponse>(requestType);
+            var adapterType = GetRequestHandlerAdapterType(requestType);
             var adapterFactory = CreateHandlerAdapterFactory(adapterType);
             var handlerInterface = GetRequestHandlerInterface(requestType);
             return new CallContext
@@ -19,13 +19,38 @@ namespace Handyman.Mediator
             };
         }
 
-        private static Type GetRequestHandlerAdapterType<TResponse>(Type requestType)
+        private static Type GetRequestHandlerAdapterType(Type requestType)
+        {
+            return typeof(RequestHandlerAdapter<>).MakeGenericType(requestType);
+        }
+
+        private static Type GetRequestHandlerInterface(Type requestType)
+        {
+            return requestType.GetTypeInfo().ImplementedInterfaces
+               .Where(x => x == typeof(IRequest))
+               .Select(x => typeof(IRequestHandler<>).MakeGenericType(requestType))
+               .Single();
+        }
+
+        public static CallContext GetRequestResponseCallContext<TResponse>(Type requestType)
+        {
+            var adapterType = GetRequestResponseHandlerAdapterType<TResponse>(requestType);
+            var adapterFactory = CreateHandlerAdapterFactory(adapterType);
+            var handlerInterface = GetRequestResponseHandlerInterface(requestType);
+            return new CallContext
+            {
+                AdapterFactory = adapterFactory,
+                HandlerInterface = handlerInterface
+            };
+        }
+
+        private static Type GetRequestResponseHandlerAdapterType<TResponse>(Type requestType)
         {
             var responseType = typeof(TResponse);
             return typeof(RequestHandlerAdapter<,>).MakeGenericType(requestType, responseType);
         }
 
-        private static Type GetRequestHandlerInterface(Type requestType)
+        private static Type GetRequestResponseHandlerInterface(Type requestType)
         {
             return requestType.GetTypeInfo().ImplementedInterfaces
                .Where(x => x.IsConstructedGenericType)

@@ -11,11 +11,18 @@ namespace Handyman.Mediator
         private readonly Func<Type, object> _getService;
         private readonly Func<Type, IEnumerable<object>> _getServices;
         private readonly ConcurrentDictionary<Type, CallContext> _contexts = new ConcurrentDictionary<Type, CallContext>();
-        
+
         public Mediator(Func<Type, object> getService, Func<Type, IEnumerable<object>> getServices)
         {
             _getService = getService;
             _getServices = getServices;
+        }
+
+        public Task Send(IRequest request)
+        {
+            var requestType = request.GetType();
+            var handler = GetRequestHandler(requestType);
+            return handler.Handle(request);
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
@@ -25,9 +32,16 @@ namespace Handyman.Mediator
             return handler.Handle(request);
         }
 
+        private IRequestHandler<IRequest> GetRequestHandler(Type requestType)
+        {
+            var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestCallContext);
+            var handler = _getService.Invoke(context.HandlerInterface);
+            return (IRequestHandler<IRequest>)context.AdapterFactory.Invoke(handler);
+        }
+
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
         {
-            var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestCallContext<TResponse>);
+            var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestResponseCallContext<TResponse>);
             var handler = _getService.Invoke(context.HandlerInterface);
             return (IRequestHandler<IRequest<TResponse>, TResponse>)context.AdapterFactory.Invoke(handler);
         }
