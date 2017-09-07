@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
    <PropertyGroup>
-      <TargetFrameworks>net452;netstandard1.0</TargetFrameworks>
+      <TargetFramework>netstandard2.0</TargetFramework>
       <PackageId>Handyman.Dynamics</PackageId>
       <Authors>Jonas Samuelsson</Authors>
       <Version>0.4.0</Version>
@@ -26,22 +26,6 @@
 
    <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-   </ItemGroup>
-
-   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-      <Reference Include="System" />
-      <Reference Include="Microsoft.CSharp" />
-   </ItemGroup>
-
-   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">
-      <PackageReference Include="System.Collections" Version="4.3.0" />
-      <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-      <PackageReference Include="System.Globalization" Version="4.3.0" />
-      <PackageReference Include="System.Linq" Version="4.3.0" />
-      <PackageReference Include="System.Reflection" Version="4.3.0" />
-      <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-      <PackageReference Include="System.Runtime" Version="4.3.0" />
-      <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
    </ItemGroup>
 
 </Project>
