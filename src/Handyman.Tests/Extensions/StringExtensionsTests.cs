@@ -1,6 +1,6 @@
-﻿using System;
-using Handyman.Extensions;
+﻿using Handyman.Extensions;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace Handyman.Tests.Extensions
@@ -228,6 +228,12 @@ namespace Handyman.Tests.Extensions
             number = Number.Zero;
             "1".TryToEnum(out number).ShouldBe(true);
             number.ShouldBe(Number.One);
+        }
+
+        [Fact]
+        public void ShouldReturnEmptyStringIfNull()
+        {
+            ((string)null).EmptyIfNull().ShouldBe(string.Empty);
         }
 
         private enum Number

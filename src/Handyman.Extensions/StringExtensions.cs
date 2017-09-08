@@ -177,5 +177,10 @@ namespace Handyman.Extensions
             value = default(T);
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
         }
+
+        public static string EmptyIfNull(this string s)
+        {
+            return s ?? string.Empty;
+        }
     }
 }
