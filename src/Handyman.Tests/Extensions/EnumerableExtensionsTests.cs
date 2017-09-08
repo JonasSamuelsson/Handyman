@@ -78,6 +78,12 @@ namespace Handyman.Tests.Extensions
         }
 
         [Fact]
+        public void ShouldReturnEmptyIfSourceIsNull()
+        {
+            default(IEnumerable<int>).IfNullGetEmpty().ShouldBe(new int[] { });
+        }
+
+        [Fact]
         public void ShouldReturnDefaultIfSourceIsEmpty()
         {
             Enumerable.Empty<int>().IfEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });

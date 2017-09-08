@@ -63,6 +63,11 @@ namespace Handyman.Extensions
             return source ?? factory();
         }
 
+        public static IEnumerable<T> IfNullGetEmpty<T>(this IEnumerable<T> source)
+        {
+            return source.IfNull(Enumerable.Empty<T>());
+        }
+
         public static IEnumerable<T> IfEmpty<T>(this IEnumerable<T> source, IEnumerable<T> @default)
         {
             if (source == null) throw new ArgumentNullException("source");
