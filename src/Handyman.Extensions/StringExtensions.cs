@@ -178,7 +178,7 @@ namespace Handyman.Extensions
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
         }
 
-        public static string EmptyIfNull(this string s)
+        public static string IfNullGetEmpty(this string s)
         {
             return s ?? string.Empty;
         }

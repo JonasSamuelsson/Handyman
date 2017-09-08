@@ -233,7 +233,7 @@ namespace Handyman.Tests.Extensions
         [Fact]
         public void ShouldReturnEmptyStringIfNull()
         {
-            ((string)null).EmptyIfNull().ShouldBe(string.Empty);
+            ((string)null).IfNullGetEmpty().ShouldBe(string.Empty);
         }
 
         private enum Number
