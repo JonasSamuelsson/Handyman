@@ -4,7 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <PackageId>Handyman.Extensions</PackageId>
       <Authors>Jonas Samuelsson</Authors>
-      <Version>1.1.0</Version>
+      <Version>2.0.0-beta1</Version>
       <Company />
       <Product>Handyman</Product>
       <Description />
@@ -17,6 +17,8 @@
       <SignAssembly>True</SignAssembly>
       <DelaySign>False</DelaySign>
       <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
+      <FileVersion>2.0.0.0</FileVersion>
+      <AssemblyVersion>2.0.0.0</AssemblyVersion>
    </PropertyGroup>
 
    <ItemGroup>
