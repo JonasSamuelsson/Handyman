@@ -7,6 +7,11 @@ namespace Handyman.Extensions
 {
     public static class StringExtensions
     {
+        public static string Join(this IEnumerable<string> strings)
+        {
+            return string.Join(string.Empty, strings);
+        }
+
         public static string Join(this IEnumerable<string> strings, string separator)
         {
             return string.Join(separator, strings);

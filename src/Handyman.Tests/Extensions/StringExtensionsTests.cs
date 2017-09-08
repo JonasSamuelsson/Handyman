@@ -10,6 +10,7 @@ namespace Handyman.Tests.Extensions
         [Fact]
         public void ShouldJoinStrings()
         {
+            new[] { "1", "2", "3" }.Join().ShouldBe("123");
             new[] { "join", "multiple", "strings" }.Join(" ").ShouldBe("join multiple strings");
         }
 
