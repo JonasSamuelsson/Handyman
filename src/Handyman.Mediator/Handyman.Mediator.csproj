@@ -4,7 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <PackageId>Handyman.Mediator</PackageId>
       <Authors>Jonas Samuelsson</Authors>
-      <Version>1.0.1</Version>
+      <Version>2.0.0-beta1</Version>
       <Company />
       <Product>Handyman</Product>
       <Description>Mediator implementation for loose coupled in-process communication.</Description>
@@ -18,8 +18,8 @@
       <DelaySign>False</DelaySign>
       <PackageTags>mediator request response message command query event notification</PackageTags>
       <AssemblyOriginatorKeyFile>..\handyman.snk</AssemblyOriginatorKeyFile>
-      <FileVersion>1.0.0.0</FileVersion>
-      <AssemblyVersion>1.0.1.0</AssemblyVersion>
+      <FileVersion>2.0.0.0</FileVersion>
+      <AssemblyVersion>2.0.0.0</AssemblyVersion>
    </PropertyGroup>
 
    <ItemGroup>
