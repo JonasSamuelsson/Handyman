@@ -18,14 +18,14 @@ namespace Handyman.Mediator
             _getServices = getServices;
         }
 
-        public Task Send(IRequest request)
+        public void Send(IRequest request)
         {
             var requestType = request.GetType();
             var handler = GetRequestHandler(requestType);
-            return handler.Handle(request);
+            handler.Handle(request);
         }
 
-        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
+        public TResponse Send<TResponse>(IRequest<TResponse> request)
         {
             var requestType = request.GetType();
             var handler = GetRequestHandler<TResponse>(requestType);
