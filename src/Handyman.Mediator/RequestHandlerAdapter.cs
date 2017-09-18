@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
@@ -13,9 +12,9 @@ namespace Handyman.Mediator
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
-        public Task Handle(IRequest request)
+        public void Handle(IRequest request)
         {
-            return _handler.Handle((TRequest)request);
+            _handler.Handle((TRequest)request);
         }
     }
 
@@ -29,7 +28,7 @@ namespace Handyman.Mediator
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
-        public Task<TResponse> Handle(IRequest<TResponse> request)
+        public TResponse Handle(IRequest<TResponse> request)
         {
             return _handler.Handle((TRequest)request);
         }

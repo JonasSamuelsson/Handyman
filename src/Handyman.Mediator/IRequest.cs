@@ -1,10 +1,6 @@
 ﻿namespace Handyman.Mediator
 {
-    public interface IRequest
-    {
-    }
+    public interface IRequest { }
 
-    public interface IRequest<TResponse>
-    {
-    }
+    public interface IRequest<TResponse> { }
 }
