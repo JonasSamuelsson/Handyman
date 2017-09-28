@@ -6,20 +6,7 @@ namespace Handyman.Tests.Mediator
 {
     internal class ServiceProvider
     {
-        private readonly Dictionary<Type, IEnumerable<Type>> _dictionary;
-
-        public ServiceProvider(Type serviceType, params Type[] instanceTypes)
-        {
-            _dictionary = new Dictionary<Type, IEnumerable<Type>>
-            {
-                [serviceType] = instanceTypes
-            };
-        }
-
-        public ServiceProvider(Dictionary<Type, IEnumerable<Type>> dictionary)
-        {
-            _dictionary = dictionary;
-        }
+        private readonly Dictionary<Type, List<Type>> _dictionary = new Dictionary<Type, List<Type>>();
 
         public object GetService(Type handlerType)
         {
@@ -29,6 +16,13 @@ namespace Handyman.Tests.Mediator
         public IEnumerable<object> GetServices(Type handlerType)
         {
             return _dictionary[handlerType].Select(Activator.CreateInstance);
+        }
+
+        public void Add<TService, TImplementation>() where TImplementation : TService
+        {
+            if (!_dictionary.TryGetValue(typeof(TService), out var list))
+                _dictionary[typeof(TService)] = list = new List<Type>();
+            list.Add(typeof(TImplementation));
         }
     }
 }

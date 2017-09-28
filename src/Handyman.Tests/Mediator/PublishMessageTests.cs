@@ -7,67 +7,71 @@ using Xunit;
 
 namespace Handyman.Tests.Mediator
 {
-    public class PublishMessageTests
+    public class PublishEventTests
     {
         [Fact]
-        public void ShouldPublishMessage()
+        public void ShouldPublishEvent()
         {
-            var message = new Message();
-            var serviceProvider = new ServiceProvider(typeof(IMessageHandler<Message>), typeof(MessageHandler1), typeof(MessageHandler2));
+            var @event = new Event();
+            var serviceProvider = new ServiceProvider();
+            serviceProvider.Add<IEventHandler<Event>, EventHandler1>();
+            serviceProvider.Add<IEventHandler<Event>, EventHandler2>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
 
-            mediator.Publish(message);
+            mediator.Publish(@event);
 
-            message.HandlerTypes.Count.ShouldBe(2);
-            message.HandlerTypes.ShouldContain(typeof(MessageHandler1));
-            message.HandlerTypes.ShouldContain(typeof(MessageHandler2));
+            @event.HandlerTypes.Count.ShouldBe(2);
+            @event.HandlerTypes.ShouldContain(typeof(EventHandler1));
+            @event.HandlerTypes.ShouldContain(typeof(EventHandler2));
         }
 
-        class Message : IMessage
+        class Event : IEvent
         {
             public ConcurrentBag<Type> HandlerTypes { get; } = new ConcurrentBag<Type>();
         }
 
-        abstract class MessageHandler : IMessageHandler<Message>
+        abstract class EventHandler : IEventHandler<Event>
         {
-            public void Handle(Message message)
+            public void Handle(Event @event)
             {
-                message.HandlerTypes.Add(GetType());
+                @event.HandlerTypes.Add(GetType());
             }
         }
 
-        class MessageHandler1 : MessageHandler { }
-        class MessageHandler2 : MessageHandler { }
+        class EventHandler1 : EventHandler { }
+        class EventHandler2 : EventHandler { }
 
         [Fact]
-        public async Task ShouldPublishAsyncMessage()
+        public async Task ShouldPublishAsyncEvent()
         {
-            var message = new AsyncMessage();
-            var serviceProvider = new ServiceProvider(typeof(IAsyncMessageHandler<AsyncMessage>), typeof(AsyncMessageHandler1), typeof(AsyncMessageHandler2));
+            var @event = new AsyncEvent();
+            var serviceProvider = new ServiceProvider();
+            serviceProvider.Add<IAsyncEventHandler<AsyncEvent>, AsyncEventHandler1>();
+            serviceProvider.Add<IAsyncEventHandler<AsyncEvent>, AsyncEventHandler2>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
 
-            await Task.WhenAll(mediator.Publish(message));
+            await Task.WhenAll(mediator.Publish(@event));
 
-            message.HandlerTypes.Count.ShouldBe(2);
-            message.HandlerTypes.ShouldContain(typeof(AsyncMessageHandler1));
-            message.HandlerTypes.ShouldContain(typeof(AsyncMessageHandler2));
+            @event.HandlerTypes.Count.ShouldBe(2);
+            @event.HandlerTypes.ShouldContain(typeof(AsyncEventHandler1));
+            @event.HandlerTypes.ShouldContain(typeof(AsyncEventHandler2));
         }
 
-        class AsyncMessage : IAsyncMessage
+        class AsyncEvent : IAsyncEvent
         {
             public ConcurrentBag<Type> HandlerTypes { get; } = new ConcurrentBag<Type>();
         }
 
-        abstract class AsyncMessageHandler : IAsyncMessageHandler<AsyncMessage>
+        abstract class AsyncEventHandler : IAsyncEventHandler<AsyncEvent>
         {
-            public Task Handle(AsyncMessage message)
+            public Task Handle(AsyncEvent @event)
             {
-                message.HandlerTypes.Add(GetType());
+                @event.HandlerTypes.Add(GetType());
                 return Task.CompletedTask;
             }
         }
 
-        class AsyncMessageHandler1 : AsyncMessageHandler { }
-        class AsyncMessageHandler2 : AsyncMessageHandler { }
+        class AsyncEventHandler1 : AsyncEventHandler { }
+        class AsyncEventHandler2 : AsyncEventHandler { }
     }
 }

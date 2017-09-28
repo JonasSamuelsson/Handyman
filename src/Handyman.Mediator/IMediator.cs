@@ -5,8 +5,8 @@ namespace Handyman.Mediator
 {
     public interface IMediator
     {
-        void Publish(IMessage message);
-        IEnumerable<Task> Publish(IAsyncMessage message);
+        void Publish(IEvent @event);
+        IEnumerable<Task> Publish(IAsyncEvent @event);
 
         void Send(IRequest request);
         TResponse Send<TResponse>(IRequest<TResponse> request);

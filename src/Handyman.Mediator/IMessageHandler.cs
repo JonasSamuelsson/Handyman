@@ -1,8 +1,8 @@
 ﻿namespace Handyman.Mediator
 {
-    public interface IMessageHandler<TMessage>
-       where TMessage : IMessage
+    public interface IEventHandler<TEvent>
+       where TEvent : IEvent
     {
-        void Handle(TMessage message);
+        void Handle(TEvent @event);
     }
 }

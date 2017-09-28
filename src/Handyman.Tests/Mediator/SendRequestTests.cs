@@ -11,7 +11,8 @@ namespace Handyman.Tests.Mediator
         public void ShouldSendRequestWithoutResponse()
         {
             var request = new RequestWithoutResponse();
-            var serviceProvider = new ServiceProvider(typeof(IRequestHandler<RequestWithoutResponse>), typeof(RequestWithoutResponseHandler));
+            var serviceProvider = new ServiceProvider();
+            serviceProvider.Add<IRequestHandler<RequestWithoutResponse>, RequestWithoutResponseHandler>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
             mediator.Send(request);
         }
@@ -27,7 +28,8 @@ namespace Handyman.Tests.Mediator
         public void ShouldSendRequestWithResponse()
         {
             var request = new RequestWithResponse();
-            var serviceProvider = new ServiceProvider(typeof(IRequestHandler<RequestWithResponse, RequestWithResponse>), typeof(RequestWithResponseHandler));
+            var serviceProvider = new ServiceProvider();
+            serviceProvider.Add<IRequestHandler<RequestWithResponse, RequestWithResponse>, RequestWithResponseHandler>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
             mediator.Send(request).ShouldBe(request);
         }
@@ -46,7 +48,8 @@ namespace Handyman.Tests.Mediator
         public void ShouldSendAsyncRequestWithoutResponse()
         {
             var request = new AsyncRequestWithoutResponse();
-            var serviceProvider = new ServiceProvider(typeof(IRequestHandler<AsyncRequestWithoutResponse, Task>), typeof(AsyncRequestWithoutResponseHandler));
+            var serviceProvider = new ServiceProvider();
+            serviceProvider.Add<IRequestHandler<AsyncRequestWithoutResponse, Task>, AsyncRequestWithoutResponseHandler>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
             mediator.Send(request).Wait();
         }
@@ -65,7 +68,8 @@ namespace Handyman.Tests.Mediator
         public void ShouldSendAsyncRequestWithResponse()
         {
             var request = new AsyncRequestWithResponse();
-            var serviceProvider = new ServiceProvider(typeof(IRequestHandler<AsyncRequestWithResponse, Task<AsyncRequestWithResponse>>), typeof(AsyncRequestWithResponseHandler));
+            var serviceProvider = new ServiceProvider();
+            serviceProvider.Add<IRequestHandler<AsyncRequestWithResponse, Task<AsyncRequestWithResponse>>, AsyncRequestWithResponseHandler>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
             mediator.Send(request).Result.ShouldBe(request);
         }

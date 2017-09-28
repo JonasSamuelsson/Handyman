@@ -2,19 +2,19 @@
 
 namespace Handyman.Mediator
 {
-    internal class MessageHandlerAdapter<TMessage> : IMessageHandler<IMessage>
-       where TMessage : IMessage
+    internal class EventHandlerAdapter<TEvent> : IEventHandler<IEvent>
+       where TEvent : IEvent
     {
-        private readonly IMessageHandler<TMessage> _handler;
+        private readonly IEventHandler<TEvent> _handler;
 
-        public MessageHandlerAdapter(IMessageHandler<TMessage> handler)
+        public EventHandlerAdapter(IEventHandler<TEvent> handler)
         {
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
-        public void Handle(IMessage message)
+        public void Handle(IEvent @event)
         {
-            _handler.Handle((TMessage)message);
+            _handler.Handle((TEvent)@event);
         }
     }
 }

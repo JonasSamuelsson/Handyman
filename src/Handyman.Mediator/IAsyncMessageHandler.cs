@@ -2,9 +2,9 @@
 
 namespace Handyman.Mediator
 {
-    public interface IAsyncMessageHandler<TMessage>
-        where TMessage : IAsyncMessage
+    public interface IAsyncEventHandler<TEvent>
+        where TEvent : IAsyncEvent
     {
-        Task Handle(TMessage message);
+        Task Handle(TEvent @event);
     }
 }

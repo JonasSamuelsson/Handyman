@@ -10,7 +10,7 @@ namespace Handyman.Mediator
         public static CallContext GetRequestCallContext(Type requestType)
         {
             var adapterType = GetRequestHandlerAdapterType(requestType);
-            var adapterFactory = CreateMessageHandlerAdapterFactory(adapterType);
+            var adapterFactory = CreateEventHandlerAdapterFactory(adapterType);
             var handlerInterface = GetRequestHandlerInterface(requestType);
             return new CallContext
             {
@@ -35,7 +35,7 @@ namespace Handyman.Mediator
         public static CallContext GetRequestResponseCallContext<TResponse>(Type requestType)
         {
             var adapterType = GetRequestResponseHandlerAdapterType<TResponse>(requestType);
-            var adapterFactory = CreateMessageHandlerAdapterFactory(adapterType);
+            var adapterFactory = CreateEventHandlerAdapterFactory(adapterType);
             var handlerInterface = GetRequestResponseHandlerInterface(requestType);
             return new CallContext
             {
@@ -59,11 +59,11 @@ namespace Handyman.Mediator
                .Single();
         }
 
-        public static CallContext GetMessageCallContext(Type messageType)
+        public static CallContext GetEventCallContext(Type eventType)
         {
-            var adapterType = GetMessageHandlerAdapterType(messageType);
-            var adapterFactory = CreateMessageHandlerAdapterFactory(adapterType);
-            var handlerInterface = GetMessageHandlerInterface(messageType);
+            var adapterType = GetEventHandlerAdapterType(eventType);
+            var adapterFactory = CreateEventHandlerAdapterFactory(adapterType);
+            var handlerInterface = GetEventHandlerInterface(eventType);
             return new CallContext
             {
                 AdapterFactory = adapterFactory,
@@ -71,20 +71,20 @@ namespace Handyman.Mediator
             };
         }
 
-        private static Type GetMessageHandlerAdapterType(Type messageType)
+        private static Type GetEventHandlerAdapterType(Type eventType)
         {
-            return typeof(MessageHandlerAdapter<>).MakeGenericType(messageType);
+            return typeof(EventHandlerAdapter<>).MakeGenericType(eventType);
         }
 
-        private static Type GetMessageHandlerInterface(Type messageType)
+        private static Type GetEventHandlerInterface(Type eventType)
         {
-            return messageType.GetTypeInfo().ImplementedInterfaces
-               .Where(x => x == typeof(IMessage))
-               .Select(_ => typeof(IMessageHandler<>).MakeGenericType(messageType))
+            return eventType.GetTypeInfo().ImplementedInterfaces
+               .Where(x => x == typeof(IEvent))
+               .Select(_ => typeof(IEventHandler<>).MakeGenericType(eventType))
                .Single();
         }
 
-        private static Func<object, object> CreateMessageHandlerAdapterFactory(Type adapterType)
+        private static Func<object, object> CreateEventHandlerAdapterFactory(Type adapterType)
         {
             var lambdaParameter = Expression.Parameter(typeof(object), "handler");
             var ctor = adapterType.GetTypeInfo().DeclaredConstructors.Single();
@@ -93,11 +93,11 @@ namespace Handyman.Mediator
             return Expression.Lambda<Func<object, object>>(Expression.New(ctor, ctorParameter), lambdaParameter).Compile();
         }
 
-        public static CallContext GetAsyncMessageCallContext(Type messageType)
+        public static CallContext GetAsyncEventCallContext(Type eventType)
         {
-            var adapterType = GetAsyncMessageHandlerAdapterType(messageType);
-            var adapterFactory = CreateAsyncMessageHandlerAdapterFactory(adapterType);
-            var handlerInterface = GetAsyncMessageHandlerInterface(messageType);
+            var adapterType = GetAsyncEventHandlerAdapterType(eventType);
+            var adapterFactory = CreateAsyncEventHandlerAdapterFactory(adapterType);
+            var handlerInterface = GetAsyncEventHandlerInterface(eventType);
             return new CallContext
             {
                 AdapterFactory = adapterFactory,
@@ -105,12 +105,12 @@ namespace Handyman.Mediator
             };
         }
 
-        private static Type GetAsyncMessageHandlerAdapterType(Type messageType)
+        private static Type GetAsyncEventHandlerAdapterType(Type eventType)
         {
-            return typeof(AsyncMessageHandlerAdapter<>).MakeGenericType(messageType);
+            return typeof(AsyncEventHandlerAdapter<>).MakeGenericType(eventType);
         }
 
-        private static Func<object, object> CreateAsyncMessageHandlerAdapterFactory(Type adapterType)
+        private static Func<object, object> CreateAsyncEventHandlerAdapterFactory(Type adapterType)
         {
             var lambdaParameter = Expression.Parameter(typeof(object), "handler");
             var ctor = adapterType.GetTypeInfo().DeclaredConstructors.Single();
@@ -119,11 +119,11 @@ namespace Handyman.Mediator
             return Expression.Lambda<Func<object, object>>(Expression.New(ctor, ctorParameter), lambdaParameter).Compile();
         }
 
-        private static Type GetAsyncMessageHandlerInterface(Type messageType)
+        private static Type GetAsyncEventHandlerInterface(Type eventType)
         {
-            return messageType.GetTypeInfo().ImplementedInterfaces
-                .Where(x => x == typeof(IAsyncMessage))
-                .Select(_ => typeof(IAsyncMessageHandler<>).MakeGenericType(messageType))
+            return eventType.GetTypeInfo().ImplementedInterfaces
+                .Where(x => x == typeof(IAsyncEvent))
+                .Select(_ => typeof(IAsyncEventHandler<>).MakeGenericType(eventType))
                 .Single();
         }
     }

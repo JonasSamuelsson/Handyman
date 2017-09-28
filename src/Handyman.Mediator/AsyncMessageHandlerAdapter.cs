@@ -3,19 +3,19 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    internal class AsyncMessageHandlerAdapter<TMessage> : IAsyncMessageHandler<IAsyncMessage>
-        where TMessage : IAsyncMessage
+    internal class AsyncEventHandlerAdapter<TEvent> : IAsyncEventHandler<IAsyncEvent>
+        where TEvent : IAsyncEvent
     {
-        private readonly IAsyncMessageHandler<TMessage> _handler;
+        private readonly IAsyncEventHandler<TEvent> _handler;
 
-        public AsyncMessageHandlerAdapter(IAsyncMessageHandler<TMessage> handler)
+        public AsyncEventHandlerAdapter(IAsyncEventHandler<TEvent> handler)
         {
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
-        public Task Handle(IAsyncMessage message)
+        public Task Handle(IAsyncEvent @event)
         {
-            return _handler.Handle((TMessage)message);
+            return _handler.Handle((TEvent)@event);
         }
     }
 }

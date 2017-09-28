@@ -18,18 +18,18 @@ namespace Handyman.Mediator
             _getServices = getServices;
         }
 
-        public void Publish(IMessage message)
+        public void Publish(IEvent @event)
         {
-            var messageType = message.GetType();
-            foreach (var handler in GetMessageHandlers(messageType))
-                handler.Handle(message);
+            var eventType = @event.GetType();
+            foreach (var handler in GetEventHandlers(eventType))
+                handler.Handle(@event);
         }
 
-        public IEnumerable<Task> Publish(IAsyncMessage message)
+        public IEnumerable<Task> Publish(IAsyncEvent @event)
         {
-            var messageType = message.GetType();
-            return GetAsyncMessageHandlers(messageType)
-                .Select(handler => handler.Handle(message))
+            var eventType = @event.GetType();
+            return GetAsyncEventHandlers(eventType)
+                .Select(handler => handler.Handle(@event))
                 .ToList();
         }
 
@@ -47,21 +47,21 @@ namespace Handyman.Mediator
             return handler.Handle(request);
         }
 
-        private IEnumerable<IMessageHandler<IMessage>> GetMessageHandlers(Type messageType)
+        private IEnumerable<IEventHandler<IEvent>> GetEventHandlers(Type eventType)
         {
-            var context = _contexts.GetOrAdd(messageType, CallContextFactory.GetMessageCallContext);
+            var context = _contexts.GetOrAdd(eventType, CallContextFactory.GetEventCallContext);
             foreach (var handler in _getServices.Invoke(context.HandlerInterface))
             {
-                yield return (IMessageHandler<IMessage>)context.AdapterFactory.Invoke(handler);
+                yield return (IEventHandler<IEvent>)context.AdapterFactory.Invoke(handler);
             }
         }
 
-        private IEnumerable<IAsyncMessageHandler<IAsyncMessage>> GetAsyncMessageHandlers(Type messageType)
+        private IEnumerable<IAsyncEventHandler<IAsyncEvent>> GetAsyncEventHandlers(Type eventType)
         {
-            var context = _contexts.GetOrAdd(messageType, CallContextFactory.GetAsyncMessageCallContext);
+            var context = _contexts.GetOrAdd(eventType, CallContextFactory.GetAsyncEventCallContext);
             foreach (var handler in _getServices.Invoke(context.HandlerInterface))
             {
-                yield return (IAsyncMessageHandler<IAsyncMessage>)context.AdapterFactory.Invoke(handler);
+                yield return (IAsyncEventHandler<IAsyncEvent>)context.AdapterFactory.Invoke(handler);
             }
         }
 

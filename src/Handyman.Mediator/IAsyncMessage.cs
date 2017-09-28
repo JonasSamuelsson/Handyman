@@ -1,4 +1,4 @@
 ﻿namespace Handyman.Mediator
 {
-    public interface IAsyncMessage { }
+    public interface IAsyncEvent { }
 }
