@@ -75,7 +75,7 @@
     <Compile Include="CultureAttribute.cs" />
     <Compile Include="CustomCultureBehavior.cs" />
     <Compile Include="Mediator\SendRequestTests.cs" />
-    <Compile Include="Mediator\PublishMessageTests.cs" />
+    <Compile Include="Mediator\PublishEventTests.cs" />
     <Compile Include="Dynamics\BasicsTests.cs" />
     <Compile Include="Dynamics\ListTests.cs" />
     <Compile Include="Dynamics\ObjectTests.cs" />
