@@ -8,14 +8,12 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly Func<Type, object> _getService;
-        private readonly Func<Type, IEnumerable<object>> _getServices;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ConcurrentDictionary<Type, CallContext> _contexts = new ConcurrentDictionary<Type, CallContext>();
 
-        public Mediator(Func<Type, object> getService, Func<Type, IEnumerable<object>> getServices)
+        public Mediator(IServiceProvider serviceProvider)
         {
-            _getService = getService;
-            _getServices = getServices;
+            _serviceProvider = serviceProvider;
         }
 
         public void Publish(IEvent @event)
@@ -50,7 +48,7 @@ namespace Handyman.Mediator
         private IEnumerable<IEventHandler<IEvent>> GetEventHandlers(Type eventType)
         {
             var context = _contexts.GetOrAdd(eventType, CallContextFactory.GetEventCallContext);
-            foreach (var handler in _getServices.Invoke(context.HandlerInterface))
+            foreach (var handler in _serviceProvider.GetServices(context.HandlerInterface))
             {
                 yield return (IEventHandler<IEvent>)context.AdapterFactory.Invoke(handler);
             }
@@ -59,7 +57,7 @@ namespace Handyman.Mediator
         private IEnumerable<IAsyncEventHandler<IAsyncEvent>> GetAsyncEventHandlers(Type eventType)
         {
             var context = _contexts.GetOrAdd(eventType, CallContextFactory.GetAsyncEventCallContext);
-            foreach (var handler in _getServices.Invoke(context.HandlerInterface))
+            foreach (var handler in _serviceProvider.GetServices(context.HandlerInterface))
             {
                 yield return (IAsyncEventHandler<IAsyncEvent>)context.AdapterFactory.Invoke(handler);
             }
@@ -68,14 +66,14 @@ namespace Handyman.Mediator
         private IRequestHandler<IRequest> GetRequestHandler(Type requestType)
         {
             var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestCallContext);
-            var handler = _getService.Invoke(context.HandlerInterface);
+            var handler = _serviceProvider.GetService(context.HandlerInterface);
             return (IRequestHandler<IRequest>)context.AdapterFactory.Invoke(handler);
         }
 
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
         {
             var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestResponseCallContext<TResponse>);
-            var handler = _getService.Invoke(context.HandlerInterface);
+            var handler = _serviceProvider.GetService(context.HandlerInterface);
             return (IRequestHandler<IRequest<TResponse>, TResponse>)context.AdapterFactory.Invoke(handler);
         }
     }

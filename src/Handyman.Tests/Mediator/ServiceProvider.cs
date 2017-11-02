@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IServiceProvider = Handyman.Mediator.IServiceProvider;
 
 namespace Handyman.Tests.Mediator
 {
-    internal class ServiceProvider
+    internal class ServiceProvider : IServiceProvider
     {
         private readonly Dictionary<Type, List<Type>> _dictionary = new Dictionary<Type, List<Type>>();
 

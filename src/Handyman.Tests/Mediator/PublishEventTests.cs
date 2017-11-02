@@ -16,7 +16,7 @@ namespace Handyman.Tests.Mediator
             var serviceProvider = new ServiceProvider();
             serviceProvider.Add<IEventHandler<Event>, EventHandler1>();
             serviceProvider.Add<IEventHandler<Event>, EventHandler2>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
+            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
 
             mediator.Publish(@event);
 
@@ -48,7 +48,7 @@ namespace Handyman.Tests.Mediator
             var serviceProvider = new ServiceProvider();
             serviceProvider.Add<IAsyncEventHandler<AsyncEvent>, AsyncEventHandler1>();
             serviceProvider.Add<IAsyncEventHandler<AsyncEvent>, AsyncEventHandler2>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider.GetService, serviceProvider.GetServices);
+            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
 
             await Task.WhenAll(mediator.Publish(@event));
 
