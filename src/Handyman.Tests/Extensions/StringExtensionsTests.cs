@@ -142,72 +142,7 @@ namespace Handyman.Tests.Extensions
             "yes".ToEnumOrDefault(IgnoreCase.No).ShouldBe(IgnoreCase.No);
             "yes".ToEnumOrDefault(() => IgnoreCase.No).ShouldBe(IgnoreCase.No);
         }
-
-        [Fact]
-        public void ShouldGetValueIfNull()
-        {
-            ((string)null).IfNull("value").ShouldBe("value");
-            ((string)null).IfNull(() => "value").ShouldBe("value");
-            "".IfNull("value").ShouldBe("");
-            "".IfNull(() => "value").ShouldBe("");
-            " ".IfNull("value").ShouldBe(" ");
-            " ".IfNull(() => "value").ShouldBe(" ");
-            "foobar".IfNull("value").ShouldBe("foobar");
-            "foobar".IfNull(() => "value").ShouldBe("foobar");
-        }
-
-        [Fact]
-        public void ShouldGetValueIfEmpty()
-        {
-            ((string)null).IfEmpty("value").ShouldBe(null);
-            ((string)null).IfEmpty(() => "value").ShouldBe(null);
-            "".IfEmpty("value").ShouldBe("value");
-            "".IfEmpty(() => "value").ShouldBe("value");
-            " ".IfEmpty("value").ShouldBe(" ");
-            " ".IfEmpty(() => "value").ShouldBe(" ");
-            "foobar".IfEmpty("value").ShouldBe("foobar");
-            "foobar".IfEmpty(() => "value").ShouldBe("foobar");
-        }
-
-        [Fact]
-        public void ShouldGetValueIfWhiteSpace()
-        {
-            ((string)null).IfWhiteSpace("value").ShouldBe(null);
-            ((string)null).IfWhiteSpace(() => "value").ShouldBe(null);
-            "".IfWhiteSpace("value").ShouldBe("value");
-            "".IfWhiteSpace(() => "value").ShouldBe("value");
-            " ".IfWhiteSpace("value").ShouldBe("value");
-            " ".IfWhiteSpace(() => "value").ShouldBe("value");
-            "foobar".IfWhiteSpace("value").ShouldBe("foobar");
-            "foobar".IfWhiteSpace(() => "value").ShouldBe("foobar");
-        }
-
-        [Fact]
-        public void ShouldGetValueIfNullOrEmpty()
-        {
-            ((string)null).IfNullOrEmpty("value").ShouldBe("value");
-            ((string)null).IfNullOrEmpty(() => "value").ShouldBe("value");
-            "".IfNullOrEmpty("value").ShouldBe("value");
-            "".IfNullOrEmpty(() => "value").ShouldBe("value");
-            " ".IfNullOrEmpty("value").ShouldBe(" ");
-            " ".IfNullOrEmpty(() => "value").ShouldBe(" ");
-            "foobar".IfNullOrEmpty("value").ShouldBe("foobar");
-            "foobar".IfNullOrEmpty(() => "value").ShouldBe("foobar");
-        }
-
-        [Fact]
-        public void ShouldGetValueIfNullOrWhiteSpace()
-        {
-            ((string)null).IfNullOrWhiteSpace("value").ShouldBe("value");
-            ((string)null).IfNullOrWhiteSpace(() => "value").ShouldBe("value");
-            "".IfNullOrWhiteSpace("value").ShouldBe("value");
-            "".IfNullOrWhiteSpace(() => "value").ShouldBe("value");
-            " ".IfNullOrWhiteSpace("value").ShouldBe("value");
-            " ".IfNullOrWhiteSpace(() => "value").ShouldBe("value");
-            "foobar".IfNullOrWhiteSpace("value").ShouldBe("foobar");
-            "foobar".IfNullOrWhiteSpace(() => "value").ShouldBe("foobar");
-        }
-
+        
         [Fact]
         public void ShouldTryConvertStringToEnum()
         {
@@ -229,13 +164,7 @@ namespace Handyman.Tests.Extensions
             "1".TryToEnum(out number).ShouldBe(true);
             number.ShouldBe(Number.One);
         }
-
-        [Fact]
-        public void ShouldReturnEmptyStringIfNull()
-        {
-            ((string)null).IfNullGetEmpty().ShouldBe(string.Empty);
-        }
-
+        
         private enum Number
         {
             Zero = 0,

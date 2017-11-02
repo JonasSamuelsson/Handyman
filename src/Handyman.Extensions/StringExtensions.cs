@@ -114,56 +114,6 @@ namespace Handyman.Extensions
             return s.ToEnumOrNull<T>() ?? factory();
         }
 
-        public static string IfNull(this string s, string @default)
-        {
-            return s.IfNull(() => @default);
-        }
-
-        public static string IfNull(this string s, Func<string> factory)
-        {
-            return s.IsNull() ? factory() : s;
-        }
-
-        public static string IfEmpty(this string s, string @default)
-        {
-            return s.IfEmpty(() => @default);
-        }
-
-        public static string IfEmpty(this string s, Func<string> factory)
-        {
-            return s.IsEmpty() ? factory() : s;
-        }
-
-        public static string IfWhiteSpace(this string s, string @default)
-        {
-            return s.IfWhiteSpace(() => @default);
-        }
-
-        public static string IfWhiteSpace(this string s, Func<string> factory)
-        {
-            return s.IsWhiteSpace() ? factory() : s;
-        }
-
-        public static string IfNullOrEmpty(this string s, string @default)
-        {
-            return s.IfNullOrEmpty(() => @default);
-        }
-
-        public static string IfNullOrEmpty(this string s, Func<string> factory)
-        {
-            return s.IsNullOrEmpty() ? factory() : s;
-        }
-
-        public static string IfNullOrWhiteSpace(this string s, string @default)
-        {
-            return s.IfNullOrWhiteSpace(() => @default);
-        }
-
-        public static string IfNullOrWhiteSpace(this string s, Func<string> factory)
-        {
-            return s.IsNullOrWhiteSpace() ? factory() : s;
-        }
-
         public static bool TryToEnum<T>(this string s, out T value) where T : struct
         {
             return s.TryToEnum(IgnoreCase.No, out value);
@@ -176,11 +126,6 @@ namespace Handyman.Extensions
             // ReSharper disable once RedundantAssignment
             value = default(T);
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
-        }
-
-        public static string IfNullGetEmpty(this string s)
-        {
-            return s ?? string.Empty;
         }
     }
 }

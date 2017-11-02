@@ -53,59 +53,6 @@ namespace Handyman.Extensions
             return enumerable == null || enumerable.IsEmpty();
         }
 
-        public static IEnumerable<T> IfNull<T>(this IEnumerable<T> source, IEnumerable<T> @default)
-        {
-            return source ?? @default;
-        }
-
-        public static IEnumerable<T> IfNull<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
-        {
-            return source ?? factory();
-        }
-
-        public static IEnumerable<T> IfNullGetEmpty<T>(this IEnumerable<T> source)
-        {
-            return source.IfNull(Enumerable.Empty<T>());
-        }
-
-        public static IEnumerable<T> IfEmpty<T>(this IEnumerable<T> source, IEnumerable<T> @default)
-        {
-            if (source == null) throw new ArgumentNullException("source");
-            // ReSharper disable once PossibleMultipleEnumeration
-            return source.IfEmpty(() => @default);
-        }
-
-        public static IEnumerable<T> IfEmpty<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
-        {
-            if (source == null) throw new ArgumentNullException("source");
-            using (var enumerator = source.GetEnumerator())
-            {
-                if (enumerator.MoveNext())
-                {
-                    do
-                    {
-                        yield return enumerator.Current;
-                    } while (enumerator.MoveNext());
-                }
-                else
-                {
-                    foreach (var element in factory())
-                        yield return element;
-                }
-            }
-        }
-
-        public static IEnumerable<T> IfNullOrEmpty<T>(this IEnumerable<T> source, IEnumerable<T> @default)
-        {
-            // ReSharper disable once PossibleMultipleEnumeration
-            return source.IfNullOrEmpty(() => @default);
-        }
-
-        public static IEnumerable<T> IfNullOrEmpty<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
-        {
-            return source == null ? factory() : source.IfEmpty(factory);
-        }
-
         public static void Enumerate<T>(this IEnumerable<T> source)
         {
             // ReSharper disable once EmptyEmbeddedStatement
@@ -346,6 +293,21 @@ namespace Handyman.Extensions
                 yield return item;
                 index++;
             }
+        }
+
+        public static IEnumerable<T> GetElementsOrDefault<T>(this IEnumerable<T> source, IEnumerable<T> @default)
+        {
+            return source ?? @default;
+        }
+
+        public static IEnumerable<T> GetElementsOrDefault<T>(this IEnumerable<T> source, Func<IEnumerable<T>> factory)
+        {
+            return source ?? factory();
+        }
+
+        public static IEnumerable<T> GetElementsOrEmpty<T>(this IEnumerable<T> source)
+        {
+            return source ?? Enumerable.Empty<T>();
         }
     }
 }

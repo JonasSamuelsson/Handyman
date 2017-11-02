@@ -71,50 +71,6 @@ namespace Handyman.Tests.Extensions
         }
 
         [Fact]
-        public void ShouldReturnDefaultIfSourceIsNull()
-        {
-            default(IEnumerable<int>).IfNull(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-            default(IEnumerable<int>).IfNull(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-        }
-
-        [Fact]
-        public void ShouldReturnEmptyIfSourceIsNull()
-        {
-            default(IEnumerable<int>).IfNullGetEmpty().ShouldBe(new int[] { });
-        }
-
-        [Fact]
-        public void ShouldReturnDefaultIfSourceIsEmpty()
-        {
-            Enumerable.Empty<int>().IfEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-            Enumerable.Empty<int>().IfEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-
-            var ints = new Ints(1, 2, 3);
-            ints.IfEmpty(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
-            ints.EnumerationCount.ShouldBe(1);
-            ints = new Ints(1, 2, 3);
-            ints.IfEmpty(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
-            ints.EnumerationCount.ShouldBe(1);
-        }
-
-        [Fact]
-        public void ShouldReturnDefaultIfSourceIsNullOrEmpty()
-        {
-            var ints = new Ints(1, 2, 3);
-            ints.IfNullOrEmpty(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
-            ints.EnumerationCount.ShouldBe(1);
-            ints = new Ints(1, 2, 3);
-            ints.IfNullOrEmpty(() => new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
-            ints.EnumerationCount.ShouldBe(1);
-
-            default(IEnumerable<int>).IfNullOrEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-            default(IEnumerable<int>).IfNullOrEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-
-            Enumerable.Empty<int>().IfNullOrEmpty(new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-            Enumerable.Empty<int>().IfNullOrEmpty(() => new[] { 1, 2, 3 }).ShouldBe(new[] { 1, 2, 3 });
-        }
-
-        [Fact]
         public void ShouldEnumerateEnumerable()
         {
             var ints = new Ints(1, 2, 3);
@@ -441,6 +397,24 @@ namespace Handyman.Tests.Extensions
             var numbers = new List<int>();
             ints.Visit((index, _) => index % 2 == 0, (index, i) => numbers.Add(index + i)).ShouldBe(ints);
             numbers.ShouldBe(new[] { 1, 5 });
+        }
+
+        [Fact]
+        public void GetElementsOrDefault()
+        {
+            new[] { 1, 2, 3 }.GetElementsOrDefault(new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
+            new[] { 1, 2, 3 }.GetElementsOrDefault(() => new[] { 4, 5, 6 }).ShouldBe(new[] { 1, 2, 3 });
+
+            default(IEnumerable<int>).GetElementsOrDefault(new[] { 4, 5, 6 }).ShouldBe(new[] { 4, 5, 6 });
+            default(IEnumerable<int>).GetElementsOrDefault(() => new[] { 4, 5, 6 }).ShouldBe(new[] { 4, 5, 6 });
+        }
+
+        [Fact]
+        public void GetElementsOrEmpty()
+        {
+            new[] { 1, 2, 3 }.GetElementsOrEmpty().ShouldBe(new[] { 1, 2, 3 });
+
+            default(IEnumerable<int>).GetElementsOrEmpty().ShouldBe(new int[] { });
         }
     }
 }
