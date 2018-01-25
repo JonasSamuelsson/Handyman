@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Extensions", "Handyman.Extensions\Handyman.Extensions.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions", "Handyman.Extensions\Handyman.Extensions.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Tests", "Handyman.Tests\Handyman.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
@@ -12,11 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "Handyman.Wp
 		{D84F2948-95E8-4832-B022-24B73ACBA33C} = {D84F2948-95E8-4832-B022-24B73ACBA33C}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Mediator", "Handyman.Mediator\Handyman.Mediator.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "Handyman.Mediator\Handyman.Mediator.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dynamics", "Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics", "Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.UriBuilder", "Handyman.UriBuilder\Handyman.UriBuilder.csproj", "{B7B46D41-2B16-4E59-B9A9-31336C29B60A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.UriBuilder", "Handyman.UriBuilder\Handyman.UriBuilder.csproj", "{B7B46D41-2B16-4E59-B9A9-31336C29B60A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{773C41E8-1426-4BDE-AEEB-9EFDE432A231}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,5 +57,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CF54741-2B3A-49AB-9A7C-500DCD7891F6}
 	EndGlobalSection
 EndGlobal
