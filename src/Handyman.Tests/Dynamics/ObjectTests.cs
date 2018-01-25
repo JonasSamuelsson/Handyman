@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Handyman.Dynamics;
 using Newtonsoft.Json;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Handyman.Tests.Dynamics
@@ -31,6 +31,15 @@ namespace Handyman.Tests.Dynamics
             Should.Throw<InvalidCastException>(() => DObject.Create(""));
             Should.Throw<InvalidCastException>(() => DObject.Create(0));
             Should.Throw<InvalidCastException>(() => DObject.Create(new object[] { }));
+        }
+
+        [Fact]
+        public void GetKeys()
+        {
+            DObject
+                .Create(new { Array = new[] { 1, 2, 3 }, Object = new object(), String = "string" })
+                .GetKeys()
+                .ShouldBe(new[] { "Array", "Object", "String" });
         }
 
         [Fact]

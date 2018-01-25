@@ -1,9 +1,10 @@
-﻿using System;
+﻿
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
 
 namespace Handyman.Dynamics
 {
@@ -46,6 +47,11 @@ namespace Handyman.Dynamics
         {
             Add(toKey, Dictionary[fromKey]);
             Remove(fromKey);
+        }
+
+        public IReadOnlyCollection<string> GetKeys()
+        {
+            return Dictionary.Keys;
         }
 
         public bool TryGetString(string key, out string value)
