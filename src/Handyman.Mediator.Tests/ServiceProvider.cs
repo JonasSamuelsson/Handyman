@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IServiceProvider = Handyman.Mediator.IServiceProvider;
 
-namespace Handyman.Tests.Mediator
+namespace Handyman.Mediator.Tests
 {
     internal class ServiceProvider : IServiceProvider
     {

@@ -74,10 +74,6 @@
   <ItemGroup>
     <Compile Include="CultureAttribute.cs" />
     <Compile Include="CustomCultureBehavior.cs" />
-    <Compile Include="Mediator\SendRequestTests.cs" />
-    <Compile Include="Mediator\PublishEventTests.cs" />
-    <Compile Include="Mediator\ServiceProvider.cs" />
-    <Compile Include="Mediator\ServiceProviderTests.cs" />
     <Compile Include="UriBuilder\UriBuilder_base_address_tests.cs" />
     <Compile Include="UriBuilder\UriBuilder_query_tests.cs" />
     <Compile Include="UriBuilder\UriBuilder_tests.cs" />

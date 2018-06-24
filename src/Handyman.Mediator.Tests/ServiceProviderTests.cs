@@ -1,10 +1,10 @@
-﻿using Shouldly;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Mediator
+namespace Handyman.Mediator.Tests
 {
     public class ServiceProviderTests
     {

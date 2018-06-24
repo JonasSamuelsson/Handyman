@@ -1,9 +1,8 @@
-﻿using Handyman.Mediator;
+﻿using System.Threading.Tasks;
 using Shouldly;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace Handyman.Tests.Mediator
+namespace Handyman.Mediator.Tests
 {
     public class SendRequestTests
     {

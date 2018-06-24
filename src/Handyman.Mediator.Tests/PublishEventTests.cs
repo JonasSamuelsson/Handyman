@@ -1,11 +1,10 @@
-﻿using Handyman.Mediator;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Mediator
+namespace Handyman.Mediator.Tests
 {
     public class PublishEventTests
     {
