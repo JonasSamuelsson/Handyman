@@ -16,19 +16,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "Handym
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics", "Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.UriBuilder", "Handyman.UriBuilder\Handyman.UriBuilder.csproj", "{B7B46D41-2B16-4E59-B9A9-31336C29B60A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{773C41E8-1426-4BDE-AEEB-9EFDE432A231}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		handyman.snk = handyman.snk
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Dynamics.Tests", "Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj", "{20B29A73-3DA9-470D-9DB2-3FDA5D155507}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj", "{20B29A73-3DA9-470D-9DB2-3FDA5D155507}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Extensions.Tests", "Handyman.Extensions.Tests\Handyman.Extensions.Tests.csproj", "{24BECB9E-C4FA-425F-83B6-D8064560B4B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "Handyman.Extensions.Tests\Handyman.Extensions.Tests.csproj", "{24BECB9E-C4FA-425F-83B6-D8064560B4B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Mediator.Tests", "Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj", "{79949073-915C-4074-B6EB-1B07A2292629}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj", "{79949073-915C-4074-B6EB-1B07A2292629}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,10 +54,6 @@ Global
 		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7B46D41-2B16-4E59-B9A9-31336C29B60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7B46D41-2B16-4E59-B9A9-31336C29B60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7B46D41-2B16-4E59-B9A9-31336C29B60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7B46D41-2B16-4E59-B9A9-31336C29B60A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20B29A73-3DA9-470D-9DB2-3FDA5D155507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20B29A73-3DA9-470D-9DB2-3FDA5D155507}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20B29A73-3DA9-470D-9DB2-3FDA5D155507}.Release|Any CPU.ActiveCfg = Release|Any CPU
