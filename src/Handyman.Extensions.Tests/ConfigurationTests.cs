@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using Handyman.Extensions;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Extensions
+namespace Handyman.Extensions.Tests
 {
     public class ConfigurationTests
     {

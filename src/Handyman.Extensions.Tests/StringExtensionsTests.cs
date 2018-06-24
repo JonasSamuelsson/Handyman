@@ -1,9 +1,8 @@
-﻿using Handyman.Extensions;
+﻿using System;
 using Shouldly;
-using System;
 using Xunit;
 
-namespace Handyman.Tests.Extensions
+namespace Handyman.Extensions.Tests
 {
     public class StringExtensionsTests
     {

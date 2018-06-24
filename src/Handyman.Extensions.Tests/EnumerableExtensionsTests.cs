@@ -1,13 +1,12 @@
-﻿using Handyman.Extensions;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Extensions
+namespace Handyman.Extensions.Tests
 {
     public class EnumerableExtensionsTests
     {
