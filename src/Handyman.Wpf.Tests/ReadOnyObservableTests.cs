@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Handyman.Wpf;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Wpf
+namespace Handyman.Wpf.Tests
 {
     public class ReadOnyObservableTests
     {

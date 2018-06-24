@@ -2,7 +2,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Wpf.Converters
+namespace Handyman.Wpf.Tests.Converters
 {
     public class InvertBoolConverterTests
     {

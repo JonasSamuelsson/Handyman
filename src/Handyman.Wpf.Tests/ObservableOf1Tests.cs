@@ -1,8 +1,7 @@
-﻿using Handyman.Wpf;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Wpf
+namespace Handyman.Wpf.Tests
 {
     public class ObservableOf1Tests
     {

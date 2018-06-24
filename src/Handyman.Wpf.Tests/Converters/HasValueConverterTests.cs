@@ -3,7 +3,7 @@ using Handyman.Wpf.Converters;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Wpf.Converters
+namespace Handyman.Wpf.Tests.Converters
 {
     public class HasValueConverterTests
     {

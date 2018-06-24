@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Shouldly;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Handyman.Extensions;
-using Handyman.Wpf;
-using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Wpf
+namespace Handyman.Wpf.Tests
 {
     public class ObservableOf2Tests
     {
@@ -61,7 +59,7 @@ namespace Handyman.Tests.Wpf
         {
             var observable = Observable.Create(new[] { new Observable<double>(1), new Observable<double>(2) },
                                                list => list.Average(x => x.Value),
-                                               (list, value) => list.ForEach(x => x.Value = value));
+                                               (list, value) => list.ToList().ForEach(x => x.Value = value));
             var propertyChangedCount = 0;
             observable.PropertyChanged += delegate { propertyChangedCount++; };
 
