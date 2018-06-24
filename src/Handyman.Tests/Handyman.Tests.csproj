@@ -76,11 +76,6 @@
     <Compile Include="CustomCultureBehavior.cs" />
     <Compile Include="Mediator\SendRequestTests.cs" />
     <Compile Include="Mediator\PublishEventTests.cs" />
-    <Compile Include="Dynamics\BasicsTests.cs" />
-    <Compile Include="Dynamics\ListTests.cs" />
-    <Compile Include="Dynamics\ObjectTests.cs" />
-    <Compile Include="Dynamics\StringTests.cs" />
-    <Compile Include="Dynamics\ValueTests.cs" />
     <Compile Include="Extensions\BoolExtensionsTests.cs" />
     <Compile Include="Extensions\ObjectExtensionsTests.cs" />
     <Compile Include="Extensions\ComparableExtensionsTests.cs" />

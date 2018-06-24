@@ -1,10 +1,9 @@
-﻿using Handyman.Dynamics;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Dynamics
+namespace Handyman.Dynamics.Tests
 {
     public class StringTests
     {

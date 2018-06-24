@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Handyman.Dynamics;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Dynamics
+namespace Handyman.Dynamics.Tests
 {
     public class ListTests
     {

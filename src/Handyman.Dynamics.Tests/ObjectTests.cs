@@ -1,12 +1,11 @@
-using Handyman.Dynamics;
-using Newtonsoft.Json;
-using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.Tests.Dynamics
+namespace Handyman.Dynamics.Tests
 {
     public class ObjectTests
     {
