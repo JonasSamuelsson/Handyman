@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Handyman.Mediator
 {
-    internal class RequestHandlerFactoryBuilder
+    internal static class RequestHandlerFactoryBuilder
     {
         internal static Func<IServiceProvider, object> Create<TResponse>(Type requestType)
         {
