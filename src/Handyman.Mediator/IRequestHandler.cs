@@ -1,14 +1,10 @@
-﻿namespace Handyman.Mediator
-{
-    public interface IRequestHandler<TRequest>
-        where TRequest : IRequest
-    {
-        void Handle(TRequest request);
-    }
+﻿using System.Threading.Tasks;
 
+namespace Handyman.Mediator
+{
     public interface IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        TResponse Handle(TRequest request);
+        Task<TResponse> Handle(TRequest request);
     }
 }

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Shouldly;
+using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
-using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -9,15 +10,15 @@ namespace Handyman.Mediator.Tests
     public class PublishEventTests
     {
         [Fact]
-        public void ShouldPublishEvent()
+        public async Task ShouldPublishEvent()
         {
             var @event = new Event();
             var serviceProvider = new ServiceProvider();
             serviceProvider.Add<IEventHandler<Event>, EventHandler1>();
             serviceProvider.Add<IEventHandler<Event>, EventHandler2>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
+            var mediator = new Mediator(serviceProvider);
 
-            mediator.Publish(@event);
+            await Task.WhenAll(mediator.Publish(@event).ToArray());
 
             @event.HandlerTypes.Count.ShouldBe(2);
             @event.HandlerTypes.ShouldContain(typeof(EventHandler1));
@@ -29,11 +30,12 @@ namespace Handyman.Mediator.Tests
             public ConcurrentBag<Type> HandlerTypes { get; } = new ConcurrentBag<Type>();
         }
 
-        abstract class EventHandler : IEventHandler<Event>
+        class EventHandler : IEventHandler<Event>
         {
-            public void Handle(Event @event)
+            public Task Handle(Event @event)
             {
                 @event.HandlerTypes.Add(GetType());
+                return Task.CompletedTask;
             }
         }
 
@@ -43,34 +45,25 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldPublishAsyncEvent()
         {
-            var @event = new AsyncEvent();
+            var @event = new Event();
             var serviceProvider = new ServiceProvider();
-            serviceProvider.Add<IAsyncEventHandler<AsyncEvent>, AsyncEventHandler1>();
-            serviceProvider.Add<IAsyncEventHandler<AsyncEvent>, AsyncEventHandler2>();
+            serviceProvider.Add<IEventHandler<Event>, EventHandler>();
+            serviceProvider.Add<IEventHandler<Event>, SynchronousEventHandler>();
             var mediator = new Handyman.Mediator.Mediator(serviceProvider);
 
             await Task.WhenAll(mediator.Publish(@event));
 
             @event.HandlerTypes.Count.ShouldBe(2);
-            @event.HandlerTypes.ShouldContain(typeof(AsyncEventHandler1));
-            @event.HandlerTypes.ShouldContain(typeof(AsyncEventHandler2));
+            @event.HandlerTypes.ShouldContain(typeof(EventHandler));
+            @event.HandlerTypes.ShouldContain(typeof(SynchronousEventHandler));
         }
 
-        class AsyncEvent : IAsyncEvent
+        class SynchronousEventHandler : SynchronousEventHandler<Event>
         {
-            public ConcurrentBag<Type> HandlerTypes { get; } = new ConcurrentBag<Type>();
-        }
-
-        abstract class AsyncEventHandler : IAsyncEventHandler<AsyncEvent>
-        {
-            public Task Handle(AsyncEvent @event)
+            protected override void Handle(Event @event)
             {
                 @event.HandlerTypes.Add(GetType());
-                return Task.CompletedTask;
             }
         }
-
-        class AsyncEventHandler1 : AsyncEventHandler { }
-        class AsyncEventHandler2 : AsyncEventHandler { }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Shouldly;
+﻿using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -7,79 +7,90 @@ namespace Handyman.Mediator.Tests
     public class SendRequestTests
     {
         [Fact]
-        public void ShouldSendRequestWithoutResponse()
+        public async Task ShouldSendRequest()
         {
-            var request = new RequestWithoutResponse();
             var serviceProvider = new ServiceProvider();
-            serviceProvider.Add<IRequestHandler<RequestWithoutResponse>, RequestWithoutResponseHandler>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
-            mediator.Send(request);
+            serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
+            var mediator = new Mediator(serviceProvider);
+            var request = new Request();
+            (await mediator.Send(request)).Request.ShouldBe(request);
         }
 
-        class RequestWithoutResponse : IRequest { }
+        class Request : IRequest<Response> { }
 
-        class RequestWithoutResponseHandler : IRequestHandler<RequestWithoutResponse>
+        class Response
         {
-            public void Handle(RequestWithoutResponse request) { }
+            public Request Request { get; set; }
         }
 
-        [Fact]
-        public void ShouldSendRequestWithResponse()
+        class RequestHandler : IRequestHandler<Request, Response>
         {
-            var request = new RequestWithResponse();
-            var serviceProvider = new ServiceProvider();
-            serviceProvider.Add<IRequestHandler<RequestWithResponse, RequestWithResponse>, RequestWithResponseHandler>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
-            mediator.Send(request).ShouldBe(request);
-        }
-
-        class RequestWithResponse : IRequest<RequestWithResponse> { }
-
-        class RequestWithResponseHandler : IRequestHandler<RequestWithResponse, RequestWithResponse>
-        {
-            public RequestWithResponse Handle(RequestWithResponse request)
+            public Task<Response> Handle(Request request)
             {
-                return request;
+                return Task.FromResult(new Response { Request = request });
             }
         }
 
         [Fact]
-        public void ShouldSendAsyncRequestWithoutResponse()
+        public async Task ShouldUseSynchronousRequestHandlerBaseType()
         {
-            var request = new AsyncRequestWithoutResponse();
             var serviceProvider = new ServiceProvider();
-            serviceProvider.Add<IRequestHandler<AsyncRequestWithoutResponse, Task>, AsyncRequestWithoutResponseHandler>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
-            mediator.Send(request).Wait();
+            serviceProvider.Add<IRequestHandler<Request, Response>, SynchronousRequestHandler>();
+            var mediator = new Mediator(serviceProvider);
+            var request = new Request();
+            (await mediator.Send(request)).Request.ShouldBe(request);
         }
 
-        class AsyncRequestWithoutResponse : IAsyncRequest { }
-
-        class AsyncRequestWithoutResponseHandler : IAsyncRequestHandler<AsyncRequestWithoutResponse>
+        class SynchronousRequestHandler : SynchronousRequestHandler<Request, Response>
         {
-            public Task Handle(AsyncRequestWithoutResponse request)
+            protected override Response Handle(Request request)
             {
+                return new Response { Request = request };
+            }
+        }
+
+        [Fact]
+        public async Task ShouldUseVoidResponseRequestHandlerBaseType()
+        {
+            var serviceProvider = new ServiceProvider();
+            var handler = new VoidRequestHandler();
+            serviceProvider.Add<IRequestHandler<VoidRequest, Void>>(() => handler);
+            var mediator = new Mediator(serviceProvider);
+            await mediator.Send(new VoidRequest());
+            handler.Executed.ShouldBeTrue();
+        }
+
+        class VoidRequest : IRequest { }
+
+        class VoidRequestHandler : VoidResponseRequestHandler<VoidRequest>
+        {
+            public bool Executed { get; set; }
+
+            protected override Task Handle(VoidRequest request)
+            {
+                Executed = true;
                 return Task.CompletedTask;
             }
         }
 
         [Fact]
-        public void ShouldSendAsyncRequestWithResponse()
+        public async Task ShouldUseSynchronousVoidResponseRequestHandlerBaseType()
         {
-            var request = new AsyncRequestWithResponse();
             var serviceProvider = new ServiceProvider();
-            serviceProvider.Add<IRequestHandler<AsyncRequestWithResponse, Task<AsyncRequestWithResponse>>, AsyncRequestWithResponseHandler>();
-            var mediator = new Handyman.Mediator.Mediator(serviceProvider);
-            mediator.Send(request).Result.ShouldBe(request);
+            var handler = new SynchronousVoidRequestHandler();
+            serviceProvider.Add<IRequestHandler<VoidRequest, Void>>(() => handler);
+            var mediator = new Mediator(serviceProvider);
+            await mediator.Send(new VoidRequest());
+            handler.Executed.ShouldBeTrue();
         }
 
-        class AsyncRequestWithResponse : IAsyncRequest<AsyncRequestWithResponse> { }
-
-        class AsyncRequestWithResponseHandler : IAsyncRequestHandler<AsyncRequestWithResponse, AsyncRequestWithResponse>
+        class SynchronousVoidRequestHandler : SynchronousVoidResponseRequestHandler<VoidRequest>
         {
-            public Task<AsyncRequestWithResponse> Handle(AsyncRequestWithResponse request)
+            public bool Executed { get; set; }
+
+            protected override void Handle(VoidRequest request)
             {
-                return Task.FromResult(request);
+                Executed = true;
             }
         }
     }
