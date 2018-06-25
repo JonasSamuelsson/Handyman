@@ -5,7 +5,7 @@ namespace Handyman.Mediator
 {
     public interface IMediator
     {
-        IEnumerable<Task> Publish(IEvent @event);
+        IEnumerable<Task> Publish<TEvent>(TEvent @event) where TEvent : IEvent;
         Task<TResponse> Send<TResponse>(IRequest<TResponse> request);
     }
 }

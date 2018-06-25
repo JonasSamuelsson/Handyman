@@ -15,7 +15,9 @@ namespace Handyman.Mediator.Tests
 
         public IEnumerable<object> GetServices(Type handlerType)
         {
-            return _dictionary[handlerType].Select(factory => factory.Invoke());
+            return _dictionary.TryGetValue(handlerType, out var factories)
+                ? factories.Select(factory => factory.Invoke())
+                : Enumerable.Empty<object>();
         }
 
         public void Add<TService, TImplementation>() where TImplementation : TService

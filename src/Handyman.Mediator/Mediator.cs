@@ -9,19 +9,19 @@ namespace Handyman.Mediator
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ConcurrentDictionary<Type, CallContext> _contexts = new ConcurrentDictionary<Type, CallContext>();
+        private readonly ConcurrentDictionary<Type, Func<IServiceProvider, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<IServiceProvider, object>>();
 
         public Mediator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public IEnumerable<Task> Publish(IEvent @event)
+        public IEnumerable<Task> Publish<TEvent>(TEvent @event)
+            where TEvent : IEvent
         {
-            var eventType = @event.GetType();
-            return GetEventHandlers(eventType)
-                .Select(handler => handler.Handle(@event))
-                .ToList();
+            var handlers = _serviceProvider.GetServices(typeof(IEventHandler<TEvent>));
+            var handler = new DelegatingEventHandler<TEvent>(handlers.Cast<IEventHandler<TEvent>>());
+            return handler.Handle(@event);
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
@@ -31,20 +31,10 @@ namespace Handyman.Mediator
             return handler.Handle(request);
         }
 
-        private IEnumerable<IEventHandler<IEvent>> GetEventHandlers(Type eventType)
-        {
-            var context = _contexts.GetOrAdd(eventType, CallContextFactory.GetAsyncEventCallContext);
-            foreach (var handler in _serviceProvider.GetServices(context.HandlerInterface))
-            {
-                yield return (IEventHandler<IEvent>)context.AdapterFactory.Invoke(handler);
-            }
-        }
-
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
         {
-            var context = _contexts.GetOrAdd(requestType, CallContextFactory.GetRequestResponseCallContext<TResponse>);
-            var handler = _serviceProvider.GetService(context.HandlerInterface);
-            return (IRequestHandler<IRequest<TResponse>, TResponse>)context.AdapterFactory.Invoke(handler);
+            var factory = _requestHandlerFactories.GetOrAdd(requestType, RequestHandlerFactoryBuilder.Create<TResponse>);
+            return (IRequestHandler<IRequest<TResponse>, TResponse>)factory.Invoke(_serviceProvider);
         }
     }
 }
