@@ -2,7 +2,7 @@
 
 namespace Handyman.Mediator
 {
-    public abstract class SynchronousVoidResponseRequestHandler<TRequest> : IRequestHandler<TRequest, Void>
+    public abstract class SynchronousVoidRequestHandler<TRequest> : IRequestHandler<TRequest, Void>
         where TRequest : IRequest<Void>
     {
         Task<Void> IRequestHandler<TRequest, Void>.Handle(TRequest request)

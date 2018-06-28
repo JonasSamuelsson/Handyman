@@ -33,7 +33,7 @@ namespace Handyman.Mediator.Tests
         }
 
         [Fact]
-        public async Task ShouldUseSynchronousRequestHandlerBaseType()
+        public async Task UseSynchronousRequestHandler()
         {
             var serviceProvider = new ServiceProvider();
             serviceProvider.Add<IRequestHandler<Request, Response>, SynchronousRequestHandler>();
@@ -51,7 +51,7 @@ namespace Handyman.Mediator.Tests
         }
 
         [Fact]
-        public async Task ShouldUseVoidResponseRequestHandlerBaseType()
+        public async Task UseVoidRequestHandler()
         {
             var serviceProvider = new ServiceProvider();
             var handler = new VoidRequestHandler();
@@ -63,7 +63,7 @@ namespace Handyman.Mediator.Tests
 
         class VoidRequest : IRequest { }
 
-        class VoidRequestHandler : VoidResponseRequestHandler<VoidRequest>
+        class VoidRequestHandler : VoidRequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 
@@ -75,7 +75,7 @@ namespace Handyman.Mediator.Tests
         }
 
         [Fact]
-        public async Task ShouldUseSynchronousVoidResponseRequestHandlerBaseType()
+        public async Task UseSynchronousVoidRequestHandler()
         {
             var serviceProvider = new ServiceProvider();
             var handler = new SynchronousVoidRequestHandler();
@@ -85,7 +85,7 @@ namespace Handyman.Mediator.Tests
             handler.Executed.ShouldBeTrue();
         }
 
-        class SynchronousVoidRequestHandler : SynchronousVoidResponseRequestHandler<VoidRequest>
+        class SynchronousVoidRequestHandler : SynchronousVoidRequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 
