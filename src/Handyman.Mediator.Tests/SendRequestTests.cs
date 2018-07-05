@@ -98,9 +98,9 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldUseRequestPipelineHandlers()
         {
+            var serviceProvider = new ServiceProvider();
             var pipelineHandler1 = new RequestPipelineHandler();
             var pipelineHandler2 = new RequestPipelineHandler();
-            var serviceProvider = new ServiceProvider();
             serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler1);
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler2);
@@ -121,6 +121,20 @@ namespace Handyman.Mediator.Tests
                 Executed = true;
                 return next.Invoke(request);
             }
+        }
+
+        [Fact]
+        public async Task PipelineHandlersShouldNotBeUsedIfPipelineIsDisabled()
+        {
+            var serviceProvider = new ServiceProvider();
+            var pipelineHandler = new RequestPipelineHandler();
+            serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
+            serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler);
+            var mediator = new Mediator(serviceProvider, new Configuration { UseRequestPipeline = false });
+            var request = new Request();
+
+            (await mediator.Send(request)).Request.ShouldBe(request);
+            pipelineHandler.Executed.ShouldBeFalse();
         }
     }
 }

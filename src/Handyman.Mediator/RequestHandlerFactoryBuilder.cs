@@ -6,32 +6,20 @@ namespace Handyman.Mediator
 {
     internal static class RequestHandlerFactoryBuilder
     {
-        internal static Func<IServiceProvider, object> Create<TResponse>(Type requestType)
+        internal static Func<IServiceProvider, object> Create<TResponse>(Type requestType, bool useRequestPipeline)
         {
             var responseType = typeof(TResponse);
-            var pipelineType = GetPipelineType(requestType, responseType);
-            var pipelineHandlerType = GetPipelineHandlerType(requestType, responseType);
-            var handlerType = GetHandlerType(requestType, responseType);
-            return CreatePipelineFactory(pipelineType, pipelineHandlerType, handlerType);
+            return useRequestPipeline
+                ? CreatePipelineHandlerFactory(requestType, responseType)
+                : CreateHandlerFactory(requestType, responseType);
         }
 
-        private static Type GetPipelineType(Type requestType, Type responseType)
+        private static Func<IServiceProvider, object> CreatePipelineHandlerFactory(Type requestType, Type responseType)
         {
-            return typeof(DelegatingRequestHandler<,>).MakeGenericType(requestType, responseType);
-        }
+            var handlerType = typeof(PipelinedRequestHandler<,>).MakeGenericType(requestType, responseType);
+            var pipelineHandlerType = typeof(IRequestPipelineHandler<,>).MakeGenericType(requestType, responseType);
+            var innerHandlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
 
-        private static Type GetPipelineHandlerType(Type requestType, Type responseType)
-        {
-            return typeof(IRequestPipelineHandler<,>).MakeGenericType(requestType, responseType);
-        }
-
-        private static Type GetHandlerType(Type requestType, Type responseType)
-        {
-            return typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
-        }
-
-        private static Func<IServiceProvider, object> CreatePipelineFactory(Type pipelineType, Type pipelineHandlerType, Type handlerType)
-        {
             var serviceProvider = Expression.Parameter(typeof(IServiceProvider), "serviceProvider");
 
             var getServicesMethod = typeof(IServiceProvider).GetMethod(nameof(IServiceProvider.GetServices));
@@ -40,13 +28,30 @@ namespace Handyman.Mediator
             var typedPipelineHandlers = Expression.Call(castMethod, pipelineHandlers);
 
             var getServiceMethod = typeof(System.IServiceProvider).GetMethod(nameof(IServiceProvider.GetService));
-            var handler = Expression.Call(serviceProvider, getServiceMethod, Expression.Constant(handlerType));
-            var typedHandler = Expression.Convert(handler, handlerType);
+            var innerHandler = Expression.Call(serviceProvider, getServiceMethod, Expression.Constant(innerHandlerType));
+            var typedInnerHandler = Expression.Convert(innerHandler, innerHandlerType);
 
-            var ctor = pipelineType.GetConstructors().Single();
-            var pipeline = Expression.New(ctor, typedPipelineHandlers, typedHandler);
+            var handlerCtor = handlerType.GetConstructors().Single();
+            var handler = Expression.New(handlerCtor, typedPipelineHandlers, typedInnerHandler);
 
-            return Expression.Lambda<Func<IServiceProvider, object>>(pipeline, serviceProvider).Compile();
+            return Expression.Lambda<Func<IServiceProvider, object>>(handler, serviceProvider).Compile();
+        }
+
+        private static Func<IServiceProvider, object> CreateHandlerFactory(Type requestType, Type responseType)
+        {
+            var handlerType = typeof(RequestHandler<,>).MakeGenericType(requestType, responseType);
+            var innerHandlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
+
+            var serviceProvider = Expression.Parameter(typeof(IServiceProvider), "serviceProvider");
+
+            var getServiceMethod = typeof(System.IServiceProvider).GetMethod(nameof(IServiceProvider.GetService));
+            var innerHandler = Expression.Call(serviceProvider, getServiceMethod, Expression.Constant(innerHandlerType));
+            var typedInnerHandler = Expression.Convert(innerHandler, innerHandlerType);
+
+            var handlerCtor = handlerType.GetConstructors().Single();
+            var handler = Expression.New(handlerCtor, typedInnerHandler);
+
+            return Expression.Lambda<Func<IServiceProvider, object>>(handler, serviceProvider).Compile();
         }
     }
 }
