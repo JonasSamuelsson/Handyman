@@ -8,19 +8,19 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
+        private readonly bool _requestPipelineEnabled;
         private readonly ServiceProvider _serviceProvider;
-        private readonly Configuration _configuration;
         private readonly ConcurrentDictionary<Type, Func<ServiceProvider, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<ServiceProvider, object>>();
 
         public Mediator(IServiceProvider serviceProvider)
-            : this(serviceProvider, new Configuration())
+            : this(new Configuration { ServiceProvider = serviceProvider })
         {
         }
 
-        public Mediator(IServiceProvider serviceProvider, Configuration configuration)
+        public Mediator(Configuration configuration)
         {
-            _serviceProvider = new ServiceProvider(serviceProvider);
-            _configuration = configuration;
+            _requestPipelineEnabled = configuration.RequestPipelineEnabled;
+            _serviceProvider = new ServiceProvider(configuration.ServiceProvider);
         }
 
         public IEnumerable<Task> Publish<TEvent>(TEvent @event)
@@ -40,8 +40,7 @@ namespace Handyman.Mediator
 
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
         {
-            var useRequestPipeline = _configuration.UseRequestPipeline;
-            var factory = _requestHandlerFactories.GetOrAdd(requestType, t => RequestHandlerFactoryBuilder.Create<TResponse>(t, useRequestPipeline));
+            var factory = _requestHandlerFactories.GetOrAdd(requestType, t => RequestHandlerFactoryBuilder.Create<TResponse>(t, _requestPipelineEnabled));
             return (IRequestHandler<IRequest<TResponse>, TResponse>)factory.Invoke(_serviceProvider);
         }
     }
