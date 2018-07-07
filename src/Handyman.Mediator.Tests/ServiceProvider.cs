@@ -8,14 +8,22 @@ namespace Handyman.Mediator.Tests
     {
         private readonly Dictionary<Type, List<Func<object>>> _dictionary = new Dictionary<Type, List<Func<object>>>();
 
-        public object GetService(Type handlerType)
+        public object GetService(Type type)
         {
-            return GetServices(handlerType).Single();
+            var isEnumerable = IsEnumerable(type);
+            return isEnumerable
+                ? GetServices(type.GetGenericArguments().Single())
+                : GetServices(type).Single();
         }
 
-        public IEnumerable<object> GetServices(Type handlerType)
+        private bool IsEnumerable(Type type)
         {
-            return _dictionary.TryGetValue(handlerType, out var factories)
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+        }
+
+        private IEnumerable<object> GetServices(Type type)
+        {
+            return _dictionary.TryGetValue(type, out var factories)
                 ? factories.Select(factory => factory.Invoke())
                 : Enumerable.Empty<object>();
         }

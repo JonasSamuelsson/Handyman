@@ -1,44 +1,26 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Handyman.Mediator
 {
-    public class ServiceProvider : IServiceProvider
+    internal class ServiceProvider
     {
-        private readonly Func<Type, object> _getService;
-        private readonly Func<Type, IEnumerable<object>> _getServices;
+        private readonly IServiceProvider _serviceProvider;
 
-        public ServiceProvider(System.IServiceProvider serviceProvider):this(serviceProvider.GetService)
+        internal ServiceProvider(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
         }
 
-        public ServiceProvider(Func<Type, object> getService)
+        internal object GetService(Type type)
         {
-            _getService = getService;
-            _getServices = t =>
-            {
-                var serviceType = typeof(IEnumerable<>).MakeGenericType(t);
-                var services = (IEnumerable)GetService(serviceType);
-                return services.Cast<object>();
-            };
+            return _serviceProvider.GetService(type)
+                   ?? throw new InvalidOperationException($"Could not get service of type '{type.FullName}'.");
         }
 
-        public ServiceProvider(Func<Type, object> getService, Func<Type, IEnumerable<object>> getServices)
+        internal IEnumerable<object> GetServices(Type type)
         {
-            _getService = getService;
-            _getServices = getServices;
-        }
-
-        public object GetService(Type serviceType)
-        {
-            return _getService(serviceType);
-        }
-
-        public IEnumerable<object> GetServices(Type serviceType)
-        {
-            return _getServices(serviceType);
+            return (IEnumerable<object>)GetService(typeof(IEnumerable<>).MakeGenericType(type));
         }
     }
 }

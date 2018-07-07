@@ -8,9 +8,9 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
         private readonly Configuration _configuration;
-        private readonly ConcurrentDictionary<Type, Func<IServiceProvider, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<IServiceProvider, object>>();
+        private readonly ConcurrentDictionary<Type, Func<ServiceProvider, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<ServiceProvider, object>>();
 
         public Mediator(IServiceProvider serviceProvider)
             : this(serviceProvider, new Configuration())
@@ -19,7 +19,7 @@ namespace Handyman.Mediator
 
         public Mediator(IServiceProvider serviceProvider, Configuration configuration)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProvider = new ServiceProvider(serviceProvider);
             _configuration = configuration;
         }
 
