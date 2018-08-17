@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator
@@ -13,14 +14,14 @@ namespace Handyman.Mediator
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
-        public Task<TResponse> Handle(IRequest<TResponse> request)
+        public Task<TResponse> Handle(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            return Execute((TRequest)request);
+            return Execute((TRequest)request, cancellationToken);
         }
 
-        protected virtual Task<TResponse> Execute(TRequest request)
+        protected virtual Task<TResponse> Execute(TRequest request, CancellationToken cancellationToken)
         {
-            return _handler.Handle(request);
+            return _handler.Handle(request, cancellationToken);
         }
     }
 }

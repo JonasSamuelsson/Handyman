@@ -1,16 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
     public abstract class SynchronousVoidRequestHandler<TRequest> : IRequestHandler<TRequest, Void>
         where TRequest : IRequest<Void>
     {
-        Task<Void> IRequestHandler<TRequest, Void>.Handle(TRequest request)
+        Task<Void> IRequestHandler<TRequest, Void>.Handle(TRequest request, CancellationToken cancellationToken)
         {
-            Handle(request);
+            Handle(request, cancellationToken);
             return Task.FromResult(Void.Instance);
         }
 
-        protected abstract void Handle(TRequest request);
+        protected abstract void Handle(TRequest request, CancellationToken cancellationToken);
     }
 }

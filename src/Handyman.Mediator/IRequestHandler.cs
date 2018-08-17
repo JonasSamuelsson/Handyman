@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
     public interface IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        Task<TResponse> Handle(TRequest request);
+        Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     }
 }

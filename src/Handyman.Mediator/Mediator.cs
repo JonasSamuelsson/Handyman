@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator
@@ -31,11 +32,11 @@ namespace Handyman.Mediator
             return handler.Handle(@event);
         }
 
-        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
+        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
             var requestType = request.GetType();
             var handler = GetRequestHandler<TResponse>(requestType);
-            return handler.Handle(request);
+            return handler.Handle(request, cancellationToken);
         }
 
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator
@@ -18,15 +19,15 @@ namespace Handyman.Mediator
                                 ?? throw new ArgumentNullException(nameof(pipelineHandlers));
         }
 
-        protected override Task<TResponse> Execute(TRequest request)
+        protected override Task<TResponse> Execute(TRequest request, CancellationToken cancellationToken)
         {
             var index = _index++;
 
             if (index == _pipelineHandlers.Count)
-                return base.Execute(request);
+                return base.Execute(request, cancellationToken);
 
             var pipelineHandler = _pipelineHandlers[index];
-            return pipelineHandler.Execute(request, Execute);
+            return pipelineHandler.Execute(request, cancellationToken, Execute);
         }
     }
 }
