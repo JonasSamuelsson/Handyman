@@ -24,12 +24,12 @@ namespace Handyman.Mediator
             _serviceProvider = new ServiceProvider(configuration.ServiceProvider);
         }
 
-        public IEnumerable<Task> Publish<TEvent>(TEvent @event)
+        public IEnumerable<Task> Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
             var handlers = _serviceProvider.GetServices(typeof(IEventHandler<TEvent>));
             var handler = new DelegatingEventHandler<TEvent>(handlers.Cast<IEventHandler<TEvent>>());
-            return handler.Handle(@event);
+            return handler.Handle(@event, cancellationToken);
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)

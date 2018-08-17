@@ -1,5 +1,6 @@
 ﻿using Shouldly;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,19 +15,19 @@ namespace Handyman.Mediator.Tests
             serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
             var mediator = new Mediator(serviceProvider);
             var request = new Request();
-            (await mediator.Send(request)).Request.ShouldBe(request);
+            (await mediator.Send(request, CancellationToken.None)).Request.ShouldBe(request);
         }
 
-        class Request : IRequest<Response> { }
+        private class Request : IRequest<Response> { }
 
-        class Response
+        private class Response
         {
             public Request Request { get; set; }
         }
 
-        class RequestHandler : IRequestHandler<Request, Response>
+        private class RequestHandler : IRequestHandler<Request, Response>
         {
-            public Task<Response> Handle(Request request)
+            public Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
                 return Task.FromResult(new Response { Request = request });
             }
@@ -39,12 +40,12 @@ namespace Handyman.Mediator.Tests
             serviceProvider.Add<IRequestHandler<Request, Response>, SynchronousRequestHandler>();
             var mediator = new Mediator(serviceProvider);
             var request = new Request();
-            (await mediator.Send(request)).Request.ShouldBe(request);
+            (await mediator.Send(request, CancellationToken.None)).Request.ShouldBe(request);
         }
 
-        class SynchronousRequestHandler : SynchronousRequestHandler<Request, Response>
+        private class SynchronousRequestHandler : SynchronousRequestHandler<Request, Response>
         {
-            protected override Response Handle(Request request)
+            protected override Response Handle(Request request, CancellationToken cancellationToken)
             {
                 return new Response { Request = request };
             }
@@ -57,17 +58,17 @@ namespace Handyman.Mediator.Tests
             var handler = new VoidRequestHandler();
             serviceProvider.Add<IRequestHandler<VoidRequest, Void>>(() => handler);
             var mediator = new Mediator(serviceProvider);
-            await mediator.Send(new VoidRequest());
+            await mediator.Send(new VoidRequest(), CancellationToken.None);
             handler.Executed.ShouldBeTrue();
         }
 
-        class VoidRequest : IRequest { }
+        private class VoidRequest : IRequest { }
 
-        class VoidRequestHandler : VoidRequestHandler<VoidRequest>
+        private class VoidRequestHandler : VoidRequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 
-            protected override Task Handle(VoidRequest request)
+            protected override Task Handle(VoidRequest request, CancellationToken cancellationToken)
             {
                 Executed = true;
                 return Task.CompletedTask;
@@ -81,15 +82,15 @@ namespace Handyman.Mediator.Tests
             var handler = new SynchronousVoidRequestHandler();
             serviceProvider.Add<IRequestHandler<VoidRequest, Void>>(() => handler);
             var mediator = new Mediator(serviceProvider);
-            await mediator.Send(new VoidRequest());
+            await mediator.Send(new VoidRequest(), CancellationToken.None);
             handler.Executed.ShouldBeTrue();
         }
 
-        class SynchronousVoidRequestHandler : SynchronousVoidRequestHandler<VoidRequest>
+        private class SynchronousVoidRequestHandler : SynchronousVoidRequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(VoidRequest request)
+            protected override void Handle(VoidRequest request, CancellationToken cancellationToken)
             {
                 Executed = true;
             }
@@ -106,20 +107,20 @@ namespace Handyman.Mediator.Tests
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler2);
             var mediator = new Mediator(serviceProvider);
             var request = new Request();
-            (await mediator.Send(request)).Request.ShouldBe(request);
+            (await mediator.Send(request, CancellationToken.None)).Request.ShouldBe(request);
 
             pipelineHandler1.Executed.ShouldBeTrue();
             pipelineHandler2.Executed.ShouldBeTrue();
         }
 
-        class RequestPipelineHandler : IRequestPipelineHandler<Request, Response>
+        private class RequestPipelineHandler : IRequestPipelineHandler<Request, Response>
         {
             public bool Executed { get; set; }
 
-            public Task<Response> Execute(Request request, Func<Request, Task<Response>> next)
+            public Task<Response> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<Response>> next)
             {
                 Executed = true;
-                return next.Invoke(request);
+                return next.Invoke(request, cancellationToken);
             }
         }
 
@@ -132,8 +133,7 @@ namespace Handyman.Mediator.Tests
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler);
             var mediator = new Mediator(new Configuration { RequestPipelineEnabled = false, ServiceProvider = serviceProvider });
             var request = new Request();
-
-            (await mediator.Send(request)).Request.ShouldBe(request);
+            (await mediator.Send(request, CancellationToken.None)).Request.ShouldBe(request);
             pipelineHandler.Executed.ShouldBeFalse();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator
@@ -15,12 +16,12 @@ namespace Handyman.Mediator
             _handlers = (handlers as IReadOnlyList<IEventHandler<TEvent>> ?? handlers?.ToArray()) ?? throw new ArgumentNullException(nameof(handlers));
         }
 
-        internal IEnumerable<Task> Handle(IEvent @event)
+        public IEnumerable<Task> Handle(IEvent @event, CancellationToken cancellationToken)
         {
-            return Handle((TEvent)@event);
+            return Handle((TEvent)@event, cancellationToken);
         }
 
-        private IEnumerable<Task> Handle(TEvent @event)
+        private IEnumerable<Task> Handle(TEvent @event, CancellationToken cancellationToken)
         {
             var count = _handlers.Count;
             var tasks = new List<Task>(count);
@@ -28,7 +29,7 @@ namespace Handyman.Mediator
             for (var i = 0; i < count; i++)
             {
                 var handler = _handlers[i];
-                var task = handler.Handle(@event);
+                var task = handler.Handle(@event, cancellationToken);
                 tasks.Add(task);
             }
 

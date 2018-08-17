@@ -6,7 +6,7 @@ namespace Handyman.Mediator
 {
     public interface IMediator
     {
-        IEnumerable<Task> Publish<TEvent>(TEvent @event) where TEvent : IEvent;
+        IEnumerable<Task> Publish<TEvent>(TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent;
         Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken);
     }
 }
