@@ -12,7 +12,7 @@ namespace Handyman.Mediator.Tests
         public async Task ShouldPublishEvent()
         {
             var @event = new Event();
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             var eventHandler1 = new EventHandler();
             var eventHandler2 = new EventHandler();
             serviceProvider.Add<IEventHandler<Event>>(() => eventHandler1);
@@ -42,7 +42,7 @@ namespace Handyman.Mediator.Tests
         public async Task ShouldPublishAsyncEvent()
         {
             var @event = new Event();
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             var eventHandler = new EventHandler();
             var synchronousEventHandler = new SynchronousEventHandler();
             serviceProvider.Add<IEventHandler<Event>>(() => eventHandler);

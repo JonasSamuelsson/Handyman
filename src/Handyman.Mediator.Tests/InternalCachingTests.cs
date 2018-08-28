@@ -11,7 +11,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldJustWork()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
 
             serviceProvider.Add<IRequestHandler<Request, int>, RequestHandler>();
 

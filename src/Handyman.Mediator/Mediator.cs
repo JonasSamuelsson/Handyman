@@ -10,8 +10,8 @@ namespace Handyman.Mediator
     public class Mediator : IMediator
     {
         private readonly bool _requestPipelineEnabled;
-        private readonly ServiceProvider _serviceProvider;
-        private readonly ConcurrentDictionary<Type, Func<ServiceProvider, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<ServiceProvider, object>>();
+        private readonly ServiceProviderAdapter _serviceProvider;
+        private readonly ConcurrentDictionary<Type, Func<ServiceProviderAdapter, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<ServiceProviderAdapter, object>>();
 
         public Mediator(IServiceProvider serviceProvider)
             : this(new Configuration { ServiceProvider = serviceProvider })
@@ -21,7 +21,7 @@ namespace Handyman.Mediator
         public Mediator(Configuration configuration)
         {
             _requestPipelineEnabled = configuration.RequestPipelineEnabled;
-            _serviceProvider = new ServiceProvider(configuration.ServiceProvider);
+            _serviceProvider = new ServiceProviderAdapter(configuration.ServiceProvider);
         }
 
         public IEnumerable<Task> Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)

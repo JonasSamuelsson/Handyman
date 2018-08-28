@@ -11,7 +11,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldSendRequest()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
             var mediator = new Mediator(serviceProvider);
             var request = new Request();
@@ -36,7 +36,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task UseSynchronousRequestHandler()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             serviceProvider.Add<IRequestHandler<Request, Response>, SynchronousRequestHandler>();
             var mediator = new Mediator(serviceProvider);
             var request = new Request();
@@ -54,7 +54,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task UseVoidRequestHandler()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             var handler = new VoidRequestHandler();
             serviceProvider.Add<IRequestHandler<VoidRequest, Void>>(() => handler);
             var mediator = new Mediator(serviceProvider);
@@ -78,7 +78,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task UseSynchronousVoidRequestHandler()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             var handler = new SynchronousVoidRequestHandler();
             serviceProvider.Add<IRequestHandler<VoidRequest, Void>>(() => handler);
             var mediator = new Mediator(serviceProvider);
@@ -99,7 +99,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldUseRequestPipelineHandlers()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             var pipelineHandler1 = new RequestPipelineHandler();
             var pipelineHandler2 = new RequestPipelineHandler();
             serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
@@ -132,7 +132,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task PipelineHandlersShouldNotBeUsedIfPipelineIsDisabled()
         {
-            var serviceProvider = new ServiceProvider();
+            var serviceProvider = new TestServiceProvider();
             var pipelineHandler = new RequestPipelineHandler();
             serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler);

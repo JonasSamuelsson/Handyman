@@ -10,7 +10,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldPublishEventWithoutCancellationToken()
         {
-            var services = new ServiceProvider();
+            var services = new TestServiceProvider();
             services.Add<IEventHandler<TestEvent>>(() => new TestEventHandler());
             var @event = new TestEvent();
             var tasks = new Mediator(services).Publish(@event);
@@ -21,7 +21,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldSendRequestWithoutCancellationToken()
         {
-            var services = new ServiceProvider();
+            var services = new TestServiceProvider();
             services.Add<IRequestHandler<TestRequest, string>>(() => new TestRequestHandler());
             (await new Mediator(services).Send(new TestRequest { Response = "success" })).ShouldBe("success");
         }

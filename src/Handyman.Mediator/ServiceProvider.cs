@@ -1,26 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Handyman.Mediator
 {
-    internal class ServiceProvider
+    public class ServiceProvider : IServiceProvider
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly Func<Type, object> _func;
 
-        internal ServiceProvider(IServiceProvider serviceProvider)
+        public ServiceProvider(Func<Type,object> func)
         {
-            _serviceProvider = serviceProvider;
+            _func = func;
         }
 
-        internal object GetService(Type type)
+        public object GetService(Type serviceType)
         {
-            return _serviceProvider.GetService(type)
-                   ?? throw new InvalidOperationException($"Could not get service of type '{type.FullName}'.");
-        }
-
-        internal IEnumerable<object> GetServices(Type type)
-        {
-            return (IEnumerable<object>)GetService(typeof(IEnumerable<>).MakeGenericType(type));
+            return _func(serviceType);
         }
     }
 }

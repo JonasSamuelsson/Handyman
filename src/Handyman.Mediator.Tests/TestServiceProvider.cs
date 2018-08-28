@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Handyman.Mediator.Tests
 {
-    internal class ServiceProvider : IServiceProvider
+    internal class TestServiceProvider : IServiceProvider
     {
         private readonly Dictionary<Type, List<Func<object>>> _dictionary = new Dictionary<Type, List<Func<object>>>();
 
