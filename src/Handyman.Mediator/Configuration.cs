@@ -5,9 +5,9 @@ namespace Handyman.Mediator
     public class Configuration
     {
         /// <summary>
-        /// Set if request pipeline should be used, default is true.
+        /// Set if request pipeline should be used, default is false.
         /// </summary>
-        public bool RequestPipelineEnabled { get; set; } = true;
+        public bool RequestPipelineEnabled { get; set; } = false;
 
         /// <summary>
         /// Service provider

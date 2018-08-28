@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Linq.Expressions;
 using BindingFlags = System.Reflection.BindingFlags;
@@ -9,9 +10,16 @@ namespace Handyman.Mediator
     {
         private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic;
 
+        private static readonly ConcurrentDictionary<bool, ConcurrentDictionary<Type, Func<ServiceProvider, object>>> Cache = new ConcurrentDictionary<bool, ConcurrentDictionary<Type, Func<ServiceProvider, object>>>();
+
         internal static Func<ServiceProvider, object> Create<TResponse>(Type requestType, bool useRequestPipeline)
         {
-            var responseType = typeof(TResponse);
+            var cache = Cache.GetOrAdd(useRequestPipeline, _ => new ConcurrentDictionary<Type, Func<ServiceProvider, object>>());
+            return cache.GetOrAdd(requestType, _ => CreateFactory(useRequestPipeline, requestType, typeof(TResponse)));
+        }
+
+        private static Func<ServiceProvider, object> CreateFactory(bool useRequestPipeline, Type requestType, Type responseType)
+        {
             return useRequestPipeline
                 ? CreatePipelineHandlerFactory(requestType, responseType)
                 : CreateHandlerFactory(requestType, responseType);

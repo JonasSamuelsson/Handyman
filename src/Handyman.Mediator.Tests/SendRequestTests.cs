@@ -105,7 +105,12 @@ namespace Handyman.Mediator.Tests
             serviceProvider.Add<IRequestHandler<Request, Response>, RequestHandler>();
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler1);
             serviceProvider.Add<IRequestPipelineHandler<Request, Response>>(() => pipelineHandler2);
-            var mediator = new Mediator(serviceProvider);
+            var configuration = new Configuration
+            {
+                RequestPipelineEnabled = true,
+                ServiceProvider = serviceProvider
+            };
+            var mediator = new Mediator(configuration);
             var request = new Request();
             (await mediator.Send(request, CancellationToken.None)).Request.ShouldBe(request);
 
