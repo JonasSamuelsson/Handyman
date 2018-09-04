@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using Handyman.Mediator.Internals;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,27 +8,39 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly bool _requestPipelineEnabled;
-        private readonly ServiceProviderAdapter _serviceProvider;
-        private readonly ConcurrentDictionary<Type, Func<ServiceProviderAdapter, object>> _requestHandlerFactories = new ConcurrentDictionary<Type, Func<ServiceProviderAdapter, object>>();
+        private readonly Func<Type, object> _serviceProvider;
+        private readonly IEventHandlerFactoryBuilder _eventHandlerFactoryBuilder;
+        private readonly IRequestHandlerFactoryBuilder _requestHandlerFactoryBuilder;
 
-        public Mediator(IServiceProvider serviceProvider)
-            : this(new Configuration { ServiceProvider = serviceProvider })
+        public Mediator(Func<Type, object> serviceProvider)
+            : this(serviceProvider, new Configuration())
         {
         }
 
-        public Mediator(Configuration configuration)
+        public Mediator(Func<Type, object> serviceProvider, Configuration configuration)
         {
-            _requestPipelineEnabled = configuration.RequestPipelineEnabled;
-            _serviceProvider = new ServiceProviderAdapter(configuration.ServiceProvider);
+            _serviceProvider = serviceProvider;
+
+            _eventHandlerFactoryBuilder = configuration.EventPipelineEnabled
+                ? (IEventHandlerFactoryBuilder)new PipelinedEventHandlerFactoryBuilder()
+                : new EventHandlerFactoryBuilder();
+
+            _requestHandlerFactoryBuilder = configuration.RequestPipelineEnabled
+                ? (IRequestHandlerFactoryBuilder)new PipelinedRequestHandlerFactoryBuilder()
+                : new RequestHandlerFactoryBuilder();
         }
 
         public IEnumerable<Task> Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
-            var handlers = _serviceProvider.GetServices(typeof(IEventHandler<TEvent>));
-            var handler = new DelegatingEventHandler<TEvent>(handlers.Cast<IEventHandler<TEvent>>());
+            var handler = GetEventHandler<TEvent>();
             return handler.Handle(@event, cancellationToken);
+        }
+
+        private Internals.EventHandler<TEvent> GetEventHandler<TEvent>() where TEvent : IEvent
+        {
+            var factory = _eventHandlerFactoryBuilder.BuildFactory(typeof(TEvent));
+            return (Internals.EventHandler<TEvent>)factory.Invoke(_serviceProvider);
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
@@ -41,7 +52,7 @@ namespace Handyman.Mediator
 
         private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
         {
-            var factory = _requestHandlerFactories.GetOrAdd(requestType, t => RequestHandlerFactoryBuilder.Create<TResponse>(t, _requestPipelineEnabled));
+            var factory = _requestHandlerFactoryBuilder.BuildFactory(requestType, typeof(TResponse));
             return (IRequestHandler<IRequest<TResponse>, TResponse>)factory.Invoke(_serviceProvider);
         }
     }

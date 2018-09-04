@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Maestro;
+using Shouldly;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,30 +12,28 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldJustWork()
         {
-            var serviceProvider = new TestServiceProvider();
+            var container = new Container();
 
-            serviceProvider.Add<IRequestHandler<Request, int>, RequestHandler>();
+            container.Configure(x => x.Add<IRequestHandler<Request, int>>().Type<RequestHandler>());
 
             for (var i = 1; i <= 3; i++)
             {
-                serviceProvider.Add<IRequestPipelineHandler<Request, int>, RequestPipelineHandler>();
+                container.Configure(x => x.Add<IRequestPipelineHandler<Request, int>>().Type<RequestPipelineHandler>());
 
                 // handler
 
-                var mediatorWithoutPipeline = new Mediator(new Configuration
+                var mediatorWithoutPipeline = new Mediator(container.GetService, new Configuration
                 {
-                    RequestPipelineEnabled = false,
-                    ServiceProvider = serviceProvider
+                    RequestPipelineEnabled = false
                 });
 
                 (await mediatorWithoutPipeline.Send(new Request())).ShouldBe(0);
 
                 // handler & pipeline
 
-                var mediatorWithPipeline = new Mediator(new Configuration
+                var mediatorWithPipeline = new Mediator(container.GetService, new Configuration
                 {
-                    RequestPipelineEnabled = true,
-                    ServiceProvider = serviceProvider
+                    RequestPipelineEnabled = true
                 });
 
                 (await mediatorWithPipeline.Send(new Request())).ShouldBe(i);
@@ -56,7 +55,7 @@ namespace Handyman.Mediator.Tests
 
         private class RequestPipelineHandler : IRequestPipelineHandler<Request, int>
         {
-            public Task<int> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<int>> next)
+            public Task<int> Handle(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<int>> next)
             {
                 request.Number++;
                 return next(request, cancellationToken);

@@ -5,13 +5,13 @@ namespace Handyman.Mediator
     public class Configuration
     {
         /// <summary>
-        /// Set if request pipeline should be used, default is false.
+        /// Enable/disable event pipeline, default is false.
         /// </summary>
-        public bool RequestPipelineEnabled { get; set; } = false;
+        public bool EventPipelineEnabled { get; set; } = false;
 
         /// <summary>
-        /// Service provider
+        /// Enable/disable request pipeline, default is false.
         /// </summary>
-        public IServiceProvider ServiceProvider { get; set; }
+        public bool RequestPipelineEnabled { get; set; } = false;
     }
 }

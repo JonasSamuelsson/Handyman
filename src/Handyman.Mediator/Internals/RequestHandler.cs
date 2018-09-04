@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Handyman.Mediator
+namespace Handyman.Mediator.Internals
 {
     internal class RequestHandler<TRequest, TResponse> : IRequestHandler<IRequest<TResponse>, TResponse>
         where TRequest : IRequest<TResponse>

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public abstract class SynchronousVoidRequestHandler<TRequest> : IRequestHandler<TRequest, Void>
+    public abstract class SynchVoidRequestHandler<TRequest> : IRequestHandler<TRequest, Void>
         where TRequest : IRequest<Void>
     {
         Task<Void> IRequestHandler<TRequest, Void>.Handle(TRequest request, CancellationToken cancellationToken)

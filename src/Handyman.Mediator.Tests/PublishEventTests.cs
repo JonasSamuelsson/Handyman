@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Maestro;
+using Shouldly;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,12 +13,12 @@ namespace Handyman.Mediator.Tests
         public async Task ShouldPublishEvent()
         {
             var @event = new Event();
-            var serviceProvider = new TestServiceProvider();
+            var container = new Container();
             var eventHandler1 = new EventHandler();
             var eventHandler2 = new EventHandler();
-            serviceProvider.Add<IEventHandler<Event>>(() => eventHandler1);
-            serviceProvider.Add<IEventHandler<Event>>(() => eventHandler2);
-            var mediator = new Mediator(serviceProvider);
+            container.Configure(x => x.Add<IEventHandler<Event>>().Factory(() => eventHandler1));
+            container.Configure(x => x.Add<IEventHandler<Event>>().Factory(() => eventHandler2));
+            var mediator = new Mediator(container.GetService);
 
             await Task.WhenAll(mediator.Publish(@event, CancellationToken.None).ToArray());
 
@@ -42,12 +43,12 @@ namespace Handyman.Mediator.Tests
         public async Task ShouldPublishAsyncEvent()
         {
             var @event = new Event();
-            var serviceProvider = new TestServiceProvider();
+            var container = new Container();
             var eventHandler = new EventHandler();
-            var synchronousEventHandler = new SynchronousEventHandler();
-            serviceProvider.Add<IEventHandler<Event>>(() => eventHandler);
-            serviceProvider.Add<IEventHandler<Event>>(() => synchronousEventHandler);
-            var mediator = new Mediator(serviceProvider);
+            var synchronousEventHandler = new SynchEventHandler();
+            container.Configure(x => x.Add<IEventHandler<Event>>().Factory(() => eventHandler));
+            container.Configure(x => x.Add<IEventHandler<Event>>().Factory(() => synchronousEventHandler));
+            var mediator = new Mediator(container.GetService);
 
             await Task.WhenAll(mediator.Publish(@event, CancellationToken.None));
 
@@ -55,7 +56,7 @@ namespace Handyman.Mediator.Tests
             synchronousEventHandler.Event.ShouldBe(@event);
         }
 
-        private class SynchronousEventHandler : SynchronousEventHandler<Event>
+        private class SynchEventHandler : SynchEventHandler<Event>
         {
             public Event Event { get; set; }
 

@@ -7,6 +7,6 @@ namespace Handyman.Mediator
     public interface IRequestPipelineHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        Task<TResponse> Execute(TRequest request, CancellationToken cancellationToken, Func<TRequest, CancellationToken, Task<TResponse>> next);
+        Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, Func<TRequest, CancellationToken, Task<TResponse>> next);
     }
 }

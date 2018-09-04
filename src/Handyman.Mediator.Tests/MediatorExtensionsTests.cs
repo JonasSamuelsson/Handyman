@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Maestro;
+using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,10 +11,10 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldPublishEventWithoutCancellationToken()
         {
-            var services = new TestServiceProvider();
-            services.Add<IEventHandler<TestEvent>>(() => new TestEventHandler());
+            var container = new Container();
+            container.Configure(x => x.Add<IEventHandler<TestEvent>>().Factory(() => new TestEventHandler()));
             var @event = new TestEvent();
-            var tasks = new Mediator(services).Publish(@event);
+            var tasks = new Mediator(container.GetService).Publish(@event);
             await Task.WhenAll(tasks);
             @event.Handeled.ShouldBeTrue();
         }
@@ -21,9 +22,9 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldSendRequestWithoutCancellationToken()
         {
-            var services = new TestServiceProvider();
-            services.Add<IRequestHandler<TestRequest, string>>(() => new TestRequestHandler());
-            (await new Mediator(services).Send(new TestRequest { Response = "success" })).ShouldBe("success");
+            var container = new Container();
+            container.Configure(x => x.Add<IRequestHandler<TestRequest, string>>().Factory(() => new TestRequestHandler()));
+            (await new Mediator(container.GetService).Send(new TestRequest { Response = "success" })).ShouldBe("success");
         }
 
         private class TestEvent : IEvent
@@ -31,7 +32,7 @@ namespace Handyman.Mediator.Tests
             public bool Handeled { get; set; }
         }
 
-        private class TestEventHandler : SynchronousEventHandler<TestEvent>
+        private class TestEventHandler : SynchEventHandler<TestEvent>
         {
             protected override void Handle(TestEvent @event)
             {
@@ -44,7 +45,7 @@ namespace Handyman.Mediator.Tests
             public string Response { get; set; }
         }
 
-        private class TestRequestHandler : SynchronousRequestHandler<TestRequest, string>
+        private class TestRequestHandler : SynchRequestHandler<TestRequest, string>
         {
             protected override string Handle(TestRequest request, CancellationToken cancellationToken) => request.Response;
         }
