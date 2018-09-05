@@ -32,7 +32,7 @@ namespace Handyman.Mediator.Tests
             public bool Handeled { get; set; }
         }
 
-        private class TestEventHandler : SynchEventHandler<TestEvent>
+        private class TestEventHandler : SyncEventHandler<TestEvent>
         {
             protected override void Handle(TestEvent @event)
             {
@@ -45,7 +45,7 @@ namespace Handyman.Mediator.Tests
             public string Response { get; set; }
         }
 
-        private class TestRequestHandler : SynchRequestHandler<TestRequest, string>
+        private class TestRequestHandler : SyncRequestHandler<TestRequest, string>
         {
             protected override string Handle(TestRequest request, CancellationToken cancellationToken) => request.Response;
         }

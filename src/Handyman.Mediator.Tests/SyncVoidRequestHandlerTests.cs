@@ -1,17 +1,17 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Maestro;
+﻿using Maestro;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
 {
-    public class SynchVoidRequestHandlerTests
+    public class SyncVoidRequestHandlerTests
     {
         [Fact]
-        public async Task UseSynchVoidRequestHandler()
+        public async Task UseSyncVoidRequestHandler()
         {
-            var handler = new SynchVoidRequestHandler();
+            var handler = new SyncVoidRequestHandler();
             var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
             var mediator = new Mediator(container.GetService);
             await mediator.Send(new VoidRequest(), CancellationToken.None);
@@ -20,7 +20,7 @@ namespace Handyman.Mediator.Tests
 
         private class VoidRequest : IRequest { }
 
-        private class SynchVoidRequestHandler : SynchVoidRequestHandler<VoidRequest>
+        private class SyncVoidRequestHandler : SyncVoidRequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 

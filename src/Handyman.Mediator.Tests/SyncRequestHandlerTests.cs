@@ -12,13 +12,13 @@ namespace Handyman.Mediator.Tests
         public async Task UseSynchRequestHandler()
         {
             var container = new Container();
-            container.Configure(x => x.Add<IRequestHandler<Request, Response>>().Type<SynchRequestHandler>());
+            container.Configure(x => x.Add<IRequestHandler<Request, Response>>().Type<SyncRequestHandler>());
             var mediator = new Mediator(container.GetService);
             var request = new Request();
             (await mediator.Send(request, CancellationToken.None)).Value.ShouldBe("success");
         }
 
-        private class SynchRequestHandler : SynchRequestHandler<Request, Response>
+        private class SyncRequestHandler : SyncRequestHandler<Request, Response>
         {
             protected override Response Handle(Request request, CancellationToken cancellationToken)
             {
