@@ -1,0 +1,19 @@
+only_commits:
+  files:
+    - build\appveyor\Handyman.Mediator.yaml
+    - src\Handyman.Mediator\**
+    - test\Handyman.Mediator.Tests\**
+
+image: Visual Studio 2017
+
+before_build:
+  - cmd: dotnet restore .\src\Handyman.Mediator\Handyman.Mediator.csproj --force
+
+build_script:
+  - cmd: dotnet build .\src\Handyman.Mediator\Handyman.Mediator.csproj -c release
+
+before_test:
+  - cmd: dotnet restore .\test\Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj --force
+
+test_script:
+  - cmd: dotnet test .\test\Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj -c release
