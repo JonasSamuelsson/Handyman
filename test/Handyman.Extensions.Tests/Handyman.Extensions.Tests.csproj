@@ -12,7 +12,7 @@
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\Handyman.Extensions\Handyman.Extensions.csproj" />
+      <ProjectReference Include="..\..\src\Handyman.Extensions\Handyman.Extensions.csproj" />
    </ItemGroup>
 
 </Project>

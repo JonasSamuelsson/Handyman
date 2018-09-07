@@ -16,7 +16,7 @@
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\Handyman.Mediator\Handyman.Mediator.csproj" />
+      <ProjectReference Include="..\..\src\Handyman.Mediator\Handyman.Mediator.csproj" />
    </ItemGroup>
 
 </Project>

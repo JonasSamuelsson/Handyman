@@ -12,7 +12,7 @@
    </ItemGroup>
 
    <ItemGroup>
-     <ProjectReference Include="..\Handyman.Dynamics\Handyman.Dynamics.csproj" />
+     <ProjectReference Include="..\..\src\Handyman.Dynamics\Handyman.Dynamics.csproj" />
    </ItemGroup>
 
 </Project>
