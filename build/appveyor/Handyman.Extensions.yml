@@ -4,8 +4,6 @@ only_commits:
     - src\Handyman.Extensions\**
     - test\Handyman.Extensions.Tests\**
 
-image: Visual Studio 2017
-
 before_build:
   - cmd: dotnet restore .\src\Handyman.Extensions\Handyman.Extensions.csproj --force
 

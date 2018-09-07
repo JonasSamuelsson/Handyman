@@ -4,8 +4,6 @@ only_commits:
     - src\Handyman.Dynamics\**
     - test\Handyman.Dynamics.Tests\**
 
-image: Visual Studio 2017
-
 before_build:
   - cmd: dotnet restore .\src\Handyman.Dynamics\Handyman.Dynamics.csproj --force
 

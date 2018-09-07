@@ -4,8 +4,6 @@ only_commits:
     - src\Handyman.Mediator\**
     - test\Handyman.Mediator.Tests\**
 
-image: Visual Studio 2017
-
 before_build:
   - cmd: dotnet restore .\src\Handyman.Mediator\Handyman.Mediator.csproj --force
 
