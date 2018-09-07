@@ -1,6 +1,6 @@
 only_commits:
   files:
-    - build\appveyor\Handyman.Dynamics.yaml
+    - build\appveyor\Handyman.Dynamics.yml
     - src\Handyman.Dynamics\**
     - test\Handyman.Dynamics.Tests\**
 

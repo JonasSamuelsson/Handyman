@@ -1,6 +1,6 @@
 only_commits:
   files:
-    - build\appveyor\Handyman.Mediator.yaml
+    - build\appveyor\Handyman.Mediator.yml
     - src\Handyman.Mediator\**
     - test\Handyman.Mediator.Tests\**
 

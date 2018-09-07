@@ -1,6 +1,6 @@
 only_commits:
   files:
-    - build\appveyor\Handyman.Extensions.yaml
+    - build\appveyor\Handyman.Extensions.yml
     - src\Handyman.Extensions\**
     - test\Handyman.Extensions.Tests\**
 
