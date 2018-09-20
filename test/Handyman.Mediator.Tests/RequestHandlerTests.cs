@@ -6,12 +6,12 @@ using Xunit;
 
 namespace Handyman.Mediator.Tests
 {
-    public class VoidRequestHandlerTests
+    public class RequestHandlerTests
     {
         [Fact]
-        public async Task UseVoidRequestHandler()
+        public async Task UseRequestHandler()
         {
-            var handler = new VoidRequestHandler();
+            var handler = new RequestHandler();
             var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
             var mediator = new Mediator(container.GetService);
             await mediator.Send(new VoidRequest(), CancellationToken.None);
@@ -20,7 +20,7 @@ namespace Handyman.Mediator.Tests
 
         private class VoidRequest : IRequest { }
 
-        private class VoidRequestHandler : VoidRequestHandler<VoidRequest>
+        private class RequestHandler : RequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 

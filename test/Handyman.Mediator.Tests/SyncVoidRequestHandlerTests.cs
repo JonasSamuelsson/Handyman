@@ -11,7 +11,7 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task UseSyncVoidRequestHandler()
         {
-            var handler = new SyncVoidRequestHandler();
+            var handler = new SyncRequestHandler();
             var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
             var mediator = new Mediator(container.GetService);
             await mediator.Send(new VoidRequest(), CancellationToken.None);
@@ -20,7 +20,7 @@ namespace Handyman.Mediator.Tests
 
         private class VoidRequest : IRequest { }
 
-        private class SyncVoidRequestHandler : SyncVoidRequestHandler<VoidRequest>
+        private class SyncRequestHandler : SyncRequestHandler<VoidRequest>
         {
             public bool Executed { get; set; }
 
