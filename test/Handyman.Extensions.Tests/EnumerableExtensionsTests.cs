@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Shouldly;
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Extensions.Tests
@@ -414,6 +415,44 @@ namespace Handyman.Extensions.Tests
             new[] { 1, 2, 3 }.GetElementsOrEmpty().ShouldBe(new[] { 1, 2, 3 });
 
             default(IEnumerable<int>).GetElementsOrEmpty().ShouldBe(new int[] { });
+        }
+
+        [Fact]
+        public void WhenAll()
+        {
+            var tcs1 = new TaskCompletionSource<object>();
+            var tcs2 = new TaskCompletionSource<object>();
+
+            var task = new[] { tcs1.Task, tcs2.Task }.WhenAll();
+
+            task.IsCompleted.ShouldBeFalse();
+
+            tcs1.SetResult(null);
+
+            task.IsCompleted.ShouldBeFalse();
+
+            tcs2.SetResult(null);
+
+            task.IsCompleted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void WhenAny()
+        {
+            var tcs1 = new TaskCompletionSource<object>();
+            var tcs2 = new TaskCompletionSource<object>();
+
+            var task = new[] { tcs1.Task, tcs2.Task }.WhenAny();
+
+            task.IsCompleted.ShouldBeFalse();
+
+            tcs1.SetResult(null);
+
+            task.IsCompleted.ShouldBeTrue();
+
+            tcs2.SetResult(null);
+
+            task.IsCompleted.ShouldBeTrue();
         }
     }
 }

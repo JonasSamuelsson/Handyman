@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Extensions
 {
@@ -308,6 +309,26 @@ namespace Handyman.Extensions
         public static IEnumerable<T> GetElementsOrEmpty<T>(this IEnumerable<T> source)
         {
             return source ?? Enumerable.Empty<T>();
+        }
+
+        public static Task WhenAll(this IEnumerable<Task> tasks)
+        {
+            return Task.WhenAll(tasks);
+        }
+
+        public static Task<TResult[]> WhenAll<TResult>(this IEnumerable<Task<TResult>> tasks)
+        {
+            return Task.WhenAll(tasks);
+        }
+
+        public static Task<Task> WhenAny(this IEnumerable<Task> tasks)
+        {
+            return Task.WhenAny(tasks);
+        }
+
+        public static Task<Task<TResult>> WhenAny<TResult>(this IEnumerable<Task<TResult>> tasks)
+        {
+            return Task.WhenAny(tasks);
         }
     }
 }
