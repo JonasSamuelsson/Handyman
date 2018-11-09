@@ -1,5 +1,5 @@
-﻿using System;
-using Shouldly;
+﻿using Shouldly;
+using System;
 using Xunit;
 
 namespace Handyman.Extensions.Tests
@@ -141,7 +141,7 @@ namespace Handyman.Extensions.Tests
             "yes".ToEnumOrDefault(IgnoreCase.No).ShouldBe(IgnoreCase.No);
             "yes".ToEnumOrDefault(() => IgnoreCase.No).ShouldBe(IgnoreCase.No);
         }
-        
+
         [Fact]
         public void ShouldTryConvertStringToEnum()
         {
@@ -163,11 +163,25 @@ namespace Handyman.Extensions.Tests
             "1".TryToEnum(out number).ShouldBe(true);
             number.ShouldBe(Number.One);
         }
-        
+
         private enum Number
         {
             Zero = 0,
             One = 1
+        }
+
+        [Fact]
+        public void ShouldSplitString()
+        {
+            Should.Throw<ArgumentException>(() => "".Split(0).Enumerate())
+                .Message.ShouldBe($"Length must be greater than 1.{Environment.NewLine}Parameter name: length");
+
+            "".Split(1).ShouldBe(new string[] { });
+
+            "123".Split(1).ShouldBe(new[] { "1", "2", "3" });
+            "123".Split(2).ShouldBe(new[] { "12", "3" });
+            "123".Split(3).ShouldBe(new[] { "123" });
+            "123".Split(4).ShouldBe(new[] { "123" });
         }
     }
 }

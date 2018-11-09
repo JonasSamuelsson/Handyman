@@ -127,5 +127,18 @@ namespace Handyman.Extensions
             value = default(T);
             return Enum.TryParse(s, ignoreCase == IgnoreCase.Yes, out value);
         }
+
+        public static IEnumerable<string> Split(this string s, int length)
+        {
+            if (length <= 0)
+                throw new ArgumentException("Length must be greater than 1.", nameof(length));
+
+            var index = 0;
+            while (index < s.Length)
+            {
+                yield return s.SubstringSafe(index, length);
+                index += length;
+            }
+        }
     }
 }
