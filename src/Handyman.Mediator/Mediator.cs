@@ -30,7 +30,7 @@ namespace Handyman.Mediator
                 : new RequestHandlerFactoryBuilder();
         }
 
-        public IEnumerable<Task> Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
+        public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
             var handler = GetEventHandler<TEvent>();

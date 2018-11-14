@@ -18,7 +18,7 @@ namespace Handyman.Mediator.Internals
             _pipelineHandlers = pipelineHandlers?.ToArray() ?? throw new ArgumentNullException(nameof(pipelineHandlers));
         }
 
-        protected override IEnumerable<Task> Execute(TEvent @event, CancellationToken cancellationToken)
+        protected override Task Execute(TEvent @event, CancellationToken cancellationToken)
         {
             var index = _index++;
 

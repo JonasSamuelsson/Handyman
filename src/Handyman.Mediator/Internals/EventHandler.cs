@@ -16,12 +16,12 @@ namespace Handyman.Mediator.Internals
             _handlers = (handlers as IReadOnlyList<IEventHandler<TEvent>> ?? handlers?.ToArray()) ?? throw new ArgumentNullException(nameof(handlers));
         }
 
-        public IEnumerable<Task> Handle(IEvent @event, CancellationToken cancellationToken)
+        public Task Handle(IEvent @event, CancellationToken cancellationToken)
         {
             return Execute((TEvent)@event, cancellationToken);
         }
 
-        protected virtual IEnumerable<Task> Execute(TEvent @event, CancellationToken cancellationToken)
+        protected virtual Task Execute(TEvent @event, CancellationToken cancellationToken)
         {
             var count = _handlers.Count;
             var tasks = new List<Task>(count);
@@ -33,7 +33,7 @@ namespace Handyman.Mediator.Internals
                 tasks.Add(task);
             }
 
-            return tasks;
+            return Task.WhenAll(tasks);
         }
     }
 }

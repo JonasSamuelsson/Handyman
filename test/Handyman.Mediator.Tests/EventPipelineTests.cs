@@ -56,7 +56,8 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public IEnumerable<Task> Handle(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, IEnumerable<Task>> next)
+            public Task Handle(Event @event, CancellationToken cancellationToken,
+                Func<Event, CancellationToken, Task> next)
             {
                 Executed = true;
                 return next(@event, cancellationToken);
