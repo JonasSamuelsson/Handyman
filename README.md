@@ -1,3 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/8e0bwcmaj761chb7)](https://ci.appveyor.com/project/JonasSamuelsson/handyman)
-Handyman
-========
+# Handyman.Mediator
+
+Handyman.Mediator is a library for loosely coupled in-process communication via messages.  
+Documentation can be found [here](docs/handyman.mediator.md).
