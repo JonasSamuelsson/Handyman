@@ -20,13 +20,13 @@ public interface IMediator
 }
 ```
 
-The `Mediator` class takes a service provider delegate and configuration object as constructor dependencies.
+The `Mediator` class takes a service provider delegate and an optional configuration object as constructor dependencies.
 
-The configuration object is used to enable the request/event pipelines.
+There are extension methods available for `Publish` and `Send` that doesn't take a `CancellationToken`.
 
-There are extension methods available for IMediator for `Publish` and `Send` that doesn't take a `CancellationToken`.
+`Mediator` supports pipeline handlers that allows for code to be executed before the final request/event handler(s).
 
-### Send request
+## Requests
 
 Requests can be used both for commands and queries.  
 First, create a message:
@@ -57,7 +57,7 @@ var s = await mediator.Send(new Echo { Message = "Hello" });
 Console.WriteLine(s);
 ```
 
-#### Request types
+### Request types
 
 There are two types of request, those that return a value and those that don't.
 
@@ -78,11 +78,11 @@ public interface IRequestHandler<TRequest, TResponse>
 
 In case the request doesn't have a response and/or if the handler isn't async there are some helper classes that can be used:
 
-* `RequestHandler<TRequest> : IRequestHandler<TRequest, Void>` - no response
-* `SyncRequestHandler<TRequest> : IRequestHandler<TRequest, Void>` - sync & no response
-* `SyncRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>` - sync
+* `RequestHandler<TRequest>` - no response
+* `SyncRequestHandler<TRequest>` - synchronous & no response
+* `SyncRequestHandler<TRequest, TResponse>` - synchronous
 
-## Publish event
+## Events
 
 First, create message:
 
@@ -123,6 +123,14 @@ await mediator.Publish(new Ping());
 Pipelines enables the ability to execute code before the actual handler is executed.
 
 Pipelines are supported by both requests and events, but needs to be enabled via the configuration object passed in to the mediator.
+
+``` csharp
+new Configuration
+{
+    EventPipelineEnabled = true,
+    RequestPipelineEnabled = true
+}
+```
 
 Pipeline handlers must implement one of the pipeline handler interfaces
 
