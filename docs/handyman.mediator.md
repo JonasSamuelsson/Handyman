@@ -7,12 +7,12 @@ It's cross platform supporting `netstandard2.0`.
 
 Mediator has two kinds of messages
 
-* Requests, dispatched to a single handler returning a response.
-* Events, dispatched to multiple handlers.
+* Requests - dispatched to a single handler returning a response.
+* Events - dispatched to multiple handlers.
 
-The core interface/class used to dispatch messages is `IMediator` & `Mediator`.
+The core interface & class used to dispatch messages is `IMediator` & `Mediator`.
 
-```csharp
+``` csharp
 public interface IMediator
 {
     Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent;
