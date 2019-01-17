@@ -8,16 +8,16 @@ namespace Handyman.Mediator.Internals
 {
     internal class PipelinedRequestHandlerFactoryBuilder : IRequestHandlerFactoryBuilder
     {
-        private static readonly ConcurrentDictionary<Type, Func<Func<Type, object>, object>> Cache = new ConcurrentDictionary<Type, Func<Func<Type, object>, object>>();
+        private static readonly ConcurrentDictionary<Type, Func<ServiceProvider, object>> Cache = new ConcurrentDictionary<Type, Func<ServiceProvider, object>>();
 
-        public Func<Func<Type, object>, object> BuildFactory(Type requestType, Type responseType)
+        public Func<ServiceProvider, object> BuildFactory(Type requestType, Type responseType)
         {
             return Cache.GetOrAdd(requestType, _ => CompileFactory(requestType, responseType));
         }
 
-        private static Func<Func<Type, object>, object> CompileFactory(Type requestType, Type responseType)
+        private static Func<ServiceProvider, object> CompileFactory(Type requestType, Type responseType)
         {
-            var serviceProvider = Expression.Parameter(typeof(Func<Type, object>));
+            var serviceProvider = Expression.Parameter(typeof(ServiceProvider));
 
             var pipelineHandlerType = typeof(IRequestPipelineHandler<,>).MakeGenericType(requestType, responseType);
             var pipelineHandlersType = typeof(IEnumerable<>).MakeGenericType(pipelineHandlerType);
@@ -32,7 +32,7 @@ namespace Handyman.Mediator.Internals
             var handlerCtor = handlerType.GetConstructors().Single();
             var handler = Expression.New(handlerCtor, typedPipelineHandlers, typedInnerHandler);
 
-            return Expression.Lambda<Func<Func<Type, object>, object>>(handler, serviceProvider).Compile();
+            return Expression.Lambda<Func<ServiceProvider, object>>(handler, serviceProvider).Compile();
         }
     }
 }

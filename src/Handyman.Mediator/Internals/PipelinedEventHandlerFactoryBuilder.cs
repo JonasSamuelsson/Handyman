@@ -8,16 +8,16 @@ namespace Handyman.Mediator.Internals
 {
     internal class PipelinedEventHandlerFactoryBuilder : IEventHandlerFactoryBuilder
     {
-        private static readonly ConcurrentDictionary<Type, Func<Func<Type, object>, object>> Cache = new ConcurrentDictionary<Type, Func<Func<Type, object>, object>>();
+        private static readonly ConcurrentDictionary<Type, Func<ServiceProvider, object>> Cache = new ConcurrentDictionary<Type, Func<ServiceProvider, object>>();
 
-        public Func<Func<Type, object>, object> BuildFactory(Type eventType)
+        public Func<ServiceProvider, object> BuildFactory(Type eventType)
         {
             return Cache.GetOrAdd(eventType, _ => CompileFactory(eventType));
         }
 
-        private Func<Func<Type, object>, object> CompileFactory(Type eventType)
+        private Func<ServiceProvider, object> CompileFactory(Type eventType)
         {
-            var serviceProvider = Expression.Parameter(typeof(Func<Type, object>));
+            var serviceProvider = Expression.Parameter(typeof(ServiceProvider));
 
             var pipelineHandlerType = typeof(IEventPipelineHandler<>).MakeGenericType(eventType);
             var pipelineHandlersType = typeof(IEnumerable<>).MakeGenericType(pipelineHandlerType);
@@ -33,7 +33,7 @@ namespace Handyman.Mediator.Internals
             var handlerCtor = handlerType.GetConstructors().Single();
             var handler = Expression.New(handlerCtor, typedPipelineHandlers, typedInnerHandlers);
 
-            return Expression.Lambda<Func<Func<Type, object>, object>>(handler, serviceProvider).Compile();
+            return Expression.Lambda<Func<ServiceProvider, object>>(handler, serviceProvider).Compile();
         }
     }
 }
