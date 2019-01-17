@@ -1,6 +1,5 @@
 ﻿using Handyman.Mediator.Internals;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,16 +7,16 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly Func<Type, object> _serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
         private readonly IEventHandlerFactoryBuilder _eventHandlerFactoryBuilder;
         private readonly IRequestHandlerFactoryBuilder _requestHandlerFactoryBuilder;
 
-        public Mediator(Func<Type, object> serviceProvider)
+        public Mediator(ServiceProvider serviceProvider)
             : this(serviceProvider, new Configuration())
         {
         }
 
-        public Mediator(Func<Type, object> serviceProvider, Configuration configuration)
+        public Mediator(ServiceProvider serviceProvider, Configuration configuration)
         {
             _serviceProvider = serviceProvider;
 

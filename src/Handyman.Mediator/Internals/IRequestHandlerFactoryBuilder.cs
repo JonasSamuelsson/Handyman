@@ -4,6 +4,6 @@ namespace Handyman.Mediator.Internals
 {
     internal interface IRequestHandlerFactoryBuilder
     {
-        Func<Func<Type, object>, object> BuildFactory(Type requestType, Type responseType);
+        Func<ServiceProvider, object> BuildFactory(Type requestType, Type responseType);
     }
 }
