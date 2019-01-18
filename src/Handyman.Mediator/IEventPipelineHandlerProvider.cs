@@ -4,6 +4,6 @@ namespace Handyman.Mediator
 {
     public interface IEventPipelineHandlerProvider
     {
-        IEnumerable<IEventPipelineHandler<TEvent>> GetHandlers<TEvent>(ServiceProvider providersServiceProvider) where TEvent : IEvent;
+        IEnumerable<IEventPipelineHandler<TEvent>> GetHandlers<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent;
     }
 }
