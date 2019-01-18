@@ -6,8 +6,6 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly ServiceProvider _serviceProvider;
-        private readonly IEventHandlerFactoryBuilder _eventHandlerFactoryBuilder;
         private readonly Providers _providers;
 
         public Mediator(ServiceProvider serviceProvider)
@@ -17,31 +15,20 @@ namespace Handyman.Mediator
 
         public Mediator(ServiceProvider serviceProvider, Configuration configuration)
         {
-            _serviceProvider = serviceProvider;
-
-            _eventHandlerFactoryBuilder = configuration.EventPipelineEnabled
-                ? (IEventHandlerFactoryBuilder)new PipelinedEventHandlerFactoryBuilder()
-                : new EventHandlerFactoryBuilder();
-
             _providers = new Providers
             {
-                ServiceProvider = serviceProvider,
+                EventHandlerProvider = configuration.GetEventHandlerProvider(),
+                EventPipelineHandlerProvider = configuration.GetEventPipelineHandlerProvider(),
                 RequestHandlerProvider = configuration.GetRequestHandlerProvider(),
-                RequestPipelineHandlerProvider = configuration.GetRequestPipelineHandlerProvider()
+                RequestPipelineHandlerProvider = configuration.GetRequestPipelineHandlerProvider(),
+                ServiceProvider = serviceProvider
             };
         }
 
         public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
-            var handler = GetEventHandler<TEvent>();
-            return handler.Handle(@event, cancellationToken);
-        }
-
-        private Internals.EventHandler<TEvent> GetEventHandler<TEvent>() where TEvent : IEvent
-        {
-            var factory = _eventHandlerFactoryBuilder.BuildFactory(typeof(TEvent));
-            return (Internals.EventHandler<TEvent>)factory.Invoke(_serviceProvider);
+            return EventProcessor.Process(@event, _providers, cancellationToken);
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
