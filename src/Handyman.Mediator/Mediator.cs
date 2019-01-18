@@ -1,5 +1,4 @@
 ﻿using Handyman.Mediator.Internals;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,7 +8,7 @@ namespace Handyman.Mediator
     {
         private readonly ServiceProvider _serviceProvider;
         private readonly IEventHandlerFactoryBuilder _eventHandlerFactoryBuilder;
-        private readonly IRequestHandlerFactoryBuilder _requestHandlerFactoryBuilder;
+        private readonly Providers _providers;
 
         public Mediator(ServiceProvider serviceProvider)
             : this(serviceProvider, new Configuration())
@@ -24,9 +23,12 @@ namespace Handyman.Mediator
                 ? (IEventHandlerFactoryBuilder)new PipelinedEventHandlerFactoryBuilder()
                 : new EventHandlerFactoryBuilder();
 
-            _requestHandlerFactoryBuilder = configuration.RequestPipelineEnabled
-                ? (IRequestHandlerFactoryBuilder)new PipelinedRequestHandlerFactoryBuilder()
-                : new RequestHandlerFactoryBuilder();
+            _providers = new Providers
+            {
+                ServiceProvider = serviceProvider,
+                RequestHandlerProvider = configuration.GetRequestHandlerProvider(),
+                RequestPipelineHandlerProvider = configuration.GetRequestPipelineHandlerProvider()
+            };
         }
 
         public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
@@ -44,15 +46,7 @@ namespace Handyman.Mediator
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            var requestType = request.GetType();
-            var handler = GetRequestHandler<TResponse>(requestType);
-            return handler.Handle(request, cancellationToken);
-        }
-
-        private IRequestHandler<IRequest<TResponse>, TResponse> GetRequestHandler<TResponse>(Type requestType)
-        {
-            var factory = _requestHandlerFactoryBuilder.BuildFactory(requestType, typeof(TResponse));
-            return (IRequestHandler<IRequest<TResponse>, TResponse>)factory.Invoke(_serviceProvider);
+            return RequestProcessorProvider.GetRequestProcessor(request).Process(request, _providers, cancellationToken);
         }
     }
 }
