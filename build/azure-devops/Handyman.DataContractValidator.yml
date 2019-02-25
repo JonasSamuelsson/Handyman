@@ -5,6 +5,7 @@ trigger:
     - master
   paths:
     include:
+    - build/azure-devops/Handyman.DataContractValidator.yml
     - src/Handyman.DataContractValidator/*
     - test/Handyman.DataContractValidator.Tests/*
 
