@@ -15,7 +15,7 @@ pool:
 steps:
 - script: dotnet restore
 
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --configuration $(buildConfiguration)
 
 - task: DotNetCoreCLI@2
   inputs:
