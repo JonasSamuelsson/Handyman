@@ -6,8 +6,8 @@ trigger:
     - *
   paths:
     include:
-    - src/Handyman.DataContractValidator/*
-    - test/Handyman.DataContractValidator/*
+    - src/Handyman.Mediator/*
+    - test/Handyman.Mediator/*
 
 pool:
   vmImage: 'Ubuntu-16.04'
