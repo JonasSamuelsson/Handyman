@@ -1,5 +1,6 @@
 | | NuGet | AppVeyor |
 |-|-|-|
+| [Handyman.DataContractValidator](docs/handyman.data-contract-validator.md) | | | 
 | Handyman.Dynamics | [![hm.d-nuget-version] ![hm.d-nuget-downloads]][hm.d-nuget] | [![hm.d-appveyor-status]][hm.d-appveyor] |
 | Handyman.Extensions | [![hm.e-nuget-version] ![hm.e-nuget-downloads]][hm.e-nuget] | [![hm.e-appveyor-status]][hm.e-appveyor] |
 | [Handyman.Mediator](docs/handyman.mediator.md) | [![hm.m-nuget-version] ![hm.m-nuget-downloads]][hm.m-nuget] | [![hm.m-appveyor-status]][hm.m-appveyor] |
