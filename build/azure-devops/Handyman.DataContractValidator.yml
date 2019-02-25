@@ -1,0 +1,17 @@
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+    - *
+  paths:
+    include:
+    - src/Handyman.DataContractValidator/*
+    - test/Handyman.DataContractValidator/*
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
