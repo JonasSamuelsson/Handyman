@@ -1,0 +1,16 @@
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - src/Handyman.DataContractValidator/*
+    - test/Handyman.DataContractValidator.Tests/*
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
