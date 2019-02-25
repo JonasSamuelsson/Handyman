@@ -20,5 +20,5 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: '**/*Tests/*.csproj'
+    projects: 'test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj'
     arguments: '--configuration $(buildConfiguration)'
