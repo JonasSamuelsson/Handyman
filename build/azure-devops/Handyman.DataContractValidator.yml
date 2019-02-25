@@ -9,16 +9,19 @@ trigger:
     - src/Handyman.DataContractValidator/*
     - test/Handyman.DataContractValidator.Tests/*
 
+variables:
+  configuration: debug
+
 pool:
   vmImage: 'vs2017-win2016'
 
 steps:
 - script: dotnet restore
 
-- script: dotnet build test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --configuration $(buildConfiguration)
+- script: dotnet build test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --configuration $(configuration)
 
 - task: DotNetCoreCLI@2
   inputs:
     command: test
     projects: 'test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(configuration)'
