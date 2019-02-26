@@ -17,13 +17,13 @@ pool:
 
 steps:
 - script: |
-    dotnet restore .\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj --force
-    dotnet restore .\test\Handyman.DataContractValidator.Tests\Handyman.DataContractValidator.Tests.csproj --force
+    dotnet restore ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj --force
+    dotnet restore ./test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --force
   displayName: dotnet restore
 
 - script: |
-    dotnet build .\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj --configuration $(configuration)
-    dotnet build .\test\Handyman.DataContractValidator.Tests\Handyman.DataContractValidator.Tests.csproj --configuration $(configuration)
+    dotnet build ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj --configuration $(configuration)
+    dotnet build ./test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --configuration $(configuration)
   displayName: dotnet build
 
 - task: DotNetCoreCLI@2
@@ -33,11 +33,11 @@ steps:
     projects: 'test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj'
     arguments: '--configuration $(configuration)'
 
-- script: dotnet pack .\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj --configuration $(configuration) --include-symbols
+- script: dotnet pack ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj --configuration $(configuration) --include-symbols
   displayName: dotnet pack
 
 - task: PublishPipelineArtifact@0
   displayName: publish artifacts
   inputs:
     artifactName: 'nuget'
-    targetPath: .\src\Handyman.DataContractValidator\bin\release*.nupkg
+    targetPath: ./src/Handyman.DataContractValidator/bin/release/*.nupkg
