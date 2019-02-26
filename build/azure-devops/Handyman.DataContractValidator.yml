@@ -15,14 +15,16 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
+- script: dotnet --version
+
 - script: |
     dotnet restore ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj --force
     dotnet restore ./test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --force
   displayName: dotnet restore
 
 - script: |
-    dotnet build ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj --configuration $(configuration)
-    dotnet build ./test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj --configuration $(configuration)
+    dotnet build ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj -c $(configuration)
+    dotnet build ./test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj -c $(configuration)
   displayName: dotnet build
 
 - task: DotNetCoreCLI@2
@@ -30,21 +32,15 @@ steps:
   inputs:
     command: test
     projects: './test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj'
-    arguments: '--configuration $(configuration)'
+    arguments: '-c $(configuration)'
 
 - task: NuGetToolInstaller@0
   displayName: update nuget.exe
   inputs:
     versionSpec: '4.9.3'
 
-- task: NuGetCommand@2
+- script: dotnet pack ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj -c $(configuration) --include-symbols -p:SymbolPackageFormat=snupkg -o $(Build.ArtifactStagingDirectory)
   displayName: nuget pack
-  inputs:
-    command: pack
-    packagesToPack: ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj
-    configuration: $(configuration)
-    includeSymbols: true
-    packDestination: $(Build.ArtifactStagingDirectory)
 
 - task: PublishPipelineArtifact@0
   displayName: publish artifacts
