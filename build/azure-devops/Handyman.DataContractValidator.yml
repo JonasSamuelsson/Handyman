@@ -23,7 +23,7 @@ steps:
 
 - script: |
     dotnet build .\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj --configuration $(configuration)
-    dotnet build .\src\Handyman.DataContractValidator.Tests\Handyman.DataContractValidator.Tests.csproj --configuration $(configuration)
+    dotnet build .\test\Handyman.DataContractValidator.Tests\Handyman.DataContractValidator.Tests.csproj --configuration $(configuration)
   displayName: dotnet build
 
 - task: DotNetCoreCLI@2
