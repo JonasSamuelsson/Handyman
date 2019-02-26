@@ -32,3 +32,12 @@ steps:
     command: test
     projects: 'test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj'
     arguments: '--configuration $(configuration)'
+
+- script: dotnet pack .\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj --configuration $(configuration) --include-symbols
+  displayName: dotnet pack
+
+- task: PublishPipelineArtifact@0
+  displayName: publish artifacts
+  inputs:
+    artifactName: 'nuget'
+    targetPath: .\src\Handyman.DataContractValidator\bin\release*.nupkg
