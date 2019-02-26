@@ -32,6 +32,11 @@ steps:
     projects: './test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj'
     arguments: '--configuration $(configuration)'
 
+- task: NuGetToolInstaller@0
+  displayName: update nuget.exe
+  inputs:
+    versionSpec: '4.9.3'
+
 - task: NuGetCommand@2
   displayName: nuget pack
   inputs:
@@ -39,13 +44,7 @@ steps:
     packagesToPack: ./src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj
     configuration: $(configuration)
     includeSymbols: true
-
-- task: CopyFiles@2
-  displayName: prepare artifacts
-  inputs:
-    sourceFolder: src/Handyman.DataContractValidator/bin/$(configuration)
-    contents: '*.nupkg'
-    targetFolder: $(Build.ArtifactStagingDirectory)
+    packDestination: $(Build.ArtifactStagingDirectory)
 
 - task: PublishPipelineArtifact@0
   displayName: publish artifacts
