@@ -45,5 +45,4 @@ steps:
 - task: PublishPipelineArtifact@0
   displayName: publish artifacts
   inputs:
-    artifactName: 'nuget'
     targetPath: $(Build.ArtifactStagingDirectory)
