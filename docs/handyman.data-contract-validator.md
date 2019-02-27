@@ -123,8 +123,11 @@ public class Test
             Name = typeof(string),
             Items = new []
             {
-                Text = typeof(string),
-                Timestamp = typeof(DateTimeOffset)
+                new
+                {
+                    Text = typeof(string),
+                    Timestamp = typeof(DateTimeOffset)
+                }
             },
             Resources = new Dictionary<Guid>(new
             {
