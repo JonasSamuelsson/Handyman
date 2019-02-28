@@ -1,0 +1,15 @@
+only_commits:
+  files:
+    - src\Handyman.Dynamics\**
+
+before_build:
+  - cmd: dotnet restore src\Handyman.Dynamics\src\Handyman.Dynamics\Handyman.Dynamics.csproj --force
+
+build_script:
+  - cmd: dotnet build src\Handyman.Dynamics\src\Handyman.Dynamics\Handyman.Dynamics.csproj -c release
+
+before_test:
+  - cmd: dotnet restore src\Handyman.Dynamics\test\Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj --force
+
+test_script:
+  - cmd: dotnet test src\Handyman.Dynamics\test\Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj -c release
