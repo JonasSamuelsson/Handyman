@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "src\Handyman.Mediator\Handyman.Mediator.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics", "src\Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics", "src\Handyman.Dynamics\src\Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{773C41E8-1426-4BDE-AEEB-9EFDE432A231}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		handyman.snk = handyman.snk
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "test\Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj", "{20B29A73-3DA9-470D-9DB2-3FDA5D155507}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "src\Handyman.Dynamics\test\Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj", "{20B29A73-3DA9-470D-9DB2-3FDA5D155507}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "test\Handyman.Extensions.Tests\Handyman.Extensions.Tests.csproj", "{24BECB9E-C4FA-425F-83B6-D8064560B4B1}"
 EndProject
