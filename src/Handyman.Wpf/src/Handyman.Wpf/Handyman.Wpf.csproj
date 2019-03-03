@@ -35,7 +35,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\handyman.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\..\..\handyman.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -60,13 +60,13 @@
     <Compile Include="RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Handyman.Extensions\src\Handyman.Extensions\Handyman.Extensions.csproj">
+    <ProjectReference Include="..\..\..\Handyman.Extensions\src\Handyman.Extensions\Handyman.Extensions.csproj">
       <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
       <Name>Handyman.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\handyman.snk">
+    <None Include="..\..\..\handyman.snk">
       <Link>handyman.snk</Link>
     </None>
   </ItemGroup>

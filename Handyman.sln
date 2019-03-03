@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions", "src\Handyman.Extensions\src\Handyman.Extensions\Handyman.Extensions.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyman.Wpf\Handyman.Wpf.csproj", "{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyman.Wpf\src\Handyman.Wpf\Handyman.Wpf.csproj", "{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D84F2948-95E8-4832-B022-24B73ACBA33C} = {D84F2948-95E8-4832-B022-24B73ACBA33C}
 	EndProjectSection
@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "src\Handyman.Mediator\test\Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj", "{79949073-915C-4074-B6EB-1B07A2292629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "test\Handyman.Wpf.Tests\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "src\Handyman.Wpf\test\Handyman.Wpf.Tests\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DataContractValidator", "src\Handyman.DataContractValidator\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj", "{6D106ED1-7B2B-4F65-B926-4BBFAF88A93B}"
 EndProject
