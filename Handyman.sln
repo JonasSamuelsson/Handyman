@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions", "src\Handyman.Extensions\Handyman.Extensions.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions", "src\Handyman.Extensions\src\Handyman.Extensions\Handyman.Extensions.csproj", "{D84F2948-95E8-4832-B022-24B73ACBA33C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyman.Wpf\Handyman.Wpf.csproj", "{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "src\Handyman.Dynamics\test\Handyman.Dynamics.Tests\Handyman.Dynamics.Tests.csproj", "{20B29A73-3DA9-470D-9DB2-3FDA5D155507}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "test\Handyman.Extensions.Tests\Handyman.Extensions.Tests.csproj", "{24BECB9E-C4FA-425F-83B6-D8064560B4B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "src\Handyman.Extensions\test\Handyman.Extensions.Tests\Handyman.Extensions.Tests.csproj", "{24BECB9E-C4FA-425F-83B6-D8064560B4B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "test\Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj", "{79949073-915C-4074-B6EB-1B07A2292629}"
 EndProject
