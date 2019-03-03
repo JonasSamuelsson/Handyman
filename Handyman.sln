@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyma
 		{D84F2948-95E8-4832-B022-24B73ACBA33C} = {D84F2948-95E8-4832-B022-24B73ACBA33C}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "src\Handyman.Mediator\Handyman.Mediator.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "src\Handyman.Mediator\src\Handyman.Mediator\Handyman.Mediator.csproj", "{CF961E0B-8F2E-46B0-B275-43783C3F1FC1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics", "src\Handyman.Dynamics\src\Handyman.Dynamics\Handyman.Dynamics.csproj", "{07622CC7-10A0-4BD8-9296-A08BFE6B45C2}"
 EndProject
@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "src\Handyman.Extensions\test\Handyman.Extensions.Tests\Handyman.Extensions.Tests.csproj", "{24BECB9E-C4FA-425F-83B6-D8064560B4B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "test\Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj", "{79949073-915C-4074-B6EB-1B07A2292629}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "src\Handyman.Mediator\test\Handyman.Mediator.Tests\Handyman.Mediator.Tests.csproj", "{79949073-915C-4074-B6EB-1B07A2292629}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "test\Handyman.Wpf.Tests\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
