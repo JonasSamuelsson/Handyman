@@ -9,13 +9,12 @@ $this = $PSScriptRoot
 $root = "$this/.."
 $configuration = "release"
 
-if ($artifacts) {
+if (!$artifacts) {
     $artifacts = "$this/.artifacts/"
+    Remove-Item -Recurse $artifacts -ErrorAction Ignore
 }
 
 Import-Module -Force -Scope Local "$root/common.psm1"
-
-Remove-Item -Recurse $artifacts -ErrorAction Ignore
 
 exec dotnet build -c $configuration `
     "$this/src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj"
