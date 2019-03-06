@@ -23,7 +23,7 @@ exec dotnet build -c $configuration `
 exec dotnet test --configuration $configuration `
     "$this/test/Handyman.DataContractValidator.Tests/Handyman.DataContractValidator.Tests.csproj"
 
-exec dotnet pack --no-restore --no-build -c $configuration -o $artifacts --include-symbols -p:SymbolPackageFormat=snupkg `
+exec dotnet pack --no-restore --no-build -c $configuration -o $artifacts --include-symbols "-p:SymbolPackageFormat=snupkg" `
     "$this/src/Handyman.DataContractValidator/Handyman.DataContractValidator.csproj"
     
 write-host -f green 'script completed'
