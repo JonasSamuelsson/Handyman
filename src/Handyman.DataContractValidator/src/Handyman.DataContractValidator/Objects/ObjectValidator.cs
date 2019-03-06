@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Handyman.DataContractValidator.Objects
@@ -21,9 +22,18 @@ namespace Handyman.DataContractValidator.Objects
         {
             var actualProperties = type.GetProperties();
 
-            var expectedProperties = _dataContract is Type dataContractType
+            var dataContractIsType = _dataContract is Type;
+
+            var dataContractType = dataContractIsType
+                ? (Type)_dataContract
+                : _dataContract.GetType();
+
+            if (!context.Features.GetOrAdd<ObjectValidationHistory>().TryAdd(type, dataContractType))
+                return;
+
+            var expectedProperties = dataContractIsType
                 ? dataContractType.GetProperties().ToDictionary(x => x.Name, x => (object)x.PropertyType)
-                : _dataContract.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(_dataContract, null));
+                : dataContractType.GetProperties().ToDictionary(x => x.Name, x => x.GetValue(_dataContract, null));
 
             var names = actualProperties
                 .Select(x => x.Name)
@@ -63,6 +73,20 @@ namespace Handyman.DataContractValidator.Objects
 
                     context.Validate(actualProperty.PropertyType, expectedProperty);
                 }
+            }
+        }
+
+        private class ObjectValidationHistory
+        {
+            private readonly List<KeyValuePair<Type, Type>> _list = new List<KeyValuePair<Type, Type>>();
+
+            public bool TryAdd(Type type, Type dataContract)
+            {
+                if (_list.Any(kvp => kvp.Key == type && kvp.Value == dataContract))
+                    return false;
+
+                _list.Add(new KeyValuePair<Type, Type>(type, dataContract));
+                return true;
             }
         }
     }

@@ -31,7 +31,8 @@ new Value<int>()
 
 ### Objects
 
-Properties of the actual type decorated with `JsonIgnoreAttribute` will be igonred.
+Properties of the actual type decorated with `JsonIgnoreAttribute` will be ignored.  
+Recursive types can only be validated against other types and not anonymous objects.
 
 ``` csharp
 typeof(MyObject)

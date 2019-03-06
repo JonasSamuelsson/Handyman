@@ -63,5 +63,52 @@ namespace Handyman.DataContractValidator.Tests
             [JsonIgnore]
             public int Number { get; set; }
         }
+
+        [Fact]
+        public void ShouldPassWhenRecursiveTypesMatch()
+        {
+            var type = typeof(ActualRecursiveType);
+            var dataContract = typeof(ExpectedRecursiveType);
+
+            new DataContractValidator().Validate(type, dataContract, out _).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void ShouldFailWhenRecursiveTypesDoNotMatch()
+        {
+            var type = typeof(ActualRecursiveType);
+            var dataContract = new
+            {
+                Text = typeof(string),
+                Child = new
+                {
+                    Text = typeof(string),
+                    Child = new
+                    {
+                        Text = typeof(string),
+                        Child = new
+                        {
+                            Text = typeof(string)
+                        }
+                    }
+                }
+            };
+
+            new DataContractValidator().Validate(type, dataContract, out var errors).ShouldBeFalse();
+
+            errors.ShouldBe(new[] { "Child.Child.Child.Child : unexpected property." });
+        }
+
+        private class ActualRecursiveType
+        {
+            public string Text { get; set; }
+            public ActualRecursiveType Child { get; set; }
+        }
+
+        private class ExpectedRecursiveType
+        {
+            public string Text { get; set; }
+            public ExpectedRecursiveType Child { get; set; }
+        }
     }
 }
