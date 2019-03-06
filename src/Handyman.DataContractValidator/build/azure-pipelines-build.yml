@@ -4,9 +4,9 @@ trigger:
     - master
   paths:
     include:
-    - src/Handyman.DataContractValidator/**
+    - src/Handyman.DataContractValidator/*
     exclude:
-    - src/Handyman.DataContractValidator/docs/**
+    - src/Handyman.DataContractValidator/docs/*
 
 pool:
   vmImage: 'vs2017-win2016'
