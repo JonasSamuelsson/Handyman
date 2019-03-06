@@ -28,7 +28,10 @@ namespace Handyman.DataContractValidator.Objects
                 ? (Type)_dataContract
                 : _dataContract.GetType();
 
-            if (!context.Features.GetOrAdd<ObjectValidationHistory>().TryAdd(type, dataContractType))
+            var recursiveTypesFeature = context.Features.GetOrAdd<RecursiveTypesFeature>();
+            var scope = $"{type.FullName}::{dataContractType.FullName}";
+
+            if (!recursiveTypesFeature.TryAdd(scope))
                 return;
 
             var expectedProperties = dataContractIsType
@@ -73,21 +76,18 @@ namespace Handyman.DataContractValidator.Objects
 
                     context.Validate(actualProperty.PropertyType, expectedProperty);
                 }
+
+                recursiveTypesFeature.Remove(scope);
             }
         }
 
-        private class ObjectValidationHistory
+        private class RecursiveTypesFeature
         {
-            private readonly List<KeyValuePair<Type, Type>> _list = new List<KeyValuePair<Type, Type>>();
+            private readonly HashSet<string> _set = new HashSet<string>();
 
-            public bool TryAdd(Type type, Type dataContract)
-            {
-                if (_list.Any(kvp => kvp.Key == type && kvp.Value == dataContract))
-                    return false;
+            public bool TryAdd(string scope) => _set.Add(scope);
 
-                _list.Add(new KeyValuePair<Type, Type>(type, dataContract));
-                return true;
-            }
+            public void Remove(string scope) => _set.Remove(scope);
         }
     }
 }
