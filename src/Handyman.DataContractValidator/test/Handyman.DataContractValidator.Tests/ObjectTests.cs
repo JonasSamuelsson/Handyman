@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Shouldly;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Handyman.DataContractValidator.Tests
@@ -11,6 +12,54 @@ namespace Handyman.DataContractValidator.Tests
         {
             var type = new { Number = default(int), Text = default(string) }.GetType();
             var dataContract = new { Number = typeof(int), Text = typeof(string) };
+
+            new DataContractValidator().Validate(type, dataContract, out _).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void ShouldPassOnRecursiveType()
+        {
+            var type = typeof(Recursive);
+
+            var dataContract = new
+            {
+                Id = typeof(int),
+                Child = typeof(Recursive)
+            };
+
+            new DataContractValidator().Validate(type, dataContract, out _).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void ShouldPassOnRecursiveCollectionType()
+        {
+            var type = typeof(RecursiveCollection);
+
+            var dataContract = new
+            {
+                Id = typeof(int),
+                Children = new[]
+                {
+                    typeof(RecursiveCollection)
+                }
+            };
+
+            new DataContractValidator().Validate(type, dataContract, out _).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void ShouldPassOnRecursiveArrayType()
+        {
+            var type = typeof(RecursiveCollection);
+
+            var dataContract = new
+            {
+                Id = typeof(int),
+                Children = new[]
+                {
+                    typeof(RecursiveCollection)
+                }
+            };
 
             new DataContractValidator().Validate(type, dataContract, out _).ShouldBeTrue();
         }
@@ -62,6 +111,24 @@ namespace Handyman.DataContractValidator.Tests
         {
             [JsonIgnore]
             public int Number { get; set; }
+        }
+
+        private class Recursive
+        {
+            public int Id { get; set; }
+            public Recursive Child { get; set; }
+        }
+
+        private class RecursiveArray
+        {
+            public int Id { get; set; }
+            public RecursiveArray[] Children { get; set; }
+        }
+
+        private class RecursiveCollection
+        {
+            public int Id { get; set; }
+            public IEnumerable<RecursiveCollection> Children { get; set; }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 
 namespace Handyman.DataContractValidator.Objects
@@ -60,6 +61,34 @@ namespace Handyman.DataContractValidator.Objects
                         context.AddError("expected property found but decorated with ignore attribute");
                         continue;
                     }
+
+                    if (expectedProperty.GetType().Namespace != null && actualProperty.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(actualProperty.PropertyType))
+                    {
+                        var actualType = actualProperty.PropertyType.IsArray
+                            ? actualProperty.PropertyType.GetElementType()
+                            : actualProperty.PropertyType.GetGenericArguments()[0];
+
+                        string expected;
+                        switch (expectedProperty)
+                        {
+                            case Type[] types:
+                                expected = types[0].FullName;
+                                break;
+                            case Type expectedType:
+                                expected = expectedType.GetGenericArguments()[0].FullName;
+                                break;
+                            default:
+                                expected = expectedProperty.GetType().GetGenericArguments()[0].FullName;
+                                break;
+                        }
+
+                        if (actualType != null && actualType.FullName == expected)
+                            continue;
+
+                    }
+
+                    if (actualProperty.PropertyType.FullName == expectedProperty.ToString())
+                        continue;
 
                     context.Validate(actualProperty.PropertyType, expectedProperty);
                 }
