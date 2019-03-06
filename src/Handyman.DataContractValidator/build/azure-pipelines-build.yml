@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - src/Handyman.DataContractValidator/**
+    exclude:
+    - src/Handyman.DataContractValidator/docs/**
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+variables:
+  artifacts: $(Build.ArtifactStagingDirectory)
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: update nuget.exe
+  inputs:
+    versionSpec: '4.9.3'
+
+- script: src/Handyman.DataContractValidator/build.ps1 -artifacts $(artifacts)
+
+- task: PublishPipelineArtifact@0
+  displayName: publish artifacts
+  inputs:
+    targetPath: $(artifacts)
