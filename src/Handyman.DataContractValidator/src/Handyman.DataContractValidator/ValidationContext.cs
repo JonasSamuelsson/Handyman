@@ -23,6 +23,7 @@ namespace Handyman.DataContractValidator
         private readonly List<string> _scopes = new List<string>();
 
         internal readonly List<string> Errors = new List<string>();
+        internal readonly FeatureCollection Features = new FeatureCollection();
 
         public string GetTypeName(object o)
         {
@@ -85,6 +86,24 @@ namespace Handyman.DataContractValidator
             {
                 _action();
                 _action = delegate { };
+            }
+        }
+
+        internal class FeatureCollection
+        {
+            private readonly Dictionary<Type, object> _features = new Dictionary<Type, object>();
+
+            public T GetOrAdd<T>() where T : new()
+            {
+                var type = typeof(T);
+
+                if (!_features.TryGetValue(type, out var feature))
+                {
+                    feature = new T();
+                    _features.Add(type, feature);
+                }
+
+                return (T)feature;
             }
         }
     }
