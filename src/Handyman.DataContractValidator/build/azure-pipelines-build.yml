@@ -20,7 +20,7 @@ steps:
   inputs:
     versionSpec: '4.9.3'
 
-- script: src/Handyman.DataContractValidator/build.ps1 -artifacts $(artifacts)
+- script: ./src/Handyman.DataContractValidator/build.ps1 -artifacts $(artifacts)
 
 - task: PublishPipelineArtifact@0
   displayName: publish artifacts
