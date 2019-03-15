@@ -32,6 +32,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DataContractValida
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DataContractValidator.Tests", "src\Handyman.DataContractValidator\test\Handyman.DataContractValidator.Tests\Handyman.DataContractValidator.Tests.csproj", "{C64F75E2-03A9-47AE-A9E6-8F905BDC3E72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.AspNetCore", "src\Handyman.AspNetCore\src\Handyman.AspNetCore\Handyman.AspNetCore.csproj", "{35360114-7A96-47D8-8A45-D78E57A384D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.AspNetCore.Tests", "src\Handyman.AspNetCore\test\Handyman.AspNetCore.Tests\Handyman.AspNetCore.Tests.csproj", "{5215D05A-7709-4D12-BB48-25DB0870C813}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +82,14 @@ Global
 		{C64F75E2-03A9-47AE-A9E6-8F905BDC3E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C64F75E2-03A9-47AE-A9E6-8F905BDC3E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C64F75E2-03A9-47AE-A9E6-8F905BDC3E72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35360114-7A96-47D8-8A45-D78E57A384D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35360114-7A96-47D8-8A45-D78E57A384D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35360114-7A96-47D8-8A45-D78E57A384D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35360114-7A96-47D8-8A45-D78E57A384D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5215D05A-7709-4D12-BB48-25DB0870C813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5215D05A-7709-4D12-BB48-25DB0870C813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5215D05A-7709-4D12-BB48-25DB0870C813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5215D05A-7709-4D12-BB48-25DB0870C813}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
