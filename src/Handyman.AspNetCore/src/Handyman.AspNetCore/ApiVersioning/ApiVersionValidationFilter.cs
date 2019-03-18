@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.AspNetCore.ApiVersioning
@@ -26,6 +27,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 
             if (_apiVersionValidator.Validate(version, _optional, _validVersions, out var matchedVersion, out var detail))
             {
+                PopulateActionParameter(context, matchedVersion);
                 return next();
             }
 
@@ -40,6 +42,14 @@ namespace Handyman.AspNetCore.ApiVersioning
             context.Result = new BadRequestObjectResult(details);
 
             return Task.CompletedTask;
+        }
+
+        private static void PopulateActionParameter(ActionExecutingContext context, string version)
+        {
+            if (!context.ActionDescriptor.Parameters.Any(x => x.Name == "apiVersion" && x.ParameterType == typeof(string)))
+                return;
+
+            context.ActionArguments["apiVersion"] = version;
         }
     }
 }
