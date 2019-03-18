@@ -4,11 +4,10 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     public class ExactMatchValidator : IApiVersionValidator
     {
-        public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion,
-            out string customProblemDetail)
+        public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion, out string error)
         {
             matchedVersion = null;
-            customProblemDetail = null;
+            error = null;
 
             if (optional && version == string.Empty)
                 return true;
@@ -22,7 +21,7 @@ namespace Handyman.AspNetCore.ApiVersioning
                 return true;
             }
 
-            customProblemDetail = $"Invalid api version, supported versions: {validVersions}.";
+            error = $"Invalid api version, supported versions: {validVersions}.";
             return false;
         }
     }
