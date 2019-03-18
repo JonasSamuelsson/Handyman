@@ -4,10 +4,11 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     internal class SemanticVersionValidator : IApiVersionValidator
     {
-        public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion, out string error)
+        public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion,
+            out string customProblemDetail)
         {
             matchedVersion = null;
-            error = null;
+            customProblemDetail = null;
 
             var parserResult = SemanticVersionParser.Parse(validVersions);
 
@@ -16,13 +17,13 @@ namespace Handyman.AspNetCore.ApiVersioning
                 if (optional)
                     return true;
 
-                error = parserResult.ValidationError;
+                customProblemDetail = parserResult.ValidationError;
                 return false;
             }
 
             if (!SemanticVersionParser.TryParse(version, out var semanticVersion))
             {
-                error = parserResult.ValidationError;
+                customProblemDetail = parserResult.ValidationError;
                 return false;
             }
 
@@ -43,7 +44,7 @@ namespace Handyman.AspNetCore.ApiVersioning
                 return true;
             }
 
-            error = parserResult.ValidationError;
+            customProblemDetail = parserResult.ValidationError;
             return false;
         }
     }

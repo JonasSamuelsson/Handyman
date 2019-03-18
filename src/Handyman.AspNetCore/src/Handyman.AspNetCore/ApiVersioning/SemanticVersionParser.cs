@@ -58,7 +58,7 @@ namespace Handyman.AspNetCore.ApiVersioning
             return new ParserResult
             {
                 DeclaredVersions = declaredVersions.ToArray(),
-                ValidationError = $"Invalid api version, supported semantic versions are: {supportedVersionsString}."
+                ValidationError = $"Invalid api version, supported semantic versions: {supportedVersionsString}."
             };
         }
 

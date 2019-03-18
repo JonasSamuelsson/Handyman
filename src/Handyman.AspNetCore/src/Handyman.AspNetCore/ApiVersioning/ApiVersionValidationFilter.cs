@@ -24,14 +24,14 @@ namespace Handyman.AspNetCore.ApiVersioning
         {
             var version = _apiVersionReader.Read(context.HttpContext.Request);
 
-            if (_apiVersionValidator.Validate(version, _optional, _validVersions, out var matchedVersion, out var error))
+            if (_apiVersionValidator.Validate(version, _optional, _validVersions, out var matchedVersion, out var detail))
             {
                 return next();
             }
 
             var details = new ProblemDetails
             {
-                Detail = error,
+                Detail = detail ?? $"Invalid api version, supported versions: {string.Join(", ", _validVersions)}",
                 Status = 400,
                 Title = "Bad request, invalid api version.",
                 Type = "https://httpstatuses.com/400"
