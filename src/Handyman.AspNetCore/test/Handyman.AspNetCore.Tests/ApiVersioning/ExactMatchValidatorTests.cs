@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Handyman.AspNetCore.ApiVersioning;
 using Shouldly;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Handyman.AspNetCore.Tests.ApiVersioning
@@ -30,7 +30,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             new ExactMatchValidator().Validate(version, optional, validVersions, out _, out _)
                 .ShouldBeFalse();
         }
-   
+
         [Fact]
         public void VersionsNotMatchingShouldBeInvalid()
         {
@@ -63,5 +63,5 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
                 new object[] {"this-is-a-long-version"}
             };
         }
- }
+    }
 }
