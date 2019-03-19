@@ -20,7 +20,7 @@ steps:
   inputs:
     versionSpec: '4.9.3'
 
-- powershell: ./src/Handyman.AspNetCore/build.ps1 -artifacts $(artifacts)
+- powershell: ./src/Handyman.AspNetCore/build.ps1 -artifacts $(artifacts) -ci
   displayName: Invoke build.ps1
 
 - task: PublishPipelineArtifact@0
