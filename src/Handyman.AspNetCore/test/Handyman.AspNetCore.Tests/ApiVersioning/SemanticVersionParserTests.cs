@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using Handyman.AspNetCore.ApiVersioning;
 using Microsoft.Extensions.Primitives;
 using Shouldly;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests
+namespace Handyman.AspNetCore.Tests.ApiVersioning
 {
     public class SemanticVersionParserTests
     {

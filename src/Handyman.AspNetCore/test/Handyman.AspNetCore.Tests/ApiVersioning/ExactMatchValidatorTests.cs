@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using Handyman.AspNetCore.ApiVersioning;
 using Shouldly;
-using System.Collections.Generic;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests
+namespace Handyman.AspNetCore.Tests.ApiVersioning
 {
     public class ExactMatchValidatorTests
     {

@@ -1,10 +1,10 @@
-using Handyman.AspNetCore.ApiVersioning;
-using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
+using Handyman.AspNetCore.ApiVersioning;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests
+namespace Handyman.AspNetCore.Tests.ApiVersioning
 {
     public class SemanticVersionValidatorTests
     {
