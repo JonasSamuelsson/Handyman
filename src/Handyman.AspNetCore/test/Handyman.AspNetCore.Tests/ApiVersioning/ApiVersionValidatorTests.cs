@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Handyman.AspNetCore.Tests.ApiVersioning
 {
-    public class ExactMatchValidatorTests
+    public class ApiVersionValidatorTests
     {
         [Fact]
         public void MissingOptionalVersionShouldBeValid()
@@ -14,7 +14,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             var optional = true;
             var validVersions = new[] { "1" };
 
-            new ExactMatchValidator().Validate(version, optional, validVersions, out var matchedVersion, out _)
+            new ApiVersionValidator().Validate(version, optional, validVersions, out var matchedVersion, out _)
                 .ShouldBeTrue();
 
             matchedVersion.ShouldBeNull();
@@ -27,7 +27,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             var optional = false;
             var validVersions = new[] { "1" };
 
-            new ExactMatchValidator().Validate(version, optional, validVersions, out _, out _)
+            new ApiVersionValidator().Validate(version, optional, validVersions, out _, out _)
                 .ShouldBeFalse();
         }
 
@@ -38,7 +38,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             var optional = true;
             var validVersions = new[] { "1" };
 
-            new ExactMatchValidator().Validate(version, optional, validVersions, out _, out _)
+            new ApiVersionValidator().Validate(version, optional, validVersions, out _, out _)
                 .ShouldBeFalse();
         }
 
@@ -48,7 +48,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             var optional = true;
             var validVersions = new[] { "1", "a", "this-is-a-long-version" };
 
-            new ExactMatchValidator().Validate(version, optional, validVersions, out var matchedVersion, out _)
+            new ApiVersionValidator().Validate(version, optional, validVersions, out var matchedVersion, out _)
                 .ShouldBeTrue();
 
             matchedVersion.ShouldBe(version);

@@ -40,7 +40,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
 
             result.DeclaredVersions.Select(x => x.SemanticVersion.ToString()).ShouldBe(new[] { "1.0", "2.0-alpha", "2.0", "3.0-beta" });
             result.DeclaredVersions.Select(x => x.String).ShouldBe(strings);
-            result.ValidationError.ShouldBe("Invalid api version, supported semantic versions: 1.0, 2.0, 3.0-beta.");
+            result.ValidationErrorMessage.ShouldBe("Invalid api version, supported semantic versions: 1.0, 2.0, 3.0-beta.");
         }
 
         public static IEnumerable<object[]> GetShouldParseParams()

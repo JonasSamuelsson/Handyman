@@ -2,7 +2,7 @@
 
 namespace Handyman.AspNetCore.ApiVersioning
 {
-    public class ExactMatchValidator : IApiVersionValidator
+    public class ApiVersionValidator : IApiVersionValidator
     {
         public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion, out string error)
         {

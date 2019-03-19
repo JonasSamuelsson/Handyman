@@ -11,9 +11,9 @@ namespace Handyman.AspNetCore.ApiVersioning
     internal static class SemanticVersionParser
     {
         private const string Pattern = @"^(?<major>\d+)(\.(?<minor>\d+))?(-(?<preRelease>[a-z0-9]+(\.[a-z0-9]+)*))?$";
-        private static readonly ConcurrentDictionary<int, ParserResult> Cache = new ConcurrentDictionary<int, ParserResult>();
+        private static readonly ConcurrentDictionary<int, Result> Cache = new ConcurrentDictionary<int, Result>();
 
-        internal static ParserResult Parse(StringValues strings)
+        internal static Result Parse(StringValues strings)
         {
             var hash = 0;
 
@@ -27,10 +27,11 @@ namespace Handyman.AspNetCore.ApiVersioning
             return Cache.GetOrAdd(hash, _ => DoParse(strings));
         }
 
-        private static ParserResult DoParse(StringValues strings)
+        private static Result DoParse(StringValues strings)
         {
-            var declaredVersions = new List<ParserResult.Version>(strings.Count);
+            var declaredVersions = new List<Result.DeclaredVersion>(strings.Count);
 
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < strings.Count; i++)
             {
                 var s = strings[i];
@@ -38,7 +39,7 @@ namespace Handyman.AspNetCore.ApiVersioning
                 if (!TryParse(s, out var semanticVersion))
                     throw new FormatException($"Invalid semantic version '{s}'.");
 
-                declaredVersions.Add(new ParserResult.Version
+                declaredVersions.Add(new Result.DeclaredVersion
                 {
                     SemanticVersion = semanticVersion,
                     String = s
@@ -55,10 +56,10 @@ namespace Handyman.AspNetCore.ApiVersioning
 
             var supportedVersionsString = string.Join(", ", supportedVersions.Select(x => x.ToString()));
 
-            return new ParserResult
+            return new Result
             {
                 DeclaredVersions = declaredVersions.ToArray(),
-                ValidationError = $"Invalid api version, supported semantic versions: {supportedVersionsString}."
+                ValidationErrorMessage = $"Invalid api version, supported semantic versions: {supportedVersionsString}."
             };
         }
 
@@ -82,6 +83,18 @@ namespace Handyman.AspNetCore.ApiVersioning
             };
 
             return true;
+        }
+
+        internal class Result
+        {
+            public DeclaredVersion[] DeclaredVersions { get; set; }
+            public string ValidationErrorMessage { get; set; }
+
+            internal class DeclaredVersion
+            {
+                public SemanticVersion SemanticVersion { get; set; }
+                public string String { get; set; }
+            }
         }
     }
 }

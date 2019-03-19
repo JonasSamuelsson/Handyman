@@ -16,13 +16,13 @@ namespace Handyman.AspNetCore.ApiVersioning
                 if (optional)
                     return true;
 
-                error = parserResult.ValidationError;
+                error = parserResult.ValidationErrorMessage;
                 return false;
             }
 
             if (!SemanticVersionParser.TryParse(version, out var semanticVersion))
             {
-                error = parserResult.ValidationError;
+                error = parserResult.ValidationErrorMessage;
                 return false;
             }
 
@@ -43,7 +43,7 @@ namespace Handyman.AspNetCore.ApiVersioning
                 return true;
             }
 
-            error = parserResult.ValidationError;
+            error = parserResult.ValidationErrorMessage;
             return false;
         }
     }

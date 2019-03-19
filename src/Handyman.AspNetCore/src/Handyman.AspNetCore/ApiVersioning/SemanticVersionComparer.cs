@@ -7,6 +7,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     internal class SemanticVersionComparer : IComparer<SemanticVersion>
     {
+        private static readonly string[] EmptySegments = new string[] { };
         public static IComparer<SemanticVersion> Default = new SemanticVersionComparer();
 
         public int Compare(SemanticVersion x, SemanticVersion y)
@@ -24,8 +25,8 @@ namespace Handyman.AspNetCore.ApiVersioning
             if (x.PreRelease == y.PreRelease)
                 return 0;
 
-            var xSegments = x.PreRelease.Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
-            var ySegments = y.PreRelease.Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+            var xSegments = x.PreRelease.Length == 0 ? EmptySegments : x.PreRelease.Split(new[] { "." }, StringSplitOptions.None);
+            var ySegments = y.PreRelease.Length == 0 ? EmptySegments : y.PreRelease.Split(new[] { "." }, StringSplitOptions.None);
 
             if (xSegments.Length == 0)
                 return 1;
