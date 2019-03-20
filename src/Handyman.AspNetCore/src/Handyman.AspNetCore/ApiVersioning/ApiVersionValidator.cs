@@ -9,7 +9,7 @@ namespace Handyman.AspNetCore.ApiVersioning
             matchedVersion = null;
             error = null;
 
-            if (optional && version == string.Empty)
+            if (optional && string.IsNullOrEmpty(version))
                 return true;
 
             // ReSharper disable once ForCanBeConvertedToForeach

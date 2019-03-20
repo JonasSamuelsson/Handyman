@@ -11,7 +11,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 
             var parserResult = SemanticVersionParser.Parse(validVersions);
 
-            if (version == string.Empty)
+            if (string.IsNullOrEmpty(version))
             {
                 if (optional)
                     return true;
