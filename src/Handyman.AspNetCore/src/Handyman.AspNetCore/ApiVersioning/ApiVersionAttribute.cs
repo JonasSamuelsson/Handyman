@@ -7,7 +7,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     // ReSharper disable once RedundantAttributeUsageProperty
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-    internal sealed class ApiVersionAttribute : Attribute, IFilterFactory
+    public sealed class ApiVersionAttribute : Attribute, IFilterFactory
     {
         private readonly StringValues _validVersions;
 
