@@ -23,6 +23,13 @@ steps:
 - powershell: ./src/Handyman.Mediator/build.ps1 -artifacts $(artifacts) -ci
   displayName: Invoke build.ps1
 
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: '**/*.trx'
+    failTaskOnFailedTests: true
+
 - task: PublishPipelineArtifact@0
   displayName: publish artifacts
   inputs:
