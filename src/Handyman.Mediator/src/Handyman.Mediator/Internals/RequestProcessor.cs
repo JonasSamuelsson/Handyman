@@ -6,13 +6,13 @@ namespace Handyman.Mediator.Internals
 {
     internal abstract class RequestProcessor<TResponse>
     {
-        public abstract Task<TResponse> Process(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken);
+        internal abstract Task<TResponse> Process(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken);
     }
 
     internal class RequestProcessor<TRequest, TResponse> : RequestProcessor<TResponse>
         where TRequest : IRequest<TResponse>
     {
-        public override Task<TResponse> Process(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken)
+        internal override Task<TResponse> Process(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken)
         {
             return Process((TRequest)request, providers, cancellationToken);
         }

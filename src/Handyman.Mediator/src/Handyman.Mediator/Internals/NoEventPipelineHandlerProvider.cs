@@ -5,7 +5,7 @@ namespace Handyman.Mediator.Internals
 {
     internal class NoEventPipelineHandlerProvider : IEventPipelineHandlerProvider
     {
-        public static IEventPipelineHandlerProvider Instance = new NoEventPipelineHandlerProvider();
+        internal static IEventPipelineHandlerProvider Instance = new NoEventPipelineHandlerProvider();
 
         public IEnumerable<IEventPipelineHandler<TEvent>> GetHandlers<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
         {
