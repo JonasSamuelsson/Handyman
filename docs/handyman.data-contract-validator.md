@@ -2,7 +2,7 @@
 
 Handyman.DataContractValidtor is a library for data contract validation.
 
-It validates the structure of the types and not the actual types.
+The idea behind this library is to validate the structure of the types.
 
 ## Supported types
 
