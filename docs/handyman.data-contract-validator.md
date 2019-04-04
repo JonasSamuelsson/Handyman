@@ -19,7 +19,9 @@ Data contract validator can handle the following types;
 ``` csharp
 typeof(MyEnum);
 new Enum(0, 1, 2)
-new FlagsEnum(0, 1, 2)
+new Enum(EnumKind.Flags, new [] { 0, 1, 2 })
+new Enum(EnumKind.Nullable, new [] { 0, 1, 2 })
+new Enum(EnumKind.Flags | EnumKind.Nullable, new [] { 0, 1, 2 })
 ```
 
 ### Values
