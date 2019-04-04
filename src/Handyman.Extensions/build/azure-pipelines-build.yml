@@ -1,0 +1,29 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - src/Handyman.Extensions/*
+    exclude:
+    - src/Handyman.Extensions/docs/*
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+variables:
+  artifacts: $(Build.ArtifactStagingDirectory)
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: update nuget.exe
+  inputs:
+    versionSpec: '4.9.3'
+
+- powershell: ./src/Handyman.Extensions/build.ps1 -artifacts $(artifacts) -ci
+  displayName: Invoke build.ps1
+
+- task: PublishPipelineArtifact@0
+  displayName: publish artifacts
+  inputs:
+    targetPath: $(artifacts)
