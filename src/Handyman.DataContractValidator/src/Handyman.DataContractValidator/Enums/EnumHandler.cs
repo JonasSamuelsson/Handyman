@@ -27,16 +27,30 @@ namespace Handyman.DataContractValidator.Enums
         {
             if (dataContract is Enum @enum)
             {
-                validator = new EnumValidator(@enum.IsFlagsEnum, @enum.EnumValues);
+                validator = new EnumValidator(@enum.EnumKind, @enum.EnumValues);
                 return true;
             }
 
-            if (dataContract is Type type && type.IsEnum)
+            if (dataContract is Type type)
             {
-                var isFlagsEnum = type.GetCustomAttributes(typeof(FlagsAttribute), false).Any();
-                var enumValues = System.Enum.GetValues(type).Cast<long>();
-                validator = new EnumValidator(isFlagsEnum, enumValues);
-                return true;
+                var isNullable = false;
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    isNullable = true;
+                    type = type.GetGenericArguments().Single();
+                }
+
+                if (type.IsEnum)
+                {
+                    var isFlags = type.GetCustomAttributes(typeof(FlagsAttribute), false).Any();
+
+                    var enumKind = EnumKind.Default
+                                   | (isFlags ? EnumKind.Flags : EnumKind.Default)
+                                   | (isNullable ? EnumKind.Nullable : EnumKind.Default);
+                    var enumValues = System.Enum.GetValues(type).Cast<long>();
+                    validator = new EnumValidator(enumKind, enumValues);
+                    return true;
+                }
             }
 
             validator = null;

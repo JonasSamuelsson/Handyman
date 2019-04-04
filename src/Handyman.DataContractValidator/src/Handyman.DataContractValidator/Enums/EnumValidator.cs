@@ -6,41 +6,33 @@ namespace Handyman.DataContractValidator.Enums
 {
     internal class EnumValidator : IValidator
     {
-        private readonly bool _expectedIsFlagsEnum;
+        private readonly EnumKind _enumKind;
         private readonly IEnumerable<string> _expectedValues;
 
-        public EnumValidator(bool isFlagsEnum, IEnumerable<long> values)
+        public EnumValidator(EnumKind enumKind, IEnumerable<long> values)
         {
-            _expectedIsFlagsEnum = isFlagsEnum;
+            _enumKind = enumKind;
             _expectedValues = values.Select(x => x.ToString()).ToList();
         }
 
         public string GetTypeName(ValidationContext context)
         {
-            return "enum";
+            return GetExpectedTypeString();
         }
 
         public void Validate(Type type, ValidationContext context)
         {
-            if (!type.IsEnum)
+            var actualType = GetActualTypeString(type, context, out var enumType);
+            var expectedType = GetExpectedTypeString();
+
+            if (actualType != expectedType)
             {
-                var typeName = context.GetTypeName(type);
-                context.AddError($"type mismatch, expected enum but found {typeName}");
+                context.AddError($"type mismatch, expected {expectedType} but found {actualType}");
                 return;
             }
 
-            var actualIsFlagsEnum = type.GetCustomAttributes(typeof(FlagsAttribute), false).Any();
-
-            if (actualIsFlagsEnum != _expectedIsFlagsEnum)
-            {
-                var expectedKind = _expectedIsFlagsEnum ? "flags" : "values";
-                var actualKind = actualIsFlagsEnum ? "flags" : "values";
-
-                context.AddError($"enum kind mismatch, expected {expectedKind} but found {actualKind}");
-            }
-
-            var underlyingType = System.Enum.GetUnderlyingType(type);
-            var actualValues = System.Enum.GetValues(type).Cast<object>().Select(x => Convert.ChangeType(x, underlyingType).ToString()).ToList();
+            var underlyingType = System.Enum.GetUnderlyingType(enumType);
+            var actualValues = System.Enum.GetValues(enumType).Cast<object>().Select(x => Convert.ChangeType(x, underlyingType).ToString()).ToList();
 
             if (actualValues.Except(_expectedValues).Concat(_expectedValues.Except(actualValues)).Any())
             {
@@ -48,6 +40,43 @@ namespace Handyman.DataContractValidator.Enums
                 var actualValuesString = string.Join(",", actualValues);
                 context.AddError($"enum values mismatch, expected [{expectedValuesString}] but found [{actualValuesString}]");
             }
+        }
+
+        private string GetActualTypeString(Type type, ValidationContext context, out Type enumType)
+        {
+            enumType = type;
+            var strings = new List<string>();
+
+            if (enumType.IsGenericType && enumType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                enumType = type.GetGenericArguments().Single();
+                strings.Add("nullable");
+            }
+
+            if (!enumType.IsEnum)
+                return context.GetTypeName(type);
+
+            if (enumType.GetCustomAttributes(typeof(FlagsAttribute), false).Any())
+                strings.Add("flags");
+
+            strings.Add("enum");
+
+            return string.Join(" ", strings);
+        }
+
+        private string GetExpectedTypeString()
+        {
+            var strings = new List<string>();
+
+            if (_enumKind.HasFlag(EnumKind.Nullable))
+                strings.Add("nullable");
+
+            if (_enumKind.HasFlag(EnumKind.Flags))
+                strings.Add("flags");
+
+            strings.Add("enum");
+
+            return string.Join(" ", strings);
         }
     }
 }
