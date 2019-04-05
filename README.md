@@ -1,12 +1,13 @@
 | | NuGet | Build status |
 |-|-|-|
-| Handyman.AspNetCore | [![h.anc-nuget-version] ![h.anc-nuget-downloads]][h.anc-nuget] | [![h.anc-ado-status]][h.anc-ado] |
+| [Handyman.AspNetCore][h.anc-docs] | [![h.anc-nuget-version] ![h.anc-nuget-downloads]][h.anc-nuget] | [![h.anc-ado-status]][h.anc-ado] |
 | [Handyman.DataContractValidator][h.dcv-docs] | [![h.dcv-nuget-version] ![h.dcv-nuget-downloads]][h.dcv-nuget] | [![h.dcv-ado-status]][h.dcv-ado] |
 | Handyman.Dynamics | [![h.d-nuget-version] ![h.d-nuget-downloads]][h.d-nuget] | [![h.d-ado-status]][h.d-ado] |
 | Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | [![h.e-ado-status]][h.e-ado] |
 | [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | [![h.m-ado-status]][h.m-ado] |
 | Handyman.Wpf | [![h.wpf-nuget-version] ![h.wpf-nuget-downloads]][h.wpf-nuget] | |
 
+[h.anc-docs]: docs/Handyman.AspNetCore.md
 [h.anc-nuget]: https://www.nuget.org/packages/Handyman.AspNetCore
 [h.anc-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.AspNetCore.svg
 [h.anc-nuget-version]: https://img.shields.io/nuget/v/Handyman.AspNetCore.svg
