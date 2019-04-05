@@ -147,3 +147,7 @@ public interface IEventPipelineHandler<TEvent>
     Task Handle(TEvent @event, CancellationToken cancellationToken, Func<TEvent, CancellationToken, Task> next);
 }
 ```
+
+## Customization
+
+Mediator allows you to customize how requests and/or events are processed by providing your own *HandlerProvider implmentation.
