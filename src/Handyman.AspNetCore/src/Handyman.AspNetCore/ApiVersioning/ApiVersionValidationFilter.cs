@@ -46,10 +46,20 @@ namespace Handyman.AspNetCore.ApiVersioning
 
         private static void PopulateActionParameter(ActionExecutingContext context, string version)
         {
-            if (!context.ActionDescriptor.Parameters.Any(x => x.Name == "apiVersion" && x.ParameterType == typeof(string)))
-                return;
+            var parameters = context.ActionDescriptor.Parameters;
 
-            context.ActionArguments["apiVersion"] = version;
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var parameter = parameters[i];
+
+                if (parameter.Name != "apiVersion" || parameter.ParameterType != typeof(string))
+                    continue;
+
+                context.ActionArguments["apiVersion"] = version;
+                return;
+            }
         }
     }
 }
