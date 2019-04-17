@@ -1,8 +1,12 @@
 ﻿namespace Handyman.AspNetCore
 {
-    public static class ETagComparer
+    public class ETagComparer
     {
-        public static bool Equals(string eTag1, string eTag2)
+        public static readonly ETagComparer Instance = new ETagComparer();
+
+        private ETagComparer() { }
+
+        public bool Equals(string eTag1, string eTag2)
         {
             if (eTag1 == "*" || eTag2 == "*")
                 return true;
@@ -13,7 +17,7 @@
             return eTag1 == eTag2;
         }
 
-        public static bool EqualsSqlServerRowVersion(string eTag, byte[] rowVersion)
+        public bool EqualsSqlServerRowVersion(string eTag, byte[] rowVersion)
         {
             if (eTag == "*")
                 return true;
