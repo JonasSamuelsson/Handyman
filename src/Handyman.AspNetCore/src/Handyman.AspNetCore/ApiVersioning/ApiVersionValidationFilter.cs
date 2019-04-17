@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace Handyman.AspNetCore.ApiVersioning
@@ -54,10 +54,15 @@ namespace Handyman.AspNetCore.ApiVersioning
             {
                 var parameter = parameters[i];
 
-                if (parameter.Name != "apiVersion" || parameter.ParameterType != typeof(string))
+                if (parameter.ParameterType != typeof(string))
                     continue;
 
-                context.ActionArguments["apiVersion"] = version;
+                var name = parameter.Name;
+
+                if (name.Equals("apiversion", StringComparison.OrdinalIgnoreCase) == false)
+                    continue;
+
+                context.ActionArguments[name] = version;
                 return;
             }
         }
