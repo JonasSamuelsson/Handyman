@@ -9,7 +9,7 @@ namespace Handyman.AspNetCore.Tests
         [Theory, MemberData(nameof(GetShouldCompareETagsParams))]
         public void ShouldCompareETags(string eTag1, string eTag2, bool result)
         {
-            ETagComparer.Equals(eTag1, eTag2).ShouldBe(result);
+            ETagComparer.Instance.Equals(eTag1, eTag2).ShouldBe(result);
         }
 
         public static IEnumerable<object[]> GetShouldCompareETagsParams()
@@ -31,7 +31,7 @@ namespace Handyman.AspNetCore.Tests
         [Theory, MemberData(nameof(GetShouldCompareETagToSqlServerRowVersionParams))]
         public void ShouldCompareETagToSqlServerRowVersion(string eTag, byte[] rowVersion, bool result)
         {
-            ETagComparer.EqualsSqlServerRowVersion(eTag, rowVersion).ShouldBe(result);
+            ETagComparer.Instance.EqualsSqlServerRowVersion(eTag, rowVersion).ShouldBe(result);
         }
 
         public static IEnumerable<object[]> GetShouldCompareETagToSqlServerRowVersionParams()
