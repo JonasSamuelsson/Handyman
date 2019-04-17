@@ -10,13 +10,7 @@ namespace Handyman.AspNetCore.Tests
         [Theory, MemberData(nameof(GetConvertToSqlServerRowVersionShouldThrowOnMalformedEtagParams))]
         public void ConvertToSqlServerRowVersionShouldThrowOnMalformedEtag(string s)
         {
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion(null));
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion(""));
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion("1"));
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion("01\""));
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion("W/\"\""));
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion("W/\"1\""));
-            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion("W/\"01020304050607080\""));
+            Assert.Throws<FormatException>(() => ETagConverter.ToSqlServerRowVersion(s));
         }
 
         public static IEnumerable<object[]> GetConvertToSqlServerRowVersionShouldThrowOnMalformedEtagParams()
