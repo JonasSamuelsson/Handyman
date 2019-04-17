@@ -17,7 +17,6 @@ namespace Handyman.AspNetCore.Tests
         {
             return new[]
             {
-                new object[] {null},
                 new object[] {""},
                 new object[] {"1"},
                 new object[] {"01\""},
