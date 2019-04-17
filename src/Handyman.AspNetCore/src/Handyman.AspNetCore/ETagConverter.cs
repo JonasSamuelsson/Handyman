@@ -24,7 +24,10 @@ namespace Handyman.AspNetCore
 
         public static byte[] ToSqlServerRowVersion(string eTag)
         {
-            if (eTag == null || eTag.Length % 2 != 0 || eTag.Length > 20 || !Regex.IsMatch(eTag))
+            if (eTag == null)
+                throw new ArgumentNullException();
+
+            if (eTag.Length % 2 != 0 || eTag.Length > 20 || !Regex.IsMatch(eTag))
                 throw new FormatException();
 
             var bytes = new byte[8];
