@@ -18,6 +18,8 @@ namespace Handyman.Mediator.Internals
 
             Task Execute(TEvent e, CancellationToken ct)
             {
+                ct.ThrowIfCancellationRequested();
+
                 if (index == length)
                     return Task.WhenAll(handlers.Select(x => x.Handle(e, ct)));
 
