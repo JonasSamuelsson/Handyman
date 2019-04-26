@@ -10,16 +10,20 @@ function exec([string]$_cmd) {
 }
 
 function GetVsProjectVersion([string] $path) {
+    $found = $false
     $pattern = '<Version>(.*)</Version>'
 
     foreach ($line in (Get-Content $path)) {
         if (($line -match $pattern)) {
+            $found = $true
             Write-Output $matches[1]
             return
         }
     }
 
-    throw "Could not find version tag in " + $path
+    if (!$found) {
+        throw "Could not find version tag in " + $path
+    }
 }
 
 function SetAdoBuildNumber([parameter(ValueFromPipeline)] [string] $buildNumber) { 
