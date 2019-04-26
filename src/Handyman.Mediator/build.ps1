@@ -19,7 +19,7 @@ if (!$artifacts) {
 Import-Module -Force -Scope Local "$root/common.psm1"
 
 if ($buildCounter) {
-    exec GetVsProjectVersion -path "$this/src/Handyman.Mediator/Handyman.Mediator.csproj" | ForEach-Object { SetAdoBuildNumber -buildNumber "$_ #$buildCounter" }
+    exec GetVsProjectVersion -path "$this/src/Handyman.Mediator/Handyman.Mediator.csproj" | ForEach-Object { SetAdoBuildNumber -buildNumber "$_#$buildCounter" }
 }
 
 exec dotnet build -c $configuration `
