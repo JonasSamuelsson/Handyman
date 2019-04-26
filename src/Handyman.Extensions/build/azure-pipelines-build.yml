@@ -13,6 +13,7 @@ pool:
 
 variables:
   artifacts: $(Build.ArtifactStagingDirectory)
+  buildCounter: $(Build.BuildId)
 
 steps:
 - task: NuGetToolInstaller@0
@@ -20,7 +21,7 @@ steps:
   inputs:
     versionSpec: '4.9.3'
 
-- powershell: ./src/Handyman.Extensions/build.ps1 -artifacts $(artifacts) -ci
+- powershell: ./src/Handyman.Extensions/build.ps1 -artifacts $(artifacts) -buildCounter $(buildCounter)
   displayName: Invoke build.ps1
 
 - task: PublishTestResults@2

@@ -1,6 +1,7 @@
 [CmdletBinding(PositionalBinding = $false)]
 param(
     [string]$artifacts = $null,
+    [string]$buildCounter = $null,
     [switch]$ci
 )
 
@@ -17,16 +18,20 @@ if (!$artifacts) {
 
 Import-Module -Force -Scope Local "$root/common.psm1"
 
+if ($buildCounter) {
+    exec GetVsProjectVersion -path "$this/src/Handyman.AspNetCore/Handyman.AspNetCore.csproj" | ForEach-Object { SetAdoBuildNumber -buildNumber "$_ #$buildCounter" }
+}
+
 exec dotnet build -c $configuration `
     "$this/src/Handyman.AspNetCore/Handyman.AspNetCore.csproj"
 
-[string[]] $testArgs=@()
+[string[]] $testArgs = @()
 
-if ($ci) {
+if ($ci -Or $env:TF_BUILD) {
     $testArgs += "--logger", "trx"
 }
 
-exec dotnet test --configuration $configuration `
+exec dotnet test -c $configuration `
     "$this/test/Handyman.AspNetCore.Tests/Handyman.AspNetCore.Tests.csproj" `
     $testArgs
 

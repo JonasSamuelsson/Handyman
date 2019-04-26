@@ -8,3 +8,20 @@ function exec([string]$_cmd) {
         exit 1
     }
 }
+
+function GetVsProjectVersion([string] $path) {
+    $pattern = '<Version>(.*)</Version>'
+
+    foreach ($line in (Get-Content $path)) {
+        if (($line -match $pattern)) {
+            Write-Output $matches[1]
+            return
+        }
+    }
+
+    throw "Could not find version tag in " + $path
+}
+
+function SetAdoBuildNumber([parameter(ValueFromPipeline)] [string] $buildNumber) { 
+    Write-Host "##vso[build.updatebuildnumber]$buildNumber"
+}
