@@ -29,6 +29,8 @@ namespace Handyman.Mediator.Internals
 
             Task<TResponse> Execute(TRequest r, CancellationToken ct)
             {
+                ct.ThrowIfCancellationRequested();
+
                 if (index == length)
                     return handler.Handle(r, ct);
 
