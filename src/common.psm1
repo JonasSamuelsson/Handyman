@@ -3,7 +3,7 @@ function exec([string]$_cmd) {
     $ErrorActionPreference = 'Continue'
     & $_cmd @args
     $ErrorActionPreference = 'Stop'
-    if ($LASTEXITCODE -ne 0) {
+    if ($LASTEXITCODE -And $LASTEXITCODE -ne 0) {
         write-error "Failed with exit code $LASTEXITCODE"
         exit 1
     }
