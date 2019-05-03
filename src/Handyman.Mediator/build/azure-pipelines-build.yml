@@ -9,7 +9,7 @@ trigger:
     - src/Handyman.Mediator/docs/*
 
 pool:
-  vmImage: 'vs2017-win2016'
+  vmImage: "windows-2019"
 
 variables:
   artifacts: $(Build.ArtifactStagingDirectory)
@@ -17,11 +17,11 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@0
-  displayName: update nuget.exe
+  displayName: install nuget.exe v4.9.4
   inputs:
-    versionSpec: '4.9.3'
+    versionSpec: '4.9.4'
 
-- powershell: ./src/Handyman.Mediator/build.ps1 -artifacts $(artifacts) -buildCounter $(buildCounter)
+- powershell: ./src/Handyman.Mediator/build/build.ps1 -artifacts $(artifacts) -buildCounter $(buildCounter)
   displayName: Invoke build.ps1
 
 - task: PublishTestResults@2
