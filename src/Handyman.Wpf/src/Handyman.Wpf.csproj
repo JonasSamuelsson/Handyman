@@ -60,15 +60,14 @@
     <Compile Include="RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Handyman.Extensions\src\Handyman.Extensions\Handyman.Extensions.csproj">
-      <Project>{d84f2948-95e8-4832-b022-24b73acba33c}</Project>
-      <Name>Handyman.Extensions</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\..\handyman.snk">
       <Link>handyman.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Handyman.Extensions">
+      <Version>2.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
