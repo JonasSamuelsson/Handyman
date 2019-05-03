@@ -60,7 +60,7 @@
     <Compile Include="RelayCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Handyman.Wpf\Handyman.Wpf.csproj">
+    <ProjectReference Include="..\src\Handyman.Wpf.csproj">
       <Project>{5eef1fc9-0186-440b-afda-e09ceb3685f3}</Project>
       <Name>Handyman.Wpf</Name>
     </ProjectReference>

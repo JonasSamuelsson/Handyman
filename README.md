@@ -7,14 +7,14 @@
 | [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | [![h.m-ado-status]][h.m-ado] |
 | Handyman.Wpf | [![h.wpf-nuget-version] ![h.wpf-nuget-downloads]][h.wpf-nuget] | |
 
-[h.anc-docs]: docs/Handyman.AspNetCore.md
+[h.anc-docs]: src/Handyman.AspNetCore/docs/index.md
 [h.anc-nuget]: https://www.nuget.org/packages/Handyman.AspNetCore
 [h.anc-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.AspNetCore.svg
 [h.anc-nuget-version]: https://img.shields.io/nuget/v/Handyman.AspNetCore.svg
 [h.anc-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=6
 [h.anc-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.AspNetCore?branchName=master
 
-[h.dcv-docs]: docs/handyman.data-contract-validator.md
+[h.dcv-docs]: src/Handyman.DataContractValidator/docs/index.md
 [h.dcv-nuget]: https://www.nuget.org/packages/Handyman.DataContractValidator
 [h.dcv-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.DataContractValidator.svg
 [h.dcv-nuget-version]: https://img.shields.io/nuget/v/Handyman.DataContractValidator.svg
@@ -33,7 +33,7 @@
 [h.e-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=8
 [h.e-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Extensions?branchName=master
 
-[h.m-docs]: docs/handyman.mediator.md
+[h.m-docs]: src/Handyman.Mediator/docs/index.md
 [h.m-nuget]: https://www.nuget.org/packages/Handyman.Mediator/
 [h.m-nuget-version]: https://img.shields.io/nuget/v/Handyman.Mediator.svg
 [h.m-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Mediator.svg

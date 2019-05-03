@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Handyman.DataContractValidator\Handyman.DataContractValidator.csproj" />
+    <ProjectReference Include="..\src\Handyman.DataContractValidator.csproj" />
   </ItemGroup>
 
 </Project>

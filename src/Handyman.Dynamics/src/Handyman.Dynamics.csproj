@@ -2,26 +2,30 @@
 
    <PropertyGroup>
       <TargetFramework>netstandard2.0</TargetFramework>
-      <PackageId>Handyman.Extensions</PackageId>
+      <PackageId>Handyman.Dynamics</PackageId>
       <Authors>Jonas Samuelsson</Authors>
-      <Version>2.2.0</Version>
-      <FileVersion>2.0.0.0</FileVersion>
+      <Version>0.5.0</Version>
       <Company />
       <Product>Handyman</Product>
       <Description />
-      <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
+      <PackageLicenseUrl>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicenseUrl>
       <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
       <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
       <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-      <AssemblyName>Handyman.Extensions</AssemblyName>
-      <RootNamespace>Handyman.Extensions</RootNamespace>
+      <AssemblyName>Handyman.Dynamics</AssemblyName>
+      <RootNamespace>Handyman.Dynamics</RootNamespace>
       <SignAssembly>True</SignAssembly>
+      <AssemblyOriginatorKeyFile>..\..\handyman.snk</AssemblyOriginatorKeyFile>
       <DelaySign>False</DelaySign>
-      <AssemblyOriginatorKeyFile>..\..\..\..\handyman.snk</AssemblyOriginatorKeyFile>
+      <FileVersion>0.0.0.0</FileVersion>
    </PropertyGroup>
 
    <ItemGroup>
-      <None Include="..\..\..\..\handyman.snk" Link="handyman.snk" />
+      <None Include="..\..\handyman.snk" Link="handyman.snk" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
    </ItemGroup>
 
 </Project>
