@@ -152,6 +152,15 @@ namespace Handyman.Extensions.Tests
         }
 
         [Fact]
+        public void ShouldCreateSetWithCustomComparerFromEnumerable()
+        {
+            var strings = new[] { "one", "oNe", "ONE" };
+            var set = strings.ToSet(StringComparer.OrdinalIgnoreCase);
+            set.Count.ShouldBe(1);
+            strings.ShouldAllBe(s => set.Contains(s));
+        }
+
+        [Fact]
         public void ShouldSkipLast()
         {
             var ints = new[] { 1, 2, 3, 4, 5 };

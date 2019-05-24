@@ -87,7 +87,12 @@ namespace Handyman.Extensions
 
         public static ISet<T> ToSet<T>(this IEnumerable<T> source)
         {
-            return new HashSet<T>(source);
+            return source.ToSet(EqualityComparer<T>.Default);
+        }
+
+        public static ISet<T> ToSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer)
+        {
+            return new HashSet<T>(source, comparer);
         }
 
         public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
