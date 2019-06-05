@@ -6,6 +6,18 @@ namespace Handyman.DataContractValidator
 {
     public class DataContractValidator
     {
+        private readonly Dictionary<string, object> _dataContracts = new Dictionary<string, object>();
+
+        public void AddDataContract(string key, object dataContract)
+        {
+            _dataContracts.Add(key, dataContract);
+        }
+
+        public object GetDataContract(string key)
+        {
+            return new DataContractResolver(() => _dataContracts[key]);
+        }
+
         public void Validate(Type type, object dataContract)
         {
             if (Validate(type, dataContract, out var errors))

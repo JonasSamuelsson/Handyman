@@ -48,6 +48,9 @@ namespace Handyman.DataContractValidator
 
         private static IValidator GetValidator(object dataContract)
         {
+            if (dataContract is DataContractResolver resolver)
+                dataContract = resolver.GetDataContract();
+
             if (dataContract is IValidator validator)
                 return validator;
 

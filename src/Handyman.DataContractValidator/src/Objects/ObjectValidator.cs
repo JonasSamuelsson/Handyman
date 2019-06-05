@@ -76,9 +76,9 @@ namespace Handyman.DataContractValidator.Objects
 
                     context.Validate(actualProperty.PropertyType, expectedProperty);
                 }
-
-                recursiveTypesFeature.Remove(scope);
             }
+
+            recursiveTypesFeature.Remove(scope);
         }
 
         private class RecursiveTypesFeature
