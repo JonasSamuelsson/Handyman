@@ -33,8 +33,7 @@ new Value<int>()
 
 ### Objects
 
-Properties of the actual type decorated with `JsonIgnoreAttribute` will be ignored.  
-Recursive types can only be validated against other types and not anonymous objects.
+Properties of the actual type decorated with `JsonIgnoreAttribute` will be ignored.
 
 ``` csharp
 typeof(MyObject)
@@ -116,7 +115,7 @@ public enum ResourceType
 public class Test
 {
     [Fact]
-    public void ShouldValidate()
+    public void TypesShouldMatchDataContract()
     {
         var type = typeof(Root);
 
@@ -141,6 +140,38 @@ public class Test
         };
 
         new DataContractValidator().Validate(type, dataContract);
+    }
+}
+```
+
+### Recursive types
+
+The `DataContractValidator` class has support for registering data contracts by name.  
+These contracts can then be used to validate against, for instance in the case of recursive types or if the same structure is repeated in multiple places of the object graph.
+
+``` csharp
+public class Node
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public IEnumerable<Node> Nodes { get; set; }
+}
+
+public class Test
+{
+    [Fact]
+    public void TypesShouldMatchDataContract()
+    {
+        var validator = new DataContractValidator();
+
+        validator.AddDataContract("node", new 
+        {
+            Id = typeof(int),
+            Name = typeof(string),
+            Nodes = new [] { validator.GetDataContract("node") }
+        })
+
+        validator.Validate(typeof(Node), validator.GetDataContract("node"))
     }
 }
 ```
