@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Handyman.DataContractValidator.Objects
 {
@@ -57,7 +58,7 @@ namespace Handyman.DataContractValidator.Objects
                     }
 
                     var actualPropertyIsIgnored = actualProperty.GetCustomAttributes(false)
-                        .Any(x => x.GetType().Name == "JsonIgnoreAttribute");
+                        .Any(x => Regex.IsMatch(x.GetType().Name, "Ignore[a-zA-Z0-9]"));
 
                     if (!expectedProperties.TryGetValue(name, out var expectedProperty))
                     {

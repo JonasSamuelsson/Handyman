@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace Handyman.DataContractValidator.Tests
@@ -38,7 +38,7 @@ namespace Handyman.DataContractValidator.Tests
         }
 
         [Fact]
-        public void ShouldIgnorePropertiesDecoratedWithJsonIgnoreAttribute()
+        public void ShouldIgnorePropertiesDecoratedWithIgnoreAttribute()
         {
             var type = typeof(TypeWithIgnoredProperty);
             var dataContract = new { };
@@ -60,8 +60,10 @@ namespace Handyman.DataContractValidator.Tests
 
         private class TypeWithIgnoredProperty
         {
-            [JsonIgnore]
+            [AttributeWithIgnoreInTheName]
             public int Number { get; set; }
         }
+
+        private class AttributeWithIgnoreInTheNameAttribute : Attribute { }
     }
 }
