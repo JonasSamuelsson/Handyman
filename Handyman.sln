@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "src\Handyman.Wpf\test\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table", "src\Handyman.Azure.Cosmos.Table\src\Handyman.Azure.Cosmos.Table.csproj", "{076558AE-B38F-430C-AE76-92F53CD15A34}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table.Tests", "src\Handyman.Azure.Cosmos.Table\tests\Handyman.Azure.Cosmos.Table.Tests.csproj", "{95186390-09E5-4D24-821C-197E8AF7C8FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{076558AE-B38F-430C-AE76-92F53CD15A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076558AE-B38F-430C-AE76-92F53CD15A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076558AE-B38F-430C-AE76-92F53CD15A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076558AE-B38F-430C-AE76-92F53CD15A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
