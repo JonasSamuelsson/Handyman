@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Handyman.Azure.Cosmos.Table.Internals;
 using Xunit;
 
 namespace Handyman.Azure.Cosmos.Table.Tests

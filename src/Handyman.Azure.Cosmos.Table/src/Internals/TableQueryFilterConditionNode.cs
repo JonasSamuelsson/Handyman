@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
     [DebuggerDisplay("{Build()}")]
     internal class TableQueryFilterConditionNode : ITableQueryFilterNode

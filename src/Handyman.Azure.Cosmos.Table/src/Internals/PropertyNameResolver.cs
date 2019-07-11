@@ -1,9 +1,9 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Microsoft.Azure.Cosmos.Table;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
     internal class PropertyNameResolver<TEntity> : IPropertyNameResolver<TEntity> where TEntity : ITableEntity
     {
