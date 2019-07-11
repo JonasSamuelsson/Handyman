@@ -1,7 +1,7 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
+using Microsoft.Azure.Cosmos.Table;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
     internal class TableQueryFilterConditionBuilder : ITableQueryFilterConditionBuilder
     {

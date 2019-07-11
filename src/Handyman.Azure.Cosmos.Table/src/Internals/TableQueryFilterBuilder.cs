@@ -1,18 +1,10 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Microsoft.Azure.Cosmos.Table;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
-    public static class TableQueryFilterBuilder
-    {
-        public static ITableQueryFilterBuilder<TEntity> For<TEntity>() where TEntity : ITableEntity
-        {
-            return new TableQueryFilterBuilder<TEntity>();
-        }
-    }
-
     internal class TableQueryFilterBuilder<TEntity> : ITableQueryFilterBuilder<TEntity>
         where TEntity : ITableEntity
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
     [DebuggerDisplay("{Build()}")]
-    internal class TableQueryFilterRootNode : ITableQueryFilterNode
+    internal class TableQueryFilterNegateNode : ITableQueryFilterNode
     {
         private ITableQueryFilterNode _child;
 
@@ -18,7 +18,10 @@ namespace Handyman.Azure.Cosmos.Table
 
         public string Build()
         {
-            return _child?.Build() ?? throw new InvalidOperationException();
+            if (_child == null)
+                throw new InvalidOperationException();
+
+            return $"not ({_child.Build()})";
         }
     }
 }

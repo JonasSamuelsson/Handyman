@@ -1,9 +1,9 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Azure.Cosmos.Table;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
     [DebuggerDisplay("{Build()}")]
     internal class TableQueryFilterCompositionNode : ITableQueryFilterNode
