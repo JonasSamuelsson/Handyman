@@ -9,7 +9,11 @@ $ErrorActionPreference = 'Stop'
 
 Import-Module -Force -Scope Local "$PSScriptRoot/../../../build/common.psm1"
 
-$expression = "exec BuildTestPack -project Handyman.Extensions"
+$root = "$PSScriptRoot/.."
+$project = "$root/src/Handyman.Extensions.csproj"
+$testProject = "$root/tests/Handyman.Extensions.Tests.csproj"
+
+$expression = "exec BuildTestPack -project $project -testProject $testProject"
 
 if ($artifacts) {
     $expression += " -artifacts $artifacts"
@@ -17,10 +21,6 @@ if ($artifacts) {
 
 if ($buildCounter) {
     $expression += " -buildCounter $buildCounter"
-}
-
-if ($ci) {
-    $expression += " -ci"
 }
 
 invoke-expression $expression
