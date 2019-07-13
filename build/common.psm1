@@ -2,9 +2,14 @@ function exec([string]$_cmd) {
     write-host -ForegroundColor DarkGray ">>> $_cmd $args"
     $ErrorActionPreference = 'Continue'
     & $_cmd @args
+    $success = $?
     $ErrorActionPreference = 'Stop'
     if ($LASTEXITCODE -And $LASTEXITCODE -ne 0) {
         write-error "Failed with exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
+    if (!$success) {
+        write-error "Execution failed."
         exit 1
     }
 }
