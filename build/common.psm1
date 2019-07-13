@@ -41,7 +41,7 @@ function BuildTestPack {
         exec dotnet test -c "release" $testProject "--logger" "trx"
     }
     
-    exec dotnet pack --no-restore --no-build -c "release" -o $artifacts --include-symbols "-p:SymbolPackageFormat=snupkg" $srcProject
+    exec dotnet pack --no-restore --no-build -c "release" -o $artifacts --include-symbols "-p:SymbolPackageFormat=snupkg" $project
 }
 
 function GetVsProjectVersion([string] $path) {
