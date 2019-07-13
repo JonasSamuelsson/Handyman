@@ -18,40 +18,28 @@ function BuildTestPack {
     param(
         [Parameter(Mandatory)][string] $project, 
         [string] $artifacts = $null, 
-        [string] $buildCounter = $null, 
-        [switch] $ci
+        [string] $buildCounter = $null,
+        [string] $testProject = $null
     )
 
-    $root = [System.IO.Path]::GetFullPath("$PSScriptRoot/../src/$project")
-    $srcProject = [System.IO.Path]::GetFullPath("$root/src/$project.csproj")
-    $testProject = [System.IO.Path]::GetFullPath("$root/test/$project.Tests.csproj")
-
-    if (![System.IO.Directory]::Exists("$root")) {
-        throw "Directory '$root' not found."
+    if (![System.IO.File]::Exists("$project")) {
+        throw "Project '$project' not found."
     }
     
     if (!$artifacts) {
-        $artifacts = "$root/.artifacts/"
+        $artifacts = "$PSScriptRoot/../.artifacts/"
         Remove-Item -Recurse $artifacts -ErrorAction Ignore
     }
 
     if ($buildCounter) {
-        exec GetVsProjectVersion -path $srcProject | ForEach-Object { SetAdoBuildNumber -buildNumber "$_ #$buildCounter" }
+        exec GetVsProjectVersion -path $project | ForEach-Object { SetAdoBuildNumber -buildNumber "$_ #$buildCounter" }
     }
 
-    if ($env:TF_BUILD) {
-        $ci = $true
+    exec dotnet build -c "release" $project
+    
+    if ($testProject) {
+        exec dotnet test -c "release" $testProject "--logger" "trx"
     }
-
-    exec dotnet build -c "release" $srcProject
-    
-    [string[]] $testArgs = @()
-    
-    if ($ci) {
-        $testArgs += "--logger", "trx"
-    }
-    
-    exec dotnet test -c "release" $testProject $testArgs
     
     exec dotnet pack --no-restore --no-build -c "release" -o $artifacts --include-symbols "-p:SymbolPackageFormat=snupkg" $srcProject
 }
