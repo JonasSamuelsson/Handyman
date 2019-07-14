@@ -5,25 +5,36 @@ namespace Handyman.Azure.Cosmos.Table
     public class TableResult<TEntity>
         where TEntity : ITableEntity
     {
-        private TEntity _entity;
-
+        public TEntity Entity { get; set; }
         public string ETag { get; set; }
         public int HttpStatusCode { get; set; }
 
-        public TEntity Entity
-        {
-            get => IsSuccessStatusCode ? _entity : throw new TableException(HttpStatusCode);
-            set => _entity = value;
-        }
+        public bool HasSuccessStatusCode => HttpStatusCode < 400;
 
-        public bool IsSuccessStatusCode => HttpStatusCode < 400;
-
-        public void AssertSuccessStatusCode()
+        public void EnsureSuccessStatusCode()
         {
-            if (IsSuccessStatusCode)
+            if (HasSuccessStatusCode)
                 return;
 
             throw new TableException(HttpStatusCode);
+        }
+
+        public TEntity GetEntityOrThrow()
+        {
+            EnsureSuccessStatusCode();
+            return Entity;
+        }
+
+        public bool TryGetEntity(out TEntity entity)
+        {
+            if (HasSuccessStatusCode)
+            {
+                entity = Entity;
+                return true;
+            }
+
+            entity = default;
+            return false;
         }
     }
 }
