@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Handyman.Azure.Cosmos.Table.Internals
 {
     [DebuggerDisplay("{Build()}")]
-    internal class TableQueryFilterNegateNode : ITableQueryFilterNode
+    internal class RootTableQueryFilterNode : ITableQueryFilterNode
     {
         private ITableQueryFilterNode _child;
 
@@ -18,10 +18,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         public string Build()
         {
-            if (_child == null)
-                throw new InvalidOperationException();
-
-            return $"not ({_child.Build()})";
+            return _child?.Build() ?? throw new InvalidOperationException();
         }
     }
 }

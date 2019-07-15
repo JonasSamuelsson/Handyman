@@ -4,11 +4,11 @@ using System.Diagnostics;
 namespace Handyman.Azure.Cosmos.Table.Internals
 {
     [DebuggerDisplay("{Build()}")]
-    internal class TableQueryFilterConditionNode : ITableQueryFilterNode
+    internal class ConditionTableQueryFilterNode : ITableQueryFilterNode
     {
         private readonly string _condition;
 
-        public TableQueryFilterConditionNode(string condition)
+        public ConditionTableQueryFilterNode(string condition)
         {
             _condition = condition;
         }

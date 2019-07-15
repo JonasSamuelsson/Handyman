@@ -296,7 +296,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         private void GenerateFilterCondition<TValue>(string operation, TValue value, FilterConditionGenerator<TValue> generator)
         {
-            _node.Add(new TableQueryFilterConditionNode(generator.Invoke(_propertyName, operation, value)));
+            _node.Add(new ConditionTableQueryFilterNode(generator.Invoke(_propertyName, operation, value)));
         }
     }
 
@@ -345,7 +345,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         private void GenerateFilterCondition(string operation, TValue value)
         {
-            _node.Add(new TableQueryFilterConditionNode(_generator.Invoke(_propertyName, operation, value)));
+            _node.Add(new ConditionTableQueryFilterNode(_generator.Invoke(_propertyName, operation, value)));
         }
     }
 }

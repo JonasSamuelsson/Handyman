@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Microsoft.Azure.Cosmos.Table;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Azure.Cosmos.Table;
 
 namespace Handyman.Azure.Cosmos.Table.Internals
 {
     [DebuggerDisplay("{Build()}")]
-    internal class TableQueryFilterCompositionNode : ITableQueryFilterNode
+    internal abstract class CompositionTableQueryFilterNode : ITableQueryFilterNode
     {
         private readonly string _operator;
         private readonly List<ITableQueryFilterNode> _nodes = new List<ITableQueryFilterNode>();
 
-        public TableQueryFilterCompositionNode(string @operator)
+        protected CompositionTableQueryFilterNode(string @operator)
         {
             _operator = @operator;
         }
@@ -36,6 +36,20 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             }
 
             return result;
+        }
+    }
+
+    internal class AndTableQueryFilterNode : CompositionTableQueryFilterNode
+    {
+        public AndTableQueryFilterNode() : base(TableOperators.And)
+        {
+        }
+    }
+
+    internal class OrTableQueryFilterNode : CompositionTableQueryFilterNode
+    {
+        public OrTableQueryFilterNode() : base(TableOperators.Or)
+        {
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Azure.Cosmos.Table;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Microsoft.Azure.Cosmos.Table;
 
 namespace Handyman.Azure.Cosmos.Table.Internals
 {
@@ -11,7 +11,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
         private readonly ITableQueryFilterNode _node;
 
         public TableQueryFilterBuilder()
-            : this(new TableQueryFilterRootNode())
+            : this(new RootTableQueryFilterNode())
         {
         }
 
@@ -27,17 +27,16 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         public void And(params Action<ITableQueryFilterBuilder<TEntity>>[] actions)
         {
-            Combine(TableOperators.And, actions);
+            Combine(new AndTableQueryFilterNode(), actions);
         }
 
         public void Or(params Action<ITableQueryFilterBuilder<TEntity>>[] actions)
         {
-            Combine(TableOperators.Or, actions);
+            Combine(new OrTableQueryFilterNode(), actions);
         }
 
-        private void Combine(string operation, IEnumerable<Action<ITableQueryFilterBuilder<TEntity>>> actions)
+        private void Combine(CompositionTableQueryFilterNode node, IEnumerable<Action<ITableQueryFilterBuilder<TEntity>>> actions)
         {
-            var node = new TableQueryFilterCompositionNode(operation);
             _node.Add(node);
             var builder = new TableQueryFilterBuilder<TEntity>(node);
 
@@ -47,7 +46,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         public void Not(Action<ITableQueryFilterBuilder<TEntity>> action)
         {
-            var node = new TableQueryFilterNegateNode();
+            var node = new NegateTableQueryFilterNode();
             _node.Add(node);
             var builder = new TableQueryFilterBuilder<TEntity>(node);
             action.Invoke(builder);
