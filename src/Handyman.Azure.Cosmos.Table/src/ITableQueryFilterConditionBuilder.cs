@@ -52,6 +52,7 @@ namespace Handyman.Azure.Cosmos.Table
         void NotEqual(int value);
         void NotEqual(long value);
         void NotEqual(string value);
+        void StartsWith(string value);
     }
 
     public interface ITableQueryFilterConditionBuilder<TValue>

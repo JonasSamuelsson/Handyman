@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Azure.Cosmos.Table;
+﻿using Microsoft.Azure.Cosmos.Table;
+using System;
 
 namespace Handyman.Azure.Cosmos.Table.Internals
 {
@@ -16,287 +16,305 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         public void Equal(bool value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(byte[] value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(DateTimeOffset value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(double value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(Guid value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(int value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(long value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void Equal(string value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void GreaterThan(bool value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(byte[] value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(DateTimeOffset value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(double value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(Guid value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(int value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(long value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThan(string value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThanOrEqual(bool value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(byte[] value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(DateTimeOffset value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(double value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(Guid value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(int value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(long value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void GreaterThanOrEqual(string value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void LessThan(bool value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(byte[] value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(DateTimeOffset value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(double value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(Guid value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(int value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(long value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThan(string value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThanOrEqual(bool value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(byte[] value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(DateTimeOffset value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(double value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(Guid value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(int value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(long value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void LessThanOrEqual(string value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void NotEqual(bool value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(byte[] value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(DateTimeOffset value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(double value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(Guid value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(int value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(long value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
         public void NotEqual(string value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        private void GenerateFilterCondition(string operation, bool value)
+        public void StartsWith(string value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForBool);
+            var andNode = new AndTableQueryFilterNode();
+
+            andNode.Add(GenerateConditionNode(QueryComparisons.GreaterThanOrEqual, value, TableQuery.GenerateFilterCondition));
+
+            var length = value.Length - 1;
+            var value2 = $"{value.Substring(0, length)}{(char)(value[length] + 1)}";
+            andNode.Add(GenerateConditionNode(QueryComparisons.LessThan, value2, TableQuery.GenerateFilterCondition));
+
+            _node.Add(andNode);
         }
 
-        private void GenerateFilterCondition(string operation, byte[] value)
+        private void AddFilterCondition(string operation, bool value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForBinary);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForBool);
         }
 
-        private void GenerateFilterCondition(string operation, DateTimeOffset value)
+        private void AddFilterCondition(string operation, byte[] value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForDate);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForBinary);
         }
 
-        private void GenerateFilterCondition(string operation, double value)
+        private void AddFilterCondition(string operation, DateTimeOffset value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForDouble);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForDate);
         }
 
-        private void GenerateFilterCondition(string operation, Guid value)
+        private void AddFilterCondition(string operation, double value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForGuid);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForDouble);
         }
 
-        private void GenerateFilterCondition(string operation, int value)
+        private void AddFilterCondition(string operation, Guid value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForInt);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForGuid);
         }
 
-        private void GenerateFilterCondition(string operation, long value)
+        private void AddFilterCondition(string operation, int value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterConditionForLong);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForInt);
         }
 
-        private void GenerateFilterCondition(string operation, string value)
+        private void AddFilterCondition(string operation, long value)
         {
-            GenerateFilterCondition(operation, value, TableQuery.GenerateFilterCondition);
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForLong);
         }
 
-        private void GenerateFilterCondition<TValue>(string operation, TValue value, FilterConditionGenerator<TValue> generator)
+        private void AddFilterCondition(string operation, string value)
         {
-            _node.Add(new ConditionTableQueryFilterNode(generator.Invoke(_propertyName, operation, value)));
+            AddFilterCondition(operation, value, TableQuery.GenerateFilterCondition);
+        }
+
+        private void AddFilterCondition<TValue>(string operation, TValue value, FilterConditionGenerator<TValue> generator)
+        {
+            _node.Add(GenerateConditionNode(operation, value, generator));
+        }
+
+        private ConditionTableQueryFilterNode GenerateConditionNode<TValue>(string operation, TValue value, FilterConditionGenerator<TValue> generator)
+        {
+            return new ConditionTableQueryFilterNode(generator.Invoke(_propertyName, operation, value));
         }
     }
 
@@ -315,37 +333,48 @@ namespace Handyman.Azure.Cosmos.Table.Internals
 
         public void Equal(TValue value)
         {
-            GenerateFilterCondition(QueryComparisons.Equal, value);
+            AddFilterCondition(QueryComparisons.Equal, value);
         }
 
         public void GreaterThan(TValue value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThan, value);
+            AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
         public void GreaterThanOrEqual(TValue value)
         {
-            GenerateFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
         public void LessThan(TValue value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThan, value);
+            AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
         public void LessThanOrEqual(TValue value)
         {
-            GenerateFilterCondition(QueryComparisons.LessThanOrEqual, value);
+            AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
         public void NotEqual(TValue value)
         {
-            GenerateFilterCondition(QueryComparisons.NotEqual, value);
+            AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        private void GenerateFilterCondition(string operation, TValue value)
+        private void AddFilterCondition(string operation, TValue value)
         {
-            _node.Add(new ConditionTableQueryFilterNode(_generator.Invoke(_propertyName, operation, value)));
+            AddNode(GenerateConditionNode(operation, value));
+        }
+
+        protected void AddNode(ITableQueryFilterNode node)
+        {
+            _node.Add(node);
+        }
+
+        protected ITableQueryFilterNode GenerateConditionNode(string operation, TValue value)
+        {
+            var condition = _generator.Invoke(_propertyName, operation, value);
+            return new ConditionTableQueryFilterNode(condition);
         }
     }
 }

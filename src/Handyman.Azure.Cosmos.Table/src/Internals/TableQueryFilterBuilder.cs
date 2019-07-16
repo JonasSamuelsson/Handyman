@@ -20,9 +20,9 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             _node = node;
         }
 
-        public ITableQueryFilterConditionBuilder<string> ETag => Property(e => e.ETag);
-        public ITableQueryFilterConditionBuilder<string> PartitionKey => Property(e => e.PartitionKey);
-        public ITableQueryFilterConditionBuilder<string> RowKey => Property(e => e.RowKey);
+        public ITableQueryFilterStringConditionBuilder ETag => Property(e => e.ETag);
+        public ITableQueryFilterStringConditionBuilder PartitionKey => Property(e => e.PartitionKey);
+        public ITableQueryFilterStringConditionBuilder RowKey => Property(e => e.RowKey);
         public ITableQueryFilterConditionBuilder<DateTimeOffset> Timestamp => Property(e => e.Timestamp);
 
         public void And(params Action<ITableQueryFilterBuilder<TEntity>>[] actions)
@@ -92,15 +92,21 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             return Property(property, TableQuery.GenerateFilterConditionForLong);
         }
 
-        public ITableQueryFilterConditionBuilder<string> Property(Expression<Func<TEntity, string>> property)
+        public ITableQueryFilterStringConditionBuilder Property(Expression<Func<TEntity, string>> property)
         {
-            return Property(property, TableQuery.GenerateFilterCondition);
+            var propertyName = GetPropertyName(property);
+            return new TableQueryFilterStringConditionBuilder(propertyName, TableQuery.GenerateFilterCondition, _node);
         }
 
         private ITableQueryFilterConditionBuilder<TValue> Property<TValue>(Expression<Func<TEntity, TValue>> property, FilterConditionGenerator<TValue> generator)
         {
-            var propertyName = ((MemberExpression)property.Body).Member.Name;
+            var propertyName = GetPropertyName(property);
             return new TableQueryFilterConditionBuilder<TValue>(propertyName, generator, _node);
+        }
+
+        private static string GetPropertyName<TValue>(Expression<Func<TEntity, TValue>> property)
+        {
+            return ((MemberExpression)property.Body).Member.Name;
         }
 
         internal string Build()

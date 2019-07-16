@@ -7,9 +7,9 @@ namespace Handyman.Azure.Cosmos.Table
     public interface ITableQueryFilterBuilder<TEntity>
         where TEntity : ITableEntity
     {
-        ITableQueryFilterConditionBuilder<string> ETag { get; }
-        ITableQueryFilterConditionBuilder<string> PartitionKey { get; }
-        ITableQueryFilterConditionBuilder<string> RowKey { get; }
+        ITableQueryFilterStringConditionBuilder ETag { get; }
+        ITableQueryFilterStringConditionBuilder PartitionKey { get; }
+        ITableQueryFilterStringConditionBuilder RowKey { get; }
         ITableQueryFilterConditionBuilder<DateTimeOffset> Timestamp { get; }
 
         void And(params Action<ITableQueryFilterBuilder<TEntity>>[] actions);
@@ -24,6 +24,6 @@ namespace Handyman.Azure.Cosmos.Table
         ITableQueryFilterConditionBuilder<Guid> Property(Expression<Func<TEntity, Guid>> property);
         ITableQueryFilterConditionBuilder<int> Property(Expression<Func<TEntity, int>> property);
         ITableQueryFilterConditionBuilder<long> Property(Expression<Func<TEntity, long>> property);
-        ITableQueryFilterConditionBuilder<string> Property(Expression<Func<TEntity, string>> property);
+        ITableQueryFilterStringConditionBuilder Property(Expression<Func<TEntity, string>> property);
     }
 }

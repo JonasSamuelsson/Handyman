@@ -1,10 +1,10 @@
+using Handyman.Azure.Cosmos.Table.Internals;
 using Microsoft.Azure.Cosmos.Table;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Handyman.Azure.Cosmos.Table.Internals;
 using Xunit;
 
 namespace Handyman.Azure.Cosmos.Table.Tests
@@ -360,6 +360,22 @@ namespace Handyman.Azure.Cosmos.Table.Tests
                 });
             });
             builder.Build().ShouldBe("(a eq 1) or ((b eq 2) and ((c eq 3) or (not (d eq 4))))");
+        }
+
+        [Fact]
+        public void ShouldBuildStringStartsWithFilter()
+        {
+            var builder = new TableQueryFilterBuilder<TestEntity>();
+            builder.Property("RowKey").StartsWith("abc");
+            builder.Build().ShouldBe("(RowKey ge 'abc') and (RowKey lt 'abd')");
+        }
+
+        [Fact]
+        public void ShouldBuildStronglyTypedStringStartsWithFilter()
+        {
+            var builder = new TableQueryFilterBuilder<TestEntity>();
+            builder.Property(x => x.RowKey).StartsWith("abc");
+            builder.Build().ShouldBe("(RowKey ge 'abc') and (RowKey lt 'abd')");
         }
 
         private class TestEntity : TableEntity
