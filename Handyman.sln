@@ -11,27 +11,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.AspNetCore", "src\Handyman.AspNetCore\src\Handyman.AspNetCore.csproj", "{06CE69D9-BF8F-4EDB-8959-671A81784110}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.AspNetCore.Tests", "src\Handyman.AspNetCore\test\Handyman.AspNetCore.Tests.csproj", "{0CD53EF5-25CE-478E-B666-7A5B9E4CC10C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.AspNetCore.Tests", "src\Handyman.AspNetCore\tests\Handyman.AspNetCore.Tests.csproj", "{0CD53EF5-25CE-478E-B666-7A5B9E4CC10C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DataContractValidator", "src\Handyman.DataContractValidator\src\Handyman.DataContractValidator.csproj", "{C85909DC-1100-42BB-BB60-DFBCC7B024AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DataContractValidator.Tests", "src\Handyman.DataContractValidator\test\Handyman.DataContractValidator.Tests.csproj", "{A28981A2-1564-49B6-BC24-D235AACD0343}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DataContractValidator.Tests", "src\Handyman.DataContractValidator\tests\Handyman.DataContractValidator.Tests.csproj", "{A28981A2-1564-49B6-BC24-D235AACD0343}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics", "src\Handyman.Dynamics\src\Handyman.Dynamics.csproj", "{24EEA3DA-FF9D-4F46-9C94-73EC1EDF31A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "src\Handyman.Dynamics\test\Handyman.Dynamics.Tests.csproj", "{B2B4AE09-C7E4-43F6-958A-8C9B2F62B41B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Dynamics.Tests", "src\Handyman.Dynamics\tests\Handyman.Dynamics.Tests.csproj", "{B2B4AE09-C7E4-43F6-958A-8C9B2F62B41B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions", "src\Handyman.Extensions\src\Handyman.Extensions.csproj", "{4B578D9A-3223-4305-A07F-B49FE50332B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "src\Handyman.Extensions\test\Handyman.Extensions.Tests.csproj", "{31EE9FE2-0071-40EE-871E-7CB176071DAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Extensions.Tests", "src\Handyman.Extensions\tests\Handyman.Extensions.Tests.csproj", "{31EE9FE2-0071-40EE-871E-7CB176071DAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "src\Handyman.Mediator\src\Handyman.Mediator.csproj", "{39FE1F64-F3CF-4437-BB18-B9D427F078EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "src\Handyman.Mediator\test\Handyman.Mediator.Tests.csproj", "{772938ED-A107-47EE-9C59-3E1585CC2559}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "src\Handyman.Mediator\tests\Handyman.Mediator.Tests.csproj", "{772938ED-A107-47EE-9C59-3E1585CC2559}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyman.Wpf\src\Handyman.Wpf.csproj", "{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "src\Handyman.Wpf\test\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "src\Handyman.Wpf\tests\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table", "src\Handyman.Azure.Cosmos.Table\src\Handyman.Azure.Cosmos.Table.csproj", "{076558AE-B38F-430C-AE76-92F53CD15A34}"
 EndProject
