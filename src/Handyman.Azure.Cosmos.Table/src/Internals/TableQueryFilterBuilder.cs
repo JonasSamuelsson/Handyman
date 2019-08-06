@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Handyman.Azure.Cosmos.Table.Internals
@@ -25,23 +24,21 @@ namespace Handyman.Azure.Cosmos.Table.Internals
         public ITableQueryFilterStringConditionBuilder RowKey => Property(e => e.RowKey);
         public ITableQueryFilterConditionBuilder<DateTimeOffset> Timestamp => Property(e => e.Timestamp);
 
-        public void And(params Action<ITableQueryFilterBuilder<TEntity>>[] actions)
+        public void And(Action<ITableQueryFilterBuilder<TEntity>> actions)
         {
             Combine(new AndTableQueryFilterNode(), actions);
         }
 
-        public void Or(params Action<ITableQueryFilterBuilder<TEntity>>[] actions)
+        public void Or(Action<ITableQueryFilterBuilder<TEntity>> actions)
         {
             Combine(new OrTableQueryFilterNode(), actions);
         }
 
-        private void Combine(CompositionTableQueryFilterNode node, IEnumerable<Action<ITableQueryFilterBuilder<TEntity>>> actions)
+        private void Combine(CompositionTableQueryFilterNode node, Action<ITableQueryFilterBuilder<TEntity>> actions)
         {
             _node.Add(node);
             var builder = new TableQueryFilterBuilder<TEntity>(node);
-
-            foreach (var action in actions)
-                action.Invoke(builder);
+            actions.Invoke(builder);
         }
 
         public void Not(Action<ITableQueryFilterBuilder<TEntity>> action)

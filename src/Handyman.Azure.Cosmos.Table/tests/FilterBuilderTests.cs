@@ -265,7 +265,11 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             builder.Build().ShouldBe("a eq 1");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.And(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2));
+            builder.And(x =>
+            {
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
+            });
             builder.Build().ShouldBe("(a eq 1) and (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
@@ -277,7 +281,12 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             builder.Build().ShouldBe("(a eq 1) and (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.And(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2), x => x.Property("c").Equals(3));
+            builder.And(x =>
+            {
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
+                x.Property("c").Equals(3);
+            });
             builder.Build().ShouldBe("((a eq 1) and (b eq 2)) and (c eq 3)");
 
 
@@ -300,7 +309,11 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             builder.Build().ShouldBe("a eq 1");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Or(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2));
+            builder.Or(x =>
+            {
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
+            });
             builder.Build().ShouldBe("(a eq 1) or (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
@@ -312,7 +325,12 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             builder.Build().ShouldBe("(a eq 1) or (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Or(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2), x => x.Property("c").Equals(3));
+            builder.Or(x =>
+            {
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
+                x.Property("c").Equals(3);
+            });
             builder.Build().ShouldBe("((a eq 1) or (b eq 2)) or (c eq 3)");
 
 
