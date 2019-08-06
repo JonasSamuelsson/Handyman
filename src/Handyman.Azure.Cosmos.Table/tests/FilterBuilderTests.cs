@@ -30,82 +30,82 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             // bool
             var boolValue = true;
             var boolValueString = "true";
-            yield return new object[] { "Equal", boolValue, $"eq {boolValueString}" };
+            yield return new object[] { "Equals", boolValue, $"eq {boolValueString}" };
             yield return new object[] { "LessThan", boolValue, $"lt {boolValueString}" };
-            yield return new object[] { "LessThanOrEqual", boolValue, $"le {boolValueString}" };
+            yield return new object[] { "LessThanOrEquals", boolValue, $"le {boolValueString}" };
             yield return new object[] { "GreaterThan", boolValue, $"gt {boolValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", boolValue, $"ge {boolValueString}" };
-            yield return new object[] { "NotEqual", boolValue, $"ne {boolValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", boolValue, $"ge {boolValueString}" };
+            yield return new object[] { "NotEquals", boolValue, $"ne {boolValueString}" };
 
             // byte[]
             var binaryValue = new byte[] { 0, 1, 2, 4, 8, 16, 32, 64, 128, 255 };
             var binaryValueString = $"X'{string.Join("", binaryValue.Select(x => $"{x:x2}"))}'";
-            yield return new object[] { "Equal", binaryValue, $"eq {binaryValueString}" };
+            yield return new object[] { "Equals", binaryValue, $"eq {binaryValueString}" };
             yield return new object[] { "LessThan", binaryValue, $"lt {binaryValueString}" };
-            yield return new object[] { "LessThanOrEqual", binaryValue, $"le {binaryValueString}" };
+            yield return new object[] { "LessThanOrEquals", binaryValue, $"le {binaryValueString}" };
             yield return new object[] { "GreaterThan", binaryValue, $"gt {binaryValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", binaryValue, $"ge {binaryValueString}" };
-            yield return new object[] { "NotEqual", binaryValue, $"ne {binaryValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", binaryValue, $"ge {binaryValueString}" };
+            yield return new object[] { "NotEquals", binaryValue, $"ne {binaryValueString}" };
 
             // date
             var dateValue = DateTimeOffset.Now;
             var dateValueString = $"datetime'{dateValue.ToUniversalTime():yyyy-MM-ddTHH:mm:ss.fffffff}Z'";
-            yield return new object[] { "Equal", dateValue, $"eq {dateValueString}" };
+            yield return new object[] { "Equals", dateValue, $"eq {dateValueString}" };
             yield return new object[] { "LessThan", dateValue, $"lt {dateValueString}" };
-            yield return new object[] { "LessThanOrEqual", dateValue, $"le {dateValueString}" };
+            yield return new object[] { "LessThanOrEquals", dateValue, $"le {dateValueString}" };
             yield return new object[] { "GreaterThan", dateValue, $"gt {dateValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", dateValue, $"ge {dateValueString}" };
-            yield return new object[] { "NotEqual", dateValue, $"ne {dateValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", dateValue, $"ge {dateValueString}" };
+            yield return new object[] { "NotEquals", dateValue, $"ne {dateValueString}" };
 
             // double
             var doubleValue = double.MaxValue;
             var doubleValueString = doubleValue.ToString(CultureInfo.InvariantCulture);
-            yield return new object[] { "Equal", doubleValue, $"eq {doubleValueString}" };
+            yield return new object[] { "Equals", doubleValue, $"eq {doubleValueString}" };
             yield return new object[] { "LessThan", doubleValue, $"lt {doubleValueString}" };
-            yield return new object[] { "LessThanOrEqual", doubleValue, $"le {doubleValueString}" };
+            yield return new object[] { "LessThanOrEquals", doubleValue, $"le {doubleValueString}" };
             yield return new object[] { "GreaterThan", doubleValue, $"gt {doubleValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", doubleValue, $"ge {doubleValueString}" };
-            yield return new object[] { "NotEqual", doubleValue, $"ne {doubleValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", doubleValue, $"ge {doubleValueString}" };
+            yield return new object[] { "NotEquals", doubleValue, $"ne {doubleValueString}" };
 
             // guid
             var guidValue = Guid.NewGuid();
             var guidValueString = $"guid'{guidValue}'";
-            yield return new object[] { "Equal", guidValue, $"eq {guidValueString}" };
+            yield return new object[] { "Equals", guidValue, $"eq {guidValueString}" };
             yield return new object[] { "LessThan", guidValue, $"lt {guidValueString}" };
-            yield return new object[] { "LessThanOrEqual", guidValue, $"le {guidValueString}" };
+            yield return new object[] { "LessThanOrEquals", guidValue, $"le {guidValueString}" };
             yield return new object[] { "GreaterThan", guidValue, $"gt {guidValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", guidValue, $"ge {guidValueString}" };
-            yield return new object[] { "NotEqual", guidValue, $"ne {guidValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", guidValue, $"ge {guidValueString}" };
+            yield return new object[] { "NotEquals", guidValue, $"ne {guidValueString}" };
 
             // int
             var intValue = int.MaxValue;
             var intValueString = intValue.ToString();
-            yield return new object[] { "Equal", intValue, $"eq {intValueString}" };
+            yield return new object[] { "Equals", intValue, $"eq {intValueString}" };
             yield return new object[] { "LessThan", intValue, $"lt {intValueString}" };
-            yield return new object[] { "LessThanOrEqual", intValue, $"le {intValueString}" };
+            yield return new object[] { "LessThanOrEquals", intValue, $"le {intValueString}" };
             yield return new object[] { "GreaterThan", intValue, $"gt {intValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", intValue, $"ge {intValueString}" };
-            yield return new object[] { "NotEqual", intValue, $"ne {intValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", intValue, $"ge {intValueString}" };
+            yield return new object[] { "NotEquals", intValue, $"ne {intValueString}" };
 
             // long
             var longValue = long.MaxValue;
             var longValueString = $"{longValue}L";
-            yield return new object[] { "Equal", longValue, $"eq {longValueString}" };
+            yield return new object[] { "Equals", longValue, $"eq {longValueString}" };
             yield return new object[] { "LessThan", longValue, $"lt {longValueString}" };
-            yield return new object[] { "LessThanOrEqual", longValue, $"le {longValueString}" };
+            yield return new object[] { "LessThanOrEquals", longValue, $"le {longValueString}" };
             yield return new object[] { "GreaterThan", longValue, $"gt {longValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", longValue, $"ge {longValueString}" };
-            yield return new object[] { "NotEqual", longValue, $"ne {longValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", longValue, $"ge {longValueString}" };
+            yield return new object[] { "NotEquals", longValue, $"ne {longValueString}" };
 
             // string
             var stringValue = "xyz";
             var stringValueString = "'xyz'";
-            yield return new object[] { "Equal", stringValue, $"eq {stringValueString}" };
+            yield return new object[] { "Equals", stringValue, $"eq {stringValueString}" };
             yield return new object[] { "LessThan", stringValue, $"lt {stringValueString}" };
-            yield return new object[] { "LessThanOrEqual", stringValue, $"le {stringValueString}" };
+            yield return new object[] { "LessThanOrEquals", stringValue, $"le {stringValueString}" };
             yield return new object[] { "GreaterThan", stringValue, $"gt {stringValueString}" };
-            yield return new object[] { "GreaterThanOrEqual", stringValue, $"ge {stringValueString}" };
-            yield return new object[] { "NotEqual", stringValue, $"ne {stringValueString}" };
+            yield return new object[] { "GreaterThanOrEquals", stringValue, $"ge {stringValueString}" };
+            yield return new object[] { "NotEquals", stringValue, $"ne {stringValueString}" };
         }
 
         [Fact]
