@@ -112,7 +112,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
         public void ShouldBuildStronglyTypedBoolFilter()
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Bool).Equal(true);
+            builder.Property(e => e.Bool).Equals(true);
             builder
                 .Build()
                 .ShouldBe("Bool eq true");
@@ -125,7 +125,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var valueString = $"X'{string.Join("", value.Select(x => $"{x:x2}"))}'";
 
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Bytes).Equal(value);
+            builder.Property(e => e.Bytes).Equals(value);
             builder
                 .Build()
                 .ShouldBe($"Bytes eq {valueString}");
@@ -138,7 +138,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var valueString = $"datetime'{value.ToUniversalTime():yyyy-MM-ddTHH:mm:ss.fffffff}Z'";
 
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Date).Equal(value);
+            builder.Property(e => e.Date).Equals(value);
             builder
                 .Build()
                 .ShouldBe($"Date eq {valueString}");
@@ -151,7 +151,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var valueString = value.ToString(CultureInfo.InvariantCulture);
 
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Double).Equal(value);
+            builder.Property(e => e.Double).Equals(value);
             builder
                 .Build()
                 .ShouldBe($"Double eq {valueString}");
@@ -164,7 +164,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var valueString = $"guid'{value}'";
 
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Guid).Equal(value);
+            builder.Property(e => e.Guid).Equals(value);
             builder
                 .Build()
                 .ShouldBe($"Guid eq {valueString}");
@@ -177,7 +177,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var valueString = value.ToString();
 
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Int).Equal(value);
+            builder.Property(e => e.Int).Equals(value);
             builder
                 .Build()
                 .ShouldBe($"Int eq {valueString}");
@@ -190,17 +190,17 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var valueString = $"{value}L";
 
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.Long).Equal(value);
+            builder.Property(e => e.Long).Equals(value);
             builder
                 .Build()
                 .ShouldBe($"Long eq {valueString}");
         }
 
         [Fact]
-        public void ShouldBuildStronglyTypedEqualFilter()
+        public void ShouldBuildStronglyTypedEqualsFilter()
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.RowKey).Equal("xyz");
+            builder.Property(e => e.RowKey).Equals("xyz");
             builder
                 .Build()
                 .ShouldBe("RowKey eq 'xyz'");
@@ -217,10 +217,10 @@ namespace Handyman.Azure.Cosmos.Table.Tests
         }
 
         [Fact]
-        public void ShouldBuildStronglyTypedGreaterThanOrEqualFilter()
+        public void ShouldBuildStronglyTypedGreaterThanOrEqualsFilter()
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.RowKey).GreaterThanOrEqual("xyz");
+            builder.Property(e => e.RowKey).GreaterThanOrEquals("xyz");
             builder
                 .Build()
                 .ShouldBe("RowKey ge 'xyz'");
@@ -237,20 +237,20 @@ namespace Handyman.Azure.Cosmos.Table.Tests
         }
 
         [Fact]
-        public void ShouldBuildStronglyTypedLessThanOrEqualFilter()
+        public void ShouldBuildStronglyTypedLessThanOrEqualsFilter()
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.RowKey).LessThanOrEqual("xyz");
+            builder.Property(e => e.RowKey).LessThanOrEquals("xyz");
             builder
                 .Build()
                 .ShouldBe("RowKey le 'xyz'");
         }
 
         [Fact]
-        public void ShouldBuildStronglyTypedNotEqualFilter()
+        public void ShouldBuildStronglyTypedNotEqualsFilter()
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Property(e => e.RowKey).NotEqual("xyz");
+            builder.Property(e => e.RowKey).NotEquals("xyz");
             builder
                 .Build()
                 .ShouldBe("RowKey ne 'xyz'");
@@ -261,32 +261,32 @@ namespace Handyman.Azure.Cosmos.Table.Tests
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
 
-            builder.And(x => x.Property("a").Equal(1));
+            builder.And(x => x.Property("a").Equals(1));
             builder.Build().ShouldBe("a eq 1");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.And(x => x.Property("a").Equal(1), x => x.Property("b").Equal(2));
+            builder.And(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2));
             builder.Build().ShouldBe("(a eq 1) and (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
             builder.And(x =>
             {
-                x.Property("a").Equal(1);
-                x.Property("b").Equal(2);
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
             });
             builder.Build().ShouldBe("(a eq 1) and (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.And(x => x.Property("a").Equal(1), x => x.Property("b").Equal(2), x => x.Property("c").Equal(3));
+            builder.And(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2), x => x.Property("c").Equals(3));
             builder.Build().ShouldBe("((a eq 1) and (b eq 2)) and (c eq 3)");
 
 
             builder = new TableQueryFilterBuilder<TestEntity>();
             builder.And(x =>
             {
-                x.Property("a").Equal(1);
-                x.Property("b").Equal(2);
-                x.Property("c").Equal(3);
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
+                x.Property("c").Equals(3);
             });
             builder.Build().ShouldBe("((a eq 1) and (b eq 2)) and (c eq 3)");
         }
@@ -296,32 +296,32 @@ namespace Handyman.Azure.Cosmos.Table.Tests
         {
             var builder = new TableQueryFilterBuilder<TestEntity>();
 
-            builder.Or(x => x.Property("a").Equal(1));
+            builder.Or(x => x.Property("a").Equals(1));
             builder.Build().ShouldBe("a eq 1");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Or(x => x.Property("a").Equal(1), x => x.Property("b").Equal(2));
+            builder.Or(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2));
             builder.Build().ShouldBe("(a eq 1) or (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
             builder.Or(x =>
             {
-                x.Property("a").Equal(1);
-                x.Property("b").Equal(2);
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
             });
             builder.Build().ShouldBe("(a eq 1) or (b eq 2)");
 
             builder = new TableQueryFilterBuilder<TestEntity>();
-            builder.Or(x => x.Property("a").Equal(1), x => x.Property("b").Equal(2), x => x.Property("c").Equal(3));
+            builder.Or(x => x.Property("a").Equals(1), x => x.Property("b").Equals(2), x => x.Property("c").Equals(3));
             builder.Build().ShouldBe("((a eq 1) or (b eq 2)) or (c eq 3)");
 
 
             builder = new TableQueryFilterBuilder<TestEntity>();
             builder.Or(x =>
             {
-                x.Property("a").Equal(1);
-                x.Property("b").Equal(2);
-                x.Property("c").Equal(3);
+                x.Property("a").Equals(1);
+                x.Property("b").Equals(2);
+                x.Property("c").Equals(3);
             });
             builder.Build().ShouldBe("((a eq 1) or (b eq 2)) or (c eq 3)");
         }
@@ -332,14 +332,14 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             var builder = new TableQueryFilterBuilder<TestEntity>();
             builder.And(b1 =>
             {
-                b1.Property("a").Equal(1);
+                b1.Property("a").Equals(1);
                 b1.Or(b2 =>
                 {
-                    b2.Property("b").Equal(2);
+                    b2.Property("b").Equals(2);
                     b2.And(b3 =>
                     {
-                        b3.Property("c").Equal(3);
-                        b3.Not(b4 => b4.Property("d").Equal(4));
+                        b3.Property("c").Equals(3);
+                        b3.Not(b4 => b4.Property("d").Equals(4));
                     });
                 });
             });
@@ -348,14 +348,14 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             builder = new TableQueryFilterBuilder<TestEntity>();
             builder.Or(b1 =>
             {
-                b1.Property("a").Equal(1);
+                b1.Property("a").Equals(1);
                 b1.And(b2 =>
                 {
-                    b2.Property("b").Equal(2);
+                    b2.Property("b").Equals(2);
                     b2.Or(b3 =>
                     {
-                        b3.Property("c").Equal(3);
-                        b3.Not(b4 => b4.Property("d").Equal(4));
+                        b3.Property("c").Equals(3);
+                        b3.Not(b4 => b4.Property("d").Equals(4));
                     });
                 });
             });

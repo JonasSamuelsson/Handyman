@@ -14,42 +14,42 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             _node = node;
         }
 
-        public void Equal(bool value)
+        public void Equals(bool value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(byte[] value)
+        public void Equals(byte[] value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(DateTimeOffset value)
+        public void Equals(DateTimeOffset value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(double value)
+        public void Equals(double value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(Guid value)
+        public void Equals(Guid value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(int value)
+        public void Equals(int value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(long value)
+        public void Equals(long value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
 
-        public void Equal(string value)
+        public void Equals(string value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
@@ -94,42 +94,42 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
-        public void GreaterThanOrEqual(bool value)
+        public void GreaterThanOrEquals(bool value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(byte[] value)
+        public void GreaterThanOrEquals(byte[] value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(DateTimeOffset value)
+        public void GreaterThanOrEquals(DateTimeOffset value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(double value)
+        public void GreaterThanOrEquals(double value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(Guid value)
+        public void GreaterThanOrEquals(Guid value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(int value)
+        public void GreaterThanOrEquals(int value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(long value)
+        public void GreaterThanOrEquals(long value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
 
-        public void GreaterThanOrEqual(string value)
+        public void GreaterThanOrEquals(string value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
@@ -174,82 +174,82 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
-        public void LessThanOrEqual(bool value)
+        public void LessThanOrEquals(bool value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(byte[] value)
+        public void LessThanOrEquals(byte[] value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(DateTimeOffset value)
+        public void LessThanOrEquals(DateTimeOffset value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(double value)
+        public void LessThanOrEquals(double value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(Guid value)
+        public void LessThanOrEquals(Guid value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(int value)
+        public void LessThanOrEquals(int value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(long value)
+        public void LessThanOrEquals(long value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void LessThanOrEqual(string value)
+        public void LessThanOrEquals(string value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void NotEqual(bool value)
+        public void NotEquals(bool value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(byte[] value)
+        public void NotEquals(byte[] value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(DateTimeOffset value)
+        public void NotEquals(DateTimeOffset value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(double value)
+        public void NotEquals(double value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(Guid value)
+        public void NotEquals(Guid value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(int value)
+        public void NotEquals(int value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(long value)
+        public void NotEquals(long value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
 
-        public void NotEqual(string value)
+        public void NotEquals(string value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
@@ -331,7 +331,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             _node = node;
         }
 
-        public void Equal(TValue value)
+        public void Equals(TValue value)
         {
             AddFilterCondition(QueryComparisons.Equal, value);
         }
@@ -341,7 +341,7 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             AddFilterCondition(QueryComparisons.GreaterThan, value);
         }
 
-        public void GreaterThanOrEqual(TValue value)
+        public void GreaterThanOrEquals(TValue value)
         {
             AddFilterCondition(QueryComparisons.GreaterThanOrEqual, value);
         }
@@ -351,12 +351,12 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             AddFilterCondition(QueryComparisons.LessThan, value);
         }
 
-        public void LessThanOrEqual(TValue value)
+        public void LessThanOrEquals(TValue value)
         {
             AddFilterCondition(QueryComparisons.LessThanOrEqual, value);
         }
 
-        public void NotEqual(TValue value)
+        public void NotEquals(TValue value)
         {
             AddFilterCondition(QueryComparisons.NotEqual, value);
         }
