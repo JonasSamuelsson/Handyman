@@ -1,6 +1,4 @@
 ﻿using Handyman.Mediator.Internals;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Handyman.Mediator
 {
@@ -36,9 +34,9 @@ namespace Handyman.Mediator
                 return EventPipelineHandlerProvider;
 
             if (EventPipelineEnabled)
-                return Internals.EventPipelineHandlerProvider.Instance;
+                return Handyman.Mediator.EventPipelineHandlerProvider.Instance;
 
-            return Internals.NoEventPipelineHandlerProvider.Instance;
+            return NoEventPipelineHandlerProvider.Instance;
         }
 
         internal IRequestHandlerProvider GetRequestHandlerProvider()
@@ -55,7 +53,7 @@ namespace Handyman.Mediator
                 return RequestPipelineHandlerProvider;
 
             if (RequestPipelineEnabled)
-                return Internals.RequestPipelineHandlerProvider.Instance;
+                return Handyman.Mediator.RequestPipelineHandlerProvider.Instance;
 
             return NoRequestPipelineHandlerProvider.Instance;
         }
