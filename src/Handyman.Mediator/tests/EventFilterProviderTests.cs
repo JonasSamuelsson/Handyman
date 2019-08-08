@@ -34,7 +34,7 @@ namespace Handyman.Mediator.Tests
         {
             public int Order => -1;
 
-            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
+            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
             {
                 throw new NotImplementedException();
             }
@@ -42,7 +42,7 @@ namespace Handyman.Mediator.Tests
 
         private class FilterB : IEventFilter<Event>
         {
-            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
+            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
             {
                 throw new NotImplementedException();
             }
@@ -52,7 +52,7 @@ namespace Handyman.Mediator.Tests
         {
             public int Order => 1;
 
-            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
+            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
             {
                 throw new NotImplementedException();
             }

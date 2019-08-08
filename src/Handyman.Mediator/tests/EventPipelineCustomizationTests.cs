@@ -62,7 +62,7 @@ namespace Handyman.Mediator.Tests
         {
             public string String { get; set; }
 
-            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
+            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
             {
                 context.Event.List.Add(String);
                 return next();

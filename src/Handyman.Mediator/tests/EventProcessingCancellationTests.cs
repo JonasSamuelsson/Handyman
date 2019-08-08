@@ -131,7 +131,7 @@ namespace Handyman.Mediator.Tests
 
             public bool Executed { get; set; }
 
-            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
+            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
             {
                 _cancellationTokenSource.Cancel();
                 Executed = true;
