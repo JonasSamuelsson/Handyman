@@ -4,15 +4,15 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Internals
 {
-    internal abstract class RequestProcessor<TResponse>
+    internal abstract class RequestPipeline<TResponse>
     {
-        internal abstract Task<TResponse> Process(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken);
+        internal abstract Task<TResponse> Execute(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken);
     }
 
-    internal class RequestProcessor<TRequest, TResponse> : RequestProcessor<TResponse>
+    internal class RequestPipeline<TRequest, TResponse> : RequestPipeline<TResponse>
         where TRequest : IRequest<TResponse>
     {
-        internal override Task<TResponse> Process(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken)
+        internal override Task<TResponse> Execute(IRequest<TResponse> request, Providers providers, CancellationToken cancellationToken)
         {
             return Process((TRequest)request, providers, cancellationToken);
         }

@@ -28,12 +28,12 @@ namespace Handyman.Mediator
         public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
-            return EventProcessor.Process(@event, _providers, cancellationToken);
+            return EventPipeline.Execute(@event, _providers, cancellationToken);
         }
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            return RequestProcessorProvider.GetRequestProcessor(request).Process(request, _providers, cancellationToken);
+            return RequestProcessorProvider.GetRequestProcessor(request).Execute(request, _providers, cancellationToken);
         }
     }
 }

@@ -7,15 +7,15 @@ namespace Handyman.Mediator.Internals
     {
         private static readonly ConcurrentDictionary<Type, object> Cache = new ConcurrentDictionary<Type, object>();
 
-        internal static RequestProcessor<TResponse> GetRequestProcessor<TResponse>(IRequest<TResponse> request)
+        internal static RequestPipeline<TResponse> GetRequestProcessor<TResponse>(IRequest<TResponse> request)
         {
-            return (RequestProcessor<TResponse>)Cache.GetOrAdd(request.GetType(), CreateRequestProcessor<TResponse>);
+            return (RequestPipeline<TResponse>)Cache.GetOrAdd(request.GetType(), CreateRequestProcessor<TResponse>);
         }
 
         private static object CreateRequestProcessor<TResponse>(Type requestType)
         {
             var responseType = typeof(TResponse);
-            var requestProcessorType = typeof(RequestProcessor<,>).MakeGenericType(requestType, responseType);
+            var requestProcessorType = typeof(RequestPipeline<,>).MakeGenericType(requestType, responseType);
             return Activator.CreateInstance(requestProcessorType);
         }
     }

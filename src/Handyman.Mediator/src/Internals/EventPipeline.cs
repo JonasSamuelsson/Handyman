@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Internals
 {
-    internal static class EventProcessor
+    internal static class EventPipeline
     {
-        internal static Task Process<TEvent>(TEvent @event, Providers providers, CancellationToken cancellationToken) where TEvent : IEvent
+        internal static Task Execute<TEvent>(TEvent @event, Providers providers, CancellationToken cancellationToken) where TEvent : IEvent
         {
             var filters = providers.EventFilterProvider.GetFilters<TEvent>(providers.ServiceProvider).ToArray();
             var handlers = providers.EventHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToArray();
