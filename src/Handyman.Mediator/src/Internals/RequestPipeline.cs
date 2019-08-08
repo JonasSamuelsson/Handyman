@@ -19,11 +19,14 @@ namespace Handyman.Mediator.Internals
 
         protected Task<TResponse> Process(TRequest request, Providers providers, CancellationToken cancellationToken)
         {
-            var filters = providers.RequestFilterProvider.GetFilters<TRequest, TResponse>(providers.ServiceProvider).ToArray();
+            var filters = providers.RequestFilterProvider.GetFilters<TRequest, TResponse>(providers.ServiceProvider).ToList();
+
+            filters.Sort(CompareFilters);
+
             var handler = providers.RequestHandlerProvider.GetHandler<TRequest, TResponse>(providers.ServiceProvider);
 
             var index = 0;
-            var length = filters.Length;
+            var length = filters.Count;
 
             var context = new RequestFilterContext<TRequest>
             {
@@ -42,6 +45,16 @@ namespace Handyman.Mediator.Internals
 
                 return filters[index++].Execute(context, Execute);
             }
+        }
+
+        private static int CompareFilters(object x, object y)
+        {
+            return GetSortOrder(x).CompareTo(GetSortOrder(y));
+        }
+
+        private static int GetSortOrder(object x)
+        {
+            return (x as IOrderedFilter)?.Order ?? 0;
         }
     }
 }

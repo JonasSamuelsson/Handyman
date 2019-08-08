@@ -53,7 +53,7 @@ namespace Handyman.Mediator
                 return RequestFilterProvider;
 
             if (RequestPipelineEnabled)
-                return Handyman.Mediator.RequestFilterProvider.Instance;
+                return Internals.RequestFilterProvider.Instance;
 
             return NoRequestFiltersProvider.Instance;
         }
