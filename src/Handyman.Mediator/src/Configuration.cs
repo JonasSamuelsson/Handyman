@@ -34,7 +34,7 @@ namespace Handyman.Mediator
                 return EventFilterProvider;
 
             if (EventPipelineEnabled)
-                return Handyman.Mediator.EventFilterProvider.Instance;
+                return Internals.EventFilterProvider.Instance;
 
             return NoEventFilterProvider.Instance;
         }
