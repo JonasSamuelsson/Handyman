@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,14 +8,18 @@ namespace Handyman.Mediator.Internals
     {
         internal static Task Execute<TEvent>(TEvent @event, Providers providers, CancellationToken cancellationToken) where TEvent : IEvent
         {
-            var filters = providers.EventFilterProvider.GetFilters<TEvent>(providers.ServiceProvider).ToList();
+            var filters = providers.EventFilterProvider.GetFilters<TEvent>(providers.ServiceProvider).ToListOptimized();
+            var handlers = providers.EventHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToListOptimized();
 
+            return filters.Count != 0
+                ? Execute(filters, handlers, @event, cancellationToken)
+                : Execute(handlers, @event, cancellationToken);
+        }
+
+        private static Task Execute<TEvent>(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken)
+            where TEvent : IEvent
+        {
             filters.Sort(CompareFilters);
-
-            var handlers = providers.EventHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToArray();
-
-            var index = 0;
-            var length = filters.Count;
 
             var context = new EventFilterContext<TEvent>
             {
@@ -23,17 +27,36 @@ namespace Handyman.Mediator.Internals
                 Event = @event
             };
 
+            var index = 0;
+            var filterCount = filters.Count;
+
             return Execute();
 
             Task Execute()
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
+                if (index < filterCount)
+                {
+                    context.CancellationToken.ThrowIfCancellationRequested();
 
-                if (index == length)
-                    return Task.WhenAll(handlers.Select(x => x.Handle(context.Event, context.CancellationToken)));
+                    return filters[index++].Execute(context, Execute);
+                }
 
-                return filters[index++].Execute(context, Execute);
+                return EventPipeline.Execute(handlers, @event, cancellationToken);
             }
+        }
+
+        private static Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var tasks = new List<Task>(handlers.Count);
+
+            foreach (var handler in handlers)
+            {
+                tasks.Add(handler.Handle(@event, cancellationToken));
+            }
+
+            return Task.WhenAll(tasks);
         }
 
         private static int CompareFilters(object x, object y)
