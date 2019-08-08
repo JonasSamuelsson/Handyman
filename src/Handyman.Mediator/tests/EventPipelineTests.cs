@@ -1,7 +1,6 @@
 ﻿using Maestro;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -11,52 +10,52 @@ namespace Handyman.Mediator.Tests
     public class EventPipelineTests
     {
         [Fact]
-        public async Task ShouldNotExecutePipelineHandlersIfPipelineIsDisabledAsync()
+        public async Task ShouldNotExecuteFiltersIfPipelineIsDisabled()
         {
+            var filter = new EventFilter();
             var handler = new EventHandler();
-            var pipelineHandler = new EventPipelineHandler();
 
             var container = new Container(x =>
             {
+                x.Add<IEventFilter<Event>>().Instance(filter);
                 x.Add<IEventHandler<Event>>().Instance(handler);
-                x.Add<IEventPipelineHandler<Event>>().Instance(pipelineHandler);
             });
 
             var mediator = new Mediator(container.GetService);
 
             await Task.WhenAll(mediator.Publish(new Event()));
 
+            filter.Executed.ShouldBeFalse();
             handler.Executed.ShouldBeTrue();
-            pipelineHandler.Executed.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task ShouldExecuteEventPipelineHandlers()
+        public async Task ShouldExecuteEventFilters()
         {
+            var filter = new EventFilter();
             var handler = new EventHandler();
-            var pipelineHandler = new EventPipelineHandler();
 
             var container = new Container(x =>
             {
+                x.Add<IEventFilter<Event>>().Instance(filter);
                 x.Add<IEventHandler<Event>>().Instance(handler);
-                x.Add<IEventPipelineHandler<Event>>().Instance(pipelineHandler);
             });
 
             var mediator = new Mediator(container.GetService, new Configuration { EventPipelineEnabled = true });
 
             await Task.WhenAll(mediator.Publish(new Event()));
 
+            filter.Executed.ShouldBeTrue();
             handler.Executed.ShouldBeTrue();
-            pipelineHandler.Executed.ShouldBeTrue();
         }
 
         private class Event : IEvent { }
 
-        private class EventPipelineHandler : IEventPipelineHandler<Event>
+        private class EventFilter : IEventFilter<Event>
         {
             public bool Executed { get; set; }
 
-            public Task Handle(Event @event, CancellationToken cancellationToken,
+            public Task Execute(Event @event, CancellationToken cancellationToken,
                 Func<Event, CancellationToken, Task> next)
             {
                 Executed = true;

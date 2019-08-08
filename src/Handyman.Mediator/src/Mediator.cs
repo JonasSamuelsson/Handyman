@@ -18,7 +18,7 @@ namespace Handyman.Mediator
             _providers = new Providers
             {
                 EventHandlerProvider = configuration.GetEventHandlerProvider(),
-                EventPipelineHandlerProvider = configuration.GetEventPipelineHandlerProvider(),
+                EventFilterProvider = configuration.GetEventPipelineHandlerProvider(),
                 RequestHandlerProvider = configuration.GetRequestHandlerProvider(),
                 RequestPipelineHandlerProvider = configuration.GetRequestPipelineHandlerProvider(),
                 ServiceProvider = serviceProvider

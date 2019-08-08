@@ -13,39 +13,39 @@ namespace Handyman.Mediator.Tests
     public class EventPipelineCustomizationTests
     {
         [Fact]
-        public async Task ShouldCustomizePipelineExecutionOrder()
+        public async Task ShouldCustomizeFilterExecutionOrder()
         {
             var container = new Container(x =>
             {
                 x.Add<IEventHandler<Event>>().Instance(new EventHandler());
-                x.Add<IEventPipelineHandler<Event>>().Instance(new EventPipelineHandler { String = "1" });
-                x.Add<IEventPipelineHandler<Event>>().Instance(new EventPipelineHandler { String = "2" });
-                x.Add<IEventPipelineHandler<Event>>().Instance(new EventPipelineHandler { String = "3" });
+                x.Add<IEventFilter<Event>>().Instance(new EventFilter { String = "1" });
+                x.Add<IEventFilter<Event>>().Instance(new EventFilter { String = "2" });
+                x.Add<IEventFilter<Event>>().Instance(new EventFilter { String = "3" });
             });
 
-            var provider = new EventPipelineHandlerProvider { Comparison = (a, b) => string.Compare(a.String, b.String, StringComparison.Ordinal) };
+            var provider = new EventFilterProvider { Comparison = (a, b) => string.Compare(a.String, b.String, StringComparison.Ordinal) };
 
             var e1 = new Event();
-            await new Mediator(container.GetService, new Configuration { EventPipelineHandlerProvider = provider }).Publish(e1);
+            await new Mediator(container.GetService, new Configuration { EventFilterProvider = provider }).Publish(e1);
             e1.List.ShouldBe(new[] { "1", "2", "3" });
 
             provider.Comparison = (a, b) => string.Compare(b.String, a.String, StringComparison.Ordinal);
 
             var e2 = new Event();
-            await new Mediator(container.GetService, new Configuration { EventPipelineHandlerProvider = provider }).Publish(e2);
+            await new Mediator(container.GetService, new Configuration { EventFilterProvider = provider }).Publish(e2);
             e2.List.ShouldBe(new[] { "3", "2", "1" });
         }
 
-        private class EventPipelineHandlerProvider : IEventPipelineHandlerProvider
+        private class EventFilterProvider : IEventFilterProvider
         {
-            public Comparison<EventPipelineHandler> Comparison { get; set; }
+            public Comparison<EventFilter> Comparison { get; set; }
 
-            public IEnumerable<IEventPipelineHandler<TEvent>> GetHandlers<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
+            public IEnumerable<IEventFilter<TEvent>> GetFilters<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
             {
-                var type = typeof(IEnumerable<IEventPipelineHandler<TEvent>>);
-                var handlers = ((IEnumerable)serviceProvider.Invoke(type)).OfType<EventPipelineHandler>().ToList();
+                var type = typeof(IEnumerable<IEventFilter<TEvent>>);
+                var handlers = ((IEnumerable)serviceProvider.Invoke(type)).OfType<EventFilter>().ToList();
                 handlers.Sort(Comparison);
-                return handlers.OfType<IEventPipelineHandler<TEvent>>();
+                return handlers.OfType<IEventFilter<TEvent>>();
             }
         }
 
@@ -59,11 +59,11 @@ namespace Handyman.Mediator.Tests
             protected override void Handle(Event @event) { }
         }
 
-        private class EventPipelineHandler : IEventPipelineHandler<Event>
+        private class EventFilter : IEventFilter<Event>
         {
             public string String { get; set; }
 
-            public Task Handle(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
+            public Task Execute(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
             {
                 @event.List.Add(String);
                 return next(@event, cancellationToken);

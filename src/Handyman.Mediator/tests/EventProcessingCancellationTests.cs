@@ -36,15 +36,15 @@ namespace Handyman.Mediator.Tests
         }
 
         [Fact]
-        public async Task ShouldNotInvokePipelineHandlerIfAlreadyCancelled()
+        public async Task ShouldNotInvokeFilterIfAlreadyCancelled()
         {
             var cts = new CancellationTokenSource();
-            var pipelineHandler = new EventPipelineHandler(cts);
+            var filter = new EventFilter(cts);
             var handler = new EventHandler();
 
             var container = new Container(x =>
             {
-                x.Add<IEventPipelineHandler<Event>>().Instance(pipelineHandler);
+                x.Add<IEventFilter<Event>>().Instance(filter);
                 x.Add<IEventHandler<Event>>().Instance(handler);
             });
 
@@ -55,20 +55,20 @@ namespace Handyman.Mediator.Tests
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Publish(new Event(), cts.Token))))
                 .Message.ShouldBe("oce");
 
-            pipelineHandler.Executed.ShouldBeFalse();
+            filter.Executed.ShouldBeFalse();
             handler.Executed.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task ShouldStopProcessingIfCancelledAfterPipeline()
+        public async Task ShouldStopProcessingIfCancelledAfterFilters()
         {
             var cts = new CancellationTokenSource();
-            var pipelineHandler = new EventPipelineHandler(cts);
+            var filter = new EventFilter(cts);
             var handler = new EventHandler();
 
             var container = new Container(x =>
             {
-                x.Add<IEventPipelineHandler<Event>>().Instance(pipelineHandler);
+                x.Add<IEventFilter<Event>>().Instance(filter);
                 x.Add<IEventHandler<Event>>().Instance(handler);
             });
 
@@ -77,22 +77,22 @@ namespace Handyman.Mediator.Tests
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Publish(new Event(), cts.Token))))
                 .Message.ShouldBe("oce");
 
-            pipelineHandler.Executed.ShouldBeTrue();
+            filter.Executed.ShouldBeTrue();
             handler.Executed.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task ShouldStopProcessingIfCancelledDuringPipeline()
+        public async Task ShouldStopProcessingIfCancelledDuringFilters()
         {
             var cts = new CancellationTokenSource();
-            var pipelineHandler1 = new EventPipelineHandler(cts);
-            var pipelineHandler2 = new EventPipelineHandler(cts);
+            var filter1 = new EventFilter(cts);
+            var filter2 = new EventFilter(cts);
             var handler = new EventHandler();
 
             var container = new Container(x =>
             {
-                x.Add<IEventPipelineHandler<Event>>().Instance(pipelineHandler1);
-                x.Add<IEventPipelineHandler<Event>>().Instance(pipelineHandler2);
+                x.Add<IEventFilter<Event>>().Instance(filter1);
+                x.Add<IEventFilter<Event>>().Instance(filter2);
                 x.Add<IEventHandler<Event>>().Instance(handler);
             });
 
@@ -101,8 +101,8 @@ namespace Handyman.Mediator.Tests
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Publish(new Event(), cts.Token))))
                 .Message.ShouldBe("oce");
 
-            pipelineHandler1.Executed.ShouldBeTrue();
-            pipelineHandler2.Executed.ShouldBeFalse();
+            filter1.Executed.ShouldBeTrue();
+            filter2.Executed.ShouldBeFalse();
             handler.Executed.ShouldBeFalse();
         }
 
@@ -120,18 +120,18 @@ namespace Handyman.Mediator.Tests
 
         private class Event : IEvent { }
 
-        private class EventPipelineHandler : IEventPipelineHandler<Event>
+        private class EventFilter : IEventFilter<Event>
         {
             private readonly CancellationTokenSource _cancellationTokenSource;
 
-            public EventPipelineHandler(CancellationTokenSource cancellationTokenSource)
+            public EventFilter(CancellationTokenSource cancellationTokenSource)
             {
                 _cancellationTokenSource = cancellationTokenSource;
             }
 
             public bool Executed { get; set; }
 
-            public Task Handle(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
+            public Task Execute(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
             {
                 _cancellationTokenSource.Cancel();
                 Executed = true;
@@ -141,7 +141,6 @@ namespace Handyman.Mediator.Tests
 
         private class EventHandler : SyncEventHandler<Event>
         {
-
             public bool Executed { get; set; }
 
             protected override void Handle(Event @event)

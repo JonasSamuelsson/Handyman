@@ -10,7 +10,7 @@ namespace Handyman.Mediator
         public bool EventPipelineEnabled { get; set; } = false;
 
         public IEventHandlerProvider EventHandlerProvider { get; set; }
-        public IEventPipelineHandlerProvider EventPipelineHandlerProvider { get; set; }
+        public IEventFilterProvider EventFilterProvider { get; set; }
 
         /// <summary>
         /// Enable/disable request pipeline, default is false.
@@ -28,15 +28,15 @@ namespace Handyman.Mediator
             return Internals.EventHandlerProvider.Instance;
         }
 
-        internal IEventPipelineHandlerProvider GetEventPipelineHandlerProvider()
+        internal IEventFilterProvider GetEventPipelineHandlerProvider()
         {
-            if (EventPipelineHandlerProvider != null)
-                return EventPipelineHandlerProvider;
+            if (EventFilterProvider != null)
+                return EventFilterProvider;
 
             if (EventPipelineEnabled)
-                return Handyman.Mediator.EventPipelineHandlerProvider.Instance;
+                return Handyman.Mediator.EventFilterProvider.Instance;
 
-            return NoEventPipelineHandlerProvider.Instance;
+            return NoEventFilterProvider.Instance;
         }
 
         internal IRequestHandlerProvider GetRequestHandlerProvider()

@@ -8,11 +8,11 @@ namespace Handyman.Mediator.Internals
     {
         internal static Task Process<TEvent>(TEvent @event, Providers providers, CancellationToken cancellationToken) where TEvent : IEvent
         {
-            var pipelineHandlers = providers.EventPipelineHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToArray();
+            var filters = providers.EventFilterProvider.GetFilters<TEvent>(providers.ServiceProvider).ToArray();
             var handlers = providers.EventHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToArray();
 
             var index = 0;
-            var length = pipelineHandlers.Length;
+            var length = filters.Length;
 
             return Execute(@event, cancellationToken);
 
@@ -23,8 +23,7 @@ namespace Handyman.Mediator.Internals
                 if (index == length)
                     return Task.WhenAll(handlers.Select(x => x.Handle(e, ct)));
 
-                var pipelineHandler = pipelineHandlers[index++];
-                return pipelineHandler.Handle(e, ct, Execute);
+                return filters[index++].Execute(e, ct, Execute);
             }
         }
     }

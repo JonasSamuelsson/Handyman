@@ -6,7 +6,7 @@ namespace Handyman.Mediator.Tests
     public class ConfigurationTests
     {
         [Fact]
-        public void EventPipelineShouldBeDisabledByDefault()
+        public void EventFiltersShouldBeDisabledByDefault()
         {
             new Configuration().EventPipelineEnabled.ShouldBeFalse();
         }
