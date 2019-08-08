@@ -30,7 +30,7 @@ namespace Handyman.Mediator.Tests
 
         private class Request : IRequest<object> { }
 
-        private class FilterA : IOrderedPipelineHandler, IRequestFilter<Request, object>
+        private class FilterA : IOrderedFilter, IRequestFilter<Request, object>
         {
             public int Order => -1;
 
@@ -50,7 +50,7 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class FilterC : IOrderedPipelineHandler, IRequestFilter<Request, object>
+        private class FilterC : IOrderedFilter, IRequestFilter<Request, object>
         {
             public int Order => 1;
 

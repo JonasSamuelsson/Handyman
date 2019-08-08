@@ -11,25 +11,25 @@ namespace Handyman.Mediator
         {
             var type = typeof(IEnumerable<IRequestFilter<TRequest, TResponse>>);
 
-            var handlers = (IEnumerable<IRequestFilter<TRequest, TResponse>>)serviceProvider.Invoke(type);
+            var filters = (IEnumerable<IRequestFilter<TRequest, TResponse>>)serviceProvider.Invoke(type);
 
-            if (handlers is List<IRequestFilter<TRequest, TResponse>> list)
+            if (filters is List<IRequestFilter<TRequest, TResponse>> list)
             {
-                list.Sort(CompareHandlers);
+                list.Sort(CompareFilters);
                 return list;
             }
 
-            return handlers.OrderBy(GetSortOrder);
+            return filters.OrderBy(GetSortOrder);
         }
 
-        private static int CompareHandlers(object x, object y)
+        private static int CompareFilters(object x, object y)
         {
             return GetSortOrder(x).CompareTo(GetSortOrder(y));
         }
 
         private static int GetSortOrder(object x)
         {
-            return (x as IOrderedPipelineHandler)?.Order ?? 0;
+            return (x as IOrderedFilter)?.Order ?? 0;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Handyman.Mediator
 {
-    public interface IOrderedPipelineHandler
+    public interface IOrderedFilter
     {
         int Order { get; }
     }

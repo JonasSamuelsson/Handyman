@@ -30,7 +30,7 @@ namespace Handyman.Mediator.Tests
 
         private class Event : IEvent { }
 
-        private class FilterA : IOrderedPipelineHandler, IEventFilter<Event>
+        private class FilterA : IOrderedFilter, IEventFilter<Event>
         {
             public int Order => -1;
 
@@ -48,7 +48,7 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class FilterC : IOrderedPipelineHandler, IEventFilter<Event>
+        private class FilterC : IOrderedFilter, IEventFilter<Event>
         {
             public int Order => 1;
 

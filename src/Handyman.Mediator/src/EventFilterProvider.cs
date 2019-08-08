@@ -29,7 +29,7 @@ namespace Handyman.Mediator
 
         private static int GetSortOrder(object x)
         {
-            return (x as IOrderedPipelineHandler)?.Order ?? 0;
+            return (x as IOrderedFilter)?.Order ?? 0;
         }
     }
 }
