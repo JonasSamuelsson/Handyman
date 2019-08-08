@@ -73,10 +73,10 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task<Response> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<Response>> next)
+            public Task<Response> Execute(RequestFilterContext<Request> context, Func<Task<Response>> next)
             {
                 Executed = true;
-                return next.Invoke(request, cancellationToken);
+                return next();
             }
         }
     }

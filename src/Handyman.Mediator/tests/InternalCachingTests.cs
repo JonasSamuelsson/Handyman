@@ -55,10 +55,10 @@ namespace Handyman.Mediator.Tests
 
         private class RequestFilter : IRequestFilter<Request, int>
         {
-            public Task<int> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<int>> next)
+            public Task<int> Execute(RequestFilterContext<Request> context, Func<Task<int>> next)
             {
-                request.Number++;
-                return next(request, cancellationToken);
+                context.Request.Number++;
+                return next();
             }
         }
     }

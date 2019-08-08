@@ -62,9 +62,9 @@ namespace Handyman.Mediator.Tests
         {
             public string String { get; set; }
 
-            public async Task<string[]> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<string[]>> next)
+            public async Task<string[]> Execute(RequestFilterContext<Request> context, Func<Task<string[]>> next)
             {
-                return (await next(request, cancellationToken)).Append(String).ToArray();
+                return (await next()).Append(String).ToArray();
             }
         }
     }

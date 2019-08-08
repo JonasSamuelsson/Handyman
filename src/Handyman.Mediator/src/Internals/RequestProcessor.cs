@@ -25,16 +25,22 @@ namespace Handyman.Mediator.Internals
             var index = 0;
             var length = filters.Length;
 
-            return Execute(request, cancellationToken);
-
-            Task<TResponse> Execute(TRequest r, CancellationToken ct)
+            var context = new RequestFilterContext<TRequest>
             {
-                ct.ThrowIfCancellationRequested();
+                CancellationToken = cancellationToken,
+                Request = request
+            };
+
+            return Execute();
+
+            Task<TResponse> Execute()
+            {
+                context.CancellationToken.ThrowIfCancellationRequested();
 
                 if (index == length)
-                    return handler.Handle(r, ct);
+                    return handler.Handle(context.Request, context.CancellationToken);
 
-                return filters[index++].Execute(r, ct, Execute);
+                return filters[index++].Execute(context, Execute);
             }
         }
     }
