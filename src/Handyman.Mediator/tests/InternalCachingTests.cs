@@ -1,6 +1,6 @@
-﻿using Maestro;
+﻿using Handyman.Mediator.Internals;
+using Maestro;
 using Shouldly;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -24,17 +24,14 @@ namespace Handyman.Mediator.Tests
 
                 var mediatorWithoutPipeline = new Mediator(container.GetService, new Configuration
                 {
-                    RequestPipelineEnabled = false
+                    RequestFilterProvider = RequestFiltersDisabled.Instance
                 });
 
                 (await mediatorWithoutPipeline.Send(new Request())).ShouldBe(0);
 
                 // handler & Filter
 
-                var mediatorWithPipeline = new Mediator(container.GetService, new Configuration
-                {
-                    RequestPipelineEnabled = true
-                });
+                var mediatorWithPipeline = new Mediator(container.GetService);
 
                 (await mediatorWithPipeline.Send(new Request())).ShouldBe(i);
             }

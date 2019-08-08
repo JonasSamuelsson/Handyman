@@ -9,11 +9,6 @@ namespace Handyman.Mediator.Tests
 {
     public class RequestProcessingCancellationTests
     {
-        private static readonly Configuration Configuration = new Configuration
-        {
-            RequestPipelineEnabled = true
-        };
-
         [Fact]
         public async Task ShouldNotInvokeHandlerIfAlreadyCancelled()
         {
@@ -25,7 +20,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
-            var mediator = new Mediator(type => container.GetService(type), Configuration);
+            var mediator = new Mediator(container.GetService);
 
             cts.Cancel();
 
@@ -48,7 +43,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
-            var mediator = new Mediator(type => container.GetService(type), Configuration);
+            var mediator = new Mediator(container.GetService);
 
             cts.Cancel();
 
@@ -72,7 +67,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
-            var mediator = new Mediator(type => container.GetService(type), Configuration);
+            var mediator = new Mediator(container.GetService);
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
                 .Message.ShouldBe("oce");
@@ -96,7 +91,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
-            var mediator = new Mediator(type => container.GetService(type), Configuration);
+            var mediator = new Mediator(container.GetService);
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
                 .Message.ShouldBe("oce");

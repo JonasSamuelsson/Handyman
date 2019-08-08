@@ -3,9 +3,11 @@ using System.Linq;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class NoEventFilterProvider : IEventFilterProvider
+    public class EventFiltersDisabled : IEventFilterProvider
     {
-        internal static IEventFilterProvider Instance = new NoEventFilterProvider();
+        public static IEventFilterProvider Instance = new EventFiltersDisabled();
+
+        private EventFiltersDisabled() { }
 
         public IEnumerable<IEventFilter<TEvent>> GetFilters<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
         {

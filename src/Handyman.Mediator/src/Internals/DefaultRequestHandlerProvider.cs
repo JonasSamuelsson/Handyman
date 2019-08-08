@@ -1,8 +1,10 @@
 ﻿namespace Handyman.Mediator.Internals
 {
-    internal class RequestHandlerProvider : IRequestHandlerProvider
+    internal class DefaultRequestHandlerProvider : IRequestHandlerProvider
     {
-        internal static readonly RequestHandlerProvider Instance = new RequestHandlerProvider();
+        internal static readonly DefaultRequestHandlerProvider Instance = new DefaultRequestHandlerProvider();
+
+        private DefaultRequestHandlerProvider() { }
 
         public IRequestHandler<TRequest, TResponse> GetHandler<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
         {

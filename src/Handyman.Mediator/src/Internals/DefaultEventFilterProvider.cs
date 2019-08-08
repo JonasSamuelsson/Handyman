@@ -2,11 +2,11 @@
 
 namespace Handyman.Mediator.Internals
 {
-    internal class EventFilterProvider : IEventFilterProvider
+    internal class DefaultEventFilterProvider : IEventFilterProvider
     {
-        internal static readonly IEventFilterProvider Instance = new EventFilterProvider();
+        internal static readonly IEventFilterProvider Instance = new DefaultEventFilterProvider();
 
-        private EventFilterProvider() { }
+        private DefaultEventFilterProvider() { }
 
         public virtual IEnumerable<IEventFilter<TEvent>> GetFilters<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
         {

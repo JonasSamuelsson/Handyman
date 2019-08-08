@@ -20,7 +20,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, string>>().Type<Handler>();
             });
 
-            var s = await new Mediator(container.GetService, new Configuration { RequestFilterProvider = RequestFilterProvider.Instance })
+            var s = await new Mediator(container.GetService, new Configuration { RequestFilterProvider = DefaultRequestFilterProvider.Instance })
                 .Send(new Request());
 
             s.ShouldBe("abc");

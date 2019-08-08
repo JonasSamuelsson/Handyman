@@ -1,6 +1,6 @@
-﻿using Maestro;
+﻿using Handyman.Mediator.Internals;
+using Maestro;
 using Shouldly;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,7 +10,7 @@ namespace Handyman.Mediator.Tests
     public class RequestFiltersTests
     {
         [Fact]
-        public async Task ShouldNotExecuteFiltersIfPipelineIsDisabled()
+        public async Task ShouldNotExecuteFiltersIfDisabled()
         {
             var container = new Container();
             var filter = new RequestFilter();
@@ -21,7 +21,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, Response>>().Instance(handler);
             });
 
-            var mediator = new Mediator(container.GetService, new Configuration { RequestPipelineEnabled = false });
+            var mediator = new Mediator(container.GetService, new Configuration { RequestFilterProvider = RequestFiltersDisabled.Instance });
             var request = new Request();
 
             await mediator.Send(request, CancellationToken.None);
@@ -44,7 +44,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestFilter<Request, Response>>().Factory(() => filter2);
             });
 
-            var mediator = new Mediator(container.GetService, new Configuration { RequestPipelineEnabled = true });
+            var mediator = new Mediator(container.GetService);
             var request = new Request();
 
             await mediator.Send(request, CancellationToken.None);

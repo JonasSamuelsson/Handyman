@@ -4,58 +4,14 @@ namespace Handyman.Mediator
 {
     public class Configuration
     {
-        /// <summary>
-        /// Enable/disable event pipeline, default is false.
-        /// </summary>
-        public bool EventPipelineEnabled { get; set; } = false;
-
-        public IEventHandlerProvider EventHandlerProvider { get; set; }
         public IEventFilterProvider EventFilterProvider { get; set; }
-
-        /// <summary>
-        /// Enable/disable request pipeline, default is false.
-        /// </summary>
-        public bool RequestPipelineEnabled { get; set; } = false;
-
-        public IRequestHandlerProvider RequestHandlerProvider { get; set; }
+        public IEventHandlerProvider EventHandlerProvider { get; set; }
         public IRequestFilterProvider RequestFilterProvider { get; set; }
+        public IRequestHandlerProvider RequestHandlerProvider { get; set; }
 
-        internal IEventHandlerProvider GetEventHandlerProvider()
-        {
-            if (EventHandlerProvider != null)
-                return EventHandlerProvider;
-
-            return Internals.EventHandlerProvider.Instance;
-        }
-
-        internal IEventFilterProvider GetEventFilterProvider()
-        {
-            if (EventFilterProvider != null)
-                return EventFilterProvider;
-
-            if (EventPipelineEnabled)
-                return Internals.EventFilterProvider.Instance;
-
-            return NoEventFilterProvider.Instance;
-        }
-
-        internal IRequestHandlerProvider GetRequestHandlerProvider()
-        {
-            if (RequestHandlerProvider != null)
-                return RequestHandlerProvider;
-
-            return Internals.RequestHandlerProvider.Instance;
-        }
-
-        internal IRequestFilterProvider GetRequestFilterProvider()
-        {
-            if (RequestFilterProvider != null)
-                return RequestFilterProvider;
-
-            if (RequestPipelineEnabled)
-                return Internals.RequestFilterProvider.Instance;
-
-            return NoRequestFiltersProvider.Instance;
-        }
+        internal IEventFilterProvider GetEventFilterProvider() => EventFilterProvider ?? DefaultEventFilterProvider.Instance;
+        internal IEventHandlerProvider GetEventHandlerProvider() => EventHandlerProvider ?? DefaultEventHandlerProvider.Instance;
+        internal IRequestFilterProvider GetRequestFilterProvider() => RequestFilterProvider ?? DefaultRequestFilterProvider.Instance;
+        internal IRequestHandlerProvider GetRequestHandlerProvider() => RequestHandlerProvider ?? DefaultRequestHandlerProvider.Instance;
     }
 }

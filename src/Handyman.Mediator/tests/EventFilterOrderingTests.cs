@@ -22,7 +22,7 @@ namespace Handyman.Mediator.Tests
 
             var @event = new Event();
 
-            await new Mediator(container.GetService, new Configuration { EventFilterProvider = EventFilterProvider.Instance })
+            await new Mediator(container.GetService, new Configuration { EventFilterProvider = DefaultEventFilterProvider.Instance })
                 .Publish(@event);
 
             @event.Text.ShouldBe("abc");

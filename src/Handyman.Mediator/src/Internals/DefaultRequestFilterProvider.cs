@@ -2,11 +2,11 @@
 
 namespace Handyman.Mediator.Internals
 {
-    internal class RequestFilterProvider : IRequestFilterProvider
+    internal class DefaultRequestFilterProvider : IRequestFilterProvider
     {
-        internal static readonly IRequestFilterProvider Instance = new RequestFilterProvider();
+        internal static readonly IRequestFilterProvider Instance = new DefaultRequestFilterProvider();
 
-        private RequestFilterProvider() { }
+        private DefaultRequestFilterProvider() { }
 
         public virtual IEnumerable<IRequestFilter<TRequest, TResponse>> GetFilters<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
         {

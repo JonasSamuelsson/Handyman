@@ -6,7 +6,7 @@ namespace Handyman.Mediator.Internals
 {
     internal static class EventPipeline
     {
-        internal static Task Execute<TEvent>(TEvent @event, Providers providers, CancellationToken cancellationToken) where TEvent : IEvent
+        internal static Task Execute<TEvent>(Providers providers, TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent
         {
             var filters = providers.EventFilterProvider.GetFilters<TEvent>(providers.ServiceProvider).ToListOptimized();
             var handlers = providers.EventHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToListOptimized();

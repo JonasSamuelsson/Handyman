@@ -3,9 +3,11 @@ using System.Linq;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class NoRequestFiltersProvider : IRequestFilterProvider
+    public class RequestFiltersDisabled : IRequestFilterProvider
     {
-        internal static readonly NoRequestFiltersProvider Instance = new NoRequestFiltersProvider();
+        public static readonly RequestFiltersDisabled Instance = new RequestFiltersDisabled();
+
+        private RequestFiltersDisabled() { }
 
         public IEnumerable<IRequestFilter<TRequest, TResponse>> GetFilters<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
         {
