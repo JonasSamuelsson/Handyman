@@ -134,7 +134,7 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class EventHandler : SyncEventHandler<Event>
+        private class EventHandler : EventHandler<Event>
         {
             public bool Executed { get; set; }
 

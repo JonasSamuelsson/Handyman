@@ -53,7 +53,7 @@ namespace Handyman.Mediator.Tests
             public List<string> List { get; set; } = new List<string>();
         }
 
-        private class EventHandler : SyncEventHandler<Event>
+        private class EventHandler : EventHandler<Event>
         {
             protected override void Handle(Event @event) { }
         }

@@ -9,25 +9,56 @@ namespace Handyman.Mediator.Tests
     public class RequestHandlerTests
     {
         [Fact]
-        public async Task UseRequestHandler()
+        public async Task AsyncVoidImplementation()
         {
-            var handler = new RequestHandler();
+            var handler = new AsyncVoidHandler();
             var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
             var mediator = new Mediator(container.GetService);
-            await mediator.Send(new VoidRequest(), CancellationToken.None);
-            handler.Executed.ShouldBeTrue();
+            await mediator.Send(new VoidRequest());
+        }
+
+        [Fact]
+        public async Task SyncVoidImplementation()
+        {
+            var handler = new SyncVoidHandler();
+            var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
+            var mediator = new Mediator(container.GetService);
+            await mediator.Send(new VoidRequest());
+        }
+
+        [Fact]
+        public async Task SyncImplementation()
+        {
+            var handler = new SyncHandler();
+            var container = new Container(x => x.Add<IRequestHandler<StringRequest, string>>().Instance(handler));
+            var mediator = new Mediator(container.GetService);
+            (await mediator.Send(new StringRequest())).ShouldBe("success");
         }
 
         private class VoidRequest : IRequest { }
 
-        private class RequestHandler : RequestHandler<VoidRequest>
+        private class AsyncVoidHandler : RequestHandler<VoidRequest>
         {
-            public bool Executed { get; set; }
-
-            protected override Task Handle(VoidRequest request, CancellationToken cancellationToken)
+            protected override Task HandleAsync(VoidRequest request, CancellationToken cancellationToken)
             {
-                Executed = true;
                 return Task.CompletedTask;
+            }
+        }
+
+        private class SyncVoidHandler : RequestHandler<VoidRequest>
+        {
+            protected override void Handle(VoidRequest request, CancellationToken cancellationToken)
+            {
+            }
+        }
+
+        private class StringRequest : IRequest<string> { }
+
+        private class SyncHandler : RequestHandler<StringRequest, string>
+        {
+            protected override string Handle(StringRequest request, CancellationToken cancellationToken)
+            {
+                return "success";
             }
         }
     }

@@ -50,7 +50,7 @@ namespace Handyman.Mediator.Tests
 
         private class Request : IRequest<string[]> { }
 
-        private class RequestHandler : SyncRequestHandler<Request, string[]>
+        private class RequestHandler : RequestHandler<Request, string[]>
         {
             protected override string[] Handle(Request request, CancellationToken cancellationToken)
             {

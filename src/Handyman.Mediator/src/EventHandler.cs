@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public abstract class SyncEventHandler<TEvent> : IEventHandler<TEvent> where TEvent : IEvent
+    public abstract class EventHandler<TEvent> : IEventHandler<TEvent> where TEvent : IEvent
     {
         Task IEventHandler<TEvent>.Handle(TEvent @event, CancellationToken cancellationToken)
         {

@@ -1,34 +1,27 @@
-﻿using System.Threading;
+﻿using Maestro;
 using System.Threading.Tasks;
-using Maestro;
-using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
 {
-    public class SyncEventHandlerTests
+    public class EventHandlerTests
     {
         [Fact]
-        public async Task UseSyncEventHandler()
+        public async Task SyncImplementation()
         {
             var handler = new EventHandler();
             var container = new Container(x => x.Add<IEventHandler<Event>>().Instance(handler));
             var mediator = new Mediator(container.GetService);
 
-            await Task.WhenAll(mediator.Publish(new Event(), CancellationToken.None));
-
-            handler.Executed.ShouldBeTrue();
+            await mediator.Publish(new Event());
         }
 
         private class Event : IEvent { }
 
-        private class EventHandler : SyncEventHandler<Event>
+        private class EventHandler : EventHandler<Event>
         {
-            public bool Executed { get; set; }
-
             protected override void Handle(Event @event)
             {
-                Executed = true;
             }
         }
     }

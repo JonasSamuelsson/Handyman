@@ -134,7 +134,7 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class RequestHandler : SyncRequestHandler<Request>
+        private class RequestHandler : RequestHandler<Request>
         {
             public bool Executed { get; set; }
 
