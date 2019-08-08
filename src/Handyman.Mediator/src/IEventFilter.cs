@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator
@@ -7,6 +6,6 @@ namespace Handyman.Mediator
     public interface IEventFilter<TEvent>
         where TEvent : IEvent
     {
-        Task Execute(TEvent @event, CancellationToken cancellationToken, Func<TEvent, CancellationToken, Task> next);
+        Task Execute(EventFilterContext<TEvent> context, Func<Task> next);
     }
 }

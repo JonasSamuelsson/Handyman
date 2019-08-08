@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -63,10 +62,10 @@ namespace Handyman.Mediator.Tests
         {
             public string String { get; set; }
 
-            public Task Execute(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
+            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
             {
-                @event.List.Add(String);
-                return next(@event, cancellationToken);
+                context.Event.List.Add(String);
+                return next();
             }
         }
     }

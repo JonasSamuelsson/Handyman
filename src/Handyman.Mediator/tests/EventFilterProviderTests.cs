@@ -34,7 +34,7 @@ namespace Handyman.Mediator.Tests
         {
             public int Order => -1;
 
-            public Task Execute(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
+            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
             {
                 throw new NotImplementedException();
             }
@@ -42,7 +42,7 @@ namespace Handyman.Mediator.Tests
 
         private class FilterB : IEventFilter<Event>
         {
-            public Task Execute(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
+            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
             {
                 throw new NotImplementedException();
             }
@@ -52,7 +52,7 @@ namespace Handyman.Mediator.Tests
         {
             public int Order => 1;
 
-            public Task Execute(Event @event, CancellationToken cancellationToken, Func<Event, CancellationToken, Task> next)
+            public Task Execute(EventFilterContext<Event> context, Func<Task> next)
             {
                 throw new NotImplementedException();
             }
