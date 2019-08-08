@@ -18,13 +18,13 @@ namespace Handyman.Mediator.Tests
             var container = new Container(x =>
             {
                 x.Add<IRequestHandler<Request, string[]>>().Instance(new RequestHandler());
-                x.Add<IRequestPipelineHandler<Request, string[]>>().Instance(new RequestPipelineHandler { String = "1" });
-                x.Add<IRequestPipelineHandler<Request, string[]>>().Instance(new RequestPipelineHandler { String = "2" });
-                x.Add<IRequestPipelineHandler<Request, string[]>>().Instance(new RequestPipelineHandler { String = "3" });
+                x.Add<IRequestFilter<Request, string[]>>().Instance(new RequestFilter { String = "1" });
+                x.Add<IRequestFilter<Request, string[]>>().Instance(new RequestFilter { String = "2" });
+                x.Add<IRequestFilter<Request, string[]>>().Instance(new RequestFilter { String = "3" });
             });
 
-            var provider = new RequestPipelineHandlerProvider { Comparison = (a, b) => string.Compare(a.String, b.String, StringComparison.Ordinal) };
-            var configuration = new Configuration { RequestPipelineHandlerProvider = provider };
+            var provider = new RequestFilterProvider { Comparison = (a, b) => string.Compare(a.String, b.String, StringComparison.Ordinal) };
+            var configuration = new Configuration { RequestFilterProvider = provider };
 
             var s1 = await new Mediator(container.GetService, configuration).Send(new Request());
             s1.ShouldBe(new[] { "3", "2", "1" });
@@ -35,16 +35,16 @@ namespace Handyman.Mediator.Tests
             s2.ShouldBe(new[] { "1", "2", "3" });
         }
 
-        private class RequestPipelineHandlerProvider : IRequestPipelineHandlerProvider
+        private class RequestFilterProvider : IRequestFilterProvider
         {
-            public Comparison<RequestPipelineHandler> Comparison { get; set; }
+            public Comparison<RequestFilter> Comparison { get; set; }
 
-            public IEnumerable<IRequestPipelineHandler<TRequest, TResponse>> GetHandlers<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
+            public IEnumerable<IRequestFilter<TRequest, TResponse>> GetFilters<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
             {
-                var type = typeof(IEnumerable<IRequestPipelineHandler<TRequest, TResponse>>);
-                var handlers = ((IEnumerable)serviceProvider.Invoke(type)).OfType<RequestPipelineHandler>().ToList();
+                var type = typeof(IEnumerable<IRequestFilter<TRequest, TResponse>>);
+                var handlers = ((IEnumerable)serviceProvider.Invoke(type)).OfType<RequestFilter>().ToList();
                 handlers.Sort(Comparison);
-                return handlers.OfType<IRequestPipelineHandler<TRequest, TResponse>>();
+                return handlers.OfType<IRequestFilter<TRequest, TResponse>>();
             }
         }
 
@@ -58,11 +58,11 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class RequestPipelineHandler : IRequestPipelineHandler<Request, string[]>
+        private class RequestFilter : IRequestFilter<Request, string[]>
         {
             public string String { get; set; }
 
-            public async Task<string[]> Handle(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<string[]>> next)
+            public async Task<string[]> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<string[]>> next)
             {
                 return (await next(request, cancellationToken)).Append(String).ToArray();
             }

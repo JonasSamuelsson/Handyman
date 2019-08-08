@@ -17,10 +17,10 @@ namespace Handyman.Mediator
         {
             _providers = new Providers
             {
+                EventFilterProvider = configuration.GetEventFilterProvider(),
                 EventHandlerProvider = configuration.GetEventHandlerProvider(),
-                EventFilterProvider = configuration.GetEventPipelineHandlerProvider(),
+                RequestFilterProvider = configuration.GetRequestFilterProvider(),
                 RequestHandlerProvider = configuration.GetRequestHandlerProvider(),
-                RequestPipelineHandlerProvider = configuration.GetRequestPipelineHandlerProvider(),
                 ServiceProvider = serviceProvider
             };
         }

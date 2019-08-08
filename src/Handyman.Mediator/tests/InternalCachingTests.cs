@@ -18,7 +18,7 @@ namespace Handyman.Mediator.Tests
 
             for (var i = 1; i <= 3; i++)
             {
-                container.Configure(x => x.Add<IRequestPipelineHandler<Request, int>>().Type<RequestPipelineHandler>());
+                container.Configure(x => x.Add<IRequestFilter<Request, int>>().Type<RequestFilter>());
 
                 // handler
 
@@ -29,7 +29,7 @@ namespace Handyman.Mediator.Tests
 
                 (await mediatorWithoutPipeline.Send(new Request())).ShouldBe(0);
 
-                // handler & pipeline
+                // handler & Filter
 
                 var mediatorWithPipeline = new Mediator(container.GetService, new Configuration
                 {
@@ -53,9 +53,9 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class RequestPipelineHandler : IRequestPipelineHandler<Request, int>
+        private class RequestFilter : IRequestFilter<Request, int>
         {
-            public Task<int> Handle(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<int>> next)
+            public Task<int> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<int>> next)
             {
                 request.Number++;
                 return next(request, cancellationToken);

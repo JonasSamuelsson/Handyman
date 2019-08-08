@@ -18,7 +18,7 @@ namespace Handyman.Mediator
         public bool RequestPipelineEnabled { get; set; } = false;
 
         public IRequestHandlerProvider RequestHandlerProvider { get; set; }
-        public IRequestPipelineHandlerProvider RequestPipelineHandlerProvider { get; set; }
+        public IRequestFilterProvider RequestFilterProvider { get; set; }
 
         internal IEventHandlerProvider GetEventHandlerProvider()
         {
@@ -28,7 +28,7 @@ namespace Handyman.Mediator
             return Internals.EventHandlerProvider.Instance;
         }
 
-        internal IEventFilterProvider GetEventPipelineHandlerProvider()
+        internal IEventFilterProvider GetEventFilterProvider()
         {
             if (EventFilterProvider != null)
                 return EventFilterProvider;
@@ -47,15 +47,15 @@ namespace Handyman.Mediator
             return Internals.RequestHandlerProvider.Instance;
         }
 
-        internal IRequestPipelineHandlerProvider GetRequestPipelineHandlerProvider()
+        internal IRequestFilterProvider GetRequestFilterProvider()
         {
-            if (RequestPipelineHandlerProvider != null)
-                return RequestPipelineHandlerProvider;
+            if (RequestFilterProvider != null)
+                return RequestFilterProvider;
 
             if (RequestPipelineEnabled)
-                return Handyman.Mediator.RequestPipelineHandlerProvider.Instance;
+                return Handyman.Mediator.RequestFilterProvider.Instance;
 
-            return NoRequestPipelineHandlerProvider.Instance;
+            return NoRequestFiltersProvider.Instance;
         }
     }
 }

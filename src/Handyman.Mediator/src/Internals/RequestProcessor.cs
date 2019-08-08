@@ -19,11 +19,11 @@ namespace Handyman.Mediator.Internals
 
         protected Task<TResponse> Process(TRequest request, Providers providers, CancellationToken cancellationToken)
         {
+            var filters = providers.RequestFilterProvider.GetFilters<TRequest, TResponse>(providers.ServiceProvider).ToArray();
             var handler = providers.RequestHandlerProvider.GetHandler<TRequest, TResponse>(providers.ServiceProvider);
-            var pipelineHandlers = providers.RequestPipelineHandlerProvider.GetHandlers<TRequest, TResponse>(providers.ServiceProvider).ToArray();
 
             var index = 0;
-            var length = pipelineHandlers.Length;
+            var length = filters.Length;
 
             return Execute(request, cancellationToken);
 
@@ -34,8 +34,7 @@ namespace Handyman.Mediator.Internals
                 if (index == length)
                     return handler.Handle(r, ct);
 
-                var pipelineHandler = pipelineHandlers[index++];
-                return pipelineHandler.Handle(r, ct, Execute);
+                return filters[index++].Execute(r, ct, Execute);
             }
         }
     }

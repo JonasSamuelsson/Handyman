@@ -36,15 +36,15 @@ namespace Handyman.Mediator.Tests
         }
 
         [Fact]
-        public async Task ShouldNotInvokePipelineHandlerIfAlreadyCancelled()
+        public async Task ShouldNotInvokeFiltersIfAlreadyCancelled()
         {
             var cts = new CancellationTokenSource();
-            var pipelineHandler = new RequestPipelineHandler(cts);
+            var filter = new RequestFilter(cts);
             var handler = new RequestHandler();
 
             var container = new Container(x =>
             {
-                x.Add<IRequestPipelineHandler<Request, Void>>().Instance(pipelineHandler);
+                x.Add<IRequestFilter<Request, Void>>().Instance(filter);
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
@@ -55,20 +55,20 @@ namespace Handyman.Mediator.Tests
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
                 .Message.ShouldBe("oce");
 
-            pipelineHandler.Executed.ShouldBeFalse();
+            filter.Executed.ShouldBeFalse();
             handler.Executed.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task ShouldStopProcessingIfCancelledAfterPipeline()
+        public async Task ShouldStopProcessingIfCancelledAfterFilters()
         {
             var cts = new CancellationTokenSource();
-            var pipelineHandler = new RequestPipelineHandler(cts);
+            var filter = new RequestFilter(cts);
             var handler = new RequestHandler();
 
             var container = new Container(x =>
             {
-                x.Add<IRequestPipelineHandler<Request, Void>>().Instance(pipelineHandler);
+                x.Add<IRequestFilter<Request, Void>>().Instance(filter);
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
@@ -77,22 +77,22 @@ namespace Handyman.Mediator.Tests
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
                 .Message.ShouldBe("oce");
 
-            pipelineHandler.Executed.ShouldBeTrue();
+            filter.Executed.ShouldBeTrue();
             handler.Executed.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task ShouldStopProcessingIfCancelledDuringPipeline()
+        public async Task ShouldStopProcessingIfCancelledDuringFilters()
         {
             var cts = new CancellationTokenSource();
-            var pipelineHandler1 = new RequestPipelineHandler(cts);
-            var pipelineHandler2 = new RequestPipelineHandler(cts);
+            var filter1 = new RequestFilter(cts);
+            var filter2 = new RequestFilter(cts);
             var handler = new RequestHandler();
 
             var container = new Container(x =>
             {
-                x.Add<IRequestPipelineHandler<Request, Void>>().Instance(pipelineHandler1);
-                x.Add<IRequestPipelineHandler<Request, Void>>().Instance(pipelineHandler2);
+                x.Add<IRequestFilter<Request, Void>>().Instance(filter1);
+                x.Add<IRequestFilter<Request, Void>>().Instance(filter2);
                 x.Add<IRequestHandler<Request, Void>>().Instance(handler);
             });
 
@@ -101,8 +101,8 @@ namespace Handyman.Mediator.Tests
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
                 .Message.ShouldBe("oce");
 
-            pipelineHandler1.Executed.ShouldBeTrue();
-            pipelineHandler2.Executed.ShouldBeFalse();
+            filter1.Executed.ShouldBeTrue();
+            filter2.Executed.ShouldBeFalse();
             handler.Executed.ShouldBeFalse();
         }
 
@@ -120,18 +120,18 @@ namespace Handyman.Mediator.Tests
 
         private class Request : IRequest { }
 
-        private class RequestPipelineHandler : IRequestPipelineHandler<Request, Void>
+        private class RequestFilter : IRequestFilter<Request, Void>
         {
             private readonly CancellationTokenSource _cancellationTokenSource;
 
-            public RequestPipelineHandler(CancellationTokenSource cancellationTokenSource)
+            public RequestFilter(CancellationTokenSource cancellationTokenSource)
             {
                 _cancellationTokenSource = cancellationTokenSource;
             }
 
             public bool Executed { get; set; }
 
-            public Task<Void> Handle(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<Void>> next)
+            public Task<Void> Execute(Request request, CancellationToken cancellationToken, Func<Request, CancellationToken, Task<Void>> next)
             {
                 _cancellationTokenSource.Cancel();
                 Executed = true;
@@ -141,7 +141,6 @@ namespace Handyman.Mediator.Tests
 
         private class RequestHandler : SyncRequestHandler<Request>
         {
-
             public bool Executed { get; set; }
 
             protected override void Handle(Request request, CancellationToken cancellationToken)
