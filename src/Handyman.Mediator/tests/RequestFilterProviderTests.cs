@@ -34,7 +34,8 @@ namespace Handyman.Mediator.Tests
         {
             public int Order => -1;
 
-            public Task<object> Execute(RequestFilterContext<Request> context, Func<Task<object>> next)
+            public Task<object> Execute(RequestFilterContext<Request> context,
+                RequestFilterExecutionDelegate<object> next)
             {
                 throw new NotImplementedException();
             }
@@ -42,7 +43,8 @@ namespace Handyman.Mediator.Tests
 
         private class FilterB : IRequestFilter<Request, object>
         {
-            public Task<object> Execute(RequestFilterContext<Request> context, Func<Task<object>> next)
+            public Task<object> Execute(RequestFilterContext<Request> context,
+                RequestFilterExecutionDelegate<object> next)
             {
                 throw new NotImplementedException();
             }
@@ -52,7 +54,8 @@ namespace Handyman.Mediator.Tests
         {
             public int Order => 1;
 
-            public Task<object> Execute(RequestFilterContext<Request> context, Func<Task<object>> next)
+            public Task<object> Execute(RequestFilterContext<Request> context,
+                RequestFilterExecutionDelegate<object> next)
             {
                 throw new NotImplementedException();
             }

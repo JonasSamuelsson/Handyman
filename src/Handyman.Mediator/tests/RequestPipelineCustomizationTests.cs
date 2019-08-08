@@ -62,7 +62,8 @@ namespace Handyman.Mediator.Tests
         {
             public string String { get; set; }
 
-            public async Task<string[]> Execute(RequestFilterContext<Request> context, Func<Task<string[]>> next)
+            public async Task<string[]> Execute(RequestFilterContext<Request> context,
+                RequestFilterExecutionDelegate<string[]> next)
             {
                 return (await next()).Append(String).ToArray();
             }

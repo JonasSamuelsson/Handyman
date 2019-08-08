@@ -73,7 +73,8 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task<Response> Execute(RequestFilterContext<Request> context, Func<Task<Response>> next)
+            public Task<Response> Execute(RequestFilterContext<Request> context,
+                RequestFilterExecutionDelegate<Response> next)
             {
                 Executed = true;
                 return next();
