@@ -82,7 +82,7 @@ Writing the same query using this package looks like this.
 
 ``` csharp
 var query = new TableQueryBuilder<MyEntity>()
-    .Where(root => root.And(and =>
+    .Where(where => where.And(and =>
     {
         and.PartitionKey.Equals("foo");
         and.Or(or =>
