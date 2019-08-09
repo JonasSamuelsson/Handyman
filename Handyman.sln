@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table.Tests", "src\Handyman.Azure.Cosmos.Table\tests\Handyman.Azure.Cosmos.Table.Tests.csproj", "{95186390-09E5-4D24-821C-197E8AF7C8FD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Samples.WhenAnyRequestHandler", "src\Handyman.Mediator\samples\WhenAnyRequestHandler\Handyman.Mediator.Samples.WhenAnyRequestHandler.csproj", "{D392E89B-CE54-4C23-AFD6-BBFED3DD9A55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95186390-09E5-4D24-821C-197E8AF7C8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D392E89B-CE54-4C23-AFD6-BBFED3DD9A55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D392E89B-CE54-4C23-AFD6-BBFED3DD9A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D392E89B-CE54-4C23-AFD6-BBFED3DD9A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D392E89B-CE54-4C23-AFD6-BBFED3DD9A55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
