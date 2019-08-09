@@ -45,7 +45,10 @@ All extension methods for operations on `CloudTable` return a customized result 
 ## TableQueryBuilder
 
 Trying to compose queries using the primitives provided by microsoft requieres you to do quite a bit of writing.  
-This is for querying entities where PartitionKey equals `foo`, Number equals `0` or is greater than `5` and we can expect more than 1000 entities found.
+
+The query builder provides a strongly typed api for composing queries and also has support for string starts with filters.
+
+This sample is querying entities where PartitionKey equals `foo`, Number equals `0` or is greater than `5` and we can expect more than 1000 entities found.
 
 ``` csharp
 var partitionKeyFilter = TableQuery.GenerateFilterCondition(nameof(MyEntity.PartitionKey), QueryComparisons.Equal, "foo");
@@ -75,9 +78,9 @@ foreach (var entity in entities)
 }
 ```
 
-Writing the same query using this package looks like this with the added benefit of being strongly typed.
+Writing the same query using this package looks like this.
 
-``` charp
+``` csharp
 var query = new TableQueryBuilder<MyEntity>()
     .Where(root => root.And(and =>
     {
