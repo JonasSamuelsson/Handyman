@@ -32,7 +32,7 @@ namespace Handyman.Mediator.Internals
         private static Task<TResponse> Execute(List<IRequestFilter<TRequest, TResponse>> filters,
             IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
         {
-            filters.Sort(CompareFilters);
+            filters.Sort(FilterComparer.CompareFilters);
 
             var context = new RequestFilterContext<TRequest>
             {
@@ -63,16 +63,6 @@ namespace Handyman.Mediator.Internals
             cancellationToken.ThrowIfCancellationRequested();
 
             return handler.Handle(request, cancellationToken);
-        }
-
-        private static int CompareFilters(object x, object y)
-        {
-            return GetSortOrder(x).CompareTo(GetSortOrder(y));
-        }
-
-        private static int GetSortOrder(object x)
-        {
-            return (x as IOrderedFilter)?.Order ?? 0;
         }
     }
 }

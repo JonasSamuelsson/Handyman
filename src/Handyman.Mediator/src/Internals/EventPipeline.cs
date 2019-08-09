@@ -19,7 +19,7 @@ namespace Handyman.Mediator.Internals
         private static Task Execute<TEvent>(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
-            filters.Sort(CompareFilters);
+            filters.Sort(FilterComparer.CompareFilters);
 
             var context = new EventFilterContext<TEvent>
             {
@@ -57,16 +57,6 @@ namespace Handyman.Mediator.Internals
             }
 
             return Task.WhenAll(tasks);
-        }
-
-        private static int CompareFilters(object x, object y)
-        {
-            return GetSortOrder(x).CompareTo(GetSortOrder(y));
-        }
-
-        private static int GetSortOrder(object x)
-        {
-            return (x as IOrderedFilter)?.Order ?? 0;
         }
     }
 }
