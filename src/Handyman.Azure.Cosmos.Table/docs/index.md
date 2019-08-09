@@ -75,7 +75,7 @@ foreach (var entity in entities)
 }
 ```
 
-Writing the same query using this package looks like this with the added benefit of being stringly typed.
+Writing the same query using this package looks like this with the added benefit of being strongly typed.
 
 ``` charp
 var query = new TableQueryBuilder<MyEntity>()
