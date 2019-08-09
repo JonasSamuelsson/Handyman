@@ -10,7 +10,7 @@ Mediator has two kinds of messages
 * Requests - dispatched to a single handler returning a response.
 * Events - dispatched to multiple handlers.
 
-The core interface & class used to dispatch messages is `IMediator` & `Mediator`.
+The core types used to dispatch messages are `IMediator` & `Mediator`.
 
 ``` csharp
 public interface IMediator
@@ -24,12 +24,13 @@ The `Mediator` class takes a service provider delegate and an optional configura
 
 There are extension methods available for `Publish` and `Send` that doesn't take a `CancellationToken`.
 
-`Mediator` supports pipeline handlers that allows for code to be executed before the final request/event handler(s).
+`Mediator` also has support for filters that allows for code to be executed before and/or after the final request/event handler(s).
 
 ## Requests
 
-Requests can be used both for commands and queries.  
-First, create a message:
+Requests are used for request/response kind of work loads where the request is handled by exactly one handler that produces a response. Lets have a look with an example.  
+
+First, we are defining a request message stating that the response should be of type `string`:
 
 ``` csharp
 class Echo : IRequest<string>
@@ -50,7 +51,7 @@ class EchoHandler : IRequestHandler<Echo, string>
 }
 ```
 
-Finally, send message:
+Finally, send the request message:
 
 ``` csharp
 var s = await mediator.Send(new Echo { Message = "Hello" });
@@ -61,7 +62,7 @@ Console.WriteLine(s);
 
 There are two types of request, those that return a value and those that don't.
 
-* `IRequest<TResponse>` - returns a value.
+* `IRequest<TResponse>` - returns a value of type TResponse.
 * `IRequest` - does not return a value.
 
 `IRequest` actually implements `IRequest<Void>` to simplify the execution pipeline.
@@ -76,15 +77,16 @@ public interface IRequestHandler<TRequest, TResponse>
 }
 ```
 
-In case the request doesn't have a response and/or if the handler isn't async there are some helper classes that can be used:
+In case the request doesn't have a response and/or if the handler isn't async there are based classes that can be used:
 
-* `RequestHandler<TRequest>` - no response
-* `SyncRequestHandler<TRequest>` - synchronous & no response
-* `SyncRequestHandler<TRequest, TResponse>` - synchronous
+* `RequestHandler<TRequest>` - no response, sync or async
+* `RequestHandler<TRequest, TResponse>` - synch
 
 ## Events
 
-First, create message:
+Events can be used to notify other parts of the system that something has happened and are handled by zero to many handlers.
+
+Lets defaine a event message:
 
 ``` csharp
 public class Ping : IEvent {}
@@ -112,42 +114,40 @@ public class PingHandler2 : IEventHandler<Ping>
 }
 ```
 
-Finally, publish message:
+Finally, publish the event message:
 
 ``` csharp
 await mediator.Publish(new Ping());
 ```
 
-## Pipelines
+## Filters
 
-Pipelines enables the ability to execute code before the actual handler is executed.
+Filters enables the ability to execute code before and/or after the actual handler is executed.  
+They can be used to inspect and/or modify the request/response and even terminate the execution pipeline.
 
-Pipelines are supported by both requests and events, but needs to be enabled via the configuration object passed in to the mediator.
-
-``` csharp
-new Configuration
-{
-    EventPipelineEnabled = true,
-    RequestPipelineEnabled = true
-}
-```
-
-Pipeline handlers must implement one of the pipeline handler interfaces
+Filters are supported by both requests and events and must implement one of the filter interfaces
 
 ``` csharp
-public interface IRequestPipelineHandler<TRequest, TResponse>
+public interface IRequestFilter<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, Func<TRequest, CancellationToken, Task<TResponse>> next);
+    Task<TResponse> Execute(RequestFilterContext<TRequest> context, RequestFilterExecutionDelegate next);
 }
 
-public interface IEventPipelineHandler<TEvent>
+public interface IEventFilter<TEvent>
     where TEvent : IEvent
 {
-    Task Handle(TEvent @event, CancellationToken cancellationToken, Func<TEvent, CancellationToken, Task> next);
+    Task Execute(EventFilterContext<TEvent> context, EventFilterExecutionDelegate next);
 }
 ```
 
-## Customization
+Filter execution order can be controlled be implementing the `IOrderedFilter` interface.  
+Filters are executed in ascending order and filters that doesn't provide an explicit order defaults to `zero`.
 
-Mediator allows you to customize how requests and/or events are processed by providing your own *HandlerProvider implmentation.
+## Customization (advanced usage)
+
+There is a way to customize how request/events are processed by providing your own request/event filter/handler provider.
+
+The [WhenAnyRequestHandler](./../samples/WhenAnyRequestHandler/Program.cs) sample contains an implementation where the request can be decorated with a `WhenAnyAttribute` which then informs the custom `RequestHandlerProvider` to resolve multiple request handlers and return the response from the first one that finishes.
+
+The nice thing with this kind of implementation is that neither the caller nor the handlers know that there are multiple handlers involved, following the open closed priciple from SOLID =)
