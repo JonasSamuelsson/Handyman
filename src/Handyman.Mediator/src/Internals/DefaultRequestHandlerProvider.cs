@@ -1,4 +1,7 @@
-﻿namespace Handyman.Mediator.Internals
+﻿using System.Linq;
+using System.Reflection;
+
+namespace Handyman.Mediator.Internals
 {
     internal class DefaultRequestHandlerProvider : IRequestHandlerProvider
     {
@@ -8,8 +11,12 @@
 
         public IRequestHandler<TRequest, TResponse> GetHandler<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
         {
-            var type = typeof(IRequestHandler<TRequest, TResponse>);
-            return (IRequestHandler<TRequest, TResponse>)serviceProvider.Invoke(type);
+            var attribute = typeof(TRequest).GetCustomAttributes<RequestHandlerProviderAttribute>(true).SingleOrDefault();
+
+            if (attribute != null)
+                return attribute.GetHandler<TRequest, TResponse>(serviceProvider);
+
+            return (IRequestHandler<TRequest, TResponse>)serviceProvider.Invoke(typeof(IRequestHandler<TRequest, TResponse>));
         }
     }
 }
