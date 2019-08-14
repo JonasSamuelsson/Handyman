@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Handyman.Mediator.Internals
 {
@@ -10,8 +12,19 @@ namespace Handyman.Mediator.Internals
 
         public IEnumerable<IEventHandler<TEvent>> GetHandlers<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
         {
-            var type = typeof(IEnumerable<IEventHandler<TEvent>>);
-            return (IEnumerable<IEventHandler<TEvent>>)serviceProvider.Invoke(type);
+            var attribute = typeof(TEvent).GetCustomAttributes<EventHandlerProviderAttribute>(true).SingleOrDefault();
+
+            if (attribute == null)
+                return GetDefaultHandlers<TEvent>(serviceProvider);
+
+            var handlers = GetDefaultHandlers<TEvent>(serviceProvider).ToListOptimized();
+            handlers.AddRange(attribute.GetHandlers<TEvent>(serviceProvider));
+            return handlers;
+        }
+
+        private static IEnumerable<IEventHandler<TEvent>> GetDefaultHandlers<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
+        {
+            return (IEnumerable<IEventHandler<TEvent>>)serviceProvider.Invoke(typeof(IEnumerable<IEventHandler<TEvent>>));
         }
     }
 }
