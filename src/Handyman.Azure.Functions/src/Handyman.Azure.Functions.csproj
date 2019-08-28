@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
-		<PackageId>Handyman.Mediator</PackageId>
+		<PackageId>Handyman.Azure.Functions</PackageId>
 		<Authors>Jonas Samuelsson</Authors>
 		<Version>1.0.0-beta.20190828.1</Version>
 		<Company />
