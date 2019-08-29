@@ -107,10 +107,10 @@ A batch has a upper limit of 100 operations, with this builder you can add as ma
 
 ``` csharp
 var batches = new TableBatchOperationBuilder()
-    .Insert(entity1)
+    .Delete(entity1)
     .Insert(entity2)
     ...
-    .Insert(entity999)
+    .Replace(entity999)
     .Build();
 
 foreach (var batch in batches)
