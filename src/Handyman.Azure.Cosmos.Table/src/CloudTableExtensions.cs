@@ -129,7 +129,9 @@ namespace Handyman.Azure.Cosmos.Table
             {
                 ETag = result.Etag,
                 HttpStatusCode = result.HttpStatusCode,
-                Entity = (TEntity)result.Result
+                Entity = (TEntity)result.Result,
+                RequestCharge = result.RequestCharge,
+                SessionToken = result.SessionToken
             };
         }
     }

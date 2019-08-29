@@ -8,6 +8,8 @@ namespace Handyman.Azure.Cosmos.Table
         public TEntity Entity { get; set; }
         public string ETag { get; set; }
         public int HttpStatusCode { get; set; }
+        public double? RequestCharge { get; set; }
+        public string SessionToken { get; set; }
 
         public bool HasSuccessStatusCode => HttpStatusCode < 400;
 
