@@ -10,13 +10,16 @@ namespace Handyman.AspNetCore.ApiVersioning
     {
         private readonly StringValues _validVersions;
         private readonly bool _optional;
+        private readonly string _defaultVersion;
         private readonly IApiVersionReader _apiVersionReader;
         private readonly IApiVersionValidator _apiVersionValidator;
 
-        public ApiVersionValidationFilter(StringValues validVersions, bool optional, IApiVersionReader apiVersionReader, IApiVersionValidator apiVersionValidator)
+        public ApiVersionValidationFilter(StringValues validVersions, bool optional, string defaultVersion,
+            IApiVersionReader apiVersionReader, IApiVersionValidator apiVersionValidator)
         {
             _validVersions = validVersions;
             _optional = optional;
+            _defaultVersion = defaultVersion;
             _apiVersionReader = apiVersionReader;
             _apiVersionValidator = apiVersionValidator;
         }
@@ -27,7 +30,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 
             if (_apiVersionValidator.Validate(version, _optional, _validVersions, out var matchedVersion, out var detail))
             {
-                PopulateActionParameter(context, matchedVersion);
+                PopulateActionParameter(context, matchedVersion ?? _defaultVersion);
                 return next();
             }
 
@@ -46,6 +49,9 @@ namespace Handyman.AspNetCore.ApiVersioning
 
         private static void PopulateActionParameter(ActionExecutingContext context, string version)
         {
+            if (string.IsNullOrWhiteSpace(version))
+                return;
+
             var parameters = context.ActionDescriptor.Parameters;
 
             // ReSharper disable once ForCanBeConvertedToForeach

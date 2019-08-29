@@ -21,7 +21,19 @@ namespace Handyman.AspNetCore.ApiVersioning
             _validVersions = versions;
         }
 
+        /// <summary>
+        /// Specify the default version to use if api version is optional and not provided in the request.
+        /// </summary>
+        public string DefaultVersion { get; set; }
+
+        /// <summary>
+        /// Specify if an api version is optional or not, default is false.
+        /// </summary>
         public bool Optional { get; set; }
+
+        /// <summary>
+        /// Custom validator type used for validation.
+        /// </summary>
         public Type Validator { get; set; }
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
@@ -29,7 +41,7 @@ namespace Handyman.AspNetCore.ApiVersioning
             var apiVersionReader = serviceProvider.GetRequiredService<IApiVersionReader>();
             var apiVersionValidator = (IApiVersionValidator)serviceProvider.GetRequiredService(Validator ?? typeof(IApiVersionValidator));
 
-            return new ApiVersionValidationFilter(_validVersions, Optional, apiVersionReader, apiVersionValidator);
+            return new ApiVersionValidationFilter(_validVersions, Optional, DefaultVersion, apiVersionReader, apiVersionValidator);
         }
 
         bool IFilterFactory.IsReusable { get; } = true;
