@@ -1,40 +1,41 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Primitives;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Primitives;
 
 namespace Handyman.Azure.Functions.Http.ApiVersioning
 {
-   [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-   public class ApiVersionAttribute : FunctionInvocationFilterAttribute
-   {
-      private readonly StringValues _validVersions;
+    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    public class ApiVersionAttribute : FunctionInvocationFilterAttribute
+    {
+        private readonly StringValues _validVersions;
 
-      public ApiVersionAttribute(string version)
-         : this(new[] { version })
-      {
-      }
+        public ApiVersionAttribute(string version)
+            : this(new[] {version})
+        {
+        }
 
-      public ApiVersionAttribute(string[] versions)
-      {
-         _validVersions = versions;
-      }
+        public ApiVersionAttribute(string[] versions)
+        {
+            _validVersions = versions;
+        }
 
-      public bool Optional { get; set; }
+        public string DefaultVersion { get; set; }
+        public bool Optional { get; set; }
 
-      public override Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken)
-      {
-         var request = executingContext.Arguments.Values.OfType<HttpRequest>().FirstOrDefault();
+        public override Task OnExecutingAsync(FunctionExecutingContext executingContext,
+            CancellationToken cancellationToken)
+        {
+            var request = executingContext.Arguments.Values.OfType<HttpRequest>().First();
 
-         if (request != null)
-         {
-            request.Headers["api-versioning"] = StringValues.Concat(Optional ? "true" : "false", _validVersions);
-         }
+            request.Headers[HeaderNames.DefaultVersion] = DefaultVersion;
+            request.Headers[HeaderNames.Optional] = Optional.ToString();
+            request.Headers[HeaderNames.ValidVersions] = _validVersions;
 
-         return Task.CompletedTask;
-      }
-   }
+            return Task.CompletedTask;
+        }
+    }
 }

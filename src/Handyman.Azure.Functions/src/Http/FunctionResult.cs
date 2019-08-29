@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace Handyman.Azure.Functions
+namespace Handyman.Azure.Functions.Http
 {
     public class FunctionResult : ActionResult
     {

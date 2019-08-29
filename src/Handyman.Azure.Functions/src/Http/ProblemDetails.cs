@@ -1,40 +1,58 @@
-﻿using System.Dynamic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Net.Http.Headers;
+using System.Dynamic;
 using System.Net;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Handyman.Azure.Functions
+namespace Handyman.Azure.Functions.Http
 {
-   public class ProblemDetails
-   {
-      public ProblemDetails(HttpStatusCode status, string title)
-      {
-         Status = status;
-         Title = title;
-      }
+    public class ProblemDetails
+    {
+        public ProblemDetails(HttpStatusCode status, string title)
+        {
+            Status = status;
+            Title = title;
+        }
 
-      public string Detail { get; set; }
-      public HttpStatusCode Status { get; }
-      public string Title { get; }
+        public object CustomData { get; set; }
+        public string Detail { get; set; }
+        public HttpStatusCode Status { get; }
+        public string Title { get; }
 
-      private ActionResult ToActionResult()
-      {
-         dynamic o = new ExpandoObject();
+        private ActionResult ToActionResult()
+        {
+            dynamic o = new ExpandoObject();
 
-         var status = (int)Status;
+            if (CustomData != null)
+                Populate(o, CustomData);
 
-         if (Detail != null)
-            o.Detail = Detail;
+            var status = (int) Status;
 
-         o.Status = status;
-         o.Title = Title;
-         o.Type = $"https://httpstatuses.com/{status}";
+            if (Detail != null)
+                o.Detail = Detail;
 
-         return new ObjectResult(o) { StatusCode = status };
-      }
+            o.Status = status;
+            o.Title = Title;
+            o.Type = $"https://httpstatuses.com/{status}";
 
-      public static implicit operator ActionResult(ProblemDetails problemDetails)
-      {
-         return problemDetails.ToActionResult();
-      }
-   }
+            return new ObjectResult(o)
+            {
+                ContentTypes = new MediaTypeCollection {new MediaTypeHeaderValue("application/problem+json")},
+                StatusCode = status
+            };
+        }
+
+        private static void Populate(dynamic o, object customData)
+        {
+            foreach (var property in customData.GetType().GetProperties())
+            {
+                o[property.Name] = property.GetValue(customData);
+            }
+        }
+
+        public static implicit operator ActionResult(ProblemDetails problemDetails)
+        {
+            return problemDetails.ToActionResult();
+        }
+    }
 }
