@@ -11,19 +11,27 @@ namespace Handyman.Mediator
     [AttributeUsage(AttributeTargets.Class)]
     public class ExperimentAttribute : RequestHandlerProviderAttribute
     {
-        public ExperimentAttribute(Type primaryHandlerType)
+        public ExperimentAttribute(Type baselineHandlerType)
         {
-            PrimaryHandlerType = primaryHandlerType;
+            BaselineHandlerType = baselineHandlerType;
         }
 
-        public Type PrimaryHandlerType { get; }
+        public Type BaselineHandlerType { get; }
+        public double? ToggleRate { get; set; }
+        public Type ToggleType { get; set; }
 
         public override IRequestHandler<TRequest, TResponse> GetHandler<TRequest, TResponse>(ServiceProvider serviceProvider)
         {
             var handlers = GetHandlers<TRequest, TResponse>(serviceProvider);
+            var toggle = GetToggle<TRequest>();
             var evaluators = GetEvaluators<TRequest, TResponse>(serviceProvider);
 
-            return new RequestHandler<TRequest, TResponse>(PrimaryHandlerType, handlers, evaluators);
+            return new ExperimentRequestHandler<TRequest, TResponse>(BaselineHandlerType, handlers, toggle, evaluators);
+        }
+
+        private IExperimentToggle<TRequest> GetToggle<TRequest>()
+        {
+            return new ExperimentToggle<TRequest>(ToggleRate ?? 1);
         }
 
         private static IEnumerable<IRequestHandler<TRequest, TResponse>> GetHandlers<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
@@ -37,55 +45,114 @@ namespace Handyman.Mediator
             var type = typeof(IEnumerable<IExperimentEvaluator<TRequest, TResponse>>);
             return (IEnumerable<IExperimentEvaluator<TRequest, TResponse>>)serviceProvider.Invoke(type);
         }
+    }
 
-        private class RequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    internal class ExperimentRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    {
+        private readonly Type _baselineHandlerType;
+        private readonly IEnumerable<IRequestHandler<TRequest, TResponse>> _handlers;
+        private readonly IExperimentToggle<TRequest> _toggle;
+        private readonly IEnumerable<IExperimentEvaluator<TRequest, TResponse>> _evaluators;
+
+        public ExperimentRequestHandler(Type baselineHandlerType, IEnumerable<IRequestHandler<TRequest, TResponse>> handlers,
+            IExperimentToggle<TRequest> toggle,
+            IEnumerable<IExperimentEvaluator<TRequest, TResponse>> evaluators)
         {
-            private readonly Type _primaryHandlerType;
-            private readonly IEnumerable<IRequestHandler<TRequest, TResponse>> _handlers;
-            private readonly IEnumerable<IExperimentEvaluator<TRequest, TResponse>> _evaluators;
+            _baselineHandlerType = baselineHandlerType;
+            _handlers = handlers.ToListOptimized();
+            _toggle = toggle;
+            _evaluators = evaluators.ToListOptimized();
+        }
 
-            public RequestHandler(Type primaryHandlerType, IEnumerable<IRequestHandler<TRequest, TResponse>> handlers,
-                IEnumerable<IExperimentEvaluator<TRequest, TResponse>> evaluators)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
+        {
+            var baselineHandler = _handlers.Single(x => x.GetType() == _baselineHandlerType);
+
+            if (!await _toggle.IsEnabled(request, cancellationToken).ConfigureAwait(false))
+                return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait(false);
+
+            var tasks = _handlers.Select(handler => Execute(handler, request, cancellationToken)).ToListOptimized();
+            var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var baselineResult = results.Single(x => x.Handler == baselineHandler);
+            var baseline = new Baseline<TRequest, TResponse>(baselineResult);
+            var experiments = results.Where(x => x != baselineResult).Select(x => new Experiment<TRequest, TResponse>(x)).ToList();
+
+            foreach (var evaluator in _evaluators)
             {
-                _primaryHandlerType = primaryHandlerType;
-                _handlers = handlers.ToListOptimized();
-                _evaluators = evaluators.ToListOptimized();
+                await evaluator.Evaluate(request, baseline, experiments).ConfigureAwait(false);
             }
 
-            public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
-            {
-                var primaryHandler = _handlers.Single(x => x.GetType() == _primaryHandlerType);
-                var experiments = _handlers.Select(handler => Execute(handler, request, cancellationToken)).ToListOptimized();
-            }
+            return await baselineResult.Task;
+        }
 
-            private void Execute(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
-            {
-                var stopwatch = Stopwatch.StartNew();
-                handler.Handle(request, cancellationToken)
-                    .ContinueWith(task =>
+        private Task<Result> Execute(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            return handler.Handle(request, cancellationToken)
+                .ContinueWith(task =>
+                {
+                    var duration = stopwatch.Elapsed;
+                    return new Result
                     {
-                        var duration = stopwatch.Elapsed;
-                        return new Experiment<TRequest, TResponse>(handler, task, duration);
-                    })
-                    .ConfigureAwait(false);
-            }
+                        Duration = duration,
+                        Handler = handler,
+                        Task = task
+                    };
+                });
+        }
+
+        internal class Result
+        {
+            public TimeSpan Duration { get; set; }
+            public IRequestHandler<TRequest, TResponse> Handler { get; set; }
+            public Task<TResponse> Task { get; set; }
+        }
+    }
+
+    internal class ExperimentToggle<TRequest> : IExperimentToggle<TRequest>
+    {
+        private static readonly Random Random = new Random();
+
+        private readonly double _rate;
+
+        public ExperimentToggle(double rate)
+        {
+            _rate = rate;
+        }
+
+        public Task<bool> IsEnabled(TRequest request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(((-_rate) + 1) <= Random.NextDouble());
         }
     }
 
     public interface IExperimentEvaluator<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
-        Task Evaluate(TRequest request, Experiment<TRequest, TResponse> primary, IEnumerable<Experiment<TRequest, TResponse>> experiments);
+        Task Evaluate(TRequest request, Experiment<TRequest, TResponse> baseline, IEnumerable<Experiment<TRequest, TResponse>> experiments);
+    }
+
+    internal interface IExperimentToggle<TRequest>
+    {
+        Task<bool> IsEnabled(TRequest request, CancellationToken cancellationToken);
+    }
+
+    public class Baseline<TRequest, TResponse> : Experiment<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    {
+        internal Baseline(ExperimentRequestHandler<TRequest, TResponse>.Result result)
+            : base(result)
+        {
+        }
     }
 
     public class Experiment<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly Task<TResponse> _task;
 
-        public Experiment(IRequestHandler<TRequest, TResponse> handler, Task<TResponse> task, TimeSpan duration)
+        internal Experiment(ExperimentRequestHandler<TRequest, TResponse>.Result result)
         {
-            Handler = handler;
-            _task = task;
-            Duration = duration;
+            _task = result.Task;
+            Handler = result.Handler;
+            Duration = result.Duration;
         }
 
         public IRequestHandler<TRequest, TResponse> Handler { get; }
