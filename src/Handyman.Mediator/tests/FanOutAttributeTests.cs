@@ -119,10 +119,11 @@ namespace Handyman.Mediator.Tests
 
             var mediator = new Mediator(container.GetService);
 
-            mediator.Send(new Request());
+            var task = mediator.Send(new Request());
 
             cts1.SetResult("success");
 
+            await task;
             await Task.Delay(10);
 
             handler1.Cancelled.ShouldBeFalse();
