@@ -1,9 +1,9 @@
-﻿using Handyman.Mediator.Internals;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator
 {
@@ -12,8 +12,7 @@ namespace Handyman.Mediator
     {
         public override IRequestHandler<TRequest, TResponse> GetHandler<TRequest, TResponse>(ServiceProvider serviceProvider)
         {
-            var type = typeof(IEnumerable<IRequestHandler<TRequest, TResponse>>);
-            var handlers = ((IEnumerable<IRequestHandler<TRequest, TResponse>>)serviceProvider.Invoke(type)).ToListOptimized();
+            var handlers = serviceProvider.GetServices<IRequestHandler<TRequest, TResponse>>().ToListOptimized();
 
             if (handlers.Count == 0)
                 throw new InvalidOperationException("Request handlers not found.");

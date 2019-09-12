@@ -16,7 +16,7 @@ namespace Handyman.Mediator.Internals
             if (attribute != null)
                 return attribute.GetHandler<TRequest, TResponse>(serviceProvider);
 
-            return (IRequestHandler<TRequest, TResponse>)serviceProvider.Invoke(typeof(IRequestHandler<TRequest, TResponse>));
+            return serviceProvider.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
         }
     }
 }

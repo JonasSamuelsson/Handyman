@@ -1,9 +1,9 @@
-﻿using Maestro;
-using Shouldly;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Maestro;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -47,8 +47,7 @@ namespace Handyman.Mediator.Tests
         {
             public IEnumerable<IEventHandler<TEvent>> GetHandlers<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
             {
-                var type = typeof(IEnumerable<IEventHandler<TEvent>>);
-                var handlers = (IEnumerable<IEventHandler<TEvent>>)serviceProvider.Invoke(type);
+                var handlers = serviceProvider.GetServices<IEventHandler<TEvent>>();
                 return new IEventHandler<TEvent>[] { new EventHandler<TEvent>(handlers) };
             }
 

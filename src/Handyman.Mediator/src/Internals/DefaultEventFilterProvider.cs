@@ -24,7 +24,7 @@ namespace Handyman.Mediator.Internals
 
         private static IEnumerable<IEventFilter<TEvent>> GetDefaultFilters<TEvent>(ServiceProvider serviceProvider) where TEvent : IEvent
         {
-            return (IEnumerable<IEventFilter<TEvent>>)serviceProvider.Invoke(typeof(IEnumerable<IEventFilter<TEvent>>));
+            return serviceProvider.GetServices<IEventFilter<TEvent>>();
         }
     }
 }
