@@ -31,12 +31,14 @@ namespace Handyman.Mediator
 
             public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
             {
-                var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-                var tasks = _handlers.Select(x => x.Handle(request, cts.Token)).ToList();
-                var task = await Task.WhenAny(tasks).ConfigureAwait(false);
-                var response = await task.ConfigureAwait(false);
-                cts.Cancel();
-                return response;
+                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
+                {
+                    var tasks = _handlers.Select(x => x.Handle(request, cts.Token)).ToList();
+                    var task = await Task.WhenAny(tasks).ConfigureAwait(false);
+                    var response = await task.ConfigureAwait(false);
+                    cts.Cancel();
+                    return response;
+                }
             }
         }
     }
