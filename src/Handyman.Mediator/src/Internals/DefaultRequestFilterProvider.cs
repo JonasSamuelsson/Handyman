@@ -24,7 +24,7 @@ namespace Handyman.Mediator.Internals
 
         private static IEnumerable<IRequestFilter<TRequest, TResponse>> GetDefaultFilters<TRequest, TResponse>(ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>
         {
-            return (IEnumerable<IRequestFilter<TRequest, TResponse>>)serviceProvider.Invoke(typeof(IEnumerable<IRequestFilter<TRequest, TResponse>>));
+            return serviceProvider.GetServices<IRequestFilter<TRequest, TResponse>>();
         }
     }
 }
