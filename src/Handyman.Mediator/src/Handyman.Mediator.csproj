@@ -12,6 +12,7 @@
       <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
       <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
       <PackageTags>mediator request response message command query event notification</PackageTags>
+      <LangVersion>latest</LangVersion>
    </PropertyGroup>
 
 </Project>
