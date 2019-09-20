@@ -26,7 +26,9 @@ namespace Handyman.DependencyInjection
             var index = name.IndexOf('`');
 
             if (index != -1)
+            {
                 name = name.Substring(0, index);
+            }
 
             if (type.IsGenericType)
             {
