@@ -32,6 +32,16 @@ namespace Handyman.DependencyInjection
             return scanner.Assembly(System.Reflection.Assembly.GetEntryAssembly());
         }
 
+        public static IScanner RegisterDefaultImplementations(this IScanner scanner)
+        {
+            return scanner.RegisterDefaultImplementations(null);
+        }
+
+        public static IScanner RegisterDefaultImplementations(this IScanner scanner, ServiceLifetime? serviceLifetime)
+        {
+            return scanner.Use(new DefaultImplementationsConvention(serviceLifetime));
+        }
+
         public static IScanner Use<TConvention>(this IScanner scanner) where TConvention : IConvention, new()
         {
             return scanner.Use(new TConvention());
