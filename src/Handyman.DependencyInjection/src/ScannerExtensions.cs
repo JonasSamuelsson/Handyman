@@ -39,7 +39,7 @@ namespace Handyman.DependencyInjection
 
         public static IScanner RegisterConcreteClassesOf<T>(this IScanner scanner, ServiceLifetime? serviceLifetime)
         {
-            return scanner.Use(new ConcreteClassesOfConvention(typeof(T), serviceLifetime));
+            return scanner.Using(new ConcreteClassesOfConvention(typeof(T), serviceLifetime));
         }
 
         public static IScanner RegisterConcreteClassesOf(this IScanner scanner, Type type)
@@ -49,7 +49,7 @@ namespace Handyman.DependencyInjection
 
         public static IScanner RegisterConcreteClassesOf(this IScanner scanner, Type type, ServiceLifetime? serviceLifetime)
         {
-            return scanner.Use(new ConcreteClassesOfConvention(type, serviceLifetime));
+            return scanner.Using(new ConcreteClassesOfConvention(type, serviceLifetime));
         }
 
         public static IScanner RegisterDefaultImplementations(this IScanner scanner)
@@ -59,17 +59,17 @@ namespace Handyman.DependencyInjection
 
         public static IScanner RegisterDefaultImplementations(this IScanner scanner, ServiceLifetime? serviceLifetime)
         {
-            return scanner.Use(new DefaultImplementationsConvention(serviceLifetime));
+            return scanner.Using(new DefaultImplementationsConvention(serviceLifetime));
         }
 
-        public static IScanner UseRegistrationPolicies(this IScanner scanner)
+        public static IScanner UsingRegistrationPolicies(this IScanner scanner)
         {
-            return scanner.Use(new RegistrationPolicyConvention());
+            return scanner.Using(new RegistrationPolicyConvention());
         }
 
-        public static IScanner Use<TConvention>(this IScanner scanner) where TConvention : IConvention, new()
+        public static IScanner Using<TConvention>(this IScanner scanner) where TConvention : IConvention, new()
         {
-            return scanner.Use(new TConvention());
+            return scanner.Using(new TConvention());
         }
     }
 }
