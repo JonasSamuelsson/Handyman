@@ -25,7 +25,7 @@ namespace Handyman.DependencyInjection
             return this;
         }
 
-        public IScanner Use(IConvention convention)
+        public IScanner Using(IConvention convention)
         {
             _conventions.Add(convention);
             return this;

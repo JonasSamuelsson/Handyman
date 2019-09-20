@@ -16,7 +16,7 @@ namespace Handyman.DependencyInjection.Tests
             services.Scan(_ =>
             {
                 _.Types(GetType().GetNestedTypes(BindingFlags.NonPublic));
-                _.UseRegistrationPolicies();
+                _.UsingRegistrationPolicies();
             });
 
             services.BuildServiceProvider().GetRequiredService<IFoo>().ShouldBeOfType<Foo>();
