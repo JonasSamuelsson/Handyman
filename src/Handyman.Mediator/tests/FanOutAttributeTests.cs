@@ -1,8 +1,8 @@
-﻿using Maestro;
-using Shouldly;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Maestro;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -124,9 +124,14 @@ namespace Handyman.Mediator.Tests
             cts1.SetResult("success");
 
             await task;
-            await Task.Delay(10);
 
-            handler1.Cancelled.ShouldBeFalse();
+            var timeout = Task.Delay(100);
+
+            while (!timeout.IsCompletedSuccessfully && !handler2.Cancelled)
+            {
+                await Task.Delay(1);
+            }
+
             handler2.Cancelled.ShouldBeTrue();
         }
 
