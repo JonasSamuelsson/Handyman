@@ -32,6 +32,26 @@ namespace Handyman.DependencyInjection
             return scanner.Assembly(System.Reflection.Assembly.GetEntryAssembly());
         }
 
+        public static IScanner RegisterConcreteClassesOf<T>(this IScanner scanner)
+        {
+            return scanner.RegisterConcreteClassesOf<T>(null);
+        }
+
+        public static IScanner RegisterConcreteClassesOf<T>(this IScanner scanner, ServiceLifetime? serviceLifetime)
+        {
+            return scanner.Use(new ConcreteClassesOfConvention(typeof(T), serviceLifetime));
+        }
+
+        public static IScanner RegisterConcreteClassesOf(this IScanner scanner, Type type)
+        {
+            return scanner.RegisterConcreteClassesOf(type, null);
+        }
+
+        public static IScanner RegisterConcreteClassesOf(this IScanner scanner, Type type, ServiceLifetime? serviceLifetime)
+        {
+            return scanner.Use(new ConcreteClassesOfConvention(type, serviceLifetime));
+        }
+
         public static IScanner RegisterDefaultImplementations(this IScanner scanner)
         {
             return scanner.RegisterDefaultImplementations(null);
