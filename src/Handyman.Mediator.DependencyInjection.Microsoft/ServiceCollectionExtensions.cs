@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,47 +19,47 @@ namespace Handyman.Mediator.DependencyInjection.Microsoft
 
             configure(config);
 
-            var types = assembly.GetTypes();
-
             services.TryAddTransient<IMediator>(sp => new Mediator(sp.GetService, config));
 
+            var types = assembly.GetTypes();
+
+            services.AddMediatorEventFilters(types);
+            services.AddMediatorEventHandlers(types);
+            services.AddMediatorRequestFilters(types);
+            services.AddMediatorRequestHandlers(types);
+        }
+
+        public static void AddMediatorEventFilters(this IServiceCollection services, IEnumerable<Type> types)
+        {
+            services.Register(types, typeof(IEventFilter<>));
+        }
+
+        public static void AddMediatorEventHandlers(this IServiceCollection services, IEnumerable<Type> types)
+        {
+            services.Register(types, typeof(IEventHandler<>));
+        }
+
+        public static void AddMediatorRequestFilters(this IServiceCollection services, IEnumerable<Type> types)
+        {
+            services.Register(types, typeof(IRequestFilter<,>));
+        }
+
+        public static void AddMediatorRequestHandlers(this IServiceCollection services, IEnumerable<Type> types)
+        {
+            services.Register(types, typeof(IRequestHandler<,>));
+        }
+
+        private static void Register(this IServiceCollection services, IEnumerable<Type> types, Type baseTypeDefinition)
+        {
             foreach (var type in types)
             {
-                services.AddEventFilters(type);
-                services.AddEventHandlers(type);
-                services.AddRequestFilters(type);
-                services.AddRequestHandlers(type);
-            }
-        }
+                if (!type.IsConcreteClassClosing(baseTypeDefinition, out var baseTypes))
+                    return;
 
-        private static void AddEventFilters(this IServiceCollection services, Type type)
-        {
-            Register(type, typeof(IEventFilter<>), services);
-        }
-
-        private static void AddEventHandlers(this IServiceCollection services, Type type)
-        {
-            Register(type, typeof(IEventHandler<>), services);
-        }
-
-        private static void AddRequestFilters(this IServiceCollection services, Type type)
-        {
-            Register(type, typeof(IRequestFilter<,>), services);
-        }
-
-        private static void AddRequestHandlers(this IServiceCollection services, Type type)
-        {
-            Register(type, typeof(IRequestHandler<,>), services);
-        }
-
-        private static void Register(Type type, Type baseTypeDefinition, IServiceCollection services)
-        {
-            if (!type.IsConcreteClassClosing(baseTypeDefinition, out var baseTypes))
-                return;
-
-            foreach (var baseType in baseTypes)
-            {
-                services.AddTransient(baseType, type);
+                foreach (var baseType in baseTypes)
+                {
+                    services.AddTransient(baseType, type);
+                }
             }
         }
     }
