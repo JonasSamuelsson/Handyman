@@ -1,18 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-   <PropertyGroup>
-      <TargetFramework>netstandard2.0</TargetFramework>
-      <PackageId>Handyman.Mediator</PackageId>
-      <Authors>Jonas Samuelsson</Authors>
-      <Version>7.0.0</Version>
-      <Company />
-      <Product>Handyman</Product>
-      <Description>Mediator implementation for loose coupled in-process communication.</Description>
-      <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
-      <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
-      <PackageTags>mediator request response message command query event notification</PackageTags>
-      <LangVersion>latest</LangVersion>
-   </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Handyman.Mediator</PackageId>
+		<Version>7.1.0-beta.190923.538</Version>
+		<Authors>Jonas Samuelsson</Authors>
+		<Company />
+		<Product>Handyman</Product>
+		<Description>Mediator implementation for loose coupled in-process communication.</Description>
+		<PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
+		<PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
+		<PackageTags>mediator request response message command query event notification</PackageTags>
+	</PropertyGroup>
 
 </Project>
