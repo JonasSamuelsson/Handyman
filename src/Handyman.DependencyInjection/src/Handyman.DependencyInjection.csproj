@@ -5,6 +5,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<Version>1.0.0-beta.190924.745</Version>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
