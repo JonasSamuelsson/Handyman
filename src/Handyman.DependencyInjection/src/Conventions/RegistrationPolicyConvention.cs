@@ -11,7 +11,7 @@ namespace Handyman.DependencyInjection.Conventions
         {
             foreach (var type in types)
             {
-                foreach (var attribute in type.GetCustomAttributes<ServiceRegistrationPolicyAttribute>())
+                foreach (var attribute in type.GetCustomAttributes<ServiceConfigurationPolicyAttribute>())
                 {
                     attribute.GetServiceRegistrationPolicy().Register(type, services);
                 }

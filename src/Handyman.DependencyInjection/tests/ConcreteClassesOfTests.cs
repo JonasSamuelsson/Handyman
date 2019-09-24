@@ -16,7 +16,7 @@ namespace Handyman.DependencyInjection.Tests
             var serviceCollection = new ServiceCollection();
             var types = GetType().GetNestedTypes(BindingFlags.NonPublic);
 
-            serviceCollection.Scan(scanner => scanner.Types(types).RegisterConcreteClassesOf(type));
+            serviceCollection.Scan(scanner => scanner.Types(types).ConfigureConcreteClassesOf(type));
 
             var errors = new List<(string error, Type serviceType, Type implementationType)>();
 

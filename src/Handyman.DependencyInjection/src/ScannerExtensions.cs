@@ -1,7 +1,7 @@
-﻿using System;
-using System.Reflection;
-using Handyman.DependencyInjection.Conventions;
+﻿using Handyman.DependencyInjection.Conventions;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
 
 namespace Handyman.DependencyInjection
 {
@@ -32,37 +32,37 @@ namespace Handyman.DependencyInjection
             return scanner.Assembly(System.Reflection.Assembly.GetEntryAssembly());
         }
 
-        public static IScanner RegisterConcreteClassesOf<T>(this IScanner scanner)
+        public static IScanner ConfigureConcreteClassesOf<T>(this IScanner scanner)
         {
-            return scanner.RegisterConcreteClassesOf<T>(null);
+            return scanner.ConfigureConcreteClassesOf<T>(null);
         }
 
-        public static IScanner RegisterConcreteClassesOf<T>(this IScanner scanner, ServiceLifetime? serviceLifetime)
+        public static IScanner ConfigureConcreteClassesOf<T>(this IScanner scanner, ServiceLifetime? serviceLifetime)
         {
             return scanner.Using(new ConcreteClassesOfConvention(typeof(T), serviceLifetime));
         }
 
-        public static IScanner RegisterConcreteClassesOf(this IScanner scanner, Type type)
+        public static IScanner ConfigureConcreteClassesOf(this IScanner scanner, Type type)
         {
-            return scanner.RegisterConcreteClassesOf(type, null);
+            return scanner.ConfigureConcreteClassesOf(type, null);
         }
 
-        public static IScanner RegisterConcreteClassesOf(this IScanner scanner, Type type, ServiceLifetime? serviceLifetime)
+        public static IScanner ConfigureConcreteClassesOf(this IScanner scanner, Type type, ServiceLifetime? serviceLifetime)
         {
             return scanner.Using(new ConcreteClassesOfConvention(type, serviceLifetime));
         }
 
-        public static IScanner RegisterDefaultImplementations(this IScanner scanner)
+        public static IScanner ConfigureDefaultImplementations(this IScanner scanner)
         {
-            return scanner.RegisterDefaultImplementations(null);
+            return scanner.ConfigureDefaultImplementations(null);
         }
 
-        public static IScanner RegisterDefaultImplementations(this IScanner scanner, ServiceLifetime? serviceLifetime)
+        public static IScanner ConfigureDefaultImplementations(this IScanner scanner, ServiceLifetime? serviceLifetime)
         {
             return scanner.Using(new DefaultImplementationsConvention(serviceLifetime));
         }
 
-        public static IScanner UsingRegistrationPolicies(this IScanner scanner)
+        public static IScanner UsingServiceConfigurationPolicies(this IScanner scanner)
         {
             return scanner.Using(new RegistrationPolicyConvention());
         }

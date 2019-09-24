@@ -1,22 +1,22 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Reflection;
 using Xunit;
 
 namespace Handyman.DependencyInjection.Tests
 {
-    public class RegistrationPolicyTests
+    public class ServiceConfigurationPolicyTests
     {
         [Fact]
-        public void ShouldRegisterServicesUsingRegistrationPolicy()
+        public void ShouldConfigureServicesUsingPolicy()
         {
             var services = new ServiceCollection();
 
             services.Scan(_ =>
             {
                 _.Types(GetType().GetNestedTypes(BindingFlags.NonPublic));
-                _.UsingRegistrationPolicies();
+                _.UsingServiceConfigurationPolicies();
             });
 
             services.BuildServiceProvider().GetRequiredService<IFoo>().ShouldBeOfType<Foo>();
@@ -24,10 +24,10 @@ namespace Handyman.DependencyInjection.Tests
 
         private interface IFoo { }
 
-        [ServiceRegistrationPolicy(typeof(ServiceRegistrationPolicy))]
+        [ServiceConfigurationPolicy(typeof(ServiceConfigurationPolicy))]
         private class Foo : IFoo { }
 
-        private class ServiceRegistrationPolicy : IServiceRegistrationPolicy
+        private class ServiceConfigurationPolicy : IServiceConfigurationPolicy
         {
             public void Register(Type type, IServiceCollection services)
             {

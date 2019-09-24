@@ -12,7 +12,7 @@ namespace Handyman.DependencyInjection.Tests
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.Scan(scanner => scanner.Types(GetType().GetNestedTypes(BindingFlags.NonPublic)).RegisterDefaultImplementations());
+            serviceCollection.Scan(scanner => scanner.Types(GetType().GetNestedTypes(BindingFlags.NonPublic)).ConfigureDefaultImplementations());
 
             serviceCollection.BuildServiceProvider().GetRequiredService<IFoo>().ShouldBeOfType<Foo>();
         }

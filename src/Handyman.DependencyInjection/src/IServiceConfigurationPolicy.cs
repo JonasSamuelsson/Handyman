@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Handyman.DependencyInjection
 {
-    public interface IServiceRegistrationPolicy
+    public interface IServiceConfigurationPolicy
     {
         void Register(Type type, IServiceCollection services);
     }

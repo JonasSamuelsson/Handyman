@@ -11,18 +11,7 @@ This package provides `IServiceCollection` extensions that simplifies service co
 `Scan(...)` enables convention based service configuration.  
 The scanner provides methods for defining which types to scan, how to filter them and the registration convention to use.
 
-Three conventions are provided out of the box; `ConfigureDefaultImplementations`, `ConfigureConcreteClassesOf` & `UseServiceConfigurationPolicies`.
-
-### Default implementations
-
-Default implemenations are classes implementing interfaces in the same namespace with the same name except the leading I.
-
-``` csharp
-namespace Company.Product.Feature
-{
-    public interface IFoo { }
-    public class Foo { }
-}
+Three conventions are provided out of the box; `ConfigureConcreteClassesOf`, `ConfigureDefaultImplementations` & `UsingServiceConfigurationPolicies`.
 
 ### Concrete classes of
 
@@ -34,6 +23,17 @@ public interface IFoo<T> { }
 public class Foo<T> : IFoo<T> { }
 public class Foo : IFoo<string> { }
 ```
+
+### Default implementations
+
+Default implemenations are classes implementing interfaces in the same namespace with the same name except the leading I.
+
+``` csharp
+namespace Company.Product.Feature
+{
+    public interface IFoo { }
+    public class Foo { }
+}
 
 ### Service configuration policies
 
