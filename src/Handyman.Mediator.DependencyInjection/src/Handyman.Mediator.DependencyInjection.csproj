@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Version>1.0.0-beta.190924.900</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Handyman.DependencyInjection" Version="1.0.0-beta.190924.745" />
+		<PackageReference Include="Handyman.Mediator" Version="7.1.0-beta.190924.824" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
+	</ItemGroup>
+
+</Project>

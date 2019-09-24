@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>netcoreapp2.1</TargetFrameworks>
@@ -13,16 +13,8 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
-	</ItemGroup>
-
 	<ItemGroup>
-		<ProjectReference Include="..\src\Handyman.DependencyInjection.csproj" />
+		<ProjectReference Include="..\src\Handyman.Mediator.DependencyInjection.csproj" />
 	</ItemGroup>
 
 </Project>

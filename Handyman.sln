@@ -39,11 +39,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Functions", "src\Handyman.Azure.Functions\src\Handyman.Azure.Functions.csproj", "{B02DF717-FEA6-4BFA-BBE1-1164CBBE1ABB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.DependencyInjection.Microsoft", "src\Handyman.Mediator.DependencyInjection.Microsoft\Handyman.Mediator.DependencyInjection.Microsoft.csproj", "{BA12CF87-6BB5-4E6D-B64A-4E2AEC74D2E1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DependencyInjection", "src\Handyman.DependencyInjection\src\Handyman.DependencyInjection.csproj", "{DA62608F-400B-4EDE-89D1-CD7E52C22331}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DependencyInjection.Tests", "src\Handyman.DependencyInjection\tests\Handyman.DependencyInjection.Tests.csproj", "{2B360757-6539-44EE-B563-F265CCFBDBBD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.DependencyInjection", "src\Handyman.Mediator.DependencyInjection\src\Handyman.Mediator.DependencyInjection.csproj", "{5E2F4596-09D3-4154-8659-5C213FD5B9CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.DependencyInjection.Tests", "src\Handyman.Mediator.DependencyInjection\tests\Handyman.Mediator.DependencyInjection.Tests.csproj", "{6D0077B4-26C5-4BE3-9F5B-98885E085A02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,10 +113,6 @@ Global
 		{B02DF717-FEA6-4BFA-BBE1-1164CBBE1ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B02DF717-FEA6-4BFA-BBE1-1164CBBE1ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B02DF717-FEA6-4BFA-BBE1-1164CBBE1ABB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA12CF87-6BB5-4E6D-B64A-4E2AEC74D2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA12CF87-6BB5-4E6D-B64A-4E2AEC74D2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA12CF87-6BB5-4E6D-B64A-4E2AEC74D2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA12CF87-6BB5-4E6D-B64A-4E2AEC74D2E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA62608F-400B-4EDE-89D1-CD7E52C22331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA62608F-400B-4EDE-89D1-CD7E52C22331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA62608F-400B-4EDE-89D1-CD7E52C22331}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -123,6 +121,14 @@ Global
 		{2B360757-6539-44EE-B563-F265CCFBDBBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B360757-6539-44EE-B563-F265CCFBDBBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B360757-6539-44EE-B563-F265CCFBDBBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E2F4596-09D3-4154-8659-5C213FD5B9CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E2F4596-09D3-4154-8659-5C213FD5B9CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E2F4596-09D3-4154-8659-5C213FD5B9CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E2F4596-09D3-4154-8659-5C213FD5B9CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D0077B4-26C5-4BE3-9F5B-98885E085A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D0077B4-26C5-4BE3-9F5B-98885E085A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D0077B4-26C5-4BE3-9F5B-98885E085A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D0077B4-26C5-4BE3-9F5B-98885E085A02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
