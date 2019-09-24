@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Handyman.Mediator.Experiments
+namespace Handyman.Mediator
 {
-    internal interface IExperimentToggle<TRequest>
+    public interface IExperimentToggle<TRequest>
     {
         Task<bool> IsEnabled(TRequest request, CancellationToken cancellationToken);
     }

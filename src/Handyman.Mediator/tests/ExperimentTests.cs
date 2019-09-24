@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.Experiments;
 using Maestro;
 using Shouldly;
 using Xunit;
@@ -19,7 +18,7 @@ namespace Handyman.Mediator.Tests
 
             var container = new Container(x =>
             {
-                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "baseline" });
+                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "experimentBaseline" });
                 x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
                 x.Add<IExperimentEvaluator<Request, string>>().Instance(evaluator);
             });
@@ -30,16 +29,16 @@ namespace Handyman.Mediator.Tests
 
             var response = await mediator.Send(request);
 
-            response.ShouldBe("baseline");
+            response.ShouldBe("experimentBaseline");
 
             evaluator.Request.ShouldBe(request);
 
-            evaluator.Baseline.Canceled.ShouldBeFalse();
-            evaluator.Baseline.Exception.ShouldBeNull();
-            evaluator.Baseline.Faulted.ShouldBeFalse();
-            evaluator.Baseline.Handler.GetType().ShouldBe(typeof(BaselineHandler));
-            evaluator.Baseline.RanToCompletion.ShouldBeTrue();
-            evaluator.Baseline.Response.ShouldBe("baseline");
+            evaluator.ExperimentBaseline.Canceled.ShouldBeFalse();
+            evaluator.ExperimentBaseline.Exception.ShouldBeNull();
+            evaluator.ExperimentBaseline.Faulted.ShouldBeFalse();
+            evaluator.ExperimentBaseline.Handler.GetType().ShouldBe(typeof(BaselineHandler));
+            evaluator.ExperimentBaseline.RanToCompletion.ShouldBeTrue();
+            evaluator.ExperimentBaseline.Response.ShouldBe("experimentBaseline");
 
             var experiment = evaluator.Experiments.Single();
 
@@ -58,7 +57,7 @@ namespace Handyman.Mediator.Tests
 
             var container = new Container(x =>
             {
-                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "baseline" });
+                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "experimentBaseline" });
                 x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => throw new Exception() });
                 x.Add<IExperimentEvaluator<Request, string>>().Instance(evaluator);
             });
@@ -69,7 +68,7 @@ namespace Handyman.Mediator.Tests
 
             var response = await mediator.Send(request);
 
-            response.ShouldBe("baseline");
+            response.ShouldBe("experimentBaseline");
 
             var experiment = evaluator.Experiments.Single();
 
@@ -89,7 +88,7 @@ namespace Handyman.Mediator.Tests
 
             var container = new Container(x =>
             {
-                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "baseline" });
+                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "experimentBaseline" });
                 x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => "experiment" });
                 x.Add<IExperimentEvaluator<Request, string>>().Instance(evaluator);
                 x.Add<IExperimentToggle<Request>>().Instance(toggle);
@@ -129,13 +128,13 @@ namespace Handyman.Mediator.Tests
         private class Evaluator : IExperimentEvaluator<Request, string>
         {
             public Request Request { get; set; }
-            public Baseline<Request, string> Baseline { get; set; }
+            public ExperimentBaseline<Request, string> ExperimentBaseline { get; set; }
             public List<Experiment<Request, string>> Experiments { get; set; }
 
-            public Task Evaluate(Request request, Baseline<Request, string> baseline, IEnumerable<Experiment<Request, string>> experiments)
+            public Task Evaluate(Request request, ExperimentBaseline<Request, string> experimentBaseline, IEnumerable<Experiment<Request, string>> experiments)
             {
                 Request = request;
-                Baseline = baseline;
+                ExperimentBaseline = experimentBaseline;
                 Experiments = experiments.ToList();
 
                 return Task.CompletedTask;

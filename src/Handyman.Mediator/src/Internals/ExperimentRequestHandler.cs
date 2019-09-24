@@ -4,9 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.Internals;
 
-namespace Handyman.Mediator.Experiments
+namespace Handyman.Mediator.Internals
 {
     internal class ExperimentRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
@@ -35,7 +34,7 @@ namespace Handyman.Mediator.Experiments
             var tasks = _handlers.Select(handler => Execute(handler, request, cancellationToken)).ToListOptimized();
             var executions = await Task.WhenAll(tasks).ConfigureAwait(false);
             var baselineExecution = executions.Single(x => x.Handler == baselineHandler);
-            var baseline = new Baseline<TRequest, TResponse>(baselineExecution);
+            var baseline = new ExperimentBaseline<TRequest, TResponse>(baselineExecution);
             var experiments = executions.Where(x => x != baselineExecution).Select(x => new Experiment<TRequest, TResponse>(x)).ToList();
 
             await _evaluator.Evaluate(request, baseline, experiments).ConfigureAwait(false);
@@ -43,14 +42,14 @@ namespace Handyman.Mediator.Experiments
             return await baselineExecution.Task;
         }
 
-        private static Task<Execution<TRequest, TResponse>> Execute(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
+        private static Task<ExperimentExecution<TRequest, TResponse>> Execute(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
             return handler.Handle(request, cancellationToken)
                 .ContinueWith(task =>
                 {
                     var duration = stopwatch.Elapsed;
-                    return new Execution<TRequest, TResponse>
+                    return new ExperimentExecution<TRequest, TResponse>
                     {
                         Duration = duration,
                         Handler = handler,

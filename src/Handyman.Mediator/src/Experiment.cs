@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Handyman.Mediator.Internals;
 
-namespace Handyman.Mediator.Experiments
+namespace Handyman.Mediator
 {
     public class Experiment<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly Task<TResponse> _task;
 
-        internal Experiment(Execution<TRequest, TResponse> execution)
+        internal Experiment(ExperimentExecution<TRequest, TResponse> experimentExecution)
         {
-            _task = execution.Task;
-            Handler = execution.Handler;
-            Duration = execution.Duration;
+            _task = experimentExecution.Task;
+            Handler = experimentExecution.Handler;
+            Duration = experimentExecution.Duration;
         }
 
         public IRequestHandler<TRequest, TResponse> Handler { get; }

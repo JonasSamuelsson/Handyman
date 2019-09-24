@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Handyman.Mediator.Experiments;
+using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator
 {

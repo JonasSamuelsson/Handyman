@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Handyman.Mediator.Experiments
+namespace Handyman.Mediator.Internals
 {
     internal class AlwaysOnExperimentToggle<TRequest> : IExperimentToggle<TRequest>
     {
