@@ -1,7 +1,7 @@
 # Handyman.Mediator
 
 Handyman.Mediator is a library for loosely coupled in-process communication via messages.  
-It's cross platform supporting `netstandard2.0`.
+It's cross platform targeting `netstandard2.0`.
 
 ## Basics
 
@@ -25,6 +25,10 @@ The `Mediator` class takes a service provider delegate and an optional configura
 There are extension methods available for `Publish` and `Send` that doesn't take a `CancellationToken`.
 
 `Mediator` also has support for filters that allows for code to be executed before and/or after the final request/event handler(s).
+
+## Configuration
+
+There is a `Handyman.Mediator.DependencyInjection` package that simplifies configuring mediator and other types.
 
 ## Requests
 
@@ -146,8 +150,12 @@ Filters are executed in ascending order and filters that doesn't provide an expl
 
 ## Customization (advanced usage)
 
-There is a way to customize how request/events are processed by providing your own request/event filter/handler provider.
+Request/event processing can be customized by providing custom request/event filter/handler providers.
 
-The [WhenAnyRequestHandler](./../samples/WhenAnyRequestHandler/Program.cs) sample contains an implementation where the request can be decorated with a `WhenAnyAttribute` which then informs the custom `RequestHandlerProvider` to resolve multiple request handlers and return the response from the first one that finishes.
+### Fan out
 
-The nice thing with this kind of implementation is that neither the caller nor the handlers know that there are multiple handlers involved, following the open closed priciple from SOLID =)
+Requests can be faned out by decorating the request type with `FanOutAttribute`. The response from the first handler that completes successfully will be used.
+
+### Experiments
+
+todo
