@@ -20,6 +20,11 @@ steps:
   inputs:
     versionSpec: '4.9.4'
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.100'
+
 - powershell: ./src/Handyman.DependencyInjection/build/build.ps1 -artifacts $(artifacts) -buildCounter $(buildCounter)
   displayName: Invoke build.ps1
 
