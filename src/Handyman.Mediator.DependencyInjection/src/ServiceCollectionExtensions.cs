@@ -24,12 +24,12 @@ namespace Handyman.Mediator.DependencyInjection
             services.Scan(_ =>
             {
                 _.Assembly(assembly);
-                _.RegisterConcreteClassesOf(typeof(IEventFilter<>));
-                _.RegisterConcreteClassesOf(typeof(IEventHandler<>));
-                _.RegisterConcreteClassesOf(typeof(IExperimentEvaluator<,>));
-                _.RegisterConcreteClassesOf(typeof(IExperimentToggle<>));
-                _.RegisterConcreteClassesOf(typeof(IRequestFilter<,>));
-                _.RegisterConcreteClassesOf(typeof(IRequestHandler<,>));
+                _.ConfigureConcreteClassesOf(typeof(IEventFilter<>));
+                _.ConfigureConcreteClassesOf(typeof(IEventHandler<>));
+                _.ConfigureConcreteClassesOf(typeof(IExperimentEvaluator<,>));
+                _.ConfigureConcreteClassesOf(typeof(IExperimentToggle<>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>));
             });
         }
     }
