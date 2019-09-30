@@ -17,10 +17,10 @@ namespace Handyman.AspNetCore.EtagParameterBinding
 
         private static bool TryGetEtag(IHeaderDictionary headers, out string etag)
         {
-            const string inm = HeaderNames.IfNoneMatch;
-            const string im = HeaderNames.IfMatch;
+            var found = headers.TryGetValue(HeaderNames.IfMatch, out var values) ||
+                        headers.TryGetValue(HeaderNames.IfNoneMatch, out values);
 
-            if (headers.TryGetValue(inm, out var values) || headers.TryGetValue(im, out values))
+            if (found)
             {
                 etag = values.ToString();
                 return true;
