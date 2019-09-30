@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.2.0</Version>
+		<Version>1.3.0</Version>
 		<Authors>Jonas Samuelsson</Authors>
 		<PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
 		<PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
