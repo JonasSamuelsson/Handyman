@@ -1,5 +1,5 @@
-﻿using Shouldly;
-using System;
+﻿using System;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Extensions.Tests
@@ -174,7 +174,7 @@ namespace Handyman.Extensions.Tests
         public void ShouldSplitString()
         {
             Should.Throw<ArgumentException>(() => "".Split(0).Enumerate())
-                .Message.ShouldBe($"Length must be greater than 1.{Environment.NewLine}Parameter name: length");
+                .Message.ShouldStartWith("Length must be greater than 1.");
 
             "".Split(1).ShouldBe(new string[] { });
 

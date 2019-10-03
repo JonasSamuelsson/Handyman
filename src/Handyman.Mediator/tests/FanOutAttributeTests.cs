@@ -127,7 +127,7 @@ namespace Handyman.Mediator.Tests
 
             var timeout = Task.Delay(100);
 
-            while (!timeout.IsCompletedSuccessfully && !handler2.Cancelled)
+            while (!timeout.IsCompletedSuccessfully() && !handler2.Cancelled)
             {
                 await Task.Delay(1);
             }

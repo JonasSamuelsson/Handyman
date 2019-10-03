@@ -16,7 +16,7 @@ namespace Handyman.Extensions
 
         public static void Reset()
         {
-            Now = () => DateTimeOffset.Now;
+            Now = () => DateTimeOffset.UtcNow;
             FormatProvider = () => CultureInfo.CurrentCulture;
             StringComparison = () => System.StringComparison.CurrentCulture;
         }

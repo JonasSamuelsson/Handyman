@@ -17,7 +17,7 @@ namespace Handyman.Extensions.Tests
         [Fact]
         public void ShouldGetDateTimeOffsetInTheFuture()
         {
-            var now = DateTimeOffset.Now;
+            var now = DateTimeOffset.UtcNow;
             Configuration.Now = () => now;
             10.Minutes().FromNow().ShouldBe(Configuration.Now().Add(10.Minutes()));
         }
