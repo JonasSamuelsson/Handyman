@@ -7,11 +7,11 @@
 
 	<PropertyGroup>
 		<PackageId>Handyman.Mediator</PackageId>
-		<Version>7.1.0-beta.190924.824</Version>
+		<Version>7.1.0</Version>
 		<Authors>Jonas Samuelsson</Authors>
 		<Company />
 		<Product>Handyman</Product>
-		<Description>Mediator implementation for loose coupled in-process communication.</Description>
+		<Description>Mediator implementation for loosely coupled in-process communication.</Description>
 		<PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
 		<PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
