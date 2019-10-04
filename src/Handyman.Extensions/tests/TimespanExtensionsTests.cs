@@ -1,5 +1,4 @@
-﻿using System;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
 namespace Handyman.Extensions.Tests
@@ -9,7 +8,7 @@ namespace Handyman.Extensions.Tests
         [Fact]
         public void ShouldGetDateTimeOffsetInThePast()
         {
-            var now = DateTimeOffset.Now;
+            var now = Configuration.Now();
             Configuration.Now = () => now;
             10.Minutes().Ago().ShouldBe(Configuration.Now().Subtract(10.Minutes()));
         }
@@ -17,7 +16,7 @@ namespace Handyman.Extensions.Tests
         [Fact]
         public void ShouldGetDateTimeOffsetInTheFuture()
         {
-            var now = DateTimeOffset.UtcNow;
+            var now = Configuration.Now();
             Configuration.Now = () => now;
             10.Minutes().FromNow().ShouldBe(Configuration.Now().Add(10.Minutes()));
         }
