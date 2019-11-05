@@ -1,4 +1,4 @@
-# Handyman.Dependencyinjection
+# Handyman.DependencyInjection
 
 This package provides `IServiceCollection` extensions that simplifies service configuration.
 
@@ -34,6 +34,7 @@ namespace Company.Product.Feature
     public interface IFoo { }
     public class Foo { }
 }
+```
 
 ### Service configuration policies
 
