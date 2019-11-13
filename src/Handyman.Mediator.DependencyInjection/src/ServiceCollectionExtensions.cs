@@ -1,19 +1,19 @@
-﻿using System;
-using System.Reflection;
-using Handyman.DependencyInjection;
+﻿using Handyman.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Reflection;
 
 namespace Handyman.Mediator.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddMediator(this IServiceCollection services, Assembly assembly)
+        public static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
         {
-            services.AddMediator(assembly, delegate { });
+            return services.AddMediator(assembly, delegate { });
         }
 
-        public static void AddMediator(this IServiceCollection services, Assembly assembly, Action<Configuration> configure)
+        public static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly, Action<Configuration> configure)
         {
             var config = new Configuration();
 
@@ -31,6 +31,8 @@ namespace Handyman.Mediator.DependencyInjection
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>));
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>));
             });
+
+            return services;
         }
     }
 }
