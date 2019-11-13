@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.RequestPipelineCustomization;
 using Maestro;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Mediator.Tests
+namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 {
     public class ExperimentTests
     {
@@ -21,6 +22,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "experimentBaseline" });
                 x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
                 x.Add<IExperimentEvaluator<Request, string>>().Instance(evaluator);
+                x.Add<IExperimentToggle<Request>>().Instance(new Toggle<Request> { Enabled = true });
             });
 
             var mediator = new Mediator(type => container.TryGetService(type, out var service) ? service : null);
@@ -33,12 +35,14 @@ namespace Handyman.Mediator.Tests
 
             evaluator.Request.ShouldBe(request);
 
-            evaluator.ExperimentBaseline.Canceled.ShouldBeFalse();
-            evaluator.ExperimentBaseline.Exception.ShouldBeNull();
-            evaluator.ExperimentBaseline.Faulted.ShouldBeFalse();
-            evaluator.ExperimentBaseline.Handler.GetType().ShouldBe(typeof(BaselineHandler));
-            evaluator.ExperimentBaseline.RanToCompletion.ShouldBeTrue();
-            evaluator.ExperimentBaseline.Response.ShouldBe("experimentBaseline");
+            var baseline = evaluator.ExperimentBaseline;
+
+            baseline.Canceled.ShouldBeFalse();
+            baseline.Exception.ShouldBeNull();
+            baseline.Faulted.ShouldBeFalse();
+            baseline.Handler.GetType().ShouldBe(typeof(BaselineHandler));
+            baseline.RanToCompletion.ShouldBeTrue();
+            baseline.Response.ShouldBe("experimentBaseline");
 
             var experiment = evaluator.Experiments.Single();
 
@@ -60,6 +64,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "experimentBaseline" });
                 x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => throw new Exception() });
                 x.Add<IExperimentEvaluator<Request, string>>().Instance(evaluator);
+                x.Add<IExperimentToggle<Request>>().Instance(new Toggle<Request> { Enabled = true });
             });
 
             var mediator = new Mediator(type => container.TryGetService(type, out var service) ? service : null);
@@ -96,14 +101,9 @@ namespace Handyman.Mediator.Tests
 
             var mediator = new Mediator(type => container.TryGetService(type, out var service) ? service : null);
 
-            foreach (var enabled in new[] { false, true })
-            {
-                toggle.Enabled = enabled;
+            await mediator.Send(new Request());
 
-                await mediator.Send(new Request());
-
-                (evaluator.Experiments != null).ShouldBe(enabled);
-            }
+            evaluator.Experiments.ShouldBeNull();
         }
 
         [Experiment(typeof(BaselineHandler))]

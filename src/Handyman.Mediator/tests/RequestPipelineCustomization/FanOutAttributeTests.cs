@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.RequestPipelineCustomization;
 using Maestro;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.Mediator.Tests
+namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 {
     public class FanOutAttributeTests
     {

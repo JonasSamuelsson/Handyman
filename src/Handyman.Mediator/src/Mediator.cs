@@ -1,6 +1,6 @@
-﻿using Handyman.Mediator.Internals;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator
 {
@@ -19,8 +19,6 @@ namespace Handyman.Mediator
             {
                 EventFilterProvider = configuration.GetEventFilterProvider(),
                 EventHandlerProvider = configuration.GetEventHandlerProvider(),
-                RequestFilterProvider = configuration.GetRequestFilterProvider(),
-                RequestHandlerProvider = configuration.GetRequestHandlerProvider(),
                 ServiceProvider = serviceProvider
             };
         }
@@ -33,8 +31,8 @@ namespace Handyman.Mediator
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            var pipeline = RequestPipelineFactory.GetRequestPipeline(request);
-            return pipeline.Execute(_providers, request, cancellationToken);
+            var pipeline = RequestPipelineFactory.GetRequestPipeline(request, _providers.ServiceProvider);
+            return pipeline.Execute(request, _providers.ServiceProvider, cancellationToken);
         }
     }
 }

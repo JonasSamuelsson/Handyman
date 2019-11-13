@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Handyman.Mediator
+namespace Handyman.Mediator.RequestPipelineCustomization
 {
     public interface IExperimentToggle<TRequest>
     {

@@ -1,8 +1,7 @@
-﻿using Handyman.Mediator.Internals;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Maestro;
 using Shouldly;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -20,7 +19,7 @@ namespace Handyman.Mediator.Tests
                 x.Add<IRequestHandler<Request, string>>().Type<Handler>();
             });
 
-            var s = await new Mediator(container.GetService, new Configuration { RequestFilterProvider = DefaultRequestFilterProvider.Instance })
+            var s = await new Mediator(container.GetService)
                 .Send(new Request());
 
             s.ShouldBe("abc");
@@ -36,7 +35,7 @@ namespace Handyman.Mediator.Tests
             public int Order { get; set; }
             public string Text { get; set; }
 
-            public Task<string> Execute(RequestFilterContext<Request> context,
+            public Task<string> Execute(IRequestFilterContext<Request> context,
                 RequestFilterExecutionDelegate<string> next)
             {
                 context.Request.Text += Text;
