@@ -17,17 +17,5 @@ namespace Handyman.Mediator.Tests
         {
             new Configuration().GetEventHandlerProvider().ShouldBe(DefaultEventHandlerProvider.Instance);
         }
-
-        [Fact]
-        public void ShouldReturnDefaultRequestFilterProviderByDefault()
-        {
-            new Configuration().GetRequestFilterProvider().ShouldBe(DefaultRequestFilterProvider.Instance);
-        }
-
-        [Fact]
-        public void ShouldReturnDefaultRequestHandlerProviderByDefault()
-        {
-            new Configuration().GetRequestHandlerProvider().ShouldBe(DefaultRequestHandlerProvider.Instance);
-        }
     }
 }

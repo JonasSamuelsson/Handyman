@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {

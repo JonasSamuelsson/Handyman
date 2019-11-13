@@ -1,8 +1,8 @@
-﻿using Handyman.Mediator.Internals;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Handyman.Mediator.Internals;
 using Maestro;
 using Shouldly;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -10,28 +10,7 @@ namespace Handyman.Mediator.Tests
     public class RequestFiltersTests
     {
         [Fact]
-        public async Task ShouldNotExecuteFiltersIfDisabled()
-        {
-            var container = new Container();
-            var filter = new RequestFilter();
-            var handler = new RequestHandler();
-            container.Configure(x =>
-            {
-                x.Add<IRequestFilter<Request, Response>>().Instance(filter);
-                x.Add<IRequestHandler<Request, Response>>().Instance(handler);
-            });
-
-            var mediator = new Mediator(container.GetService, new Configuration { RequestFilterProvider = RequestFiltersDisabled.Instance });
-            var request = new Request();
-
-            await mediator.Send(request, CancellationToken.None);
-
-            filter.Executed.ShouldBeFalse();
-            handler.Executed.ShouldBeTrue();
-        }
-
-        [Fact]
-        public async Task ShouldUseFilters()
+        public async Task ShouldExecuteFilters()
         {
             var container = new Container();
             var handler = new RequestHandler();
@@ -73,8 +52,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task<Response> Execute(RequestFilterContext<Request> context,
-                RequestFilterExecutionDelegate<Response> next)
+            public Task<Response> Execute(IRequestFilterContext<Request> context, RequestFilterExecutionDelegate<Response> next)
             {
                 Executed = true;
                 return next();

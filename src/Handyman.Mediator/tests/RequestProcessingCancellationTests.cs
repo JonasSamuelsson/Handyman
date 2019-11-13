@@ -1,8 +1,8 @@
-﻿using Maestro;
-using Shouldly;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Maestro;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -126,7 +126,7 @@ namespace Handyman.Mediator.Tests
 
             public bool Executed { get; set; }
 
-            public Task<Void> Execute(RequestFilterContext<Request> context, RequestFilterExecutionDelegate<Void> next)
+            public Task<Void> Execute(IRequestFilterContext<Request> context, RequestFilterExecutionDelegate<Void> next)
             {
                 _cancellationTokenSource.Cancel();
                 Executed = true;

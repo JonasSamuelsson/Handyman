@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Handyman.Mediator.Internals;
 
-namespace Handyman.Mediator
+namespace Handyman.Mediator.RequestPipelineCustomization
 {
     public class Experiment<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
