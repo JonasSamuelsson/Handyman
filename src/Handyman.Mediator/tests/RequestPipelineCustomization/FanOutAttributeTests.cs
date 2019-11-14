@@ -81,11 +81,11 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         [Fact]
         public async Task ShouldReturnSuccessEvenIfSomeHandlersFail()
         {
-            var cts1 = new TaskCompletionSource<string>();
-            var cts2 = new TaskCompletionSource<string>();
+            var tcs1 = new TaskCompletionSource<string>();
+            var tcs2 = new TaskCompletionSource<string>();
 
-            var handler1 = new RequestHandler(cts1.Task);
-            var handler2 = new RequestHandler(cts2.Task);
+            var handler1 = new RequestHandler(tcs1.Task);
+            var handler2 = new RequestHandler(tcs2.Task);
 
             var container = new Container(x =>
             {
@@ -97,20 +97,25 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             var task = mediator.Send(new Request());
 
-            cts1.SetException(new Exception());
-            cts2.SetResult("success");
+            await Task.Delay(50);
+
+            tcs1.SetException(new Exception());
+
+            await Task.Delay(50);
+
+            tcs2.SetResult("success");
 
             (await task).ShouldBe("success");
         }
 
         [Fact]
-        public async Task OnceTheFirstHandlerCompletesOtherHandlersShouldGetACancellationSignal()
+        public async Task OnceTheFirstHandlerCompletesOtherHandlersShouldBeCancelled()
         {
-            var cts1 = new TaskCompletionSource<string>();
-            var cts2 = new TaskCompletionSource<string>();
+            var tcs1 = new TaskCompletionSource<string>();
+            var tcs2 = new TaskCompletionSource<string>();
 
-            var handler1 = new RequestHandler(cts1.Task);
-            var handler2 = new RequestHandler(cts2.Task);
+            var handler1 = new RequestHandler(tcs1.Task);
+            var handler2 = new RequestHandler(tcs2.Task);
 
             var container = new Container(x =>
             {
@@ -122,7 +127,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             var task = mediator.Send(new Request());
 
-            cts1.SetResult("success");
+            tcs1.SetResult("success");
 
             await task;
 

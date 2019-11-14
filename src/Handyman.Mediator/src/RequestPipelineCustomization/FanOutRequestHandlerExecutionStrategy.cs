@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,10 +14,22 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             using (var cts = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken))
             {
                 var tasks = handlers.Select(x => x.Handle(context.Request, cts.Token)).ToList();
-                var task = await Task.WhenAny(tasks).ConfigureAwait(false);
-                var response = await task.ConfigureAwait(false);
-                cts.Cancel();
-                return response;
+
+                while (tasks.Count != 0)
+                {
+                    var task = await Task.WhenAny(tasks).ConfigureAwait(false);
+
+                    if (task.Status != TaskStatus.RanToCompletion)
+                    {
+                        tasks.Remove(task);
+                        continue;
+                    }
+
+                    cts.Cancel();
+                    return task.Result;
+                }
+
+                throw new InvalidOperationException();
             }
         }
     }

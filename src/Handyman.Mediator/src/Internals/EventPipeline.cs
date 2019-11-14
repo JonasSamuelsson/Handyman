@@ -1,49 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.EventPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
-    internal static class EventPipeline
+    internal abstract class EventPipeline
     {
-        internal static Task Execute<TEvent>(Providers providers, TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent
-        {
-            var filters = providers.EventFilterProvider.GetFilters<TEvent>(providers.ServiceProvider).ToListOptimized();
-            var handlers = providers.EventHandlerProvider.GetHandlers<TEvent>(providers.ServiceProvider).ToListOptimized();
-
-            return filters.Count != 0
-                ? Execute(filters, handlers, @event, cancellationToken)
-                : Execute(handlers, @event, cancellationToken);
-        }
-
-        private static Task Execute<TEvent>(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken)
-            where TEvent : IEvent
-        {
-            filters.Sort(FilterComparer.CompareFilters);
-
-            var context = new EventFilterContext<TEvent>
-            {
-                CancellationToken = cancellationToken,
-                Event = @event
-            };
-
-            var index = 0;
-            var filterCount = filters.Count;
-
-            return Execute();
-
-            Task Execute()
-            {
-                if (index < filterCount)
-                {
-                    context.CancellationToken.ThrowIfCancellationRequested();
-
-                    return filters[index++].Execute(context, Execute);
-                }
-
-                return EventPipeline.Execute(handlers, @event, cancellationToken);
-            }
-        }
+        internal abstract Task Execute(IEvent @event, ServiceProvider serviceProvider, CancellationToken cancellationToken);
 
         private static Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent
         {
@@ -57,6 +21,56 @@ namespace Handyman.Mediator.Internals
             }
 
             return Task.WhenAll(tasks);
+        }
+    }
+
+    internal abstract class EventPipeline<TEvent> : EventPipeline
+        where TEvent : IEvent
+    {
+        internal override Task Execute(IEvent @event, ServiceProvider serviceProvider, CancellationToken cancellationToken)
+        {
+            var filters = serviceProvider.GetServices<IEventFilter<TEvent>>().ToListOptimized();
+            var handlers = serviceProvider.GetServices<IEventHandler<TEvent>>().ToListOptimized();
+
+            var context = new EventPipelineContext<TEvent>
+            {
+                CancellationToken = cancellationToken,
+                Event = (TEvent)@event,
+                ServiceProvider = serviceProvider
+            };
+
+            return Execute(filters, handlers, context);
+        }
+
+        protected abstract Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context);
+
+        protected Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, IEventHandlerExecutionStrategy<TEvent> executionStrategy, EventPipelineContext<TEvent> context)
+        {
+            var filterCount = filters.Count;
+
+            if (filterCount == 0)
+            {
+                context.CancellationToken.ThrowIfCancellationRequested();
+                return executionStrategy.Execute(handlers, context);
+            }
+
+            filters.Sort(FilterComparer.CompareFilters);
+
+            var index = 0;
+
+            return Execute();
+
+            Task Execute()
+            {
+                if (index < filterCount)
+                {
+                    context.CancellationToken.ThrowIfCancellationRequested();
+                    return filters[index++].Execute(context, Execute);
+                }
+
+                context.CancellationToken.ThrowIfCancellationRequested();
+                return executionStrategy.Execute(handlers, context);
+            }
         }
     }
 }

@@ -1,39 +1,14 @@
-﻿using Handyman.Mediator.Internals;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Handyman.Mediator.EventPipelineCustomization;
 using Maestro;
 using Shouldly;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
 {
     public class EventPipelineTests
     {
-        [Fact]
-        public async Task ShouldNotExecuteFiltersIfDisabled()
-        {
-            var filter = new EventFilter();
-            var handler = new EventHandler();
-
-            var container = new Container(x =>
-            {
-                x.Add<IEventFilter<Event>>().Instance(filter);
-                x.Add<IEventHandler<Event>>().Instance(handler);
-            });
-
-            var configuration = new Configuration
-            {
-                EventFilterProvider = EventFiltersDisabled.Instance
-            };
-
-            var mediator = new Mediator(container.GetService, configuration);
-
-            await Task.WhenAll(mediator.Publish(new Event()));
-
-            filter.Executed.ShouldBeFalse();
-            handler.Executed.ShouldBeTrue();
-        }
-
         [Fact]
         public async Task ShouldExecuteEventFilters()
         {
@@ -60,7 +35,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task Execute(EventFilterContext<Event> context,
+            public Task Execute(IEventPipelineContext<Event> context,
                 EventFilterExecutionDelegate next)
             {
                 Executed = true;
