@@ -2,6 +2,7 @@
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class RequestHandlerToggleAttribute : RequestPipelineBuilderAttribute
     {
         private readonly Type _toggledHandlerType;
