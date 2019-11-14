@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
@@ -15,22 +14,20 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _toggledHandlerType = toggledHandlerType;
         }
 
-        public Type DefaultHandlerType { get; set; }
+        public Type FallbackHandlerType { get; set; }
 
         public async Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle<TRequest, TResponse>>();
-            var defaultHandler = handlers.Single(x => x.GetType() == _toggledHandlerType);
-            var toggledHandler = handlers.Single(x => x.GetType() != _toggledHandlerType);
-            var enabled = await toggle.IsEnabled(context.Request).ConfigureAwait(false);
+            var enabled = await toggle.IsEnabled(context).ConfigureAwait(false);
 
             if (!enabled)
             {
                 handlers.RemoveAll(x => x.GetType() == _toggledHandlerType);
             }
-            else if (DefaultHandlerType != null)
+            else if (FallbackHandlerType != null)
             {
-                handlers.RemoveAll(x => x.GetType() == DefaultHandlerType);
+                handlers.RemoveAll(x => x.GetType() == FallbackHandlerType);
             }
         }
     }

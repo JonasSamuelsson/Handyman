@@ -5,6 +5,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     public interface IRequestHandlerToggle<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        Task<bool> IsEnabled(TRequest request);
+        Task<bool> IsEnabled(IRequestPipelineContext<TRequest> context);
     }
 }

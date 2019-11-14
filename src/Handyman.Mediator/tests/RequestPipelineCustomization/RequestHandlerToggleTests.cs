@@ -1,7 +1,6 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,43 +9,50 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 {
     public class RequestHandlerToggleTests
     {
-        [Fact]
-        public async Task ShouldToggleRequestHandler()
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task ShouldToggleRequestHandler(bool toggleEnabled)
         {
-            var toggle = new RequestHandlerToggle<Request, Type>();
+            var toggle = new RequestHandlerToggle<Request, object> { Enabled = toggleEnabled };
+            var toggledHandler = new ToggledRequestHandler();
+            var fallbackHandler = new FallbackRequestHandler();
 
             var services = new ServiceCollection();
 
             services.AddScoped<IMediator>(x => new Mediator(x));
-            services.AddTransient<IRequestHandler<Request, Type>, DefaultRequestHandler>();
-            services.AddTransient<IRequestHandler<Request, Type>, ToggledRequestHandler>();
-            services.AddSingleton<IRequestHandlerToggle<Request, Type>>(toggle);
+            services.AddSingleton<IRequestHandlerToggle<Request, object>>(toggle);
+            services.AddSingleton<IRequestHandler<Request, object>>(toggledHandler);
+            services.AddSingleton<IRequestHandler<Request, object>>(fallbackHandler);
 
-            var mediator = services.BuildServiceProvider().GetRequiredService<IMediator>();
+            await services.BuildServiceProvider().GetService<IMediator>().Send(new Request());
 
-            (await mediator.Send(new Request())).ShouldBe(typeof(DefaultRequestHandler));
-
-            toggle.Enabled = true;
-
-            (await mediator.Send(new Request())).ShouldBe(typeof(ToggledRequestHandler));
+            toggledHandler.Executed.ShouldBe(toggleEnabled);
+            fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestHandlerToggle(typeof(ToggledRequestHandler), DefaultHandlerType = typeof(DefaultRequestHandler))]
-        private class Request : IRequest<Type> { }
+        [RequestHandlerToggle(typeof(ToggledRequestHandler), FallbackHandlerType = typeof(FallbackRequestHandler))]
+        private class Request : IRequest<object> { }
 
-        private class DefaultRequestHandler : IRequestHandler<Request, Type>
+        private class ToggledRequestHandler : RequestHandler<Request, object>
         {
-            public Task<Type> Handle(Request request, CancellationToken cancellationToken)
+            public bool Executed { get; set; }
+
+            protected override object Handle(Request request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(GetType());
+                Executed = true;
+                return null;
             }
         }
 
-        private class ToggledRequestHandler : IRequestHandler<Request, Type>
+        private class FallbackRequestHandler : RequestHandler<Request, object>
         {
-            public Task<Type> Handle(Request request, CancellationToken cancellationToken)
+            public bool Executed { get; set; }
+
+            protected override object Handle(Request request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(GetType());
+                Executed = true;
+                return null;
             }
         }
 
@@ -55,7 +61,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public bool Enabled { get; set; }
 
-            public Task<bool> IsEnabled(TRequest request)
+            public Task<bool> IsEnabled(IRequestPipelineContext<TRequest> context)
             {
                 return Task.FromResult(Enabled);
             }

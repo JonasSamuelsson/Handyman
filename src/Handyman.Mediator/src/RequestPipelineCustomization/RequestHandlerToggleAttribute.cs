@@ -8,16 +8,16 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public RequestHandlerToggleAttribute(Type toggledHandlerType)
         {
-            _toggledHandlerType = toggledHandlerType;
+            _toggledHandlerType = toggledHandlerType ?? throw new ArgumentNullException(nameof(toggledHandlerType));
         }
 
-        public Type DefaultHandlerType { get; set; }
+        public Type FallbackHandlerType { get; set; }
 
         public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, ServiceProvider serviceProvider)
         {
             builder.AddHandlerSelector(new RequestHandlerToggleHandlerSelector<TRequest, TResponse>(_toggledHandlerType)
             {
-                DefaultHandlerType = DefaultHandlerType
+                FallbackHandlerType = FallbackHandlerType
             });
         }
     }
