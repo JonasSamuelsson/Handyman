@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
