@@ -3,6 +3,7 @@ using Maestro;
 using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.EventPipelineCustomization;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -22,7 +23,7 @@ namespace Handyman.Mediator.Tests
 
             var @event = new Event();
 
-            await new Mediator(container.GetService, new Configuration { EventFilterProvider = DefaultEventFilterProvider.Instance })
+            await new Mediator(container.GetService)
                 .Publish(@event);
 
             @event.Text.ShouldBe("abc");
@@ -38,7 +39,7 @@ namespace Handyman.Mediator.Tests
             public int Order { get; set; }
             public string Text { get; set; }
 
-            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
+            public Task Execute(IEventPipelineContext<Event> context, EventFilterExecutionDelegate next)
             {
                 context.Event.Text += Text;
                 return next();

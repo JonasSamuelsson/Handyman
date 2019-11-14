@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.EventPipelineCustomization;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -126,7 +127,7 @@ namespace Handyman.Mediator.Tests
 
             public bool Executed { get; set; }
 
-            public Task Execute(EventFilterContext<Event> context, EventFilterExecutionDelegate next)
+            public Task Execute(IEventPipelineContext<Event> context, EventFilterExecutionDelegate next)
             {
                 _cancellationTokenSource.Cancel();
                 Executed = true;
