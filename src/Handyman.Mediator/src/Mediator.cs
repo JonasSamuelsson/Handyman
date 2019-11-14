@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Handyman.Mediator.Internals;
 
@@ -7,6 +8,10 @@ namespace Handyman.Mediator
     public class Mediator : IMediator
     {
         private readonly ServiceProvider _serviceProvider;
+
+        public Mediator(IServiceProvider serviceProvider)
+            : this(serviceProvider.GetService)
+        { }
 
         public Mediator(ServiceProvider serviceProvider)
         {
