@@ -42,7 +42,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         private class EventFilterSelector<TEvent> : IEventFilterSelector<TEvent>
             where TEvent : IEvent
         {
-            public Task SelectFilters(List<IEventFilter<TEvent>> filters, IEventPipelineContext<TEvent> context)
+            public Task SelectFilters(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context)
             {
                 filters.Add(new EventFilter<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
@@ -52,7 +52,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         private class EventHandlerSelector<TEvent> : IEventHandlerSelector<TEvent>
             where TEvent : IEvent
         {
-            public Task SelectHandlers(List<IEventHandler<TEvent>> handlers, IEventPipelineContext<TEvent> context)
+            public Task SelectHandlers(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
             {
                 handlers.Add(new EventHandler<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
@@ -64,7 +64,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute(IEventPipelineContext<TEvent> context, EventFilterExecutionDelegate next)
+            public Task Execute(EventPipelineContext<TEvent> context, EventFilterExecutionDelegate next)
             {
                 Action("filter");
                 return next();
@@ -88,7 +88,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute(List<IEventHandler<TEvent>> handlers, IEventPipelineContext<TEvent> context)
+            public Task Execute(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
             {
                 Action("execution strategy");
                 return DefaultEventHandlerExecutionStrategy<TEvent>.Instance.Execute(handlers, context);

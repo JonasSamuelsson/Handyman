@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 
-namespace Handyman.Mediator.EventPipelineCustomization
+namespace Handyman.Mediator
 {
-    internal class EventPipelineContext<TEvent> : IEventPipelineContext<TEvent>
+    public class EventPipelineContext<TEvent>
     {
         public CancellationToken CancellationToken { get; set; }
         public TEvent Event { get; set; }

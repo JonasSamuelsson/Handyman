@@ -35,7 +35,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task Execute(IEventPipelineContext<Event> context,
+            public Task Execute(EventPipelineContext<Event> context,
                 EventFilterExecutionDelegate next)
             {
                 Executed = true;

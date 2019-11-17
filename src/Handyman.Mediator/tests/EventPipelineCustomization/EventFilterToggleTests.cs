@@ -37,7 +37,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public bool Executed { get; set; }
 
-            public Task Execute(IEventPipelineContext<Event> context, EventFilterExecutionDelegate next)
+            public Task Execute(EventPipelineContext<Event> context, EventFilterExecutionDelegate next)
             {
                 Executed = true;
                 return next();
@@ -48,7 +48,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public bool Executed { get; set; }
 
-            public Task Execute(IEventPipelineContext<Event> context, EventFilterExecutionDelegate next)
+            public Task Execute(EventPipelineContext<Event> context, EventFilterExecutionDelegate next)
             {
                 Executed = true;
                 return next();
@@ -59,7 +59,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public bool Enabled { get; set; }
 
-            public Task<bool> IsEnabled(IEventPipelineContext<Event> context)
+            public Task<bool> IsEnabled(EventPipelineContext<Event> context)
             {
                 return Task.FromResult(Enabled);
             }

@@ -5,6 +5,6 @@ namespace Handyman.Mediator.EventPipelineCustomization
 {
     public interface IEventFilterSelector<TEvent> where TEvent : IEvent
     {
-        Task SelectFilters(List<IEventFilter<TEvent>> filters, IEventPipelineContext<TEvent> context);
+        Task SelectFilters(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context);
     }
 }
