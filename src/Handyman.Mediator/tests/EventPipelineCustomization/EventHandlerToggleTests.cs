@@ -57,7 +57,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public bool Enabled { get; set; }
 
-            public Task<bool> IsEnabled(IEventPipelineContext<Event> context)
+            public Task<bool> IsEnabled(EventPipelineContext<Event> context)
             {
                 return Task.FromResult(Enabled);
             }

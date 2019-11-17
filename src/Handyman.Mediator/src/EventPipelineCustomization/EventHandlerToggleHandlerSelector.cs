@@ -16,7 +16,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public Type FallbackHandlerType { get; set; }
 
-        public async Task SelectHandlers(List<IEventHandler<TEvent>> handlers, IEventPipelineContext<TEvent> context)
+        public async Task SelectHandlers(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventHandlerToggle<TEvent>>();
             var enabled = await toggle.IsEnabled(context).ConfigureAwait(false);

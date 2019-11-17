@@ -10,7 +10,7 @@ namespace Handyman.Mediator.Internals
     {
         public static readonly IEventHandlerExecutionStrategy<TEvent> Instance = new DefaultEventHandlerExecutionStrategy<TEvent>();
 
-        public Task Execute(List<IEventHandler<TEvent>> handlers, IEventPipelineContext<TEvent> context)
+        public Task Execute(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
         {
             return Task.WhenAll(handlers.Select(x => x.Handle(context.Event, context.CancellationToken)));
         }
