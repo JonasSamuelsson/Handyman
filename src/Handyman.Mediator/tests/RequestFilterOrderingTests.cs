@@ -35,7 +35,7 @@ namespace Handyman.Mediator.Tests
             public int Order { get; set; }
             public string Text { get; set; }
 
-            public Task<string> Execute(IRequestFilterContext<Request> context,
+            public Task<string> Execute(RequestPipelineContext<Request> context,
                 RequestFilterExecutionDelegate<string> next)
             {
                 context.Request.Text += Text;

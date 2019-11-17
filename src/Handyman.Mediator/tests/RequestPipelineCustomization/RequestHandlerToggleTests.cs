@@ -61,7 +61,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public bool Enabled { get; set; }
 
-            public Task<bool> IsEnabled(IRequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled(RequestPipelineContext<TRequest> context)
             {
                 return Task.FromResult(Enabled);
             }

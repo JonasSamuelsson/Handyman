@@ -45,7 +45,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class RequestFilterSelector<TRequest, TResponse> : IRequestFilterSelector<TRequest, TResponse>
             where TRequest : IRequest<TResponse>
         {
-            public Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, IRequestPipelineContext<TRequest> context)
+            public Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
             {
                 filters.Add(new RequestFilter<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
@@ -56,7 +56,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class RequestHandlerSelector<TRequest, TResponse> : IRequestHandlerSelector<TRequest, TResponse>
             where TRequest : IRequest<TResponse>
         {
-            public Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
+            public Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
             {
                 handlers.Add(new RequestHandler<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
@@ -68,7 +68,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public Action<string> Action { get; set; }
 
-            public Task<TResponse> Execute(IRequestFilterContext<TRequest> context, RequestFilterExecutionDelegate<TResponse> next)
+            public Task<TResponse> Execute(RequestPipelineContext<TRequest> context, RequestFilterExecutionDelegate<TResponse> next)
             {
                 Action.Invoke("filter");
                 return next();
@@ -80,7 +80,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public Action<string> Action { get; set; }
 
-            public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
+            public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
             {
                 Action.Invoke("execution strategy");
                 return handlers.Single().Handle(context.Request, context.CancellationToken);
