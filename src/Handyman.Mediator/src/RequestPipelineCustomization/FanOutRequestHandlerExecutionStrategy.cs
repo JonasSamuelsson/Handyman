@@ -9,7 +9,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     public class FanOutRequestHandlerExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
+        public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
             using (var cts = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken))
             {

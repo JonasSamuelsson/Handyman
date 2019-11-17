@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -9,7 +9,7 @@ namespace Handyman.Mediator.Internals
     {
         public static IRequestHandlerExecutionStrategy<TRequest, TResponse> Instance = new DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>();
 
-        public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
+        public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
             return handlers.Single().Handle(context.Request, context.CancellationToken);
         }

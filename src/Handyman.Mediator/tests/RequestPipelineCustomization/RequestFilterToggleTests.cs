@@ -41,7 +41,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public bool Executed { get; set; }
 
-            public Task<object> Execute(IRequestFilterContext<Request> context, RequestFilterExecutionDelegate<object> next)
+            public Task<object> Execute(RequestPipelineContext<Request> context, RequestFilterExecutionDelegate<object> next)
             {
                 Executed = true;
                 return next();
@@ -52,7 +52,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public bool Executed { get; set; }
 
-            public Task<object> Execute(IRequestFilterContext<Request> context, RequestFilterExecutionDelegate<object> next)
+            public Task<object> Execute(RequestPipelineContext<Request> context, RequestFilterExecutionDelegate<object> next)
             {
                 Executed = true;
                 return next();
@@ -64,7 +64,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public bool Enabled { get; set; }
 
-            public Task<bool> IsEnabled(IRequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled(RequestPipelineContext<TRequest> context)
             {
                 return Task.FromResult(Enabled);
             }

@@ -16,7 +16,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public Type FallbackHandlerType { get; set; }
 
-        public async Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
+        public async Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle<TRequest, TResponse>>();
             var enabled = await toggle.IsEnabled(context).ConfigureAwait(false);

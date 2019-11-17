@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 
-namespace Handyman.Mediator.Internals
+namespace Handyman.Mediator
 {
-    internal class RequestPipelineContext<TRequest> : IRequestFilterContext<TRequest>, IRequestPipelineContext<TRequest>
+    public class RequestPipelineContext<TRequest>
     {
         public CancellationToken CancellationToken { get; set; }
         public TRequest Request { get; set; }

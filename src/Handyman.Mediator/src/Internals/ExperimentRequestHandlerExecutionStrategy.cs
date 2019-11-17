@@ -17,7 +17,7 @@ namespace Handyman.Mediator.Internals
             _baselineHandlerType = baselineHandlerType;
         }
 
-        public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, IRequestPipelineContext<TRequest> context)
+        public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
             var baselineHandler = GetBaselineHandler(handlers);
 

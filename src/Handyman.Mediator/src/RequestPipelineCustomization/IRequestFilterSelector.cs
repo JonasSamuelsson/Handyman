@@ -5,6 +5,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 {
     public interface IRequestFilterSelector<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
-        Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, IRequestPipelineContext<TRequest> context);
+        Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context);
     }
 }
