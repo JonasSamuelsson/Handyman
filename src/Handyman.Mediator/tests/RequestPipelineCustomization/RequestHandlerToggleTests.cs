@@ -1,6 +1,7 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -27,6 +28,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Send(new Request());
 
+            toggle.RequestHandlerType.ShouldBe(typeof(ToggledRequestHandler));
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
@@ -60,9 +62,11 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             where TRequest : IRequest<TResponse>
         {
             public bool Enabled { get; set; }
+            public Type RequestHandlerType { get; set; }
 
-            public Task<bool> IsEnabled(RequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled(Type requestHandlerType, RequestPipelineContext<TRequest> context)
             {
+                RequestHandlerType = requestHandlerType;
                 return Task.FromResult(Enabled);
             }
         }
