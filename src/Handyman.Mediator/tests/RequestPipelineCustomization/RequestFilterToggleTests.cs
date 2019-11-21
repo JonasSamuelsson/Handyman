@@ -1,6 +1,7 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,6 +31,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await mediator.Send(new Request());
 
+            toggle.RequestFilterType.ShouldBe(typeof(ToggledRequestFilter));
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
@@ -63,9 +65,11 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             where TRequest : IRequest<TResponse>
         {
             public bool Enabled { get; set; }
+            public Type RequestFilterType { get; set; }
 
-            public Task<bool> IsEnabled(RequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled(Type requestFilterType, RequestPipelineContext<TRequest> context)
             {
+                RequestFilterType = requestFilterType;
                 return Task.FromResult(Enabled);
             }
         }

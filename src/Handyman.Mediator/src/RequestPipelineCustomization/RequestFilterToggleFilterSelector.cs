@@ -19,7 +19,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         public async Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestFilterToggle<TRequest, TResponse>>();
-            var enabled = await toggle.IsEnabled(context).ConfigureAwait(false);
+            var enabled = await toggle.IsEnabled(_toggledFilterType, context).ConfigureAwait(false);
 
             if (!enabled)
             {
