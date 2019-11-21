@@ -1,6 +1,7 @@
 ﻿using Handyman.Mediator.EventPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,6 +27,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
+            toggle.EventHandlerType.ShouldBe(typeof(ToggledEventHandler));
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
@@ -56,9 +58,11 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         private class EventHandlerToggle : IEventHandlerToggle<Event>
         {
             public bool Enabled { get; set; }
+            public Type EventHandlerType { get; set; }
 
-            public Task<bool> IsEnabled(EventPipelineContext<Event> context)
+            public Task<bool> IsEnabled(Type eventHandlerType, EventPipelineContext<Event> context)
             {
+                EventHandlerType = eventHandlerType;
                 return Task.FromResult(Enabled);
             }
         }
