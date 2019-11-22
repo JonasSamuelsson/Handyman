@@ -1,6 +1,6 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Internals
@@ -11,7 +11,17 @@ namespace Handyman.Mediator.Internals
 
         public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
-            return handlers.Single().Handle(context.Request, context.CancellationToken);
+            if (handlers.Count == 0)
+            {
+                throw new InvalidOperationException($"No handlers for request of type '{context.Request.GetType().FullName}'.");
+            }
+
+            if (handlers.Count > 1)
+            {
+                throw new InvalidOperationException($"Multiple handlers for request of type '{context.Request.GetType().FullName}'.");
+            }
+
+            return handlers[0].Handle(context.Request, context.CancellationToken);
         }
     }
 }
