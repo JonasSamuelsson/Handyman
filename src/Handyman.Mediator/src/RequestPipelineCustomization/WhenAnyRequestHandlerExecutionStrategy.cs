@@ -13,15 +13,34 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         {
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken);
             var tasks = handlers.Select(x => x.Handle(context.Request, cts.Token)).ToList();
+            List<Exception> exceptions = null;
 
             while (tasks.Count != 0)
             {
                 var task = await Task.WhenAny(tasks).ConfigureAwait(false);
 
+                context.CancellationToken.ThrowIfCancellationRequested();
+
                 if (task.Status != TaskStatus.RanToCompletion)
                 {
+                    if (exceptions == null)
+                    {
+                        exceptions = new List<Exception>();
+                    }
+
+                    exceptions.Add(task.Exception);
                     tasks.Remove(task);
                     continue;
+                }
+
+                if (exceptions != null)
+                {
+                    var exceptionHandler = context.ServiceProvider.GetService<IExceptionHandler>();
+
+                    if (exceptionHandler != null)
+                    {
+                        await exceptionHandler.Handle(exceptions);
+                    }
                 }
 
                 cts.Cancel();

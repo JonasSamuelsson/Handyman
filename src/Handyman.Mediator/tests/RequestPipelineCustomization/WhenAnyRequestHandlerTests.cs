@@ -120,6 +120,44 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             handler2.Cancelled.ShouldBeTrue();
         }
 
+        [Fact]
+        public async Task ShouldHandOverExceptionsFromFailedRequestHandlersToExceptionHandler()
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            var requestHandler1 = new RequestHandler(Task.Run(new Func<string>(() => throw new Exception("1"))));
+            var requestHandler2 = new RequestHandler(Task.Run(new Func<string>(() => throw new Exception("2"))));
+            var requestHandler3 = new RequestHandler(tcs.Task);
+            var exceptionHandler = new ExceptionHandler();
+
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IRequestHandler<Request, string>>(requestHandler1);
+            services.AddSingleton<IRequestHandler<Request, string>>(requestHandler2);
+            services.AddSingleton<IRequestHandler<Request, string>>(requestHandler3);
+            services.AddSingleton<IExceptionHandler>(exceptionHandler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
+
+            var task = mediator.Send(new Request());
+
+            await Task.Delay(50);
+
+            tcs.SetResult("success");
+
+            (await task).ShouldBe("success");
+
+            exceptionHandler.Exceptions
+                .Select(x => GetInnermostException(x).Message)
+                .OrderBy(x => x)
+                .ShouldBe(new[] { "1", "2" });
+
+            Exception GetInnermostException(Exception exception)
+            {
+                return exception.InnerException == null ? exception : GetInnermostException(exception.InnerException);
+            }
+        }
+
         [WhenAnyRequestHandler]
         private class Request : IRequest<string> { }
 
@@ -152,6 +190,17 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
                 }
 
                 return await _task;
+            }
+        }
+
+        private class ExceptionHandler : IExceptionHandler
+        {
+            public IEnumerable<Exception> Exceptions { get; set; }
+
+            public Task Handle(IEnumerable<Exception> exceptions)
+            {
+                Exceptions = exceptions;
+                return Task.CompletedTask;
             }
         }
     }
