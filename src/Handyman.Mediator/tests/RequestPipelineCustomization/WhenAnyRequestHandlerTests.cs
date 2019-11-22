@@ -1,7 +1,10 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Maestro;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -16,13 +19,12 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             var handler1 = new RequestHandler(Task.FromResult("success"));
             var handler2 = new RequestHandler(Task.FromResult("success"));
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(handler1);
-                x.Add<IRequestHandler<Request, string>>().Instance(handler2);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler1);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler2);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             await mediator.Send(new Request());
 
@@ -30,8 +32,10 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             handler2.Executed.ShouldBeTrue();
         }
 
-        [Fact]
-        public async Task ShouldReturnWhenAnyHandlerCompletes()
+        [Theory]
+        [InlineData("1")]
+        [InlineData("2")]
+        public async Task ShouldReturnWhenAnyHandlerCompletes(string result)
         {
             var cts1 = new TaskCompletionSource<string>();
             var cts2 = new TaskCompletionSource<string>();
@@ -39,43 +43,20 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             var handler1 = new RequestHandler(cts1.Task);
             var handler2 = new RequestHandler(cts2.Task);
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(handler1);
-                x.Add<IRequestHandler<Request, string>>().Instance(handler2);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler1);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler2);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             var task = mediator.Send(new Request());
 
             task.Status.ShouldNotBe(TaskStatus.RanToCompletion);
 
-            cts1.SetResult("1");
+            cts1.SetResult(result);
 
-            (await task).ShouldBe("1");
-
-            cts1 = new TaskCompletionSource<string>();
-            cts2 = new TaskCompletionSource<string>();
-
-            handler1 = new RequestHandler(cts1.Task);
-            handler2 = new RequestHandler(cts2.Task);
-
-            container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(handler1);
-                x.Add<IRequestHandler<Request, string>>().Instance(handler2);
-            });
-
-            mediator = new Mediator(container.GetService);
-
-            task = mediator.Send(new Request());
-
-            task.Status.ShouldNotBe(TaskStatus.RanToCompletion);
-
-            cts2.SetResult("2");
-
-            (await task).ShouldBe("2");
+            (await task).ShouldBe(result);
         }
 
         [Fact]
@@ -87,13 +68,12 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             var handler1 = new RequestHandler(tcs1.Task);
             var handler2 = new RequestHandler(tcs2.Task);
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(handler1);
-                x.Add<IRequestHandler<Request, string>>().Instance(handler2);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler1);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler2);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             var task = mediator.Send(new Request());
 
@@ -117,13 +97,12 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             var handler1 = new RequestHandler(tcs1.Task);
             var handler2 = new RequestHandler(tcs2.Task);
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(handler1);
-                x.Add<IRequestHandler<Request, string>>().Instance(handler2);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler1);
+            services.AddSingleton<IRequestHandler<Request, string>>(handler2);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             var task = mediator.Send(new Request());
 
