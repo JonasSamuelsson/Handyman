@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class ExperimentRequestHandlerExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    internal class ExperimentRequestHandlerExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
         private readonly Type _baselineHandlerType;
 
@@ -19,6 +20,11 @@ namespace Handyman.Mediator.Internals
 
         public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
+            if (handlers.Count <= 1)
+            {
+                return await DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance.Execute(handlers, context).ConfigureAwait(false);
+            }
+
             var baselineHandler = GetBaselineHandler(handlers);
 
             var toggle = context.ServiceProvider.GetRequiredService<IExperimentToggle<TRequest>>();
