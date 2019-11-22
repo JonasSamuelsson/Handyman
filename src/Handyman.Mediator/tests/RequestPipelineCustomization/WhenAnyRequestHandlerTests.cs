@@ -1,14 +1,14 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Maestro;
 using Shouldly;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 {
-    public class FanOutAttributeTests
+    public class WhenAnyRequestHandlerTests
     {
         [Fact]
         public async Task ShouldCallAllHandlers()
@@ -141,7 +141,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             handler2.Cancelled.ShouldBeTrue();
         }
 
-        [FanOut]
+        [WhenAnyRequestHandler]
         private class Request : IRequest<string> { }
 
         private class RequestHandler : IRequestHandler<Request, string>
