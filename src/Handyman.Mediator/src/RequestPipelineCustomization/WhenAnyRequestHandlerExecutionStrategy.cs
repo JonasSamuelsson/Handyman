@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Handyman.Mediator.Internals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,11 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     {
         public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
+            if (handlers.Count <= 1)
+            {
+                return await DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance.Execute(handlers, context).ConfigureAwait(false);
+            }
+
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken);
             var tasks = handlers.Select(x => x.Handle(context.Request, cts.Token)).ToList();
             List<Exception> exceptions = null;
