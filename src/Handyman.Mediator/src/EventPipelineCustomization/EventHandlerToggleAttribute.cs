@@ -5,20 +5,20 @@ namespace Handyman.Mediator.EventPipelineCustomization
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class EventHandlerToggleAttribute : EventPipelineBuilderAttribute
     {
-        private readonly Type _toggledHandlerType;
+        private readonly Type _toggleEnabledHandlerType;
 
-        public EventHandlerToggleAttribute(Type toggledHandlerType)
+        public EventHandlerToggleAttribute(Type toggleEnabledHandlerType)
         {
-            _toggledHandlerType = toggledHandlerType ?? throw new ArgumentNullException(nameof(toggledHandlerType));
+            _toggleEnabledHandlerType = toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType));
         }
 
-        public Type FallbackHandlerType { get; set; }
+        public Type ToggleDisabledHandlerType { get; set; }
 
         public override void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, ServiceProvider serviceProvider)
         {
-            builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector<TEvent>(_toggledHandlerType)
+            builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector<TEvent>(_toggleEnabledHandlerType)
             {
-                FallbackHandlerType = FallbackHandlerType
+                ToggleDisabledHandlerType = ToggleDisabledHandlerType
             });
         }
     }

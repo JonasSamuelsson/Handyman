@@ -5,20 +5,20 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class RequestFilterToggleAttribute : RequestPipelineBuilderAttribute
     {
-        private readonly Type _toggledFilterType;
+        private readonly Type _toggleEnabledFilterType;
 
-        public RequestFilterToggleAttribute(Type toggledFilterType)
+        public RequestFilterToggleAttribute(Type toggleEnabledFilterType)
         {
-            _toggledFilterType = toggledFilterType ?? throw new ArgumentNullException(nameof(toggledFilterType));
+            _toggleEnabledFilterType = toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType));
         }
 
-        public Type FallbackFilterType { get; set; }
+        public Type ToggleDisabledFilterType { get; set; }
 
         public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, ServiceProvider serviceProvider)
         {
-            builder.AddFilterSelector(new RequestFilterToggleFilterSelector<TRequest, TResponse>(_toggledFilterType)
+            builder.AddFilterSelector(new RequestFilterToggleFilterSelector<TRequest, TResponse>(_toggleEnabledFilterType)
             {
-                FallbackFilterType = FallbackFilterType
+                ToggleDisabledFilterType = ToggleDisabledFilterType
             });
         }
     }

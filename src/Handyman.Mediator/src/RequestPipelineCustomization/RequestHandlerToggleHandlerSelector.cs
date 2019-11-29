@@ -7,27 +7,27 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     public class RequestHandlerToggleHandlerSelector<TRequest, TResponse> : IRequestHandlerSelector<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly Type _toggledHandlerType;
+        private readonly Type _toggleEnabledHandlerType;
 
-        public RequestHandlerToggleHandlerSelector(Type toggledHandlerType)
+        public RequestHandlerToggleHandlerSelector(Type toggleEnabledHandlerType)
         {
-            _toggledHandlerType = toggledHandlerType;
+            _toggleEnabledHandlerType = toggleEnabledHandlerType;
         }
 
-        public Type FallbackHandlerType { get; set; }
+        public Type ToggleDisabledHandlerType { get; set; }
 
         public async Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle<TRequest, TResponse>>();
-            var enabled = await toggle.IsEnabled(_toggledHandlerType, context).ConfigureAwait(false);
+            var enabled = await toggle.IsEnabled(_toggleEnabledHandlerType, context).ConfigureAwait(false);
 
             if (!enabled)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggledHandlerType);
+                handlers.RemoveAll(x => x.GetType() == _toggleEnabledHandlerType);
             }
-            else if (FallbackHandlerType != null)
+            else if (ToggleDisabledHandlerType != null)
             {
-                handlers.RemoveAll(x => x.GetType() == FallbackHandlerType);
+                handlers.RemoveAll(x => x.GetType() == ToggleDisabledHandlerType);
             }
         }
     }
