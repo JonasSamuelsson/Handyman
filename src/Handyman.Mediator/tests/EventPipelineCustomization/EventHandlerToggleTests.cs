@@ -1,8 +1,8 @@
-﻿using Handyman.Mediator.EventPipelineCustomization;
+﻿using System;
+using System.Threading.Tasks;
+using Handyman.Mediator.EventPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.EventPipelineCustomization
@@ -15,8 +15,8 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         public async Task ShouldToggleEventHandler(bool toggleEnabled)
         {
             var toggle = new EventHandlerToggle { Enabled = toggleEnabled };
-            var toggledHandler = new ToggledEventHandler();
-            var fallbackHandler = new FallbackEventHandler();
+            var toggledHandler = new ToggleEnabledEventHandler();
+            var fallbackHandler = new ToggleDisabledEventHandler();
 
             var services = new ServiceCollection();
 
@@ -27,15 +27,15 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
-            toggle.EventHandlerType.ShouldBe(typeof(ToggledEventHandler));
+            toggle.EventHandlerType.ShouldBe(typeof(ToggleEnabledEventHandler));
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventHandlerToggle(typeof(ToggledEventHandler), FallbackHandlerType = typeof(FallbackEventHandler))]
+        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler))]
         private class Event : IEvent { }
 
-        private class ToggledEventHandler : EventHandler<Event>
+        private class ToggleEnabledEventHandler : EventHandler<Event>
         {
             public bool Executed { get; set; }
 
@@ -45,7 +45,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             }
         }
 
-        private class FallbackEventHandler : EventHandler<Event>
+        private class ToggleDisabledEventHandler : EventHandler<Event>
         {
             public bool Executed { get; set; }
 

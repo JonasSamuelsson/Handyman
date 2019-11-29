@@ -1,9 +1,9 @@
-﻿using Handyman.Mediator.RequestPipelineCustomization;
-using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.RequestPipelineCustomization;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
@@ -16,8 +16,8 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         public async Task ShouldToggleRequestFilter(bool toggleEnabled)
         {
             var toggle = new RequestFilterToggle<Request, object> { Enabled = toggleEnabled };
-            var toggledFilter = new ToggledRequestFilter();
-            var fallbackFilter = new FallbackRequestFilter();
+            var toggledFilter = new ToggledEnabledRequestFilter();
+            var fallbackFilter = new ToggleDisabledRequestFilter();
 
             var services = new ServiceCollection();
 
@@ -31,15 +31,15 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await mediator.Send(new Request());
 
-            toggle.RequestFilterType.ShouldBe(typeof(ToggledRequestFilter));
+            toggle.RequestFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestFilterToggle(typeof(ToggledRequestFilter), FallbackFilterType = typeof(FallbackRequestFilter))]
+        [RequestFilterToggle(typeof(ToggledEnabledRequestFilter), ToggleDisabledFilterType = typeof(ToggleDisabledRequestFilter))]
         private class Request : IRequest<object> { }
 
-        private class ToggledRequestFilter : IRequestFilter<Request, object>
+        private class ToggledEnabledRequestFilter : IRequestFilter<Request, object>
         {
             public bool Executed { get; set; }
 
@@ -50,7 +50,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class FallbackRequestFilter : IRequestFilter<Request, object>
+        private class ToggleDisabledRequestFilter : IRequestFilter<Request, object>
         {
             public bool Executed { get; set; }
 

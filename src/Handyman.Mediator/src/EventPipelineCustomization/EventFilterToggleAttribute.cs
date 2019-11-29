@@ -5,20 +5,20 @@ namespace Handyman.Mediator.EventPipelineCustomization
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class EventFilterToggleAttribute : EventPipelineBuilderAttribute
     {
-        private readonly Type _toggledFilterType;
+        private readonly Type _toggleEnabledFilterType;
 
-        public EventFilterToggleAttribute(Type toggledFilterType)
+        public EventFilterToggleAttribute(Type toggleEnabledFilterType)
         {
-            _toggledFilterType = toggledFilterType ?? throw new ArgumentNullException(nameof(toggledFilterType));
+            _toggleEnabledFilterType = toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType));
         }
 
-        public Type FallbackFilterType { get; set; }
+        public Type ToggleDisabledFilterType { get; set; }
 
         public override void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, ServiceProvider serviceProvider)
         {
-            builder.AddFilterSelector(new EventFilterToggleFilterSelector<TEvent>(_toggledFilterType)
+            builder.AddFilterSelector(new EventFilterToggleFilterSelector<TEvent>(_toggleEnabledFilterType)
             {
-                FallbackFilterType = FallbackFilterType
+                ToggleDisabledFilterType = ToggleDisabledFilterType
             });
         }
     }

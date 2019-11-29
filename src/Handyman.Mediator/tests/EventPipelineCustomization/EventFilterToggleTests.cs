@@ -1,8 +1,8 @@
-﻿using Handyman.Mediator.EventPipelineCustomization;
+﻿using System;
+using System.Threading.Tasks;
+using Handyman.Mediator.EventPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.EventPipelineCustomization
@@ -15,8 +15,8 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         public async Task ShouldToggleEventFilter(bool toggleEnabled)
         {
             var toggle = new EventFilterToggle { Enabled = toggleEnabled };
-            var toggledFilter = new ToggledEventFilter();
-            var fallbackFilter = new FallbackEventFilter();
+            var toggledFilter = new ToggleEnabledEventFilter();
+            var fallbackFilter = new ToggleDisabledEventFilter();
 
             var services = new ServiceCollection();
 
@@ -27,15 +27,15 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
-            toggle.EventFilterType.ShouldBe(typeof(ToggledEventFilter));
+            toggle.EventFilterType.ShouldBe(typeof(ToggleEnabledEventFilter));
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventFilterToggle(typeof(ToggledEventFilter), FallbackFilterType = typeof(FallbackEventFilter))]
+        [EventFilterToggle(typeof(ToggleEnabledEventFilter), ToggleDisabledFilterType = typeof(ToggleDisabledEventFilter))]
         private class Event : IEvent { }
 
-        private class ToggledEventFilter : IEventFilter<Event>
+        private class ToggleEnabledEventFilter : IEventFilter<Event>
         {
             public bool Executed { get; set; }
 
@@ -46,7 +46,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             }
         }
 
-        private class FallbackEventFilter : IEventFilter<Event>
+        private class ToggleDisabledEventFilter : IEventFilter<Event>
         {
             public bool Executed { get; set; }
 
