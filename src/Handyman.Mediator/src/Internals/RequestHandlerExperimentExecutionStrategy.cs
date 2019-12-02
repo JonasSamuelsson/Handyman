@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -43,14 +43,14 @@ namespace Handyman.Mediator.Internals
             var baselineExecution = executions.Single(x => x.Handler == baselineHandler);
             var experimentExecutions = executions.Where(x => x != baselineExecution).ToList();
 
-            var result = new RequestHandlerExperimentResult<TRequest, TResponse>
+            var experiment = new RequestHandlerExperiment<TRequest, TResponse>
             {
-                Baseline = baselineExecution,
-                Experiments = experimentExecutions,
+                BaselineExecution = baselineExecution,
+                ExperimentalExecutions = experimentExecutions,
                 Request = request
             };
 
-            await observer.Observe(result).ConfigureAwait(false);
+            await observer.Observe(experiment).ConfigureAwait(false);
 
             return await baselineExecution.Task;
         }
@@ -65,13 +65,13 @@ namespace Handyman.Mediator.Internals
                     continue;
 
                 if (baselineHandler != null)
-                    throw new InvalidOperationException($"{typeof(TRequest).FullName} has multiple experiment baseline handlers.");
+                    throw new InvalidOperationException($"{typeof(TRequest).FullName} experiment has multiple baseline handlers.");
 
                 baselineHandler = handler;
             }
 
             if (baselineHandler == null)
-                throw new InvalidOperationException($"{typeof(TRequest).FullName} does not have any experiment baseline handlers.");
+                throw new InvalidOperationException($"{typeof(TRequest).FullName} experiment does not have a baseline handler.");
 
             return baselineHandler;
         }
