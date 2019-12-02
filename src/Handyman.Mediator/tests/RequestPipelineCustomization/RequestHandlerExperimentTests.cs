@@ -130,11 +130,11 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             public RequestHandlerExperimentExecution<Request, string> Baseline { get; set; }
             public IReadOnlyCollection<RequestHandlerExperimentExecution<Request, string>> Experiments { get; set; }
 
-            public Task Observe(RequestHandlerExperimentResult<Request, string> result)
+            public Task Observe(RequestHandlerExperiment<Request, string> experiment)
             {
-                Request = result.Request;
-                Baseline = result.Baseline;
-                Experiments = result.Experiments;
+                Request = experiment.Request;
+                Baseline = experiment.BaselineExecution;
+                Experiments = experiment.ExperimentalExecutions;
 
                 return Task.CompletedTask;
             }
