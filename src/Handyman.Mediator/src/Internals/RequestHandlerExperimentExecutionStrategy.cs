@@ -89,7 +89,7 @@ namespace Handyman.Mediator.Internals
                         Handler = handler,
                         Task = task
                     };
-                }, TaskContinuationOptions.None);
+                }, TaskScheduler.Default);
         }
     }
 }
