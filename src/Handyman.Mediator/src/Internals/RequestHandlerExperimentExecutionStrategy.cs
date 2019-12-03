@@ -1,10 +1,10 @@
-﻿using Handyman.Mediator.RequestPipelineCustomization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -52,7 +52,7 @@ namespace Handyman.Mediator.Internals
 
             await observer.Observe(experiment).ConfigureAwait(false);
 
-            return await baselineExecution.Task;
+            return await baselineExecution.Task.ConfigureAwait(false);
         }
 
         private IRequestHandler<TRequest, TResponse> GetBaselineHandler(List<IRequestHandler<TRequest, TResponse>> handlers)
