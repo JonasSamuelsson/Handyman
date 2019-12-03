@@ -29,7 +29,7 @@ namespace Handyman.Mediator.Internals
             }
 
             context.CancellationToken.ThrowIfCancellationRequested();
-            return await Execute(filters, ctx => HandlerExecutionStrategy.Execute(handlers, ctx), context);
+            return await Execute(filters, ctx => HandlerExecutionStrategy.Execute(handlers, ctx), context).ConfigureAwait(false);
         }
     }
 }

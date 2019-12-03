@@ -1,9 +1,9 @@
-﻿using Handyman.Mediator.Internals;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
@@ -45,7 +45,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
                     if (exceptionHandler != null)
                     {
-                        await exceptionHandler.Handle(exceptions);
+                        await exceptionHandler.Handle(exceptions).ConfigureAwait(false);
                     }
                 }
 
