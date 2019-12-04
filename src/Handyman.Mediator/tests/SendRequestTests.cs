@@ -2,6 +2,7 @@
 using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -11,8 +12,9 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldSendRequest()
         {
-            var container = new Container(x => x.Add<IRequestHandler<Request, Response>>().Type<RequestHandler>());
-            (await new Mediator(container.GetService).Send(new Request(), CancellationToken.None)).Value.ShouldBe("success");
+            var services = new ServiceCollection().AddTransient<IRequestHandler<Request, Response>, RequestHandler>();
+            var mediator = new Mediator(services.BuildServiceProvider());
+            (await mediator.Send(new Request(), CancellationToken.None)).Value.ShouldBe("success");
         }
 
         private class Request : IRequest<Response> { }

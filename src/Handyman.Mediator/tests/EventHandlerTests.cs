@@ -1,5 +1,6 @@
 ﻿using Maestro;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -10,8 +11,8 @@ namespace Handyman.Mediator.Tests
         public async Task SyncImplementation()
         {
             var handler = new EventHandler();
-            var container = new Container(x => x.Add<IEventHandler<Event>>().Instance(handler));
-            var mediator = new Mediator(container.GetService);
+            var services = new ServiceCollection().AddSingleton<IEventHandler<Event>>(handler);
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             await mediator.Publish(new Event());
         }

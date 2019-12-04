@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Maestro;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -15,12 +15,11 @@ namespace Handyman.Mediator.Tests
             var cts = new CancellationTokenSource();
             var handler = new RequestHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, Void>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestHandler<Request, Void>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             cts.Cancel();
 
@@ -37,13 +36,12 @@ namespace Handyman.Mediator.Tests
             var filter = new RequestFilter(cts);
             var handler = new RequestHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestFilter<Request, Void>>().Instance(filter);
-                x.Add<IRequestHandler<Request, Void>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestFilter<Request, Void>>(filter);
+            services.AddSingleton<IRequestHandler<Request, Void>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             cts.Cancel();
 
@@ -61,16 +59,15 @@ namespace Handyman.Mediator.Tests
             var filter = new RequestFilter(cts);
             var handler = new RequestHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestFilter<Request, Void>>().Instance(filter);
-                x.Add<IRequestHandler<Request, Void>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestFilter<Request, Void>>(filter);
+            services.AddSingleton<IRequestHandler<Request, Void>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
-                .Message.ShouldBe("oce");
+            .Message.ShouldBe("oce");
 
             filter.Executed.ShouldBeTrue();
             handler.Executed.ShouldBeFalse();
@@ -84,17 +81,16 @@ namespace Handyman.Mediator.Tests
             var filter2 = new RequestFilter(cts);
             var handler = new RequestHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestFilter<Request, Void>>().Instance(filter1);
-                x.Add<IRequestFilter<Request, Void>>().Instance(filter2);
-                x.Add<IRequestHandler<Request, Void>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IRequestFilter<Request, Void>>(filter1);
+            services.AddSingleton<IRequestFilter<Request, Void>>(filter2);
+            services.AddSingleton<IRequestHandler<Request, Void>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
-                .Message.ShouldBe("oce");
+            .Message.ShouldBe("oce");
 
             filter1.Executed.ShouldBeTrue();
             filter2.Executed.ShouldBeFalse();

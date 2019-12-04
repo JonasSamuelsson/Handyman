@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Handyman.Mediator.EventPipelineCustomization;
 using Handyman.Mediator.Internals;
-using Maestro;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -17,9 +17,11 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             var strings = new List<string>();
 
-            var container = new Container(x => x.Add<Action<string>>().Instance(new Action<string>(s => strings.Add(s))));
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<Action<string>>(s => strings.Add(s));
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             await mediator.Publish(new Event());
 

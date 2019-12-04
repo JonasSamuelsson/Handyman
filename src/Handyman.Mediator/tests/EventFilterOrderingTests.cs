@@ -4,6 +4,7 @@ using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
 using Handyman.Mediator.EventPipelineCustomization;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -13,17 +14,16 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task FiltersShouldBeExecutedInTheCorrectOrder()
         {
-            var container = new Container(x =>
-            {
-                x.Add<IEventFilter<Event>>().Instance(new Filter { Text = "b" });
-                x.Add<IEventFilter<Event>>().Instance(new Filter { Order = 1, Text = "c" });
-                x.Add<IEventFilter<Event>>().Instance(new Filter { Order = -1, Text = "a" });
-                x.Add<IEventHandler<Event>>().Type<Handler>();
-            });
+            var services = new ServiceCollection();
+
+                services.AddSingleton<IEventFilter<Event>>(new Filter { Text = "b" });
+                services.AddSingleton<IEventFilter<Event>>(new Filter { Order = 1, Text = "c" });
+                services.AddSingleton<IEventFilter<Event>>(new Filter { Order = -1, Text = "a" });
+                services.AddTransient<IEventHandler<Event>, Handler>();
 
             var @event = new Event();
 
-            await new Mediator(container.GetService)
+            await new Mediator(services.BuildServiceProvider())
                 .Publish(@event);
 
             @event.Text.ShouldBe("abc");
