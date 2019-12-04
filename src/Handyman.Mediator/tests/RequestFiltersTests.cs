@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.Internals;
-using Maestro;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -12,18 +11,17 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldExecuteFilters()
         {
-            var container = new Container();
             var handler = new RequestHandler();
             var filter1 = new RequestFilter();
             var filter2 = new RequestFilter();
-            container.Configure(x =>
-            {
-                x.Add<IRequestHandler<Request, Response>>().Instance(handler);
-                x.Add<IRequestFilter<Request, Response>>().Factory(() => filter1);
-                x.Add<IRequestFilter<Request, Response>>().Factory(() => filter2);
-            });
 
-            var mediator = new Mediator(container.GetService);
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IRequestHandler<Request, Response>>(handler);
+            services.AddSingleton<IRequestFilter<Request, Response>>(filter1);
+            services.AddSingleton<IRequestFilter<Request, Response>>(filter2);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
             var request = new Request();
 
             await mediator.Send(request, CancellationToken.None);
