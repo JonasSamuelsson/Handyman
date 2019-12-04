@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace Handyman.Mediator
 {
@@ -6,6 +7,6 @@ namespace Handyman.Mediator
     {
         public CancellationToken CancellationToken { get; set; }
         public TRequest Request { get; set; }
-        public ServiceProvider ServiceProvider { get; set; }
+        public IServiceProvider ServiceProvider { get; set; }
     }
 }

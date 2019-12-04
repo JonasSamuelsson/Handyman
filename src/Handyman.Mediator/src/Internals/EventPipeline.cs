@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Handyman.Mediator.EventPipelineCustomization;
@@ -7,7 +8,7 @@ namespace Handyman.Mediator.Internals
 {
     internal abstract class EventPipeline
     {
-        internal abstract Task Execute(IEvent @event, ServiceProvider serviceProvider, CancellationToken cancellationToken);
+        internal abstract Task Execute(IEvent @event, IServiceProvider serviceProvider, CancellationToken cancellationToken);
 
         private static Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent
         {
@@ -27,7 +28,7 @@ namespace Handyman.Mediator.Internals
     internal abstract class EventPipeline<TEvent> : EventPipeline
         where TEvent : IEvent
     {
-        internal override Task Execute(IEvent @event, ServiceProvider serviceProvider, CancellationToken cancellationToken)
+        internal override Task Execute(IEvent @event, IServiceProvider serviceProvider, CancellationToken cancellationToken)
         {
             var filters = serviceProvider.GetServices<IEventFilter<TEvent>>().ToListOptimized();
             var handlers = serviceProvider.GetServices<IEventHandler<TEvent>>().ToListOptimized();

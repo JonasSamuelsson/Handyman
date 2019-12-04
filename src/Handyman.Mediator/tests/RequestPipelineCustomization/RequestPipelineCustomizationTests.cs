@@ -37,7 +37,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
         private class CustomizeRequestPipelineAttribute : RequestPipelineBuilderAttribute
         {
-            public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, ServiceProvider serviceProvider)
+            public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
             {
                 builder.AddFilterSelector(new RequestFilterSelector<TRequest, TResponse>());
                 builder.AddHandlerSelector(new RequestHandlerSelector<TRequest, TResponse>());

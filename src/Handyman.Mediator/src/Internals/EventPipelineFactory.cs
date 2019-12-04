@@ -9,14 +9,14 @@ namespace Handyman.Mediator.Internals
     {
         private static readonly ConcurrentDictionary<Type, Func<object>> Cache = new ConcurrentDictionary<Type, Func<object>>();
 
-        public static EventPipeline CreatePipeline(IEvent @event, ServiceProvider serviceProvider)
+        public static EventPipeline CreatePipeline(IEvent @event, IServiceProvider serviceProvider)
         {
             var eventType = @event.GetType();
             var factory = Cache.GetOrAdd(eventType, type => CreateFactory(type, serviceProvider));
             return (EventPipeline)factory();
         }
 
-        private static Func<object> CreateFactory(Type eventType, ServiceProvider serviceProvider)
+        private static Func<object> CreateFactory(Type eventType, IServiceProvider serviceProvider)
         {
             var factoryBuilderType = typeof(FactoryBuilder<>).MakeGenericType(eventType);
             var factoryBuilder = (FactoryBuilder)Activator.CreateInstance(factoryBuilderType);
@@ -25,13 +25,13 @@ namespace Handyman.Mediator.Internals
 
         private abstract class FactoryBuilder
         {
-            internal abstract Func<EventPipeline> CreateFactory(ServiceProvider serviceProvider);
+            internal abstract Func<EventPipeline> CreateFactory(IServiceProvider serviceProvider);
         }
 
         private class FactoryBuilder<TEvent> : FactoryBuilder
             where TEvent : IEvent
         {
-            internal override Func<EventPipeline> CreateFactory(ServiceProvider serviceProvider)
+            internal override Func<EventPipeline> CreateFactory(IServiceProvider serviceProvider)
             {
                 var attributes = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>().ToListOptimized();
 

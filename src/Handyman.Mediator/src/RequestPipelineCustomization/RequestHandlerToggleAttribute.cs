@@ -14,7 +14,8 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public Type ToggleDisabledHandlerType { get; set; }
 
-        public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, ServiceProvider serviceProvider)
+        public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
+            IServiceProvider serviceProvider)
         {
             builder.AddHandlerSelector(new RequestHandlerToggleHandlerSelector<TRequest, TResponse>(_toggleEnabledHandlerType)
             {
