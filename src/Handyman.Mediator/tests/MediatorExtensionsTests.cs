@@ -2,6 +2,7 @@
 using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -11,20 +12,23 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldPublishEventWithoutCancellationToken()
         {
-            var container = new Container();
-            container.Configure(x => x.Add<IEventHandler<TestEvent>>().Factory(() => new TestEventHandler()));
+            var services = new ServiceCollection().AddTransient<IEventHandler<TestEvent>>(_ => new TestEventHandler());
+            var mediator = new Mediator(services.BuildServiceProvider());
+
             var @event = new TestEvent();
-            var tasks = new Mediator(container.GetService).Publish(@event);
-            await Task.WhenAll(tasks);
+
+            await mediator.Publish(@event);
+
             @event.Handeled.ShouldBeTrue();
         }
 
         [Fact]
         public async Task ShouldSendRequestWithoutCancellationToken()
         {
-            var container = new Container();
-            container.Configure(x => x.Add<IRequestHandler<TestRequest, string>>().Factory(() => new TestRequestHandler()));
-            (await new Mediator(container.GetService).Send(new TestRequest { Response = "success" })).ShouldBe("success");
+            var services = new ServiceCollection().AddTransient<IRequestHandler<TestRequest, string>>(_ => new TestRequestHandler());
+            var mediator = new Mediator(services.BuildServiceProvider());
+
+            (await mediator.Send(new TestRequest { Response = "success" })).ShouldBe("success");
         }
 
         private class TestEvent : IEvent
