@@ -7,13 +7,9 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public Mediator(IServiceProvider serviceProvider)
-            : this(serviceProvider.GetService)
-        { }
-
-        public Mediator(ServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

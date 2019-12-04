@@ -10,14 +10,14 @@ namespace Handyman.Mediator.Internals
         private static readonly ConcurrentDictionary<Type, Func<object>> Cache = new ConcurrentDictionary<Type, Func<object>>();
 
         internal static RequestPipeline<TResponse> GetRequestPipeline<TResponse>(IRequest<TResponse> request,
-            ServiceProvider serviceProvider)
+            IServiceProvider serviceProvider)
         {
             var requestType = request.GetType();
             var factory = Cache.GetOrAdd(requestType, type => CreateFactory<TResponse>(type, serviceProvider));
             return (RequestPipeline<TResponse>)factory();
         }
 
-        private static Func<object> CreateFactory<TResponse>(Type requestType, ServiceProvider serviceProvider)
+        private static Func<object> CreateFactory<TResponse>(Type requestType, IServiceProvider serviceProvider)
         {
             var responseType = typeof(TResponse);
             var factoryBuilderType = typeof(FactoryBuilder<,>).MakeGenericType(requestType, responseType);
@@ -27,13 +27,13 @@ namespace Handyman.Mediator.Internals
 
         private abstract class FactoryBuilder<TResponse>
         {
-            internal abstract Func<RequestPipeline<TResponse>> CreateFactory(ServiceProvider serviceProvider);
+            internal abstract Func<RequestPipeline<TResponse>> CreateFactory(IServiceProvider serviceProvider);
         }
 
         private class FactoryBuilder<TRequest, TResponse> : FactoryBuilder<TResponse>
             where TRequest : IRequest<TResponse>
         {
-            internal override Func<RequestPipeline<TResponse>> CreateFactory(ServiceProvider serviceProvider)
+            internal override Func<RequestPipeline<TResponse>> CreateFactory(IServiceProvider serviceProvider)
             {
                 var attributes = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>().ToListOptimized();
 

@@ -5,7 +5,7 @@ namespace Handyman.Mediator
 {
     internal static class ServiceProviderExtensions
     {
-        public static T GetRequiredService<T>(this ServiceProvider serviceProvider)
+        public static T GetRequiredService<T>(this IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<T>();
 
@@ -16,22 +16,17 @@ namespace Handyman.Mediator
             throw new InvalidOperationException(message);
         }
 
-        public static object GetService(this ServiceProvider serviceProvider, Type type)
-        {
-            return serviceProvider.Invoke(type);
-        }
-
-        public static T GetService<T>(this ServiceProvider serviceProvider)
+        public static T GetService<T>(this IServiceProvider serviceProvider)
         {
             return (T)serviceProvider.GetService(typeof(T));
         }
 
-        public static IEnumerable<object> GetServices(this ServiceProvider serviceProvider, Type type)
+        public static IEnumerable<object> GetServices(this IServiceProvider serviceProvider, Type type)
         {
             return (IEnumerable<object>)serviceProvider.GetService(typeof(IEnumerable<>).MakeGenericType(type));
         }
 
-        public static IEnumerable<T> GetServices<T>(this ServiceProvider serviceProvider)
+        public static IEnumerable<T> GetServices<T>(this IServiceProvider serviceProvider)
         {
             return serviceProvider.GetRequiredService<IEnumerable<T>>();
         }

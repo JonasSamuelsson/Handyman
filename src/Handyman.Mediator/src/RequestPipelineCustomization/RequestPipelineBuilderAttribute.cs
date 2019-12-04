@@ -6,6 +6,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     public abstract class RequestPipelineBuilderAttribute : Attribute
     {
         public abstract void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
-            ServiceProvider serviceProvider) where TRequest : IRequest<TResponse>;
+            IServiceProvider serviceProvider) where TRequest : IRequest<TResponse>;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,14 +7,14 @@ namespace Handyman.Mediator.Internals
 {
     internal abstract class RequestPipeline<TResponse>
     {
-        internal abstract Task<TResponse> Execute(IRequest<TResponse> request, ServiceProvider serviceProvider,
+        internal abstract Task<TResponse> Execute(IRequest<TResponse> request, IServiceProvider serviceProvider,
             CancellationToken cancellationToken);
     }
 
     internal abstract class RequestPipeline<TRequest, TResponse> : RequestPipeline<TResponse>
         where TRequest : IRequest<TResponse>
     {
-        internal override Task<TResponse> Execute(IRequest<TResponse> request, ServiceProvider serviceProvider, CancellationToken cancellationToken)
+        internal override Task<TResponse> Execute(IRequest<TResponse> request, IServiceProvider serviceProvider, CancellationToken cancellationToken)
         {
             var context = new RequestPipelineContext<TRequest>
             {
