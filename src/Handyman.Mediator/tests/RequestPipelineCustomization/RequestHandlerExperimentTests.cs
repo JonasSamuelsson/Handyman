@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
@@ -17,15 +18,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             var observer = new Observer();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "baseline" });
-                x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
-                x.Add<IRequestHandlerExperimentObserver<Request, string>>().Instance(observer);
-                x.Add<IExperimentToggle<Request>>().Instance(new Toggle<Request> { Enabled = true });
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(type => container.TryGetService(type, out var service) ? service : null);
+            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
+            services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
+            services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
+            services.AddSingleton<IExperimentToggle<Request>>(new Toggle<Request> { Enabled = true });
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             var request = new Request();
 
@@ -55,15 +55,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             var observer = new Observer();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "baseline" });
-                x.Add<IRequestHandler<Request, string>>().Instance(new ExperimentHandler { Action = () => throw new Exception("boom") });
-                x.Add<IRequestHandlerExperimentObserver<Request, string>>().Instance(observer);
-                x.Add<IExperimentToggle<Request>>().Instance(new Toggle<Request> { Enabled = true });
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(type => container.TryGetService(type, out var service) ? service : null);
+            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
+            services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => throw new Exception("boom") });
+            services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
+            services.AddSingleton<IExperimentToggle<Request>>(new Toggle<Request> { Enabled = true });
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             var request = new Request();
 
@@ -86,15 +85,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             var observer = new Observer();
             var toggle = new Toggle<Request>();
 
-            var container = new Container(x =>
-            {
-                x.Add<IRequestHandler<Request, string>>().Instance(new BaselineHandler { Action = () => "baseline" });
-                x.Add<IRequestHandler<Request, string>>().Instance(experimentHandler);
-                x.Add<IRequestHandlerExperimentObserver<Request, string>>().Instance(observer);
-                x.Add<IExperimentToggle<Request>>().Instance(toggle);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(type => container.TryGetService(type, out var service) ? service : null);
+            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
+            services.AddSingleton<IRequestHandler<Request, string>>(experimentHandler);
+            services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
+            services.AddSingleton<IExperimentToggle<Request>>(toggle);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             await mediator.Send(new Request());
 

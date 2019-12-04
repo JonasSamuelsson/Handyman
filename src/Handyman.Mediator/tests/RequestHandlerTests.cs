@@ -1,7 +1,7 @@
-﻿using Maestro;
-using Shouldly;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -12,8 +12,8 @@ namespace Handyman.Mediator.Tests
         public async Task AsyncVoidImplementation()
         {
             var handler = new AsyncVoidHandler();
-            var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
-            var mediator = new Mediator(container.GetService);
+            var services = new ServiceCollection().AddSingleton<IRequestHandler<VoidRequest, Void>>(handler);
+            var mediator = new Mediator(services.BuildServiceProvider());
             await mediator.Send(new VoidRequest());
         }
 
@@ -21,8 +21,8 @@ namespace Handyman.Mediator.Tests
         public async Task SyncVoidImplementation()
         {
             var handler = new SyncVoidHandler();
-            var container = new Container(x => x.Add<IRequestHandler<VoidRequest, Void>>().Instance(handler));
-            var mediator = new Mediator(container.GetService);
+            var services = new ServiceCollection().AddSingleton<IRequestHandler<VoidRequest, Void>>(handler);
+            var mediator = new Mediator(services.BuildServiceProvider());
             await mediator.Send(new VoidRequest());
         }
 
@@ -30,8 +30,8 @@ namespace Handyman.Mediator.Tests
         public async Task SyncImplementation()
         {
             var handler = new SyncHandler();
-            var container = new Container(x => x.Add<IRequestHandler<StringRequest, string>>().Instance(handler));
-            var mediator = new Mediator(container.GetService);
+            var services = new ServiceCollection().AddSingleton<IRequestHandler<StringRequest, string>>(handler);
+            var mediator = new Mediator(services.BuildServiceProvider());
             (await mediator.Send(new StringRequest())).ShouldBe("success");
         }
 

@@ -1,9 +1,8 @@
-﻿using Maestro;
-using Shouldly;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -16,12 +15,11 @@ namespace Handyman.Mediator.Tests
             var cts = new CancellationTokenSource();
             var handler = new EventHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IEventHandler<Event>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IEventHandler<Event>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             cts.Cancel();
 
@@ -38,13 +36,12 @@ namespace Handyman.Mediator.Tests
             var filter = new EventFilter(cts);
             var handler = new EventHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IEventFilter<Event>>().Instance(filter);
-                x.Add<IEventHandler<Event>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IEventFilter<Event>>(filter);
+            services.AddSingleton<IEventHandler<Event>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             cts.Cancel();
 
@@ -62,13 +59,12 @@ namespace Handyman.Mediator.Tests
             var filter = new EventFilter(cts);
             var handler = new EventHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IEventFilter<Event>>().Instance(filter);
-                x.Add<IEventHandler<Event>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IEventFilter<Event>>(filter);
+            services.AddSingleton<IEventHandler<Event>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Publish(new Event(), cts.Token))))
                 .Message.ShouldBe("oce");
@@ -85,14 +81,13 @@ namespace Handyman.Mediator.Tests
             var filter2 = new EventFilter(cts);
             var handler = new EventHandler();
 
-            var container = new Container(x =>
-            {
-                x.Add<IEventFilter<Event>>().Instance(filter1);
-                x.Add<IEventFilter<Event>>().Instance(filter2);
-                x.Add<IEventHandler<Event>>().Instance(handler);
-            });
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            services.AddSingleton<IEventFilter<Event>>(filter1);
+            services.AddSingleton<IEventFilter<Event>>(filter2);
+            services.AddSingleton<IEventHandler<Event>>(handler);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Publish(new Event(), cts.Token))))
                 .Message.ShouldBe("oce");

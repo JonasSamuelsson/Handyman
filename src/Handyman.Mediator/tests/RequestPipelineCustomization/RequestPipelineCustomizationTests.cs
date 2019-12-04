@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Handyman.Mediator.RequestPipelineCustomization;
 using Maestro;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -17,10 +18,12 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             var strings = new List<string>();
 
-            // no filters or handlers are registered, they will be provided by the selectors
-            var container = new Container(x => x.Add<Action<string>>().Instance(new Action<string>(s => strings.Add(s))));
+            var services = new ServiceCollection();
 
-            var mediator = new Mediator(container.GetService);
+            // no filters or handlers are registered, they will be provided by the selectors
+            services.AddSingleton<Action<string>>(s => strings.Add(s));
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             await mediator.Send(new Request());
 

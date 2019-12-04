@@ -2,6 +2,7 @@
 using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -13,12 +14,13 @@ namespace Handyman.Mediator.Tests
         {
             var handler1 = new EventHandler();
             var handler2 = new EventHandler();
-            var container = new Container(x =>
-            {
-                x.Add<IEventHandler<Event>>().Instance(handler1);
-                x.Add<IEventHandler<Event>>().Instance(handler2);
-            });
-            var mediator = new Mediator(container.GetService);
+
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IEventHandler<Event>>(handler1);
+            services.AddSingleton<IEventHandler<Event>>(handler2);
+
+            var mediator = new Mediator(services.BuildServiceProvider());
 
             await Task.WhenAll(mediator.Publish(new Event(), CancellationToken.None));
 

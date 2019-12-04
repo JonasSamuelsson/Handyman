@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Maestro;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -11,15 +12,14 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public async Task ShouldExecuteFiltersInTheCorrectOrder()
         {
-            var container = new Container(x =>
-            {
-                x.Add<IRequestFilter<Request, string>>().Instance(new Filter { Text = "b" });
-                x.Add<IRequestFilter<Request, string>>().Instance(new Filter { Order = 1, Text = "c" });
-                x.Add<IRequestFilter<Request, string>>().Instance(new Filter { Order = -1, Text = "a" });
-                x.Add<IRequestHandler<Request, string>>().Type<Handler>();
-            });
+            var services = new ServiceCollection();
 
-            var s = await new Mediator(container.GetService)
+                services.AddSingleton<IRequestFilter<Request, string>>(new Filter { Text = "b" });
+                services.AddSingleton<IRequestFilter<Request, string>>(new Filter { Order = 1, Text = "c" });
+                services.AddSingleton<IRequestFilter<Request, string>>(new Filter { Order = -1, Text = "a" });
+                services.AddTransient<IRequestHandler<Request, string>, Handler>();
+
+            var s = await new Mediator(services.BuildServiceProvider())
                 .Send(new Request());
 
             s.ShouldBe("abc");
