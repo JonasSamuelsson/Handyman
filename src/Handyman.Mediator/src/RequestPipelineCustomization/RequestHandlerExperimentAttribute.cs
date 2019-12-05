@@ -13,6 +13,8 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _baselineHandlerType = baselineHandlerType;
         }
 
+        public override bool PipelineCanBeReused => true;
+
         public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
             IServiceProvider serviceProvider)
         {
