@@ -1,8 +1,7 @@
-﻿using Maestro;
-using Shouldly;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests

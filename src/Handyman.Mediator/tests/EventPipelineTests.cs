@@ -1,7 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
-using Maestro;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
