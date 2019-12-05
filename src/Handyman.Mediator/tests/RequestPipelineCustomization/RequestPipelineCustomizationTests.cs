@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Handyman.Mediator.RequestPipelineCustomization;
-using Maestro;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;

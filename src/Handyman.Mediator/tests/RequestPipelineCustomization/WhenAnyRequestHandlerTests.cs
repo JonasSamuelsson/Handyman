@@ -1,12 +1,11 @@
-﻿using Handyman.Mediator.RequestPipelineCustomization;
-using Maestro;
-using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.RequestPipelineCustomization;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization

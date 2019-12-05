@@ -1,10 +1,7 @@
-﻿using Handyman.Mediator.Internals;
-using Maestro;
-using Shouldly;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -16,10 +13,10 @@ namespace Handyman.Mediator.Tests
         {
             var services = new ServiceCollection();
 
-                services.AddSingleton<IEventFilter<Event>>(new Filter { Text = "b" });
-                services.AddSingleton<IEventFilter<Event>>(new Filter { Order = 1, Text = "c" });
-                services.AddSingleton<IEventFilter<Event>>(new Filter { Order = -1, Text = "a" });
-                services.AddTransient<IEventHandler<Event>, Handler>();
+            services.AddSingleton<IEventFilter<Event>>(new Filter { Text = "b" });
+            services.AddSingleton<IEventFilter<Event>>(new Filter { Order = 1, Text = "c" });
+            services.AddSingleton<IEventFilter<Event>>(new Filter { Order = -1, Text = "a" });
+            services.AddTransient<IEventHandler<Event>, Handler>();
 
             var @event = new Event();
 
