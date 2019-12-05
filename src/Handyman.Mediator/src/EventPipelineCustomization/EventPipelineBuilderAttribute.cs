@@ -5,6 +5,8 @@ namespace Handyman.Mediator.EventPipelineCustomization
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class EventPipelineBuilderAttribute : Attribute
     {
+        public virtual bool PipelineCanBeReused => false;
+
         public abstract void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, IServiceProvider serviceProvider)
             where TEvent : IEvent;
     }
