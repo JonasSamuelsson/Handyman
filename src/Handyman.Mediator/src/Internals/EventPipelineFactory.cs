@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 using Handyman.Mediator.EventPipelineCustomization;
 
@@ -37,25 +38,36 @@ namespace Handyman.Mediator.Internals
 
                 if (attributes.Count == 0)
                 {
-                    var pipeline = new DefaultEventPipeline<TEvent>();
-                    return () => pipeline;
+                    var defaultPipeline = new DefaultEventPipeline<TEvent>();
+                    return () => defaultPipeline;
                 }
 
-                var builder = new EventPipelineBuilder<TEvent>();
-
-                foreach (var attribute in attributes)
+                if (attributes.All(x => x.PipelineCanBeReused))
                 {
-                    attribute.Configure(builder, serviceProvider);
+                    var customizedPipeline = CreateCustomizedEventPipeline();
+                    return () => customizedPipeline;
                 }
 
-                var customizedPipeline = new CustomizedEventPipeline<TEvent>
-                {
-                    FilterSelectors = builder.FilterSelectors,
-                    HandlerSelectors = builder.HandlerSelectors,
-                    HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? DefaultEventHandlerExecutionStrategy<TEvent>.Instance
-                };
+                return CreateCustomizedEventPipeline;
 
-                return () => customizedPipeline;
+                CustomizedEventPipeline<TEvent> CreateCustomizedEventPipeline()
+                {
+                    var builder = new EventPipelineBuilder<TEvent>();
+
+                    foreach (var attribute in attributes)
+                    {
+                        attribute.Configure(builder, serviceProvider);
+                    }
+
+                    var customizedPipeline = new CustomizedEventPipeline<TEvent>
+                    {
+                        FilterSelectors = builder.FilterSelectors,
+                        HandlerSelectors = builder.HandlerSelectors,
+                        HandlerExecutionStrategy =
+                            builder.HandlerExecutionStrategy ?? DefaultEventHandlerExecutionStrategy<TEvent>.Instance
+                    };
+                    return customizedPipeline;
+                }
             }
         }
     }
