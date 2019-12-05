@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 using Handyman.Mediator.RequestPipelineCustomization;
 
@@ -39,25 +40,35 @@ namespace Handyman.Mediator.Internals
 
                 if (attributes.Count == 0)
                 {
-                    var pipeline = new DefaultRequestPipeline<TRequest, TResponse>();
-                    return () => pipeline;
+                    var defaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
+                    return () => defaultPipeline;
                 }
 
-                var builder = new RequestPipelineBuilder<TRequest, TResponse>();
-
-                foreach (var attribute in attributes)
+                if (attributes.All(x => x.PipelineCanBeReused))
                 {
-                    attribute.Configure(builder, serviceProvider);
+                    var customizedPipeline = CreateCustomizedRequestPipeline();
+                    return () => customizedPipeline;
                 }
 
-                var customizedPipeline = new CustomizedRequestPipeline<TRequest, TResponse>
-                {
-                    FilterSelectors = builder.FilterSelectors,
-                    HandlerSelectors = builder.HandlerSelectors,
-                    HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance
-                };
+                return CreateCustomizedRequestPipeline;
 
-                return () => customizedPipeline;
+                CustomizedRequestPipeline<TRequest, TResponse> CreateCustomizedRequestPipeline()
+                {
+                    var builder = new RequestPipelineBuilder<TRequest, TResponse>();
+
+                    foreach (var attribute in attributes)
+                    {
+                        attribute.Configure(builder, serviceProvider);
+                    }
+
+                    return new CustomizedRequestPipeline<TRequest, TResponse>
+                    {
+                        FilterSelectors = builder.FilterSelectors,
+                        HandlerSelectors = builder.HandlerSelectors,
+                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ??
+                                                   DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance
+                    };
+                }
             }
         }
     }
