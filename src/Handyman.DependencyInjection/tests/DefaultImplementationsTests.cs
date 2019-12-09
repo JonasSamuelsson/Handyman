@@ -1,6 +1,7 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Handyman.DependencyInjection.Tests
@@ -10,15 +11,23 @@ namespace Handyman.DependencyInjection.Tests
         [Fact]
         public void ShouldRegisterDefaultImplementations()
         {
-            var serviceCollection = new ServiceCollection();
+            var services = new ServiceCollection();
 
-            serviceCollection.Scan(scanner => scanner.Types(GetType().GetNestedTypes(BindingFlags.NonPublic)).ConfigureDefaultImplementations());
+            services.Scan(scanner => scanner.Types(GetType().GetNestedTypes(BindingFlags.NonPublic)).ConfigureDefaultImplementations());
 
-            serviceCollection.BuildServiceProvider().GetRequiredService<IFoo>().ShouldBeOfType<Foo>();
+            var descriptor = services.Single();
+
+            descriptor.ImplementationType.ShouldBe(typeof(Foo));
+            descriptor.Lifetime.ShouldBe(ServiceLifetime.Transient);
+            descriptor.ServiceType.ShouldBe(typeof(IFoo));
         }
 
         private interface IFoo { }
 
         private class Foo : IFoo { }
+
+        private interface IBar { }
+
+        private class Bar { }
     }
 }

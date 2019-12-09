@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Handyman.DependencyInjection.Conventions
 {
@@ -23,7 +23,11 @@ namespace Handyman.DependencyInjection.Conventions
             {
                 var @class = classes.FirstOrDefault(c => @interface.Namespace == c.Namespace && @interface.Name.Substring(1) == c.Name);
 
-                if (@class == null) continue;
+                if (@class == null)
+                    continue;
+
+                if (!@interface.IsAssignableFrom(@class))
+                    continue;
 
                 var lifetime = ServiceLifetimeProvider.GetLifetimeOrDefault(@class, _serviceLifetime);
 
