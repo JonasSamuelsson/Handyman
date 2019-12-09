@@ -2,9 +2,8 @@
 
 namespace Handyman.DependencyInjection
 {
-    public interface IDiagnostics
+    public interface IServiceProviderInsights
     {
         IEnumerable<ServiceDescription> GetServiceDescriptions();
-        string GetServiceDescriptionsString();
     }
 }

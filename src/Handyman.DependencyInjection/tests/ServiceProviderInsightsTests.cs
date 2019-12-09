@@ -1,18 +1,18 @@
-﻿using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Linq;
 using Xunit;
 
 namespace Handyman.DependencyInjection.Tests
 {
-    public class DiagnosticsTests
+    public class ServiceProviderInsightsTests
     {
         [Fact]
         public void ShouldGetServiceDescriptions()
         {
             var services = new ServiceCollection();
 
-            services.AddDiagnostics();
+            services.AddServiceProviderInsights();
 
             services.AddTransient<IFoo, Foo1>();
             services.AddScoped<IFoo, Foo2>(_ => new Foo2());
@@ -20,7 +20,7 @@ namespace Handyman.DependencyInjection.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var diagnostics = serviceProvider.GetRequiredService<IDiagnostics>();
+            var diagnostics = serviceProvider.GetRequiredService<IServiceProviderInsights>();
 
             var descriptions = diagnostics.GetServiceDescriptions().ToList();
 
