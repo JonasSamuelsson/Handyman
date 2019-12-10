@@ -1,7 +1,9 @@
 ﻿using Handyman.DependencyInjection;
+using Handyman.Mediator.EventPipelineCustomization;
+using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Handyman.Mediator.DependencyInjection
@@ -10,26 +12,41 @@ namespace Handyman.Mediator.DependencyInjection
     {
         public static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
         {
-            return services.AddMediator(assembly, delegate { });
+            return services.AddMediator(x => x.ScanAssembly(assembly));
         }
 
-        public static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly, Action<Configuration> configure)
+        public static IServiceCollection AddMediator(this IServiceCollection services, Action<MediatorOptions> configure)
         {
-            var config = new Configuration();
+            if (services.Any(x => x.ServiceType == typeof(IMediator)))
+            {
+                throw new InvalidOperationException("Mediator has already been added.");
+            }
 
-            configure(config);
+            var options = new MediatorOptions();
 
-            services.TryAddTransient<IMediator>(sp => new Mediator(sp.GetService, config));
+            configure(options);
+
+            services.AddServiceProviderInsights();
+
+            services.AddScoped<IMediator>(sp => new Mediator(sp));
 
             services.Scan(_ =>
             {
-                _.Assembly(assembly);
+                foreach (var assembly in options.Assemblies)
+                {
+                    _.Assembly(assembly);
+                }
+
                 _.ConfigureConcreteClassesOf(typeof(IEventFilter<>));
+                _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle<>));
                 _.ConfigureConcreteClassesOf(typeof(IEventHandler<>));
-                _.ConfigureConcreteClassesOf(typeof(IExperimentEvaluator<,>));
-                _.ConfigureConcreteClassesOf(typeof(IExperimentToggle<>));
+                _.ConfigureConcreteClassesOf(typeof(IEventHandlerToggle<>));
+                _.ConfigureConcreteClassesOf(typeof(IExceptionHandler));
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle<,>));
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle<,>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle<,>));
             });
 
             return services;
