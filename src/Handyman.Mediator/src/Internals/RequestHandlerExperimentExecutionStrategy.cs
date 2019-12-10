@@ -27,7 +27,7 @@ namespace Handyman.Mediator.Internals
 
             var baselineHandler = GetBaselineHandler(handlers);
 
-            var toggle = context.ServiceProvider.GetRequiredService<IExperimentToggle<TRequest>>();
+            var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerExperimentToggle<TRequest, TResponse>>();
 
             var request = context.Request;
             var cancellationToken = context.CancellationToken;

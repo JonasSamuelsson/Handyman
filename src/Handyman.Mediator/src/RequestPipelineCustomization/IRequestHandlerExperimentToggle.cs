@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public interface IExperimentToggle<TRequest>
+    public interface IRequestHandlerExperimentToggle<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
         Task<bool> IsEnabled(TRequest request, CancellationToken cancellationToken);
     }
