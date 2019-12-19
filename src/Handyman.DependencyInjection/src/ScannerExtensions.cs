@@ -62,6 +62,11 @@ namespace Handyman.DependencyInjection
             return scanner.Using(new DefaultImplementationsConvention(serviceLifetime));
         }
 
+        public static IScanner ExecuteServiceConfigurationStrategies(this IScanner scanner)
+        {
+            return scanner.Using(new ExecuteServiceConfigurationStrategiesConvention());
+        }
+
         public static IScanner UsingServiceConfigurationPolicies(this IScanner scanner)
         {
             return scanner.Using(new RegistrationPolicyConvention());
