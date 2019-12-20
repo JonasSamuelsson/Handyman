@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Handyman.Mediator.Internals;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator
 {
@@ -14,8 +14,7 @@ namespace Handyman.Mediator
             _serviceProvider = serviceProvider;
         }
 
-        public Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken)
-            where TEvent : IEvent
+        public Task Publish(IEvent @event, CancellationToken cancellationToken)
         {
             var pipeline = EventPipelineFactory.CreatePipeline(@event, _serviceProvider);
             return pipeline.Execute(@event, _serviceProvider, cancellationToken);

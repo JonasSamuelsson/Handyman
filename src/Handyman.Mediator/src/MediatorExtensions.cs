@@ -5,7 +5,7 @@ namespace Handyman.Mediator
 {
     public static class MediatorExtensions
     {
-        public static Task Publish<TEvent>(this IMediator mediator, TEvent @event) where TEvent : IEvent
+        public static Task Publish(this IMediator mediator, IEvent @event)
         {
             return mediator.Publish(@event, CancellationToken.None);
         }
