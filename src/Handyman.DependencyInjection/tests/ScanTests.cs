@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Handyman.DependencyInjection.Tests
@@ -23,7 +23,7 @@ namespace Handyman.DependencyInjection.Tests
             convention.ProcessedTypes.ShouldBe(new[] { typeof(Convention) });
         }
 
-        private class Convention : IConvention
+        private class Convention : IServiceConfigurationConvention
         {
             public List<Type> ProcessedTypes { get; } = new List<Type>();
 

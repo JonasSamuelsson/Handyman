@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Handyman.DependencyInjection.Conventions
 {
-    internal class ExecuteServiceConfigurationStrategiesConvention : IConvention
+    internal class ExecuteServiceConfigurationStrategiesConvention : IServiceConfigurationConvention
     {
         public void Execute(IReadOnlyCollection<Type> types, IServiceCollection services)
         {

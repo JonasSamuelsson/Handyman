@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Handyman.DependencyInjection.Conventions
 {
-    internal class ConcreteClassesOfConvention : IConvention
+    internal class ConfigureConcreteClassesOfConvention : IServiceConfigurationConvention
     {
         private static readonly IEnumerable<Type> EmptyTypes = new Type[] { };
 
         private readonly Type _type;
         private readonly ServiceLifetime _lifetime;
 
-        public ConcreteClassesOfConvention(Type type, ServiceLifetime? lifetime)
+        public ConfigureConcreteClassesOfConvention(Type type, ServiceLifetime? lifetime)
         {
             _type = type;
             _lifetime = lifetime ?? ServiceLifetime.Transient;

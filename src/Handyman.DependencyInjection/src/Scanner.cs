@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Handyman.DependencyInjection
 {
@@ -11,7 +11,7 @@ namespace Handyman.DependencyInjection
     {
         private readonly List<Type> _types = new List<Type>();
         private readonly List<Func<Type, bool>> _predicates = new List<Func<Type, bool>>();
-        private readonly List<IConvention> _conventions = new List<IConvention>();
+        private readonly List<IServiceConfigurationConvention> _conventions = new List<IServiceConfigurationConvention>();
 
         public IScanner Types(IEnumerable<Type> types)
         {
@@ -25,7 +25,7 @@ namespace Handyman.DependencyInjection
             return this;
         }
 
-        public IScanner Using(IConvention convention)
+        public IScanner Using(IServiceConfigurationConvention convention)
         {
             _conventions.Add(convention);
             return this;

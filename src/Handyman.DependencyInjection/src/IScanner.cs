@@ -7,6 +7,6 @@ namespace Handyman.DependencyInjection
     {
         IScanner Types(IEnumerable<Type> types);
         IScanner Where(Func<Type, bool> filter);
-        IScanner Using(IConvention convention);
+        IScanner Using(IServiceConfigurationConvention convention);
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Handyman.DependencyInjection
 {
-    public interface IConvention
+    public interface IServiceConfigurationConvention
     {
         void Execute(IReadOnlyCollection<Type> types, IServiceCollection services);
     }

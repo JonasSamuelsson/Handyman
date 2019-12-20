@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Handyman.DependencyInjection.Conventions
 {
-    public class DefaultImplementationsConvention : IConvention
+    public class ConfigureDefaultImplementationsConvention : IServiceConfigurationConvention
     {
         private readonly ServiceLifetime _serviceLifetime;
 
-        public DefaultImplementationsConvention(ServiceLifetime? serviceLifetime)
+        public ConfigureDefaultImplementationsConvention(ServiceLifetime? serviceLifetime)
         {
             _serviceLifetime = serviceLifetime ?? ServiceLifetime.Transient;
         }
