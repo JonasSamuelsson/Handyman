@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.DependencyInjection.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 

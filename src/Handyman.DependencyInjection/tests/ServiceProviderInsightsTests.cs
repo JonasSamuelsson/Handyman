@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Handyman.DependencyInjection.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Linq;
 using Xunit;

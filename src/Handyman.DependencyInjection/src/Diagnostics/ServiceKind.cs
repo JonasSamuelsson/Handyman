@@ -1,4 +1,4 @@
-﻿namespace Handyman.DependencyInjection
+﻿namespace Handyman.DependencyInjection.Diagnostics
 {
     public enum ServiceKind
     {

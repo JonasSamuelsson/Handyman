@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Handyman.DependencyInjection
+namespace Handyman.DependencyInjection.Diagnostics
 {
     public interface IServiceProviderInsights
     {

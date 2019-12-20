@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
-namespace Handyman.DependencyInjection
+namespace Handyman.DependencyInjection.Diagnostics
 {
     public class ServiceDescription
     {
