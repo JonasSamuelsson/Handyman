@@ -6,9 +6,9 @@ namespace Handyman.DependencyInjection
 {
     public class ServiceLifetimeProvider
     {
-        public static ServiceLifetime GetLifetimeOrDefault(Type type, ServiceLifetime defaultLifetime)
+        public static ServiceLifetime? GetLifetimeOrNullFromAttribute(Type type)
         {
-            return type.GetCustomAttribute<ServiceLifetimeAttribute>()?.Lifetime ?? defaultLifetime;
+            return type.GetCustomAttribute<ServiceLifetimeAttribute>()?.Lifetime;
         }
     }
 }

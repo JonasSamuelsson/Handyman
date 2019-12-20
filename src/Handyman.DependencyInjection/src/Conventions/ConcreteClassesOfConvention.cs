@@ -25,7 +25,7 @@ namespace Handyman.DependencyInjection.Conventions
                 if (!IsConcreteClassOf(type, _type, out var baseTypes))
                     continue;
 
-                var lifetime = ServiceLifetimeProvider.GetLifetimeOrDefault(type, _lifetime);
+                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(type) ?? _lifetime;
 
                 foreach (var baseType in baseTypes)
                 {

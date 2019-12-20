@@ -29,7 +29,7 @@ namespace Handyman.DependencyInjection.Conventions
                 if (!@interface.IsAssignableFrom(@class))
                     continue;
 
-                var lifetime = ServiceLifetimeProvider.GetLifetimeOrDefault(@class, _serviceLifetime);
+                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(@class) ?? _serviceLifetime;
 
                 services.Add(new ServiceDescriptor(@interface, @class, lifetime));
             }
