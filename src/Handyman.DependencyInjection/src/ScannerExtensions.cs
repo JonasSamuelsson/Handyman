@@ -67,11 +67,6 @@ namespace Handyman.DependencyInjection
             return scanner.Using(new ExecuteServiceConfigurationStrategiesConvention());
         }
 
-        public static IScanner UsingServiceConfigurationPolicies(this IScanner scanner)
-        {
-            return scanner.Using(new RegistrationPolicyConvention());
-        }
-
         public static IScanner Using<TConvention>(this IScanner scanner) where TConvention : IConvention, new()
         {
             return scanner.Using(new TConvention());
