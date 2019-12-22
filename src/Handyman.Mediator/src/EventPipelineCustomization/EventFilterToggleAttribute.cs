@@ -16,7 +16,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public override void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, IServiceProvider serviceProvider)
         {
-            builder.AddFilterSelector(new EventFilterToggleFilterSelector<TEvent>(_toggleEnabledFilterType)
+            builder.AddFilterSelector(new EventFilterToggleFilterSelector(_toggleEnabledFilterType)
             {
                 ToggleDisabledFilterType = ToggleDisabledFilterType
             });

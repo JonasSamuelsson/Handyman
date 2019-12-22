@@ -7,7 +7,7 @@ namespace Handyman.Mediator.Internals
     internal class CustomizedEventPipeline<TEvent> : EventPipeline<TEvent>
         where TEvent : IEvent
     {
-        public List<IEventFilterSelector<TEvent>> FilterSelectors { get; set; }
+        public List<IEventFilterSelector> FilterSelectors { get; set; }
         public List<IEventHandlerSelector> HandlerSelectors { get; set; }
         public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 

@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    internal class EventFilterToggleFilterSelector<TEvent> : IEventFilterSelector<TEvent>
-        where TEvent : IEvent
+    internal class EventFilterToggleFilterSelector : IEventFilterSelector
     {
         private readonly Type _toggleEnabledFilterType;
 
@@ -16,7 +15,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public Type ToggleDisabledFilterType { get; set; }
 
-        public async Task SelectFilters(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context)
+        public async Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventFilterToggle<TEvent>>();
             var enabled = await toggle.IsEnabled(_toggleEnabledFilterType, context).ConfigureAwait(false);

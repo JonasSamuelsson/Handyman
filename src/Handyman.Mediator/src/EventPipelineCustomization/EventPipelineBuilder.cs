@@ -5,12 +5,12 @@ namespace Handyman.Mediator.EventPipelineCustomization
 {
     internal class EventPipelineBuilder<TEvent> : IEventPipelineBuilder<TEvent> where TEvent : IEvent
     {
-        public List<IEventFilterSelector<TEvent>> FilterSelectors { get; set; } = new List<IEventFilterSelector<TEvent>>();
+        public List<IEventFilterSelector> FilterSelectors { get; set; } = new List<IEventFilterSelector>();
         public List<IEventHandlerSelector> HandlerSelectors { get; set; } = new List<IEventHandlerSelector>();
         public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
 
-        public void AddFilterSelector(IEventFilterSelector<TEvent> eventFilterSelector)
+        public void AddFilterSelector(IEventFilterSelector eventFilterSelector)
         {
             FilterSelectors.Add(eventFilterSelector);
         }

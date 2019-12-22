@@ -35,16 +35,15 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         {
             public override void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, IServiceProvider serviceProvider)
             {
-                builder.AddFilterSelector(new EventFilterSelector<TEvent>());
+                builder.AddFilterSelector(new EventFilterSelector());
                 builder.AddHandlerSelector(new EventHandlerSelector());
                 builder.UseHandlerExecutionStrategy(new EventHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
             }
         }
 
-        private class EventFilterSelector<TEvent> : IEventFilterSelector<TEvent>
-            where TEvent : IEvent
+        private class EventFilterSelector : IEventFilterSelector
         {
-            public Task SelectFilters(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context)
+            public Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context) where TEvent : IEvent
             {
                 filters.Add(new EventFilter<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
