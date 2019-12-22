@@ -56,7 +56,7 @@ namespace Handyman.Mediator.Internals
 
                     foreach (var attribute in attributes)
                     {
-                        attribute.Configure<TEvent>(builder, serviceProvider);
+                        attribute.Configure(builder, serviceProvider);
                     }
 
                     return new CustomizedEventPipeline<TEvent>

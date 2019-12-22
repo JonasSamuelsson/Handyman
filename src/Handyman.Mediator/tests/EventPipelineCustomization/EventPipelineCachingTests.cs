@@ -29,7 +29,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             public override bool PipelineCanBeReused => false;
 
-            public override void Configure<TEvent>(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+            public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 ExecutionCount++;
             }
@@ -55,7 +55,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             public override bool PipelineCanBeReused => true;
 
-            public override void Configure<TEvent>(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+            public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 ExecutionCount++;
             }

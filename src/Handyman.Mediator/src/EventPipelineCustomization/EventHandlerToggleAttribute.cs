@@ -14,7 +14,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public Type ToggleDisabledHandlerType { get; set; }
 
-        public override void Configure<TEvent>(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+        public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
             builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector(_toggleEnabledHandlerType)
             {

@@ -7,7 +7,6 @@ namespace Handyman.Mediator.EventPipelineCustomization
     {
         public virtual bool PipelineCanBeReused => false;
 
-        public abstract void Configure<TEvent>(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
-            where TEvent : IEvent;
+        public abstract void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider);
     }
 }
