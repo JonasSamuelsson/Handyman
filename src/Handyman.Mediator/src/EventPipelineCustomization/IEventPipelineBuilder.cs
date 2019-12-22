@@ -4,6 +4,6 @@
     {
         void AddFilterSelector(IEventFilterSelector<TEvent> eventFilterSelector);
         void AddHandlerSelector(IEventHandlerSelector<TEvent> eventHandlerSelector);
-        void UseHandlerExecutionStrategy(IEventHandlerExecutionStrategy<TEvent> eventHandlerExecutionStrategy);
+        void UseHandlerExecutionStrategy(IEventHandlerExecutionStrategy eventHandlerExecutionStrategy);
     }
 }

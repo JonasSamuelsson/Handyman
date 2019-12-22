@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.Mediator.EventPipelineCustomization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -9,7 +9,7 @@ namespace Handyman.Mediator.Internals
     {
         public List<IEventFilterSelector<TEvent>> FilterSelectors { get; set; }
         public List<IEventHandlerSelector<TEvent>> HandlerSelectors { get; set; }
-        public IEventHandlerExecutionStrategy<TEvent> HandlerExecutionStrategy { get; set; }
+        public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
         protected override async Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
         {

@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.Mediator.EventPipelineCustomization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class DefaultEventHandlerExecutionStrategy<TEvent> : IEventHandlerExecutionStrategy<TEvent>
-        where TEvent : IEvent
+    internal class DefaultEventHandlerExecutionStrategy : IEventHandlerExecutionStrategy
     {
-        public static readonly IEventHandlerExecutionStrategy<TEvent> Instance = new DefaultEventHandlerExecutionStrategy<TEvent>();
+        public static readonly IEventHandlerExecutionStrategy Instance = new DefaultEventHandlerExecutionStrategy();
 
-        public Task Execute(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+        public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
             return Task.WhenAll(handlers.Select(x => x.Handle(context.Event, context.CancellationToken)));
         }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Handyman.Mediator.EventPipelineCustomization;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
-using Handyman.Mediator.EventPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -10,7 +10,7 @@ namespace Handyman.Mediator.Internals
     {
         private static readonly ConcurrentDictionary<Type, Func<object>> Cache = new ConcurrentDictionary<Type, Func<object>>();
 
-        public static EventPipeline CreatePipeline(IEvent @event, IServiceProvider serviceProvider)
+        public static EventPipeline GetPipeline(IEvent @event, IServiceProvider serviceProvider)
         {
             var eventType = @event.GetType();
             var factory = Cache.GetOrAdd(eventType, type => CreateFactory(type, serviceProvider));
@@ -56,17 +56,15 @@ namespace Handyman.Mediator.Internals
 
                     foreach (var attribute in attributes)
                     {
-                        attribute.Configure(builder, serviceProvider);
+                        attribute.Configure<TEvent>(builder, serviceProvider);
                     }
 
-                    var customizedPipeline = new CustomizedEventPipeline<TEvent>
+                    return new CustomizedEventPipeline<TEvent>
                     {
                         FilterSelectors = builder.FilterSelectors,
                         HandlerSelectors = builder.HandlerSelectors,
-                        HandlerExecutionStrategy =
-                            builder.HandlerExecutionStrategy ?? DefaultEventHandlerExecutionStrategy<TEvent>.Instance
+                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? DefaultEventHandlerExecutionStrategy.Instance
                     };
-                    return customizedPipeline;
                 }
             }
         }

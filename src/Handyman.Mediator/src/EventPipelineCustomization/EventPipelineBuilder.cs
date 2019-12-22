@@ -7,7 +7,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
     {
         public List<IEventFilterSelector<TEvent>> FilterSelectors { get; set; } = new List<IEventFilterSelector<TEvent>>();
         public List<IEventHandlerSelector<TEvent>> HandlerSelectors { get; set; } = new List<IEventHandlerSelector<TEvent>>();
-        public IEventHandlerExecutionStrategy<TEvent> HandlerExecutionStrategy { get; set; }
+        public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
 
         public void AddFilterSelector(IEventFilterSelector<TEvent> eventFilterSelector)
@@ -20,7 +20,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
             HandlerSelectors.Add(eventHandlerSelector);
         }
 
-        public void UseHandlerExecutionStrategy(IEventHandlerExecutionStrategy<TEvent> eventHandlerExecutionStrategy)
+        public void UseHandlerExecutionStrategy(IEventHandlerExecutionStrategy eventHandlerExecutionStrategy)
         {
             if (HandlerExecutionStrategy != null)
             {

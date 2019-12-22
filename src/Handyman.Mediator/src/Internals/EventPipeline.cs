@@ -45,7 +45,7 @@ namespace Handyman.Mediator.Internals
 
         protected abstract Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context);
 
-        protected Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, IEventHandlerExecutionStrategy<TEvent> executionStrategy, EventPipelineContext<TEvent> context)
+        protected Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, IEventHandlerExecutionStrategy executionStrategy, EventPipelineContext<TEvent> context)
         {
             var filterCount = filters.Count;
 

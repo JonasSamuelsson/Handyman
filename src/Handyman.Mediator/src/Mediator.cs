@@ -16,7 +16,7 @@ namespace Handyman.Mediator
 
         public Task Publish(IEvent @event, CancellationToken cancellationToken)
         {
-            var pipeline = EventPipelineFactory.CreatePipeline(@event, _serviceProvider);
+            var pipeline = EventPipelineFactory.GetPipeline(@event, _serviceProvider);
             return pipeline.Execute(@event, _serviceProvider, cancellationToken);
         }
 

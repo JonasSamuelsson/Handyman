@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
+﻿using Handyman.Mediator.EventPipelineCustomization;
 using Handyman.Mediator.Internals;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.EventPipelineCustomization
@@ -37,7 +37,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             {
                 builder.AddFilterSelector(new EventFilterSelector<TEvent>());
                 builder.AddHandlerSelector(new EventHandlerSelector<TEvent>());
-                builder.UseHandlerExecutionStrategy(new EventHandlerExecutionStrategy<TEvent> { Action = serviceProvider.GetRequiredService<Action<string>>() });
+                builder.UseHandlerExecutionStrategy(new EventHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
             }
         }
 
@@ -85,15 +85,14 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             }
         }
 
-        private class EventHandlerExecutionStrategy<TEvent> : IEventHandlerExecutionStrategy<TEvent>
-            where TEvent : IEvent
+        private class EventHandlerExecutionStrategy : IEventHandlerExecutionStrategy
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+            public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
             {
                 Action("execution strategy");
-                return DefaultEventHandlerExecutionStrategy<TEvent>.Instance.Execute(handlers, context);
+                return DefaultEventHandlerExecutionStrategy.Instance.Execute(handlers, context);
             }
         }
     }
