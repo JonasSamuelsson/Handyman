@@ -1,6 +1,6 @@
 ﻿namespace Handyman.Mediator.EventPipelineCustomization
 {
-    public interface IEventPipelineBuilder<TEvent> where TEvent : IEvent
+    public interface IEventPipelineBuilder
     {
         void AddFilterSelector(IEventFilterSelector eventFilterSelector);
         void AddHandlerSelector(IEventHandlerSelector eventHandlerSelector);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    internal class EventPipelineBuilder<TEvent> : IEventPipelineBuilder<TEvent> where TEvent : IEvent
+    internal class EventPipelineBuilder : IEventPipelineBuilder
     {
         public List<IEventFilterSelector> FilterSelectors { get; set; } = new List<IEventFilterSelector>();
         public List<IEventHandlerSelector> HandlerSelectors { get; set; } = new List<IEventHandlerSelector>();

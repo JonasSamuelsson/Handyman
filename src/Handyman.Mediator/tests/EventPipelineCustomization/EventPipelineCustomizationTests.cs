@@ -33,7 +33,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
         private class CustomizeEventPipelineAttribute : EventPipelineBuilderAttribute
         {
-            public override void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, IServiceProvider serviceProvider)
+            public override void Configure<TEvent>(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 builder.AddFilterSelector(new EventFilterSelector());
                 builder.AddHandlerSelector(new EventHandlerSelector());

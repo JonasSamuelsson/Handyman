@@ -52,7 +52,7 @@ namespace Handyman.Mediator.Internals
 
                 CustomizedEventPipeline<TEvent> CreateCustomizedEventPipeline()
                 {
-                    var builder = new EventPipelineBuilder<TEvent>();
+                    var builder = new EventPipelineBuilder();
 
                     foreach (var attribute in attributes)
                     {
