@@ -6,7 +6,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
     internal class EventPipelineBuilder<TEvent> : IEventPipelineBuilder<TEvent> where TEvent : IEvent
     {
         public List<IEventFilterSelector<TEvent>> FilterSelectors { get; set; } = new List<IEventFilterSelector<TEvent>>();
-        public List<IEventHandlerSelector<TEvent>> HandlerSelectors { get; set; } = new List<IEventHandlerSelector<TEvent>>();
+        public List<IEventHandlerSelector> HandlerSelectors { get; set; } = new List<IEventHandlerSelector>();
         public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
 
@@ -15,7 +15,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
             FilterSelectors.Add(eventFilterSelector);
         }
 
-        public void AddHandlerSelector(IEventHandlerSelector<TEvent> eventHandlerSelector)
+        public void AddHandlerSelector(IEventHandlerSelector eventHandlerSelector)
         {
             HandlerSelectors.Add(eventHandlerSelector);
         }

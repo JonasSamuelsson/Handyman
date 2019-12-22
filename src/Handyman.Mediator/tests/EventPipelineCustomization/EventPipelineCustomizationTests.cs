@@ -36,7 +36,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             public override void Configure<TEvent>(IEventPipelineBuilder<TEvent> builder, IServiceProvider serviceProvider)
             {
                 builder.AddFilterSelector(new EventFilterSelector<TEvent>());
-                builder.AddHandlerSelector(new EventHandlerSelector<TEvent>());
+                builder.AddHandlerSelector(new EventHandlerSelector());
                 builder.UseHandlerExecutionStrategy(new EventHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
             }
         }
@@ -51,10 +51,9 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             }
         }
 
-        private class EventHandlerSelector<TEvent> : IEventHandlerSelector<TEvent>
-            where TEvent : IEvent
+        private class EventHandlerSelector : IEventHandlerSelector
         {
-            public Task SelectHandlers(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+            public Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
             {
                 handlers.Add(new EventHandler<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;

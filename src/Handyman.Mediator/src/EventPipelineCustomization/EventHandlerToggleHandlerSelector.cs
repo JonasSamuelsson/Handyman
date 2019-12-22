@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    internal class EventHandlerToggleHandlerSelector<TEvent> : IEventHandlerSelector<TEvent>
-        where TEvent : IEvent
+    internal class EventHandlerToggleHandlerSelector : IEventHandlerSelector
     {
         private readonly Type _toggleEnabledHandlerType;
 
@@ -16,7 +15,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public Type ToggleDisabledHandlerType { get; set; }
 
-        public async Task SelectHandlers(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+        public async Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventHandlerToggle<TEvent>>();
             var enabled = await toggle.IsEnabled(_toggleEnabledHandlerType, context).ConfigureAwait(false);

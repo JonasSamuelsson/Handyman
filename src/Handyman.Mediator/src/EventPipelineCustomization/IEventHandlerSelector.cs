@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    public interface IEventHandlerSelector<TEvent> where TEvent : IEvent
+    public interface IEventHandlerSelector
     {
-        Task SelectHandlers(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context);
+        Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent;
     }
 }

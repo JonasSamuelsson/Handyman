@@ -8,7 +8,7 @@ namespace Handyman.Mediator.Internals
         where TEvent : IEvent
     {
         public List<IEventFilterSelector<TEvent>> FilterSelectors { get; set; }
-        public List<IEventHandlerSelector<TEvent>> HandlerSelectors { get; set; }
+        public List<IEventHandlerSelector> HandlerSelectors { get; set; }
         public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
         protected override async Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
