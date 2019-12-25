@@ -42,12 +42,6 @@ namespace Handyman.Mediator.Internals
                     return () => defaultPipeline;
                 }
 
-                if (attributes.All(x => x.PipelineCanBeReused))
-                {
-                    var customizedPipeline = CreateCustomizedEventPipeline();
-                    return () => customizedPipeline;
-                }
-
                 return CreateCustomizedEventPipeline;
 
                 CustomizedEventPipeline<TEvent> CreateCustomizedEventPipeline()
