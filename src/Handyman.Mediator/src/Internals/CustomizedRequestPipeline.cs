@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -9,7 +9,7 @@ namespace Handyman.Mediator.Internals
     {
         internal List<IRequestFilterSelector<TRequest, TResponse>> FilterSelectors { get; set; }
         internal List<IRequestHandlerSelector<TRequest, TResponse>> HandlerSelectors { get; set; }
-        internal IRequestHandlerExecutionStrategy<TRequest, TResponse> HandlerExecutionStrategy { get; set; }
+        internal IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
         internal override async Task<TResponse> Execute(RequestPipelineContext<TRequest> context)
         {

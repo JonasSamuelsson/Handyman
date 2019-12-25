@@ -4,6 +4,6 @@
     {
         void AddFilterSelector(IRequestFilterSelector<TRequest, TResponse> requestFilterSelector);
         void AddHandlerSelector(IRequestHandlerSelector<TRequest, TResponse> requestHandlerSelector);
-        void UseHandlerExecutionStrategy(IRequestHandlerExecutionStrategy<TRequest, TResponse> requestHandlerExecutionStrategy);
+        void UseHandlerExecutionStrategy(IRequestHandlerExecutionStrategy requestHandlerExecutionStrategy);
     }
 }

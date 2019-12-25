@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class DefaultRequestHandlerExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    internal class DefaultRequestHandlerExecutionStrategy : IRequestHandlerExecutionStrategy
     {
-        public static IRequestHandlerExecutionStrategy<TRequest, TResponse> Instance = new DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>();
+        public static IRequestHandlerExecutionStrategy Instance = new DefaultRequestHandlerExecutionStrategy();
 
-        public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public Task<TResponse> Execute<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>
         {
             if (handlers.Count == 0)
             {

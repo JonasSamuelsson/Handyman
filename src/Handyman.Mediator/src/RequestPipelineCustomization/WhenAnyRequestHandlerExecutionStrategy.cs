@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Handyman.Mediator.Internals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public class WhenAnyRequestHandlerExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public class WhenAnyRequestHandlerExecutionStrategy : IRequestHandlerExecutionStrategy
     {
-        public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public async Task<TResponse> Execute<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>
         {
             if (handlers.Count <= 1)
             {
-                return await DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance.Execute(handlers, context).ConfigureAwait(false);
+                return await DefaultRequestHandlerExecutionStrategy.Instance.Execute(handlers, context).ConfigureAwait(false);
             }
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken);

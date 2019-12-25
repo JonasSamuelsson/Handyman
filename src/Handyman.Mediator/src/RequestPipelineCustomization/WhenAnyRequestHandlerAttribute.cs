@@ -1,5 +1,4 @@
 ﻿using System;
-using Handyman.Mediator.Internals;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
@@ -11,7 +10,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
             IServiceProvider serviceProvider)
         {
-            builder.UseHandlerExecutionStrategy(new WhenAnyRequestHandlerExecutionStrategy<TRequest, TResponse>());
+            builder.UseHandlerExecutionStrategy(new WhenAnyRequestHandlerExecutionStrategy());
         }
     }
 }

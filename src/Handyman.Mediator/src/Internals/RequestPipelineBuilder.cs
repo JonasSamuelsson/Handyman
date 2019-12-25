@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System;
 using System.Collections.Generic;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -9,7 +9,7 @@ namespace Handyman.Mediator.Internals
     {
         public List<IRequestFilterSelector<TRequest, TResponse>> FilterSelectors { get; set; } = new List<IRequestFilterSelector<TRequest, TResponse>>();
         public List<IRequestHandlerSelector<TRequest, TResponse>> HandlerSelectors { get; set; } = new List<IRequestHandlerSelector<TRequest, TResponse>>();
-        public IRequestHandlerExecutionStrategy<TRequest, TResponse> HandlerExecutionStrategy { get; set; }
+        public IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
         public void AddFilterSelector(IRequestFilterSelector<TRequest, TResponse> requestFilterSelector)
         {
@@ -21,7 +21,7 @@ namespace Handyman.Mediator.Internals
             HandlerSelectors.Add(requestHandlerSelector);
         }
 
-        public void UseHandlerExecutionStrategy(IRequestHandlerExecutionStrategy<TRequest, TResponse> requestHandlerExecutionStrategy)
+        public void UseHandlerExecutionStrategy(IRequestHandlerExecutionStrategy requestHandlerExecutionStrategy)
         {
             if (HandlerExecutionStrategy != null)
             {

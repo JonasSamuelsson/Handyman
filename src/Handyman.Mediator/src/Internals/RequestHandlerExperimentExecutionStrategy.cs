@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class RequestHandlerExperimentExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    internal class RequestHandlerExperimentExecutionStrategy : IRequestHandlerExecutionStrategy
     {
         private readonly Type _baselineHandlerType;
 
@@ -18,11 +17,12 @@ namespace Handyman.Mediator.Internals
             _baselineHandlerType = baselineHandlerType;
         }
 
-        public async Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public async Task<TResponse> Execute<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>
         {
             if (handlers.Count <= 1)
             {
-                return await DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance.Execute(handlers, context).ConfigureAwait(false);
+                return await DefaultRequestHandlerExecutionStrategy.Instance.Execute(handlers, context).ConfigureAwait(false);
             }
 
             var baselineHandler = GetBaselineHandler(handlers);
@@ -55,7 +55,8 @@ namespace Handyman.Mediator.Internals
             return await baselineExecution.Task.ConfigureAwait(false);
         }
 
-        private IRequestHandler<TRequest, TResponse> GetBaselineHandler(List<IRequestHandler<TRequest, TResponse>> handlers)
+        private IRequestHandler<TRequest, TResponse> GetBaselineHandler<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers)
+            where TRequest : IRequest<TResponse>
         {
             IRequestHandler<TRequest, TResponse> baselineHandler = null;
 
@@ -76,7 +77,8 @@ namespace Handyman.Mediator.Internals
             return baselineHandler;
         }
 
-        private static Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
+        private static Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
+            where TRequest : IRequest<TResponse>
         {
             var stopwatch = Stopwatch.StartNew();
             return handler.Handle(request, cancellationToken)

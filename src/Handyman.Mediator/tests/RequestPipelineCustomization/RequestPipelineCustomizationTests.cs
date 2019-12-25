@@ -40,7 +40,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             {
                 builder.AddFilterSelector(new RequestFilterSelector<TRequest, TResponse>());
                 builder.AddHandlerSelector(new RequestHandlerSelector<TRequest, TResponse>());
-                builder.UseHandlerExecutionStrategy(new RequestHandlerExecutionStrategy<TRequest, TResponse> { Action = serviceProvider.GetRequiredService<Action<string>>() });
+                builder.UseHandlerExecutionStrategy(new RequestHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
             }
         }
 
@@ -77,12 +77,12 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class RequestHandlerExecutionStrategy<TRequest, TResponse> : IRequestHandlerExecutionStrategy<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+        private class RequestHandlerExecutionStrategy : IRequestHandlerExecutionStrategy
         {
             public Action<string> Action { get; set; }
 
-            public Task<TResponse> Execute(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            public Task<TResponse> Execute<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+                where TRequest : IRequest<TResponse>
             {
                 Action.Invoke("execution strategy");
                 return handlers.Single().Handle(context.Request, context.CancellationToken);

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
-using Handyman.Mediator.RequestPipelineCustomization;
 
 namespace Handyman.Mediator.Internals
 {
@@ -65,8 +65,7 @@ namespace Handyman.Mediator.Internals
                     {
                         FilterSelectors = builder.FilterSelectors,
                         HandlerSelectors = builder.HandlerSelectors,
-                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ??
-                                                   DefaultRequestHandlerExecutionStrategy<TRequest, TResponse>.Instance
+                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? DefaultRequestHandlerExecutionStrategy.Instance
                     };
                 }
             }
