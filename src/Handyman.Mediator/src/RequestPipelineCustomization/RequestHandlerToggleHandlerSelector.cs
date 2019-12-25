@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public class RequestHandlerToggleHandlerSelector<TRequest, TResponse> : IRequestHandlerSelector<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public class RequestHandlerToggleHandlerSelector : IRequestHandlerSelector
     {
         private readonly Type _toggleEnabledHandlerType;
 
@@ -16,7 +15,8 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public Type ToggleDisabledHandlerType { get; set; }
 
-        public async Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public async Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle<TRequest, TResponse>>();
             var enabled = await toggle.IsEnabled(_toggleEnabledHandlerType, context).ConfigureAwait(false);

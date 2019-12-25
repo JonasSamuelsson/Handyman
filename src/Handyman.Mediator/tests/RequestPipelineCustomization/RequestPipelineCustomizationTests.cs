@@ -39,7 +39,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
             {
                 builder.AddFilterSelector(new RequestFilterSelector<TRequest, TResponse>());
-                builder.AddHandlerSelector(new RequestHandlerSelector<TRequest, TResponse>());
+                builder.AddHandlerSelector(new RequestHandlerSelector());
                 builder.UseHandlerExecutionStrategy(new RequestHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
             }
         }
@@ -51,14 +51,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             {
                 filters.Add(new RequestFilter<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
-                ;
             }
         }
 
-        private class RequestHandlerSelector<TRequest, TResponse> : IRequestHandlerSelector<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+        private class RequestHandlerSelector : IRequestHandlerSelector
         {
-            public Task SelectHandlers(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            public Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+                where TRequest : IRequest<TResponse>
             {
                 handlers.Add(new RequestHandler<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;

@@ -8,7 +8,7 @@ namespace Handyman.Mediator.Internals
         where TRequest : IRequest<TResponse>
     {
         internal List<IRequestFilterSelector<TRequest, TResponse>> FilterSelectors { get; set; }
-        internal List<IRequestHandlerSelector<TRequest, TResponse>> HandlerSelectors { get; set; }
+        internal List<IRequestHandlerSelector> HandlerSelectors { get; set; }
         internal IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
         internal override async Task<TResponse> Execute(RequestPipelineContext<TRequest> context)
