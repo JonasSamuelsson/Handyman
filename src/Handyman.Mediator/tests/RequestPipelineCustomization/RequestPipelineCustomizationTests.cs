@@ -38,16 +38,16 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
             {
-                builder.AddFilterSelector(new RequestFilterSelector<TRequest, TResponse>());
+                builder.AddFilterSelector(new RequestFilterSelector());
                 builder.AddHandlerSelector(new RequestHandlerSelector());
                 builder.UseHandlerExecutionStrategy(new RequestHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
             }
         }
 
-        private class RequestFilterSelector<TRequest, TResponse> : IRequestFilterSelector<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+        private class RequestFilterSelector : IRequestFilterSelector
         {
-            public Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
+            public Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
+                where TRequest : IRequest<TResponse>
             {
                 filters.Add(new RequestFilter<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;

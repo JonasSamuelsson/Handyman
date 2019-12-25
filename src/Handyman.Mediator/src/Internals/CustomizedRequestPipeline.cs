@@ -7,7 +7,7 @@ namespace Handyman.Mediator.Internals
     internal class CustomizedRequestPipeline<TRequest, TResponse> : RequestPipeline<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        internal List<IRequestFilterSelector<TRequest, TResponse>> FilterSelectors { get; set; }
+        internal List<IRequestFilterSelector> FilterSelectors { get; set; }
         internal List<IRequestHandlerSelector> HandlerSelectors { get; set; }
         internal IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 

@@ -18,7 +18,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
             IServiceProvider serviceProvider)
         {
-            builder.AddFilterSelector(new RequestFilterToggleFilterSelector<TRequest, TResponse>(_toggleEnabledFilterType)
+            builder.AddFilterSelector(new RequestFilterToggleFilterSelector(_toggleEnabledFilterType)
             {
                 ToggleDisabledFilterType = ToggleDisabledFilterType
             });

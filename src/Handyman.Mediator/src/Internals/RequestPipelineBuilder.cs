@@ -7,11 +7,11 @@ namespace Handyman.Mediator.Internals
     internal class RequestPipelineBuilder<TRequest, TResponse> : IRequestPipelineBuilder<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        public List<IRequestFilterSelector<TRequest, TResponse>> FilterSelectors { get; set; } = new List<IRequestFilterSelector<TRequest, TResponse>>();
+        public List<IRequestFilterSelector> FilterSelectors { get; set; } = new List<IRequestFilterSelector>();
         public List<IRequestHandlerSelector> HandlerSelectors { get; set; } = new List<IRequestHandlerSelector>();
         public IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
-        public void AddFilterSelector(IRequestFilterSelector<TRequest, TResponse> requestFilterSelector)
+        public void AddFilterSelector(IRequestFilterSelector requestFilterSelector)
         {
             FilterSelectors.Add(requestFilterSelector);
         }

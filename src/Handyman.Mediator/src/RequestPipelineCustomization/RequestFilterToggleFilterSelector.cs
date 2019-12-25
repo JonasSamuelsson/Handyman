@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    internal class RequestFilterToggleFilterSelector<TRequest, TResponse> : IRequestFilterSelector<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    internal class RequestFilterToggleFilterSelector : IRequestFilterSelector
     {
         private readonly Type _toggleEnabledFilterType;
 
@@ -16,7 +15,8 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public Type ToggleDisabledFilterType { get; set; }
 
-        public async Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
+        public async Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestFilterToggle<TRequest, TResponse>>();
             var enabled = await toggle.IsEnabled(_toggleEnabledFilterType, context).ConfigureAwait(false);

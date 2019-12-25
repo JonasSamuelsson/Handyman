@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public interface IRequestFilterSelector<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public interface IRequestFilterSelector
     {
-        Task SelectFilters(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context);
+        Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>;
     }
 }
