@@ -54,7 +54,7 @@ namespace Handyman.Mediator.Internals
 
                 CustomizedRequestPipeline<TRequest, TResponse> CreateCustomizedRequestPipeline()
                 {
-                    var builder = new RequestPipelineBuilder<TRequest, TResponse>();
+                    var builder = new RequestPipelineBuilder();
 
                     foreach (var attribute in attributes)
                     {

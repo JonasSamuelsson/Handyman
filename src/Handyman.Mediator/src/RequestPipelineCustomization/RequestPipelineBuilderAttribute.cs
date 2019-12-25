@@ -7,7 +7,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     {
         public virtual bool PipelineCanBeReused => false;
 
-        public abstract void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
-            IServiceProvider serviceProvider) where TRequest : IRequest<TResponse>;
+        public abstract void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider);
     }
 }

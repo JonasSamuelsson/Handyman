@@ -7,8 +7,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     {
         public override bool PipelineCanBeReused => true;
 
-        public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder,
-            IServiceProvider serviceProvider)
+        public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
             builder.UseHandlerExecutionStrategy(new WhenAnyRequestHandlerExecutionStrategy());
         }

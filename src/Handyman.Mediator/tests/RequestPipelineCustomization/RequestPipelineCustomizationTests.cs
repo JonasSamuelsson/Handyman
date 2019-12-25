@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
-using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
@@ -36,7 +36,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
         private class CustomizeRequestPipelineAttribute : RequestPipelineBuilderAttribute
         {
-            public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
+            public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 builder.AddFilterSelector(new RequestFilterSelector());
                 builder.AddHandlerSelector(new RequestHandlerSelector());

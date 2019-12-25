@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
@@ -49,7 +49,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             public override bool PipelineCanBeReused => false;
 
-            public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
+            public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 ExecutionCount++;
             }
@@ -64,7 +64,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             public override bool PipelineCanBeReused => true;
 
-            public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
+            public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 ExecutionCount++;
             }

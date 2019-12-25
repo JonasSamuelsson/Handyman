@@ -1,6 +1,6 @@
-﻿using System;
-using Handyman.Mediator.RequestPipelineCustomization;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -49,7 +49,7 @@ namespace Handyman.Mediator.Tests
 
         private class PipelineBuilderAttribute : RequestPipelineBuilderAttribute
         {
-            public override void Configure<TRequest, TResponse>(IRequestPipelineBuilder<TRequest, TResponse> builder, IServiceProvider serviceProvider)
+            public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
             {
                 throw new NotImplementedException();
             }
