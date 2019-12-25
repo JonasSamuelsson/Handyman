@@ -12,7 +12,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _toggleEnabledFilterType = toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType));
         }
 
-        public override bool PipelineCanBeReused => true;
         public Type ToggleDisabledFilterType { get; set; }
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)

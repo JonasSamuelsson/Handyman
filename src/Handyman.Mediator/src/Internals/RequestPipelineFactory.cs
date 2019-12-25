@@ -1,7 +1,6 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
 using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Reflection;
 
 namespace Handyman.Mediator.Internals
@@ -44,15 +43,9 @@ namespace Handyman.Mediator.Internals
                     return () => defaultPipeline;
                 }
 
-                if (attributes.All(x => x.PipelineCanBeReused))
-                {
-                    var customizedPipeline = CreateCustomizedRequestPipeline();
-                    return () => customizedPipeline;
-                }
+                return CreateCustomizedPipeline;
 
-                return CreateCustomizedRequestPipeline;
-
-                CustomizedRequestPipeline<TRequest, TResponse> CreateCustomizedRequestPipeline()
+                RequestPipeline<TResponse> CreateCustomizedPipeline()
                 {
                     var builder = new RequestPipelineBuilder();
 

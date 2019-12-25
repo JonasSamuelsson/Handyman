@@ -12,7 +12,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _toggleEnabledHandlerType = toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType));
         }
 
-        public override bool PipelineCanBeReused => true;
         public Type ToggleDisabledHandlerType { get; set; }
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)

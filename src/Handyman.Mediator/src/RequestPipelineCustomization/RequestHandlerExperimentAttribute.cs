@@ -13,8 +13,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _baselineHandlerType = baselineHandlerType;
         }
 
-        public override bool PipelineCanBeReused => true;
-
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
             builder.UseHandlerExecutionStrategy(new RequestHandlerExperimentExecutionStrategy(_baselineHandlerType));
