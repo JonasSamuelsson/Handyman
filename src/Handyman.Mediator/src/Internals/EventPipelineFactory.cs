@@ -1,7 +1,6 @@
 ﻿using Handyman.Mediator.EventPipelineCustomization;
 using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Reflection;
 
 namespace Handyman.Mediator.Internals
@@ -38,8 +37,7 @@ namespace Handyman.Mediator.Internals
 
                 if (attributes.Count == 0)
                 {
-                    var defaultPipeline = new DefaultEventPipeline<TEvent>();
-                    return () => defaultPipeline;
+                    return () => DefaultEventPipeline<TEvent>.Instance;
                 }
 
                 return CreateCustomizedEventPipeline;

@@ -5,6 +5,10 @@ namespace Handyman.Mediator.Internals
     internal class DefaultRequestPipeline<TRequest, TResponse> : RequestPipeline<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
+        internal static readonly RequestPipeline<TRequest, TResponse> Instance = new DefaultRequestPipeline<TRequest, TResponse>();
+
+        private DefaultRequestPipeline() { }
+
         internal override Task<TResponse> Execute(RequestPipelineContext<TRequest> context)
         {
             var filters = context.ServiceProvider.GetServices<IRequestFilter<TRequest, TResponse>>().ToListOptimized();

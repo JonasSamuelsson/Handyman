@@ -39,8 +39,7 @@ namespace Handyman.Mediator.Internals
 
                 if (attributes.Count == 0)
                 {
-                    var defaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
-                    return () => defaultPipeline;
+                    return () => DefaultRequestPipeline<TRequest, TResponse>.Instance;
                 }
 
                 return CreateCustomizedPipeline;
