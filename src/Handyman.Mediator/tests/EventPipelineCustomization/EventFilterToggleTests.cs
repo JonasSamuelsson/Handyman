@@ -21,7 +21,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             var services = new ServiceCollection();
 
             services.AddScoped<IMediator>(x => new Mediator(x));
-            services.AddSingleton<IEventFilterToggle<Event>>(toggle);
+            services.AddSingleton<IEventFilterToggle>(toggle);
             services.AddSingleton<IEventFilter<Event>>(toggledFilter);
             services.AddSingleton<IEventFilter<Event>>(fallbackFilter);
 
@@ -57,12 +57,12 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             }
         }
 
-        private class EventFilterToggle : IEventFilterToggle<Event>
+        private class EventFilterToggle : IEventFilterToggle
         {
             public bool Enabled { get; set; }
             public Type EventFilterType { get; set; }
 
-            public Task<bool> IsEnabled(Type eventFilterType, EventPipelineContext<Event> context)
+            public Task<bool> IsEnabled<TEvent>(Type eventFilterType, EventPipelineContext<TEvent> context) where TEvent : IEvent
             {
                 EventFilterType = eventFilterType;
                 return Task.FromResult(Enabled);

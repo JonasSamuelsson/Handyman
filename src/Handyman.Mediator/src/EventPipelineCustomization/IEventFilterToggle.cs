@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    public interface IEventFilterToggle<TEvent>
-        where TEvent : IEvent
+    public interface IEventFilterToggle
     {
-        Task<bool> IsEnabled(Type eventFilterType, EventPipelineContext<TEvent> context);
+        Task<bool> IsEnabled<TEvent>(Type eventFilterType, EventPipelineContext<TEvent> context)
+            where TEvent : IEvent;
     }
 }

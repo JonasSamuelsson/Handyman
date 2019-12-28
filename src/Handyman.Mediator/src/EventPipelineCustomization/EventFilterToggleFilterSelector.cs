@@ -17,7 +17,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public async Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
-            var toggle = context.ServiceProvider.GetRequiredService<IEventFilterToggle<TEvent>>();
+            var toggle = context.ServiceProvider.GetRequiredService<IEventFilterToggle>();
             var enabled = await toggle.IsEnabled(_toggleEnabledFilterType, context).ConfigureAwait(false);
 
             if (!enabled)
