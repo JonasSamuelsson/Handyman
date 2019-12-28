@@ -15,14 +15,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         [InlineData(true)]
         public async Task ShouldToggleRequestHandler(bool toggleEnabled)
         {
-            var toggle = new RequestHandlerToggle<Request, object> { Enabled = toggleEnabled };
+            var toggle = new RequestHandlerToggle { Enabled = toggleEnabled };
             var toggledHandler = new ToggleEnabledRequestHandler();
             var fallbackHandler = new ToggleDisabledRequestHandler();
 
             var services = new ServiceCollection();
 
             services.AddScoped<IMediator>(x => new Mediator(x));
-            services.AddSingleton<IRequestHandlerToggle<Request, object>>(toggle);
+            services.AddSingleton<IRequestHandlerToggle>(toggle);
             services.AddSingleton<IRequestHandler<Request, object>>(toggledHandler);
             services.AddSingleton<IRequestHandler<Request, object>>(fallbackHandler);
 
@@ -58,13 +58,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class RequestHandlerToggle<TRequest, TResponse> : IRequestHandlerToggle<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+        private class RequestHandlerToggle : IRequestHandlerToggle
         {
             public bool Enabled { get; set; }
             public Type RequestHandlerType { get; set; }
 
-            public Task<bool> IsEnabled(Type requestHandlerType, RequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled<TRequest, TResponse>(Type requestHandlerType, RequestPipelineContext<TRequest> context)
+                where TRequest : IRequest<TResponse>
             {
                 RequestHandlerType = requestHandlerType;
                 return Task.FromResult(Enabled);
