@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public interface IRequestFilterToggle<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public interface IRequestFilterToggle
     {
-        Task<bool> IsEnabled(Type requestFilterType, RequestPipelineContext<TRequest> context);
+        Task<bool> IsEnabled<TRequest, TResponse>(Type requestFilterType, RequestPipelineContext<TRequest> context)
+            where TRequest : IRequest<TResponse>;
     }
 }

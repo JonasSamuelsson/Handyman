@@ -15,14 +15,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         [InlineData(true)]
         public async Task ShouldToggleRequestFilter(bool toggleEnabled)
         {
-            var toggle = new RequestFilterToggle<Request, object> { Enabled = toggleEnabled };
+            var toggle = new RequestFilterToggle { Enabled = toggleEnabled };
             var toggledFilter = new ToggledEnabledRequestFilter();
             var fallbackFilter = new ToggleDisabledRequestFilter();
 
             var services = new ServiceCollection();
 
             services.AddScoped<IMediator>(x => new Mediator(x));
-            services.AddSingleton<IRequestFilterToggle<Request, object>>(toggle);
+            services.AddSingleton<IRequestFilterToggle>(toggle);
             services.AddSingleton<IRequestFilter<Request, object>>(toggledFilter);
             services.AddSingleton<IRequestFilter<Request, object>>(fallbackFilter);
             services.AddTransient<IRequestHandler<Request, object>, RequestHandler>();
@@ -61,13 +61,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class RequestFilterToggle<TRequest, TResponse> : IRequestFilterToggle<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+        private class RequestFilterToggle : IRequestFilterToggle
         {
             public bool Enabled { get; set; }
             public Type RequestFilterType { get; set; }
 
-            public Task<bool> IsEnabled(Type requestFilterType, RequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled<TRequest, TResponse>(Type requestFilterType, RequestPipelineContext<TRequest> context)
+                where TRequest : IRequest<TResponse>
             {
                 RequestFilterType = requestFilterType;
                 return Task.FromResult(Enabled);
