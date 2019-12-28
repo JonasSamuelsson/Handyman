@@ -22,7 +22,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
             services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
-            services.AddSingleton<IRequestHandlerExperimentToggle<Request, string>>(new Toggle<Request, string> { Enabled = true });
+            services.AddSingleton<IRequestHandlerExperimentToggle>(new Toggle { Enabled = true });
 
             var mediator = new Mediator(services.BuildServiceProvider());
 
@@ -59,7 +59,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => throw new Exception("boom") });
             services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
-            services.AddSingleton<IRequestHandlerExperimentToggle<Request, string>>(new Toggle<Request, string> { Enabled = true });
+            services.AddSingleton<IRequestHandlerExperimentToggle>(new Toggle { Enabled = true });
 
             var mediator = new Mediator(services.BuildServiceProvider());
 
@@ -82,14 +82,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             var experimentHandler = new ExperimentHandler();
             var observer = new Observer();
-            var toggle = new Toggle<Request, string>();
+            var toggle = new Toggle();
 
             var services = new ServiceCollection();
 
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(experimentHandler);
             services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
-            services.AddSingleton<IRequestHandlerExperimentToggle<Request, string>>(toggle);
+            services.AddSingleton<IRequestHandlerExperimentToggle>(toggle);
 
             var mediator = new Mediator(services.BuildServiceProvider());
 
@@ -137,12 +137,12 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class Toggle<TRequest, TResponse> : IRequestHandlerExperimentToggle<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
+        private class Toggle : IRequestHandlerExperimentToggle
         {
             public bool Enabled { get; set; }
 
-            public Task<bool> IsEnabled(TRequest request, CancellationToken cancellationToken)
+            public Task<bool> IsEnabled<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+                where TRequest : IRequest<TResponse>
             {
                 return Task.FromResult(Enabled);
             }

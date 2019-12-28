@@ -27,12 +27,12 @@ namespace Handyman.Mediator.Internals
 
             var baselineHandler = GetBaselineHandler(handlers);
 
-            var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerExperimentToggle<TRequest, TResponse>>();
+            var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerExperimentToggle>();
 
             var request = context.Request;
             var cancellationToken = context.CancellationToken;
 
-            if (!await toggle.IsEnabled(request, cancellationToken).ConfigureAwait(false))
+            if (!await toggle.IsEnabled<TRequest, TResponse>(request, cancellationToken).ConfigureAwait(false))
             {
                 return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait(false);
             }
