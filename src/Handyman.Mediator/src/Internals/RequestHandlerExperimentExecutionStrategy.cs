@@ -37,7 +37,7 @@ namespace Handyman.Mediator.Internals
                 return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait(false);
             }
 
-            var observer = context.ServiceProvider.GetRequiredService<IRequestHandlerExperimentObserver<TRequest, TResponse>>();
+            var observer = context.ServiceProvider.GetRequiredService<IRequestHandlerExperimentObserver>();
             var tasks = handlers.Select(handler => Execute(handler, request, cancellationToken)).ToListOptimized();
             var executions = await Task.WhenAll(tasks).ConfigureAwait(false);
             var baselineExecution = executions.Single(x => x.Handler == baselineHandler);

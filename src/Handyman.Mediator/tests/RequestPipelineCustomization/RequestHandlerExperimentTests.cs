@@ -21,7 +21,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
-            services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
+            services.AddSingleton<IRequestHandlerExperimentObserver>(observer);
             services.AddSingleton<IRequestHandlerExperimentToggle>(new Toggle { Enabled = true });
 
             var mediator = new Mediator(services.BuildServiceProvider());
@@ -58,7 +58,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => throw new Exception("boom") });
-            services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
+            services.AddSingleton<IRequestHandlerExperimentObserver>(observer);
             services.AddSingleton<IRequestHandlerExperimentToggle>(new Toggle { Enabled = true });
 
             var mediator = new Mediator(services.BuildServiceProvider());
@@ -88,7 +88,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(experimentHandler);
-            services.AddSingleton<IRequestHandlerExperimentObserver<Request, string>>(observer);
+            services.AddSingleton<IRequestHandlerExperimentObserver>(observer);
             services.AddSingleton<IRequestHandlerExperimentToggle>(toggle);
 
             var mediator = new Mediator(services.BuildServiceProvider());
@@ -120,18 +120,19 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class Observer : IRequestHandlerExperimentObserver<Request, string>
+        private class Observer : IRequestHandlerExperimentObserver
         {
             public bool Executed { get; set; }
             public Request Request { get; set; }
             public RequestHandlerExperimentExecution<Request, string> Baseline { get; set; }
             public IReadOnlyCollection<RequestHandlerExperimentExecution<Request, string>> Experiments { get; set; }
 
-            public Task Observe(RequestHandlerExperiment<Request, string> experiment)
+            public Task Observe<TRequest, TResponse>(RequestHandlerExperiment<TRequest, TResponse> experiment)
+                where TRequest : IRequest<TResponse>
             {
-                Request = experiment.Request;
-                Baseline = experiment.BaselineExecution;
-                Experiments = experiment.ExperimentalExecutions;
+                Request = (Request)(object)experiment.Request;
+                Baseline = (RequestHandlerExperimentExecution<Request, string>) (object)experiment.BaselineExecution;
+                Experiments = experiment.ExperimentalExecutions.Cast<RequestHandlerExperimentExecution<Request,string>>().ToList();
 
                 return Task.CompletedTask;
             }
