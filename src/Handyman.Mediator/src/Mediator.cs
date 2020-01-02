@@ -8,6 +8,7 @@ namespace Handyman.Mediator
     public class Mediator : IMediator
     {
 
+        private static readonly EventPipelineFactory EventPipelineFactory = new EventPipelineFactory();
         private static readonly RequestPipelineFactory RequestPipelineFactory = new RequestPipelineFactory();
 
         private readonly IServiceProvider _serviceProvider;

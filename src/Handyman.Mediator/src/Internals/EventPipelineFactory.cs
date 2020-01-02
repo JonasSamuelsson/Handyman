@@ -5,33 +5,33 @@ using System.Reflection;
 
 namespace Handyman.Mediator.Internals
 {
-    internal static class EventPipelineFactory
+    internal class EventPipelineFactory
     {
-        private static readonly ConcurrentDictionary<Type, Func<object>> Cache = new ConcurrentDictionary<Type, Func<object>>();
+        private readonly ConcurrentDictionary<Type, Func<EventPipeline>> _factoryMethods = new ConcurrentDictionary<Type, Func<EventPipeline>>();
 
-        public static EventPipeline GetPipeline(IEvent @event, IServiceProvider serviceProvider)
+        public EventPipeline GetPipeline(IEvent @event, IServiceProvider serviceProvider)
         {
             var eventType = @event.GetType();
-            var factory = Cache.GetOrAdd(eventType, type => CreateFactory(type, serviceProvider));
-            return (EventPipeline)factory();
+            var factoryMethod = _factoryMethods.GetOrAdd(eventType, type => CreateFactoryMethod(type, serviceProvider));
+            return factoryMethod.Invoke();
         }
 
-        private static Func<object> CreateFactory(Type eventType, IServiceProvider serviceProvider)
+        private static Func<EventPipeline> CreateFactoryMethod(Type eventType, IServiceProvider serviceProvider)
         {
-            var factoryBuilderType = typeof(FactoryBuilder<>).MakeGenericType(eventType);
-            var factoryBuilder = (FactoryBuilder)Activator.CreateInstance(factoryBuilderType);
-            return factoryBuilder.CreateFactory(serviceProvider);
+            var factoryMethodBuilderType = typeof(FactoryMethodBuilder<>).MakeGenericType(eventType);
+            var factoryMethodBuilder = (FactoryMethodBuilder)Activator.CreateInstance(factoryMethodBuilderType);
+            return factoryMethodBuilder.CreateFactoryMethod(serviceProvider);
         }
 
-        private abstract class FactoryBuilder
+        private abstract class FactoryMethodBuilder
         {
-            internal abstract Func<EventPipeline> CreateFactory(IServiceProvider serviceProvider);
+            internal abstract Func<EventPipeline> CreateFactoryMethod(IServiceProvider serviceProvider);
         }
 
-        private class FactoryBuilder<TEvent> : FactoryBuilder
+        private class FactoryMethodBuilder<TEvent> : FactoryMethodBuilder
             where TEvent : IEvent
         {
-            internal override Func<EventPipeline> CreateFactory(IServiceProvider serviceProvider)
+            internal override Func<EventPipeline> CreateFactoryMethod(IServiceProvider serviceProvider)
             {
                 var attributes = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>().ToListOptimized();
 
