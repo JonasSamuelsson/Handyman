@@ -7,6 +7,9 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
+
+        private static readonly RequestPipelineFactory RequestPipelineFactory = new RequestPipelineFactory();
+
         private readonly IServiceProvider _serviceProvider;
 
         public Mediator(IServiceProvider serviceProvider)
@@ -22,7 +25,7 @@ namespace Handyman.Mediator
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            var pipeline = RequestPipelineFactory.GetRequestPipeline(request, _serviceProvider);
+            var pipeline = RequestPipelineFactory.GetPipeline(request, _serviceProvider);
             return pipeline.Execute(request, _serviceProvider, cancellationToken);
         }
     }

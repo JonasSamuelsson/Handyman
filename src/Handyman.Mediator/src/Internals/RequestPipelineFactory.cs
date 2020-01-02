@@ -5,35 +5,34 @@ using System.Reflection;
 
 namespace Handyman.Mediator.Internals
 {
-    internal static class RequestPipelineFactory
+    internal class RequestPipelineFactory
     {
-        private static readonly ConcurrentDictionary<Type, Func<object>> Cache = new ConcurrentDictionary<Type, Func<object>>();
+        private readonly ConcurrentDictionary<Type, Func<object>> _factoryMethods = new ConcurrentDictionary<Type, Func<object>>();
 
-        internal static RequestPipeline<TResponse> GetRequestPipeline<TResponse>(IRequest<TResponse> request,
-            IServiceProvider serviceProvider)
+        internal RequestPipeline<TResponse> GetPipeline<TResponse>(IRequest<TResponse> request, IServiceProvider serviceProvider)
         {
             var requestType = request.GetType();
-            var factory = Cache.GetOrAdd(requestType, type => CreateFactory<TResponse>(type, serviceProvider));
-            return (RequestPipeline<TResponse>)factory();
+            var factoryMethod = _factoryMethods.GetOrAdd(requestType, type => CreateFactory<TResponse>(type, serviceProvider));
+            return (RequestPipeline<TResponse>)factoryMethod.Invoke();
         }
 
         private static Func<object> CreateFactory<TResponse>(Type requestType, IServiceProvider serviceProvider)
         {
             var responseType = typeof(TResponse);
-            var factoryBuilderType = typeof(FactoryBuilder<,>).MakeGenericType(requestType, responseType);
-            var factoryBuilder = (FactoryBuilder<TResponse>)Activator.CreateInstance(factoryBuilderType);
-            return factoryBuilder.CreateFactory(serviceProvider);
+            var factoryMethodBuilderType = typeof(FactoryMethodBuilder<,>).MakeGenericType(requestType, responseType);
+            var factoryMethodBuilder = (FactoryMethodBuilder)Activator.CreateInstance(factoryMethodBuilderType);
+            return factoryMethodBuilder.CreateFactoryMethod(serviceProvider);
         }
 
-        private abstract class FactoryBuilder<TResponse>
+        private abstract class FactoryMethodBuilder
         {
-            internal abstract Func<RequestPipeline<TResponse>> CreateFactory(IServiceProvider serviceProvider);
+            internal abstract Func<object> CreateFactoryMethod(IServiceProvider serviceProvider);
         }
 
-        private class FactoryBuilder<TRequest, TResponse> : FactoryBuilder<TResponse>
+        private class FactoryMethodBuilder<TRequest, TResponse> : FactoryMethodBuilder
             where TRequest : IRequest<TResponse>
         {
-            internal override Func<RequestPipeline<TResponse>> CreateFactory(IServiceProvider serviceProvider)
+            internal override Func<object> CreateFactoryMethod(IServiceProvider serviceProvider)
             {
                 var attributes = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>().ToListOptimized();
 
