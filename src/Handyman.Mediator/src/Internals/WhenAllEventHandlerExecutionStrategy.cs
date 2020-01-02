@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Internals
 {
-    internal class DefaultEventHandlerExecutionStrategy : IEventHandlerExecutionStrategy
+    internal class WhenAllEventHandlerExecutionStrategy : IEventHandlerExecutionStrategy
     {
-        public static readonly IEventHandlerExecutionStrategy Instance = new DefaultEventHandlerExecutionStrategy();
+        public static readonly IEventHandlerExecutionStrategy Instance = new WhenAllEventHandlerExecutionStrategy();
 
         public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {

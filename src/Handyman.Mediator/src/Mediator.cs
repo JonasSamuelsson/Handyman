@@ -7,20 +7,26 @@ namespace Handyman.Mediator
 {
     public class Mediator : IMediator
     {
-
         private static readonly EventPipelineFactory EventPipelineFactory = new EventPipelineFactory();
         private static readonly RequestPipelineFactory RequestPipelineFactory = new RequestPipelineFactory();
 
         private readonly IServiceProvider _serviceProvider;
+        private readonly MediatorOptions _options;
 
         public Mediator(IServiceProvider serviceProvider)
+        : this(serviceProvider, MediatorOptions.Default)
         {
-            _serviceProvider = serviceProvider;
+        }
+
+        public Mediator(IServiceProvider serviceProvider, MediatorOptions options)
+        {
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public Task Publish(IEvent @event, CancellationToken cancellationToken)
         {
-            var pipeline = EventPipelineFactory.GetPipeline(@event, _serviceProvider);
+            var pipeline = EventPipelineFactory.GetPipeline(@event, _serviceProvider, _options);
             return pipeline.Execute(@event, _serviceProvider, cancellationToken);
         }
 

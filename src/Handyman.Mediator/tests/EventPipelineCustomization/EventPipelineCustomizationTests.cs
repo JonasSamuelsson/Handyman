@@ -90,7 +90,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
             {
                 Action("execution strategy");
-                return DefaultEventHandlerExecutionStrategy.Instance.Execute(handlers, context);
+                return WhenAllEventHandlerExecutionStrategy.Instance.Execute(handlers, context);
             }
         }
     }

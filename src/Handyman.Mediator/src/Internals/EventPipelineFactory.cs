@@ -7,42 +7,45 @@ namespace Handyman.Mediator.Internals
 {
     internal class EventPipelineFactory
     {
-        private readonly ConcurrentDictionary<Type, Func<EventPipeline>> _factoryMethods = new ConcurrentDictionary<Type, Func<EventPipeline>>();
+        private readonly ConcurrentDictionary<Type, Func<IServiceProvider, MediatorOptions, EventPipeline>> _factoryMethods = new ConcurrentDictionary<Type, Func<IServiceProvider, MediatorOptions, EventPipeline>>();
 
-        public EventPipeline GetPipeline(IEvent @event, IServiceProvider serviceProvider)
+        public EventPipeline GetPipeline(IEvent @event, IServiceProvider serviceProvider, MediatorOptions options)
         {
             var eventType = @event.GetType();
-            var factoryMethod = _factoryMethods.GetOrAdd(eventType, type => CreateFactoryMethod(type, serviceProvider));
-            return factoryMethod.Invoke();
+            var factoryMethod = _factoryMethods.GetOrAdd(eventType, CreateFactoryMethod);
+            return factoryMethod.Invoke(serviceProvider, options);
         }
 
-        private static Func<EventPipeline> CreateFactoryMethod(Type eventType, IServiceProvider serviceProvider)
+        private static Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod(Type eventType)
         {
             var factoryMethodBuilderType = typeof(FactoryMethodBuilder<>).MakeGenericType(eventType);
             var factoryMethodBuilder = (FactoryMethodBuilder)Activator.CreateInstance(factoryMethodBuilderType);
-            return factoryMethodBuilder.CreateFactoryMethod(serviceProvider);
+            return factoryMethodBuilder.CreateFactoryMethod();
         }
 
         private abstract class FactoryMethodBuilder
         {
-            internal abstract Func<EventPipeline> CreateFactoryMethod(IServiceProvider serviceProvider);
+            internal abstract Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod();
         }
 
         private class FactoryMethodBuilder<TEvent> : FactoryMethodBuilder
             where TEvent : IEvent
         {
-            internal override Func<EventPipeline> CreateFactoryMethod(IServiceProvider serviceProvider)
+            internal override Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod()
             {
                 var attributes = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>().ToListOptimized();
 
                 if (attributes.Count == 0)
                 {
-                    return () => DefaultEventPipeline<TEvent>.Instance;
+                    return (serviceProvider, mediatorOptions) =>
+                        mediatorOptions.EventHandlerExecutionStrategy == WhenAllEventHandlerExecutionStrategy.Instance
+                            ? DefaultEventPipeline<TEvent>.DefaultInstance
+                            : new DefaultEventPipeline<TEvent>(mediatorOptions.EventHandlerExecutionStrategy);
                 }
 
                 return CreateCustomizedEventPipeline;
 
-                CustomizedEventPipeline<TEvent> CreateCustomizedEventPipeline()
+                EventPipeline CreateCustomizedEventPipeline(IServiceProvider serviceProvider, MediatorOptions mediatorOptions)
                 {
                     var builder = new EventPipelineBuilder();
 
@@ -55,7 +58,7 @@ namespace Handyman.Mediator.Internals
                     {
                         FilterSelectors = builder.FilterSelectors,
                         HandlerSelectors = builder.HandlerSelectors,
-                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? DefaultEventHandlerExecutionStrategy.Instance
+                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? mediatorOptions.EventHandlerExecutionStrategy
                     };
                 }
             }
