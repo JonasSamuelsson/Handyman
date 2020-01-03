@@ -28,7 +28,7 @@ namespace Handyman.Mediator.DependencyInjection
 
             services.AddServiceProviderInsights();
 
-            services.AddScoped<IMediator>(sp => new Mediator(sp));
+            services.Add(new ServiceDescriptor(typeof(IMediator), sp => new Mediator(sp), options.MediatorLifetime));
 
             services.Scan(_ =>
             {

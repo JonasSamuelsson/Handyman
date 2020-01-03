@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -7,6 +8,8 @@ namespace Handyman.Mediator.DependencyInjection
     public class MediatorOptions
     {
         internal ISet<Assembly> Assemblies { get; } = new HashSet<Assembly>();
+
+        public ServiceLifetime MediatorLifetime { get; set; } = ServiceLifetime.Scoped;
 
         public void ScanAssembly(Assembly assembly)
         {
