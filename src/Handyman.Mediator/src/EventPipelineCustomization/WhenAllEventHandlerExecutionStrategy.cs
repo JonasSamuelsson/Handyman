@@ -1,11 +1,10 @@
-﻿using Handyman.Mediator.EventPipelineCustomization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Handyman.Mediator.Internals
+namespace Handyman.Mediator.EventPipelineCustomization
 {
-    internal class WhenAllEventHandlerExecutionStrategy : IEventHandlerExecutionStrategy
+    public sealed class WhenAllEventHandlerExecutionStrategy : IEventHandlerExecutionStrategy
     {
         public static readonly IEventHandlerExecutionStrategy Instance = new WhenAllEventHandlerExecutionStrategy();
 
