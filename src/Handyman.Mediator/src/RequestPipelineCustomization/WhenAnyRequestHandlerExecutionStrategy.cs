@@ -23,9 +23,9 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
             while (tasks.Count != 0)
             {
-                var task = await Task.WhenAny(tasks).ConfigureAwait(false);
-
                 context.CancellationToken.ThrowIfCancellationRequested();
+
+                var task = await Task.WhenAny(tasks).ConfigureAwait(false);
 
                 if (task.Status != TaskStatus.RanToCompletion)
                 {
@@ -53,7 +53,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
                 return task.Result;
             }
 
-            throw new InvalidOperationException();
+            throw new AggregateException(exceptions);
         }
     }
 }
