@@ -7,7 +7,7 @@
 
 	<PropertyGroup>
 		<PackageId>Handyman.Mediator</PackageId>
-		<Version>8.0.0-beta.2001051505</Version>
+		<Version>8.0.0-beta.2001052053</Version>
 		<Authors>Jonas Samuelsson</Authors>
 		<Company />
 		<Product>Handyman</Product>
