@@ -34,15 +34,16 @@ namespace Handyman.Mediator.DependencyInjection
             {
                 _.Types(options.TypesToScan);
                 _.ConfigureConcreteClassesOf(typeof(IEventFilter<>));
-                _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle<>));
+                _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle));
                 _.ConfigureConcreteClassesOf(typeof(IEventHandler<>));
-                _.ConfigureConcreteClassesOf(typeof(IEventHandlerToggle<>));
+                _.ConfigureConcreteClassesOf(typeof(IEventHandlerToggle));
                 _.ConfigureConcreteClassesOf(typeof(IExceptionHandler));
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>));
-                _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle<,>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle));
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>));
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle<,>));
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle<,>));
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentObserver));
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle));
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle));
             });
 
             return services;

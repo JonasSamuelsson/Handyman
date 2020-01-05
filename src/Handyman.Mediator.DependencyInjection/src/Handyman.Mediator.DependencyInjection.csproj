@@ -9,8 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Handyman.DependencyInjection" Version="2.0.0-beta.191210.1909" />
-		<PackageReference Include="Handyman.Mediator" Version="8.0.0-beta.191210.2054" />
+		<PackageReference Include="Handyman.DependencyInjection" Version="2.0.0-beta.2001051555" />
+		<PackageReference Include="Handyman.Mediator" Version="8.0.0-beta.2001051505" />
 	</ItemGroup>
 
 </Project>
