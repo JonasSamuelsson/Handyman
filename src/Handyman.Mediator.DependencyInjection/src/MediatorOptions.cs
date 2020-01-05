@@ -7,13 +7,13 @@ namespace Handyman.Mediator.DependencyInjection
 {
     public class MediatorOptions
     {
-        internal ISet<Assembly> Assemblies { get; } = new HashSet<Assembly>();
+        internal ISet<Type> TypesToScan { get; } = new HashSet<Type>();
 
         public ServiceLifetime MediatorLifetime { get; set; } = ServiceLifetime.Scoped;
 
         public void ScanAssembly(Assembly assembly)
         {
-            Assemblies.Add(assembly);
+            ScanTypes(assembly.GetTypes());
         }
 
         public void ScanAssemblyContaining(Type type)
@@ -33,7 +33,15 @@ namespace Handyman.Mediator.DependencyInjection
 
         public void ScanEntryAssembly()
         {
-            ScanAssembly(System.Reflection.Assembly.GetEntryAssembly());
+            ScanAssembly(Assembly.GetEntryAssembly());
+        }
+
+        public void ScanTypes(IEnumerable<Type> types)
+        {
+            foreach (var type in types)
+            {
+                TypesToScan.Add(type);
+            }
         }
     }
 }

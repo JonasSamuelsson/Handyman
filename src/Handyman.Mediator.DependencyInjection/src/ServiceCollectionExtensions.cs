@@ -32,11 +32,7 @@ namespace Handyman.Mediator.DependencyInjection
 
             services.Scan(_ =>
             {
-                foreach (var assembly in options.Assemblies)
-                {
-                    _.Assembly(assembly);
-                }
-
+                _.Types(options.TypesToScan);
                 _.ConfigureConcreteClassesOf(typeof(IEventFilter<>));
                 _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle<>));
                 _.ConfigureConcreteClassesOf(typeof(IEventHandler<>));
