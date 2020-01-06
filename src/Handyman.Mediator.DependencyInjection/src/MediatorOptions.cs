@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Handyman.Mediator.EventPipelineCustomization;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,6 +11,7 @@ namespace Handyman.Mediator.DependencyInjection
         internal ISet<Type> TypesToScan { get; } = new HashSet<Type>();
 
         public ServiceLifetime MediatorLifetime { get; set; } = ServiceLifetime.Scoped;
+        public IEventHandlerExecutionStrategy EventHandlerExecutionStrategy { get; set; } = WhenAllEventHandlerExecutionStrategy.Instance;
 
         public void ScanAssembly(Assembly assembly)
         {
