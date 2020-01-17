@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Dependenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Tools.Ado", "src\Handyman.Tools.Ado\src\Handyman.Tools.Ado.csproj", "{AB09BF42-0C9A-4685-9C19-62217853885A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Tools.Outdated", "src\Handyman.Tools.Outdated\src\Handyman.Tools.Outdated.csproj", "{EAE2DEA1-6405-4755-AE94-09823AC9FD9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{AB09BF42-0C9A-4685-9C19-62217853885A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB09BF42-0C9A-4685-9C19-62217853885A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB09BF42-0C9A-4685-9C19-62217853885A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAE2DEA1-6405-4755-AE94-09823AC9FD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAE2DEA1-6405-4755-AE94-09823AC9FD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAE2DEA1-6405-4755-AE94-09823AC9FD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAE2DEA1-6405-4755-AE94-09823AC9FD9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
