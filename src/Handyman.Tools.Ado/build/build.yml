@@ -51,6 +51,10 @@ stages:
           deploy:
             steps:
             - download: none
+            - task: NuGetToolInstaller@0
+              displayName: install nuget.exe v5.4.0
+              inputs:
+                versionSpec: '5.4.0'
             - task: DownloadPipelineArtifact@2
               inputs:
                 artifactName: drop
