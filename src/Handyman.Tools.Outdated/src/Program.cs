@@ -1,21 +1,26 @@
-﻿using Handyman.Tools.Outdated.IO;
+﻿using Handyman.Tools.Outdated.Analyze;
+using Handyman.Tools.Outdated.IO;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Handyman.Tools.Outdated.Analyze;
+using System.IO.Abstractions;
 
 namespace Handyman.Tools.Outdated
 {
     [Command("handyman-outdated")]
     [Subcommand(typeof(AnalyzeCommand))]
+    [Subcommand(typeof(GenerateConfigCommand))]
     public class Program
     {
         public static int Main(string[] args)
         {
             var services = new ServiceCollection()
+                .AddSingleton<IFileSystem, FileSystem>()
+                .AddSingleton<IFileWriter, JsonFileWriter>()
+                .AddSingleton<IFileWriter, MarkdownFileWriter>()
                 .AddSingleton<IProcessRunner, ProcessRunner>()
                 .AddSingleton<ProjectAnalyzer>()
-                .AddSingleton<ProjectResolver>()
+                .AddSingleton<ProjectLocator>()
                 .BuildServiceProvider(true);
 
             var app = new CommandLineApplication<Program>();

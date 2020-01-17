@@ -20,8 +20,8 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
 
                 framework.Dependencies.Add(new DotnetListPackageDependency
                 {
-                    Available = available,
-                    Current = current,
+                    AvailableVersion = available,
+                    CurrentVersion = current,
                     Name = name,
                     IsTransitive = true
                 });

@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public bool IsTransitive { get; set; }
-        public string Current { get; set; }
-        public string Available { get; set; }
+        public string CurrentVersion { get; set; }
+        public string AvailableVersion { get; set; }
     }
 }

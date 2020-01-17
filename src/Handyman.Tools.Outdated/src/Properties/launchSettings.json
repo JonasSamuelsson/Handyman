@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Handyman.Tools.Outdated": {
+      "commandName": "Project",
+      "commandLineArgs": "analyze D:\\Dev\\GitHub\\Handyman\\src\\Handyman.AspNetCore\\ -of d:\\dev\\temp\\outdated.json -of d:\\dev\\temp\\outdated.md"
+    }
+  }
+}

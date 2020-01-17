@@ -20,18 +20,45 @@ namespace Handyman.Tools.Outdated.Analyze
         public void Analyze(Project project)
         {
             var results = CheckForUpdates(project).ToList();
+
+            foreach (var frameworks in results.SelectMany(x => x.Frameworks).GroupBy(x => x.Name))
+            {
+                var framework = new TargetFramework { Name = frameworks.Key };
+
+                foreach (var packages in frameworks.SelectMany(x => x.Dependencies).GroupBy(x => x.Name))
+                {
+                    var package = new Package
+                    {
+                        CurrentVersion = packages.First().CurrentVersion,
+                        IsTransitive = packages.First().IsTransitive,
+                        Name = packages.Key
+                    };
+
+                    foreach (var updates in packages.GroupBy(x => GetUpdateSeverity(x.CurrentVersion, x.AvailableVersion)))
+                    {
+                        package.AvailableVersions[updates.Key] = updates.First().AvailableVersion;
+                    }
+
+                    framework.Packages.Add(package);
+                }
+
+                project.TargetFrameworks.Add(framework);
+            }
         }
 
         private IEnumerable<DotnetListPackageResult> CheckForUpdates(Project project)
         {
-            foreach (var arg in new[] { "", " --highest-minor", " --highest-patch" })
+            foreach (var severity in new[] { "", " --highest-minor", " --highest-patch" })
             {
+                var transitive = project.Config.IncludeTransitive ?? false ? " --include-transitive" : "";
+                var arguments = $"list {project.FullPath} package --outdated{transitive}{severity}";
+
                 var errors = new List<string>();
                 var output = new List<string>();
 
                 var info = new ProcessStartInfo
                 {
-                    Arguments = $"list {project.FullPath} package --outdated --include-transitive{arg}",
+                    Arguments = arguments,
                     FileName = "dotnet",
                     StandardErrorHandler = s => errors.Add(s),
                     StandardOutputHandler = s => output.Add(s)
@@ -68,13 +95,6 @@ namespace Handyman.Tools.Outdated.Analyze
                 : x[1] != y[1]
                     ? Severity.Minor
                     : Severity.Patch;
-        }
-
-        internal enum Severity
-        {
-            Major,
-            Minor,
-            Patch
         }
     }
 }
