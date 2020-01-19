@@ -24,22 +24,8 @@ namespace Handyman.Tools.Outdated
         {
             var config = new ProjectConfig
             {
-                Tags = new[] { "alpha", "bravo" },
-                Frameworks = new[]
-                {
-                    new FrameworkConfig
-                    {
-                        Name = "netcoreapp3.*",
-                        Packages = new[]
-                        {
-                            new PackageConfig
-                            {
-                                Name = "Handyman.*",
-                                VersionLock = VersionLock.Major
-                            }
-                        }
-                    }
-                }
+                IncludeTransitive = true,
+                Tags = new[] { "alpha", "bravo" }
             };
 
             var path = OutputFile ?? ".handyman-outdated.json";

@@ -1,5 +1,6 @@
 ﻿using Handyman.Tools.Outdated.Model;
 using McMaster.Extensions.CommandLineUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,6 +28,9 @@ namespace Handyman.Tools.Outdated.Analyze
         [Option(ShortName = "of", Description = "Output file(s)")]
         public IEnumerable<string> OutputFile { get; set; }
 
+        [Option]
+        public IEnumerable<string> Tags { get; set; }
+
         public int OnExecute()
         {
             var projects = _projectLocator.GetProjects(Path);
@@ -42,6 +46,26 @@ namespace Handyman.Tools.Outdated.Analyze
 
             foreach (var project in projects)
             {
+                if (Tags != null)
+                {
+                    var includes = Tags
+                        .Where(x => !x.StartsWith("!"))
+                        .Select(x => x.ToLowerInvariant())
+                        .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+                    var excludes = Tags
+                        .Where(x => x.StartsWith("!"))
+                        .Select(x => x.Substring(1))
+                        .Select(x => x.ToLowerInvariant())
+                        .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+                    if (includes.Any() && !project.Tags.Any(x => includes.Contains(x)))
+                        continue;
+
+                    if (project.Tags.Any(x => excludes.Contains(x)))
+                        continue;
+                }
+
                 _console.WriteLine($"Analyzing {project.RelativePath}");
                 _projectAnalyzer.Analyze(project);
             }
