@@ -35,6 +35,7 @@ namespace Handyman.DependencyInjection
         {
             var types = _types
                 .Distinct()
+                .Where(x => !x.GetCustomAttributes<IgnoreServiceAttribute>().Any())
                 .Where(x => !x.GetCustomAttributes<CompilerGeneratedAttribute>().Any())
                 .Where(x => _predicates.All(y => y.Invoke(x)))
                 .ToList();
