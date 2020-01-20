@@ -28,7 +28,7 @@ namespace Handyman.Tools.Outdated
                 Tags = new[] { "alpha", "bravo" }
             };
 
-            var path = OutputFile ?? ".handyman-outdated.json";
+            var path = OutputFile ?? $".{AppInfo.AppName}.json";
             var formatting = Formatting.Indented;
             var settings = new JsonSerializerSettings { Converters = { new StringEnumConverter() } };
             var json = JsonConvert.SerializeObject(config, formatting, settings);

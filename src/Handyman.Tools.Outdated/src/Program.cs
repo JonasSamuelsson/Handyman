@@ -7,7 +7,7 @@ using System.IO.Abstractions;
 
 namespace Handyman.Tools.Outdated
 {
-    [Command("handyman-outdated")]
+    [Command(AppInfo.AppName)]
     [Subcommand(typeof(AnalyzeCommand))]
     [Subcommand(typeof(GenerateConfigCommand))]
     public class Program
