@@ -25,19 +25,25 @@ namespace Handyman.Tools.Outdated.Analyze
         [Argument(0, "path", Description = "Path to folder or project")]
         public string Path { get; set; }
 
-        [Option(ShortName = "of", Description = "Output file(s)")]
+        [Option(ShortName = "of", Description = "Output file(s), supported format are .json & .md")]
         public IEnumerable<string> OutputFile { get; set; }
 
-        [Option]
+        [Option(Description = "Tags filter, start with ! to exclude")]
         public IEnumerable<string> Tags { get; set; }
+
+        [Option]
+        public Verbosity Verbosity { get; set; }
 
         public int OnExecute()
         {
             var projects = _projectLocator.GetProjects(Path);
 
-            _console.WriteLine();
-            _console.WriteLine($"Discovered {projects.Count} projects.");
-            _console.WriteLine();
+            if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
+            {
+                _console.WriteLine();
+                _console.WriteLine($"Discovered {projects.Count} projects.");
+                _console.WriteLine();
+            }
 
             if (projects.Count == 0)
             {
@@ -46,33 +52,76 @@ namespace Handyman.Tools.Outdated.Analyze
 
             foreach (var project in projects)
             {
-                if (Tags != null)
-                {
-                    var includes = Tags
-                        .Where(x => !x.StartsWith("!"))
-                        .Select(x => x.ToLowerInvariant())
-                        .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+                if (!ShouldProcessProject(project))
+                    continue;
 
-                    var excludes = Tags
-                        .Where(x => x.StartsWith("!"))
-                        .Select(x => x.Substring(1))
-                        .Select(x => x.ToLowerInvariant())
-                        .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+                if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
+                    _console.WriteLine($"Analyzing {project.RelativePath}");
 
-                    if (includes.Any() && !project.Tags.Any(x => includes.Contains(x)))
-                        continue;
-
-                    if (project.Tags.Any(x => excludes.Contains(x)))
-                        continue;
-                }
-
-                _console.WriteLine($"Analyzing {project.RelativePath}");
                 _projectAnalyzer.Analyze(project);
             }
 
-            _console.WriteLine();
-
             projects = projects.Where(x => x.TargetFrameworks.Any()).ToList();
+
+            if (ShouldWriteToConsole(Analyze.Verbosity.Normal))
+                WriteResultToConsole(projects);
+
+            WriteResultToFile(projects);
+
+            return 0;
+        }
+
+        private bool ShouldWriteToConsole(Verbosity required)
+        {
+            var current = Verbosity;
+            return current != Verbosity.Quiet && (int)required <= (int)current;
+        }
+
+        private bool ShouldProcessProject(Project project)
+        {
+            if (Tags == null || !Tags.Any())
+                return true;
+
+            var includes = Tags
+                .Where(x => !x.StartsWith("!"))
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+            var excludes = Tags
+                .Where(x => x.StartsWith("!"))
+                .Select(x => x.Substring(1))
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+            if (includes.Any() && !project.Tags.Any(x => includes.Contains(x)))
+                return false;
+
+            if (project.Tags.Any(x => excludes.Contains(x)))
+                return false;
+
+            return true;
+        }
+
+        private void WriteResultToFile(IReadOnlyCollection<Project> projects)
+        {
+            foreach (var outputFile in OutputFile)
+            {
+                var extension = System.IO.Path.GetExtension(outputFile).ToLowerInvariant();
+                var fileWriters = _fileWriters.Where(x => x.CanHandle(extension)).ToList();
+
+                if (!fileWriters.Any())
+                {
+                    _console.WriteLine($"Unsupported output file format '{extension}'.");
+                    continue;
+                }
+
+                fileWriters.ForEach(x => x.Write(outputFile, projects));
+            }
+        }
+
+        private void WriteResultToConsole(IReadOnlyCollection<Project> projects)
+        {
+            _console.WriteLine();
 
             if (!projects.Any())
             {
@@ -109,22 +158,6 @@ namespace Handyman.Tools.Outdated.Analyze
 
                 _console.WriteLine();
             }
-
-            foreach (var outputFile in OutputFile)
-            {
-                var extension = System.IO.Path.GetExtension(outputFile).ToLowerInvariant();
-                var fileWriters = _fileWriters.Where(x => x.CanHandle(extension)).ToList();
-
-                if (!fileWriters.Any())
-                {
-                    _console.WriteLine($"Unsupported output file format '{extension}'.");
-                    continue;
-                }
-
-                fileWriters.ForEach(x => x.Write(outputFile, projects));
-            }
-
-            return 0;
         }
     }
 }
