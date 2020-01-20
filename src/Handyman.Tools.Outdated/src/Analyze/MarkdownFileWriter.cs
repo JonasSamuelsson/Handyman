@@ -69,6 +69,10 @@ namespace Handyman.Tools.Outdated.Analyze
             builder.AppendLine("***");
             builder.AppendLine($"_{AppInfo.AppName} {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm UTC}_");
 
+            var directory = _fileSystem.Path.GetDirectoryName(path);
+            if (!_fileSystem.Directory.Exists(directory))
+                _fileSystem.Directory.CreateDirectory(directory);
+
             _fileSystem.File.WriteAllText(path, builder.ToString(), Encoding.UTF8);
         }
     }

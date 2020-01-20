@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Handyman.Tools.Outdated.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Text;
-using Handyman.Tools.Outdated.Model;
-using Newtonsoft.Json;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
@@ -29,6 +29,10 @@ namespace Handyman.Tools.Outdated.Analyze
                 Timestamp = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd HH:mm UTC")
             };
             var json = JsonConvert.SerializeObject(o, Formatting.Indented);
+
+            var directory = _fileSystem.Path.GetDirectoryName(path);
+            if (!_fileSystem.Directory.Exists(directory))
+                _fileSystem.Directory.CreateDirectory(directory);
 
             _fileSystem.File.WriteAllText(path, json, Encoding.UTF8);
         }
