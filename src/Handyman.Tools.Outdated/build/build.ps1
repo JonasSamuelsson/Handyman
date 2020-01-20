@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 Import-Module -Force -Scope Local "$PSScriptRoot/../../../build/common.psm1"
 
-$project = "$PSScriptRoot/../src/Handyman.Tools.Ado.csproj"
+$project = "$PSScriptRoot/../src/Handyman.Tools.Outdated.csproj"
 
 if (!$artifacts) {
     $artifacts = [System.IO.Path]::Combine($project, 'bin', '.artifacts')
