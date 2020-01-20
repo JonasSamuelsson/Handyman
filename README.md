@@ -16,8 +16,8 @@
 
 | | NuGet | Build status |
 |-|-|-|
-| [handyman-ado][h.t.ado-docs] | [![h.t.ado-nuget-version] ![h.t.ado-nuget-downloads]][h.t.ado-nuget] | |
-| [handyman-outdated][h.t.o-docs] | [![h.t.o-nuget-version] ![h.t.o-nuget-downloads]][h.t.o-nuget] | |
+| [handyman-ado][h.t.ado-docs] | [![h.t.ado-nuget-version] ![h.t.ado-nuget-downloads]][h.t.ado-nuget] | [![h.t.ado-ado-status]][h.t.ado-ado] |
+| [handyman-outdated][h.t.o-docs] | [![h.t.o-nuget-version] ![h.t.o-nuget-downloads]][h.t.o-nuget] | [![h.t.o-ado-status]][h.t.o-ado] |
 
 [h.anc-docs]: src/Handyman.AspNetCore/docs/index.md
 [h.anc-nuget]: https://www.nuget.org/packages/Handyman.AspNetCore
@@ -77,11 +77,15 @@
 [h.t.ado-nuget]: https://www.nuget.org/packages/handyman-ado/
 [h.t.ado-nuget-version]: https://img.shields.io/nuget/v/handyman-ado.svg
 [h.t.ado-nuget-downloads]: https://img.shields.io/nuget/dt/handyman-ado.svg
+[h.t.ado-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=22
+[h.t.ado-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/handyman-ado?branchName=master
 
 [h.t.o-docs]: src/Handyman.Tools.Outdated/docs/index.md
 [h.t.o-nuget]: https://www.nuget.org/packages/handyman-outdated/
 [h.t.o-nuget-version]: https://img.shields.io/nuget/v/handyman-outdated.svg
 [h.t.o-nuget-downloads]: https://img.shields.io/nuget/dt/handyman-outdated.svg
+[h.t.o-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=23
+[h.t.o-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/handyman-outdated?branchName=master
 
 [h.wpf-nuget]: https://www.nuget.org/packages/Handyman.Wpf/
 [h.wpf-nuget-version]: https://img.shields.io/nuget/v/Handyman.Wpf.svg
