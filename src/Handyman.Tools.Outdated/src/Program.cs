@@ -21,6 +21,7 @@ namespace Handyman.Tools.Outdated
                 .AddSingleton<IProcessRunner, ProcessRunner>()
                 .AddSingleton<ProjectAnalyzer>()
                 .AddSingleton<ProjectLocator>()
+                .AddSingleton<ProjectUtil>()
                 .BuildServiceProvider(true);
 
             var app = new CommandLineApplication<Program>();

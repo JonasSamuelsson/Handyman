@@ -11,13 +11,15 @@ namespace Handyman.Tools.Outdated.Analyze
     {
         private readonly IConsole _console;
         private readonly ProjectLocator _projectLocator;
+        private readonly ProjectUtil _projectUtil;
         private readonly ProjectAnalyzer _projectAnalyzer;
         private readonly IEnumerable<IFileWriter> _fileWriters;
 
-        public AnalyzeCommand(IConsole console, ProjectLocator projectLocator, ProjectAnalyzer projectAnalyzer, IEnumerable<IFileWriter> fileWriters)
+        public AnalyzeCommand(IConsole console, ProjectLocator projectLocator, ProjectUtil projectUtil, ProjectAnalyzer projectAnalyzer, IEnumerable<IFileWriter> fileWriters)
         {
             _console = console;
             _projectLocator = projectLocator;
+            _projectUtil = projectUtil;
             _projectAnalyzer = projectAnalyzer;
             _fileWriters = fileWriters;
         }
@@ -30,6 +32,9 @@ namespace Handyman.Tools.Outdated.Analyze
 
         [Option(Description = "Tags filter, start with ! to exclude")]
         public IEnumerable<string> Tags { get; set; }
+
+        [Option(CommandOptionType.NoValue)]
+        public bool Restore { get; set; }
 
         [Option]
         public Verbosity Verbosity { get; set; }
@@ -57,6 +62,9 @@ namespace Handyman.Tools.Outdated.Analyze
 
                 if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
                     _console.WriteLine($"Analyzing {project.RelativePath}");
+
+                if (Restore)
+                    _projectUtil.Restore(project.FullPath);
 
                 _projectAnalyzer.Analyze(project);
             }
