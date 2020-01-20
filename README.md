@@ -17,6 +17,7 @@
 | | NuGet | Build status |
 |-|-|-|
 | [handyman-ado][h.t.ado-docs] | [![h.t.ado-nuget-version] ![h.t.ado-nuget-downloads]][h.t.ado-nuget] | |
+| [handyman-outdated][h.t.o-docs] | [![h.t.o-nuget-version] ![h.t.o-nuget-downloads]][h.t.o-nuget] | |
 
 [h.anc-docs]: src/Handyman.AspNetCore/docs/index.md
 [h.anc-nuget]: https://www.nuget.org/packages/Handyman.AspNetCore
@@ -72,10 +73,15 @@
 [h.m.di-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=18
 [h.m.di-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Mediator.DependencyInjection?branchName=master
 
-[h.t.ado-docs]: src/Handyman.Mediator/docs/index.md
+[h.t.ado-docs]: src/Handyman.Tools.Ado/docs/index.md
 [h.t.ado-nuget]: https://www.nuget.org/packages/handyman-ado/
 [h.t.ado-nuget-version]: https://img.shields.io/nuget/v/handyman-ado.svg
 [h.t.ado-nuget-downloads]: https://img.shields.io/nuget/dt/handyman-ado.svg
+
+[h.t.o-docs]: src/Handyman.Tools.Outdated/docs/index.md
+[h.t.o-nuget]: https://www.nuget.org/packages/handyman-outdated/
+[h.t.o-nuget-version]: https://img.shields.io/nuget/v/handyman-outdated.svg
+[h.t.o-nuget-downloads]: https://img.shields.io/nuget/dt/handyman-outdated.svg
 
 [h.wpf-nuget]: https://www.nuget.org/packages/Handyman.Wpf/
 [h.wpf-nuget-version]: https://img.shields.io/nuget/v/Handyman.Wpf.svg
