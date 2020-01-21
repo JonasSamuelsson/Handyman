@@ -69,10 +69,8 @@ namespace Handyman.Tools.Outdated.Analyze
                 _projectAnalyzer.Analyze(project);
             }
 
-            projects = projects.Where(x => x.TargetFrameworks.Any()).ToList();
-
             if (ShouldWriteToConsole(Analyze.Verbosity.Normal))
-                WriteResultToConsole(projects);
+                WriteResultToConsole(projects.Where(x => x.TargetFrameworks.Any()).ToList());
 
             WriteResultToFile(projects);
 

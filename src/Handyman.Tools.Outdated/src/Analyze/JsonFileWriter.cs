@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Text;
 
 namespace Handyman.Tools.Outdated.Analyze
@@ -25,7 +26,7 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             var o = new
             {
-                Projects = projects,
+                Projects = projects.Where(x => x.TargetFrameworks.Any()),
                 Timestamp = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd HH:mm UTC")
             };
             var json = JsonConvert.SerializeObject(o, Formatting.Indented);

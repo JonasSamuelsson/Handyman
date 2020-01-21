@@ -25,45 +25,59 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             var builder = new StringBuilder();
 
-            foreach (var project in projects)
+            projects = projects.ToList();
+
+            var totalCount = projects.Count();
+            var outdatedCount = projects.Count(x => x.TargetFrameworks.Any());
+
+            if (totalCount == 0)
             {
-                builder.AppendLine($"# {project.Name}");
+                builder.AppendLine("No projects found.");
+            }
+            else if (outdatedCount == 0)
+            {
+                builder.AppendLine($"All {totalCount} projects are up to date.");
+            }
+            else
+            {
+                builder.AppendLine($"{outdatedCount} of {totalCount} projects has outdated dependencies.");
                 builder.AppendLine();
-                builder.AppendLine($"Path: {project.RelativePath}  ");
 
-                if (project.Config.Tags.Any())
+                foreach (var project in projects)
                 {
-                    builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
-                }
-
-                builder.AppendLine();
-
-                foreach (var framework in project.TargetFrameworks)
-                {
-                    builder.AppendLine($"## {framework.Name}");
+                    builder.AppendLine($"# {project.Name}");
                     builder.AppendLine();
-                    builder.AppendLine("| Package | Current | Major | Minor | Patch | Transitive |");
-                    builder.AppendLine("| - | - | - | - | - | - |");
+                    builder.AppendLine($"Path: {project.RelativePath}  ");
 
-                    foreach (var package in framework.Packages)
+                    if (project.Config.Tags.Any())
                     {
-                        builder
-                            .Append($"| {package.Name} |")
-                            .Append($" {package.CurrentVersion} |")
-                            .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Major)} |")
-                            .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Minor)} |")
-                            .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Patch)} |")
-                            .Append($" {package.IsTransitive.ToString().ToLowerInvariant()} |")
-                            .AppendLine();
+                        builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
                     }
 
                     builder.AppendLine();
-                }
-            }
 
-            if (builder.Length == 0)
-            {
-                builder.AppendLine("All projects are up to date. =)");
+                    foreach (var framework in project.TargetFrameworks)
+                    {
+                        builder.AppendLine($"## {framework.Name}");
+                        builder.AppendLine();
+                        builder.AppendLine("| Package | Current | Major | Minor | Patch | Transitive |");
+                        builder.AppendLine("| - | - | - | - | - | - |");
+
+                        foreach (var package in framework.Packages)
+                        {
+                            builder
+                                .Append($"| {package.Name} |")
+                                .Append($" {package.CurrentVersion} |")
+                                .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Major)} |")
+                                .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Minor)} |")
+                                .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Patch)} |")
+                                .Append($" {package.IsTransitive.ToString().ToLowerInvariant()} |")
+                                .AppendLine();
+                        }
+
+                        builder.AppendLine();
+                    }
+                }
             }
 
             builder.AppendLine("***");
