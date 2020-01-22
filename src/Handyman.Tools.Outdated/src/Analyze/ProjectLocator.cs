@@ -22,6 +22,7 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             return FindProjects(path)
                 .Visit(ApplyConfig)
+                .Where(x => x.Config.Skip == false)
                 .ToList();
         }
 

@@ -15,10 +15,4 @@ namespace Handyman.Tools.Outdated.Model
         [JsonIgnore]
         public ProjectConfig Config { get; set; }
     }
-
-    public class ProjectConfig
-    {
-        public bool? IncludeTransitive { get; set; }
-        public IEnumerable<string> Tags { get; set; } = Enumerable.Empty<string>();
-    }
 }
