@@ -1,4 +1,5 @@
 ﻿using Handyman.Tools.Outdated.Analyze;
+using Handyman.Tools.Outdated.GenerateConfig;
 using Handyman.Tools.Outdated.IO;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;

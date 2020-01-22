@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 using System.IO.Abstractions;
 using System.Text;
 
-namespace Handyman.Tools.Outdated
+namespace Handyman.Tools.Outdated.GenerateConfig
 {
     [Command("generate-config")]
     public class GenerateConfigCommand
