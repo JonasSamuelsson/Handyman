@@ -58,6 +58,7 @@ namespace Handyman.Tools.Outdated.Analyze
             if (_fileSystem.Directory.Exists(path))
             {
                 return _fileSystem.Directory.GetFiles(path, "*.csproj", SearchOption.AllDirectories)
+                    .OrderBy(x => x.ToLowerInvariant())
                     .Select(x => new Project
                     {
                         FullPath = x,
