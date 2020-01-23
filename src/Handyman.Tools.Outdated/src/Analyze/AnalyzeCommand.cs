@@ -69,8 +69,7 @@ namespace Handyman.Tools.Outdated.Analyze
                 _projectAnalyzer.Analyze(project);
             }
 
-            if (ShouldWriteToConsole(Verbosity.Minimal))
-                WriteResultToConsole(projects);
+            WriteResultToConsole(projects);
 
             WriteResultToFile(projects);
 
