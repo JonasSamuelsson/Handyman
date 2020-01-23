@@ -27,13 +27,13 @@ namespace Handyman.Tools.Outdated.Analyze
         [Argument(0, "path", Description = "Path to folder or project")]
         public string Path { get; set; }
 
-        [Option(ShortName = "of", Description = "Output file(s), supported format are .json & .md")]
+        [Option(ShortName = "", Description = "Output file(s), supported format is .md")]
         public IEnumerable<string> OutputFile { get; set; }
 
-        [Option(Description = "Tags filter, start with ! to exclude")]
+        [Option(ShortName = "", Description = "Tags filter, start with ! to exclude")]
         public IEnumerable<string> Tags { get; set; }
 
-        [Option(CommandOptionType.NoValue)]
+        [Option(CommandOptionType.NoValue, ShortName = "")]
         public bool NoRestore { get; set; }
 
         [Option]
