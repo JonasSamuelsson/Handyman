@@ -33,7 +33,7 @@ namespace Handyman.Tools.Outdated.Analyze
         [Option(ShortName = "", Description = "Tags filter, start with ! to exclude")]
         public IEnumerable<string> Tags { get; set; }
 
-        [Option(CommandOptionType.NoValue, ShortName = "")]
+        [Option(CommandOptionType.NoValue, ShortName = "", Description = "Skip dotnet restore")]
         public bool NoRestore { get; set; }
 
         [Option]
