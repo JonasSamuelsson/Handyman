@@ -27,56 +27,104 @@ namespace Handyman.Tools.Outdated.Analyze
 
             projects = projects.ToList();
 
-            var totalCount = projects.Count();
-            var outdatedCount = projects.Count(x => x.TargetFrameworks.Any());
+            var errors = projects.Where(x => x.Errors.Any()).ToList();
+            var outdated = projects.Where(x => x.TargetFrameworks.Any()).ToList();
+            var upToDate = projects.Except(errors).Except(outdated).ToList();
 
-            if (totalCount == 0)
+            builder.AppendLine("# Summary");
+
+            if (!projects.Any())
             {
                 builder.AppendLine("No projects found.");
             }
-            else if (outdatedCount == 0)
-            {
-                builder.AppendLine($"All {totalCount} projects are up to date.");
-            }
             else
             {
-                builder.AppendLine($"{outdatedCount} of {totalCount} projects has outdated dependencies.");
+                if (errors.Any())
+                {
+                    builder.AppendLine($"* {errors.Count} projects failed");
+                }
+
+                builder.AppendLine($"* {outdated.Count} projects has outdated dependencies");
+                builder.AppendLine($"* {upToDate.Count} projects are up to date");
                 builder.AppendLine();
 
-                foreach (var project in projects)
+                if (errors.Any())
                 {
-                    builder.AppendLine($"# {project.Name}");
-                    builder.AppendLine();
-                    builder.AppendLine($"Path: {project.RelativePath}  ");
+                    builder.AppendLine("# Failed");
 
-                    if (project.Config.Tags.Any())
+                    foreach (var project in errors)
                     {
-                        builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
-                    }
+                        builder.AppendLine($"## {project.Name}");
+                        builder.AppendLine(project.RelativePath);
 
-                    builder.AppendLine();
-
-                    foreach (var framework in project.TargetFrameworks)
-                    {
-                        builder.AppendLine($"## {framework.Name}");
-                        builder.AppendLine();
-                        builder.AppendLine("| Package | Current | Major | Minor | Patch | Transitive |");
-                        builder.AppendLine("| - | - | - | - | - | - |");
-
-                        foreach (var package in framework.Packages)
+                        if (project.Config.Tags.Any())
                         {
-                            builder
-                                .Append($"| {package.Name} |")
-                                .Append($" {package.CurrentVersion} |")
-                                .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Major)} |")
-                                .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Minor)} |")
-                                .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Patch)} |")
-                                .Append($" {package.IsTransitive.ToString().ToLowerInvariant()} |")
-                                .AppendLine();
+                            builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
                         }
 
-                        builder.AppendLine();
+                        foreach (var error in project.Errors)
+                        {
+                            builder.AppendLine($"### {error.Stage}");
+                            builder.AppendLine(error.Message);
+                        }
                     }
+
+                    builder.AppendLine();
+                }
+
+                if (outdated.Any())
+                {
+                    builder.AppendLine("# Outdated");
+
+                    foreach (var project in outdated)
+                    {
+                        builder.AppendLine($"## {project.Name}");
+                        builder.AppendLine(project.RelativePath);
+
+                        if (project.Config.Tags.Any())
+                        {
+                            builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
+                        }
+
+                        foreach (var framework in project.TargetFrameworks)
+                        {
+                            builder.AppendLine($"### {framework.Name}");
+                            builder.AppendLine("| Package | Current | Major | Minor | Patch | Transitive |");
+                            builder.AppendLine("| - | - | - | - | - | - |");
+
+                            foreach (var package in framework.Packages)
+                            {
+                                builder
+                                    .Append($"| {package.Name} |")
+                                    .Append($" {package.CurrentVersion} |")
+                                    .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Major)} |")
+                                    .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Minor)} |")
+                                    .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Patch)} |")
+                                    .Append($" {package.IsTransitive.ToString().ToLowerInvariant()} |")
+                                    .AppendLine();
+                            }
+                        }
+                    }
+
+                    builder.AppendLine();
+                }
+
+                if (upToDate.Any())
+                {
+                    builder.AppendLine("# Up to date");
+
+                    foreach (var project in outdated)
+                    {
+                        builder.AppendLine($"## {project.Name}");
+                        builder.AppendLine(project.RelativePath);
+
+                        if (project.Config.Tags.Any())
+                        {
+                            builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
+                        }
+                    }
+
+                    builder.AppendLine();
                 }
             }
 
