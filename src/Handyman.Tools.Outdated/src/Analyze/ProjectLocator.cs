@@ -18,11 +18,12 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             _fileSystem = fileSystem;
         }
-        public IReadOnlyCollection<Project> GetProjects(string path)
+        public IReadOnlyCollection<Project> GetProjects(string path, IReadOnlyCollection<string> tags)
         {
             return FindProjects(path)
                 .Visit(ApplyConfig)
                 .Where(x => x.Config.Skip == false)
+                .Where(x => IsMatch(x, tags))
                 .ToList();
         }
 
@@ -95,6 +96,31 @@ namespace Handyman.Tools.Outdated.Analyze
             } while (directory != null);
 
             return new ProjectConfig();
+        }
+
+        private static bool IsMatch(Project project, IReadOnlyCollection<string> tags)
+        {
+            if (!tags.Any())
+                return true;
+
+            var includes = tags
+                .Where(x => !x.StartsWith("!"))
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+            var excludes = tags
+                .Where(x => x.StartsWith("!"))
+                .Select(x => x.Substring(1))
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+            if (includes.Any() && !project.Tags.All(x => includes.Contains(x)))
+                return false;
+
+            if (project.Tags.Any(x => excludes.Contains(x)))
+                return false;
+
+            return true;
         }
     }
 }

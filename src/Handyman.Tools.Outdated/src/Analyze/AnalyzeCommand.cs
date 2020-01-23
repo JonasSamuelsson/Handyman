@@ -1,6 +1,5 @@
 ﻿using Handyman.Tools.Outdated.Model;
 using McMaster.Extensions.CommandLineUtils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +40,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
         public int OnExecute()
         {
-            var projects = _projectLocator.GetProjects(Path);
+            var projects = _projectLocator.GetProjects(Path, (Tags ?? new string[] { }).ToList());
 
             if (ShouldWriteToConsole(Verbosity.Minimal))
             {
@@ -57,9 +56,6 @@ namespace Handyman.Tools.Outdated.Analyze
 
             foreach (var project in projects)
             {
-                if (!ShouldProcessProject(project))
-                    continue;
-
                 if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
                     _console.WriteLine($"Analyzing {project.RelativePath}");
 
@@ -79,31 +75,6 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             var current = Verbosity;
             return current != Verbosity.Quiet && (int)required <= (int)current;
-        }
-
-        private bool ShouldProcessProject(Project project)
-        {
-            if (Tags == null || !Tags.Any())
-                return true;
-
-            var includes = Tags
-                .Where(x => !x.StartsWith("!"))
-                .Select(x => x.ToLowerInvariant())
-                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-
-            var excludes = Tags
-                .Where(x => x.StartsWith("!"))
-                .Select(x => x.Substring(1))
-                .Select(x => x.ToLowerInvariant())
-                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-
-            if (includes.Any() && !project.Tags.All(x => includes.Contains(x)))
-                return false;
-
-            if (project.Tags.Any(x => excludes.Contains(x)))
-                return false;
-
-            return true;
         }
 
         private void WriteResultToFile(IReadOnlyCollection<Project> projects)
