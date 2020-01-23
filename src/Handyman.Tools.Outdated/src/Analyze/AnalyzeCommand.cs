@@ -34,7 +34,7 @@ namespace Handyman.Tools.Outdated.Analyze
         public IEnumerable<string> Tags { get; set; }
 
         [Option(CommandOptionType.NoValue)]
-        public bool Restore { get; set; }
+        public bool NoRestore { get; set; }
 
         [Option]
         public Verbosity Verbosity { get; set; }
@@ -63,8 +63,8 @@ namespace Handyman.Tools.Outdated.Analyze
                 if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
                     _console.WriteLine($"Analyzing {project.RelativePath}");
 
-                if (Restore)
                     _projectUtil.Restore(project.FullPath);
+                if (NoRestore == false)
 
                 _projectAnalyzer.Analyze(project);
             }
