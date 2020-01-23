@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Handyman.Tools.Outdated.Model
@@ -11,8 +10,7 @@ namespace Handyman.Tools.Outdated.Model
         public string RelativePath { get; set; }
         public IEnumerable<string> Tags { get; set; } = Enumerable.Empty<string>();
         public List<TargetFramework> TargetFrameworks { get; } = new List<TargetFramework>();
-
-        [JsonIgnore]
         public ProjectConfig Config { get; set; }
+        public List<Error> Errors { get; } = new List<Error>();
     }
 }

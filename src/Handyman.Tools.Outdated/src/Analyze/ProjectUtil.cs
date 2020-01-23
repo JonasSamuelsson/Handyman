@@ -1,4 +1,5 @@
 ﻿using Handyman.Tools.Outdated.IO;
+using Handyman.Tools.Outdated.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,13 @@ namespace Handyman.Tools.Outdated.Analyze
             _processRunner = processRunner;
         }
 
-        public void Restore(string path)
+        public void Restore(Project project)
         {
             var errors = new List<string>();
 
             var info = new ProcessStartInfo
             {
-                Arguments = $"restore {path}",
+                Arguments = $"restore {project.FullPath}",
                 FileName = "dotnet",
                 StandardErrorHandler = s => errors.Add(s),
                 StandardOutputHandler = delegate { }
@@ -32,7 +33,11 @@ namespace Handyman.Tools.Outdated.Analyze
 
             if (errors.Any())
             {
-                throw new ApplicationException(string.Join(Environment.NewLine, errors));
+                project.Errors.Add(new Error
+                {
+                    Stage = "restore",
+                    Message = string.Join(Environment.NewLine, errors)
+                });
             }
         }
     }

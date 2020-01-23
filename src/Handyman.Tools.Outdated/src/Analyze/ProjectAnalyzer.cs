@@ -71,7 +71,13 @@ namespace Handyman.Tools.Outdated.Analyze
 
                 if (errors.Any())
                 {
-                    throw new ApplicationException(string.Join(Environment.NewLine, errors));
+                    project.Errors.Add(new Error
+                    {
+                        Message = string.Join(Environment.NewLine, errors),
+                        Stage = "analyze"
+                    });
+
+                    yield break;
                 }
 
                 var parser = new DotnetListPackageResultParser();

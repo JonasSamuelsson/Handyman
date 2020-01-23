@@ -63,14 +63,14 @@ namespace Handyman.Tools.Outdated.Analyze
                 if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
                     _console.WriteLine($"Analyzing {project.RelativePath}");
 
-                    _projectUtil.Restore(project.FullPath);
                 if (NoRestore == false)
+                    _projectUtil.Restore(project);
 
                 _projectAnalyzer.Analyze(project);
             }
 
-            if (ShouldWriteToConsole(Analyze.Verbosity.Normal))
-                WriteResultToConsole(projects.Where(x => x.TargetFrameworks.Any()).ToList());
+            if (ShouldWriteToConsole(Verbosity.Minimal))
+                WriteResultToConsole(projects);
 
             WriteResultToFile(projects);
 
@@ -127,12 +127,72 @@ namespace Handyman.Tools.Outdated.Analyze
 
         private void WriteResultToConsole(IReadOnlyCollection<Project> projects)
         {
+            if (!ShouldWriteToConsole(Verbosity.Minimal))
+                return;
+
             _console.WriteLine();
 
-            if (!projects.Any())
+            if (projects.Count == 0)
             {
-                _console.WriteLine("All projects are up to date. =)");
+                _console.WriteLine("No projects found.");
+                return;
             }
+
+            var totalCount = projects.Count;
+            var errorCount = projects.Count(x => x.Errors.Any());
+            var outdatedCount = projects.Count(x => x.TargetFrameworks.Any());
+            var updatedCount = totalCount - (errorCount + outdatedCount);
+
+            _console.WriteLine($"Out of {totalCount} projects");
+            if (errorCount != 0)
+            {
+                _console.WriteLine($"  {errorCount} could not be analyzed");
+            }
+            _console.WriteLine($"  {updatedCount} have outdated dependencies");
+            _console.WriteLine($"  {updatedCount} are up to date");
+
+            if (!ShouldWriteToConsole(Verbosity.Normal))
+                return;
+
+            WriteErrorsToConsole(projects);
+            WriteOutdatedToConsole(projects);
+            WriteUpToDateToConsole(projects);
+        }
+
+        private void WriteErrorsToConsole(IReadOnlyCollection<Project> projects)
+        {
+            projects = projects.Where(x => x.Errors.Any()).ToList();
+
+            if (!projects.Any())
+                return;
+
+            _console.WriteLine(" Errors");
+            _console.WriteLine("==============");
+            _console.WriteLine();
+
+            foreach (var project in projects)
+            {
+                _console.WriteLine(project.RelativePath);
+
+                foreach (var error in project.Errors)
+                {
+                    _console.WriteLine($"{error.Stage}: {error.Message}");
+                }
+            }
+
+            _console.WriteLine();
+        }
+
+        private void WriteOutdatedToConsole(IReadOnlyCollection<Project> projects)
+        {
+            projects = projects.Where(x => x.TargetFrameworks.Any()).ToList();
+
+            if (!projects.Any())
+                return;
+
+            _console.WriteLine(" Outdated");
+            _console.WriteLine("==============");
+            _console.WriteLine();
 
             foreach (var project in projects)
             {
@@ -164,6 +224,27 @@ namespace Handyman.Tools.Outdated.Analyze
 
                 _console.WriteLine();
             }
+
+            _console.WriteLine();
+        }
+
+        private void WriteUpToDateToConsole(IReadOnlyCollection<Project> projects)
+        {
+            projects = projects.Where(x => !x.Errors.Any() && !x.TargetFrameworks.Any()).ToList();
+
+            if (!projects.Any())
+                return;
+
+            _console.WriteLine(" Up to date");
+            _console.WriteLine("==============");
+            _console.WriteLine();
+
+            foreach (var project in projects)
+            {
+                _console.WriteLine(project.RelativePath);
+            }
+
+            _console.WriteLine();
         }
     }
 }
