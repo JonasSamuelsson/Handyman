@@ -54,10 +54,11 @@ namespace Handyman.Tools.Outdated.Analyze
                 return 0;
             }
 
+            var counter = 1;
             foreach (var project in projects)
             {
                 if (ShouldWriteToConsole(Analyze.Verbosity.Minimal))
-                    _console.WriteLine($"Analyzing {project.RelativePath}");
+                    _console.WriteLine($"Analyzing {project.RelativePath} ({counter++} of {projects.Count})");
 
                 if (NoRestore == false)
                     _projectUtil.Restore(project);
