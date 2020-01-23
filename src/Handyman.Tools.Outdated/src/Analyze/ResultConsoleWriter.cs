@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Handyman.Tools.Outdated.Model;
+﻿using Handyman.Tools.Outdated.Model;
 using McMaster.Extensions.CommandLineUtils;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
@@ -39,8 +39,9 @@ namespace Handyman.Tools.Outdated.Analyze
             {
                 _console.WriteLine($"  {errorCount} could not be analyzed");
             }
-            _console.WriteLine($"  {updatedCount} have outdated dependencies");
+            _console.WriteLine($"  {outdatedCount} have outdated dependencies");
             _console.WriteLine($"  {updatedCount} are up to date");
+            _console.WriteLine();
 
             if (!ShouldWrite(Verbosity.Normal))
                 return;
@@ -74,6 +75,8 @@ namespace Handyman.Tools.Outdated.Analyze
                 {
                     _console.WriteLine($"{error.Stage}: {error.Message}");
                 }
+
+                _console.WriteLine();
             }
 
             _console.WriteLine();
