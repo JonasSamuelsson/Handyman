@@ -24,6 +24,7 @@ namespace Handyman.Tools.Outdated.Analyze
             foreach (var frameworks in results.SelectMany(x => x.Frameworks).GroupBy(x => x.Name))
             {
                 var framework = new TargetFramework { Name = frameworks.Key };
+                var frameworkConfig = project.Config.TargetFrameworks.FirstOrDefault(x => x.Filter.IsMatch(framework.Name));
 
                 foreach (var packages in frameworks.SelectMany(x => x.Dependencies).GroupBy(x => x.Name))
                 {
@@ -34,13 +35,26 @@ namespace Handyman.Tools.Outdated.Analyze
                         Name = packages.Key
                     };
 
+                    var packageConfig = frameworkConfig?.Packages.FirstOrDefault(x => x.NameFilter.IsMatch(package.Name));
+
                     foreach (var updates in packages.GroupBy(x => GetUpdateSeverity(x.CurrentVersion, x.AvailableVersion)))
                     {
-                        package.AvailableVersions[updates.Key] = updates.First().AvailableVersion;
+                        var version = updates.First().AvailableVersion;
+
+                        if (packageConfig?.VersionFilter.IsMatch(version) == true)
+                            continue;
+
+                        package.AvailableVersions[updates.Key] = version;
                     }
+
+                    if (!package.AvailableVersions.Any())
+                        continue;
 
                     framework.Packages.Add(package);
                 }
+
+                if (!framework.Packages.Any())
+                    continue;
 
                 project.TargetFrameworks.Add(framework);
             }
@@ -50,7 +64,7 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             foreach (var severity in new[] { "", " --highest-minor", " --highest-patch" })
             {
-                var transitive = project.Config.IncludeTransitive ?? false ? " --include-transitive" : "";
+                var transitive = project.Config.IncludeTransitive ? " --include-transitive" : "";
                 var arguments = $"list {project.FullPath} package --outdated{transitive}{severity}";
 
                 var errors = new List<string>();

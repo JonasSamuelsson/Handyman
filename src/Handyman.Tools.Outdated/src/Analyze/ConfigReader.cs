@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Handyman.Tools.Outdated.Model;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
-using Handyman.Tools.Outdated.Model;
-using Newtonsoft.Json;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
@@ -21,7 +21,7 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             do
             {
-                var files = _fileSystem.Directory.GetFiles(directory, ".handyman-outdatad.json",
+                var files = _fileSystem.Directory.GetFiles(directory, ".handyman-outdated.json",
                     SearchOption.TopDirectoryOnly);
 
                 if (!files.Any())
@@ -33,7 +33,11 @@ namespace Handyman.Tools.Outdated.Analyze
                 return Parse(_fileSystem.File.ReadAllText(files.Single(), Encoding.UTF8));
             } while (directory != null);
 
-            return new ProjectConfig();
+            return new ProjectConfig
+            {
+                Tags = Enumerable.Empty<string>(),
+                TargetFrameworks = Enumerable.Empty<TargetFrameworkConfig>()
+            };
         }
 
         private static ProjectConfig Parse(string json)
@@ -45,6 +49,17 @@ namespace Handyman.Tools.Outdated.Analyze
 
             config.Tags ??= Enumerable.Empty<string>();
             config.TargetFrameworks ??= Enumerable.Empty<TargetFrameworkConfig>();
+
+            foreach (var targetFrameworkConfig in config.TargetFrameworks)
+            {
+                targetFrameworkConfig.Filter = TargetFrameworkNameFilter.Parse(targetFrameworkConfig.Name);
+
+                foreach (var packageConfig in targetFrameworkConfig.Packages)
+                {
+                    packageConfig.NameFilter = PackageNameFilter.Parse(packageConfig.Name);
+                    packageConfig.VersionFilter = PackageVersionFilter.Parse(packageConfig.IgnoreVersion);
+                }
+            }
 
             return config;
         }
