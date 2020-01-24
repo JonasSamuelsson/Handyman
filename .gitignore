@@ -182,3 +182,5 @@ project.lock.json
 
 # vs
 */.vs
+
+**/launchSettings.json
