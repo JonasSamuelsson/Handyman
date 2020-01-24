@@ -27,10 +27,10 @@ namespace Handyman.Tools.Outdated.Analyze
         public string Path { get; set; }
 
         [Option(ShortName = "", Description = "Output file(s), supported format is .md")]
-        public IEnumerable<string> OutputFile { get; set; }
+        public string[] OutputFile { get; set; } = { };
 
         [Option(ShortName = "", Description = "Tags filter, start with ! to exclude")]
-        public IEnumerable<string> Tags { get; set; }
+        public string[] Tags { get; set; } = { };
 
         [Option(CommandOptionType.NoValue, ShortName = "", Description = "Skip dotnet restore")]
         public bool NoRestore { get; set; }
@@ -40,7 +40,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
         public int OnExecute()
         {
-            var projects = _projectLocator.GetProjects(Path, (Tags ?? new string[] { }).ToList());
+            var projects = _projectLocator.GetProjects(Path, Tags.ToList());
 
             if (ShouldWriteToConsole(Verbosity.Minimal))
             {
