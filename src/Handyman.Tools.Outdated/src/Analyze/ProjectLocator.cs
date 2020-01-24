@@ -1,23 +1,24 @@
 ﻿using Handyman.Extensions;
 using Handyman.Tools.Outdated.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
     public class ProjectLocator
     {
         private readonly IFileSystem _fileSystem;
+        private readonly ConfigReader _configReader;
 
-        public ProjectLocator(IFileSystem fileSystem)
+        public ProjectLocator(IFileSystem fileSystem, ConfigReader configReader)
         {
             _fileSystem = fileSystem;
+            _configReader = configReader;
         }
+
         public IReadOnlyCollection<Project> GetProjects(string path, IReadOnlyCollection<string> tags)
         {
             return FindProjects(path)
@@ -74,28 +75,7 @@ namespace Handyman.Tools.Outdated.Analyze
         private void ApplyConfig(Project project)
         {
             var directory = _fileSystem.Path.GetDirectoryName(project.FullPath);
-            var config = GetConfig(directory);
-            project.Config = config;
-        }
-
-        private ProjectConfig GetConfig(string directory)
-        {
-            do
-            {
-                var files = _fileSystem.Directory.GetFiles(directory, ".handyman-outdatad.json",
-                    SearchOption.TopDirectoryOnly);
-
-                if (!files.Any())
-                {
-                    directory = _fileSystem.Path.GetDirectoryName(directory);
-                    continue;
-                }
-
-                var json = _fileSystem.File.ReadAllText(files.Single(), Encoding.UTF8);
-                return JsonConvert.DeserializeObject<ProjectConfig>(json);
-            } while (directory != null);
-
-            return new ProjectConfig();
+            project.Config = _configReader.GetConfig(directory);
         }
 
         private static bool IsMatch(Project project, IReadOnlyCollection<string> tags)

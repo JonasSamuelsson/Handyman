@@ -19,6 +19,7 @@ namespace Handyman.Tools.Outdated
                 .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IFileWriter, MarkdownFileWriter>()
                 .AddSingleton<IProcessRunner, ProcessRunner>()
+                .AddSingleton<ConfigReader>()
                 .AddSingleton<ProjectAnalyzer>()
                 .AddSingleton<ProjectLocator>()
                 .AddSingleton<ProjectUtil>()
