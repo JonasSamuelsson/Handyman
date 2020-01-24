@@ -1,8 +1,0 @@
-{
-  "profiles": {
-   "Handyman.Tools.Ado": {
-      "commandName": "Project",
-      "commandLineArgs": "list-repos --help"
-   }
-  }
-}
