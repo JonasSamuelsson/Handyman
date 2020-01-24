@@ -25,7 +25,20 @@ namespace Handyman.Tools.Outdated.GenerateConfig
             var config = new ProjectConfig
             {
                 IncludeTransitive = true,
-                Tags = new[] { "alpha", "bravo" }
+                SchemaVersion = "1.0",
+                Skip = false,
+                Tags = new[] { "foo" },
+                TargetFrameworks = new[]
+                {
+                    new TargetFrameworkConfig
+                    {
+                        Name = "netstandard2.0",
+                        Packages = new[]
+                        {
+                            new PackageConfig {Name = "Handyman.Mediator", IgnoreVersion = "1.2.3"}
+                        }
+                    }
+                }
             };
 
             var path = OutputFile ?? $".{AppInfo.AppName}.json";
