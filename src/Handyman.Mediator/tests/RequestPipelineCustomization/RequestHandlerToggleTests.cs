@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
@@ -28,12 +28,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Send(new Request());
 
-            toggle.RequestHandlerType.ShouldBe(typeof(ToggleEnabledRequestHandler));
+            toggle.ToggleInfo.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledRequestHandler));
+            toggle.ToggleInfo.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledRequestHandler));
+            toggle.ToggleInfo.ToggleName.ShouldBe("test");
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler))]
+        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler), ToggleName = "test")]
         private class Request : IRequest<object> { }
 
         private class ToggleEnabledRequestHandler : RequestHandler<Request, object>
@@ -61,12 +63,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class RequestHandlerToggle : IRequestHandlerToggle
         {
             public bool Enabled { get; set; }
-            public Type RequestHandlerType { get; set; }
+            public RequestHandlerToggleInfo ToggleInfo { get; set; }
 
-            public Task<bool> IsEnabled<TRequest, TResponse>(Type requestHandlerType, RequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerToggleInfo toggleInfo,
+                RequestPipelineContext<TRequest> context)
                 where TRequest : IRequest<TResponse>
             {
-                RequestHandlerType = requestHandlerType;
+                ToggleInfo = toggleInfo;
                 return Task.FromResult(Enabled);
             }
         }
