@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
     public interface IEventHandlerToggle
     {
-        Task<bool> IsEnabled<TEvent>(Type eventHandlerType, EventPipelineContext<TEvent> context)
+        Task<bool> IsEnabled<TEvent>(EventHandlerToggleInfo toggleInfo, EventPipelineContext<TEvent> context)
             where TEvent : IEvent;
     }
 }

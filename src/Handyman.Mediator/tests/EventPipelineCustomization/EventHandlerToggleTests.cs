@@ -27,12 +27,14 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
-            toggle.EventHandlerType.ShouldBe(typeof(ToggleEnabledEventHandler));
+            toggle.ToggleInfo.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledEventHandler));
+            toggle.ToggleInfo.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledEventHandler));
+            toggle.ToggleInfo.ToggleName.ShouldBe("test");
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler))]
+        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler), ToggleName = "test")]
         private class Event : IEvent { }
 
         private class ToggleEnabledEventHandler : EventHandler<Event>
@@ -58,11 +60,11 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
         private class EventHandlerToggle : IEventHandlerToggle
         {
             public bool Enabled { get; set; }
-            public Type EventHandlerType { get; set; }
+            public EventHandlerToggleInfo ToggleInfo { get; set; }
 
-            public Task<bool> IsEnabled<TEvent>(Type eventHandlerType, EventPipelineContext<TEvent> context) where TEvent : IEvent
+            public Task<bool> IsEnabled<TEvent>(EventHandlerToggleInfo toggleInfo, EventPipelineContext<TEvent> context) where TEvent : IEvent
             {
-                EventHandlerType = eventHandlerType;
+                ToggleInfo = toggleInfo;
                 return Task.FromResult(Enabled);
             }
         }

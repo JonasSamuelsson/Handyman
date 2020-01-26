@@ -13,13 +13,18 @@ namespace Handyman.Mediator.EventPipelineCustomization
         }
 
         public Type ToggleDisabledHandlerType { get; set; }
+        public string ToggleName { get; set; }
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector(_toggleEnabledHandlerType)
+            var toggleInfo = new EventHandlerToggleInfo
             {
-                ToggleDisabledHandlerType = ToggleDisabledHandlerType
-            });
+                ToggleDisabledHandlerType = ToggleDisabledHandlerType,
+                ToggleEnabledHandlerType = _toggleEnabledHandlerType,
+                ToggleName = ToggleName
+            };
+
+            builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector(toggleInfo));
         }
     }
 }
