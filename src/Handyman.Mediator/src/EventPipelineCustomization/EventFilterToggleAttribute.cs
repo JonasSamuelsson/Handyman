@@ -13,13 +13,18 @@ namespace Handyman.Mediator.EventPipelineCustomization
         }
 
         public Type ToggleDisabledFilterType { get; set; }
+        public string ToggleName { get; set; }
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            builder.AddFilterSelector(new EventFilterToggleFilterSelector(_toggleEnabledFilterType)
+            var toggleInfo = new EventFilterToggleInfo
             {
-                ToggleDisabledFilterType = ToggleDisabledFilterType
-            });
+                ToggleDisabledFilterType = ToggleDisabledFilterType,
+                ToggleEnabledFilterType = _toggleEnabledFilterType,
+                ToggleName = ToggleName
+            };
+
+            builder.AddFilterSelector(new EventFilterToggleFilterSelector(toggleInfo));
         }
     }
 }
