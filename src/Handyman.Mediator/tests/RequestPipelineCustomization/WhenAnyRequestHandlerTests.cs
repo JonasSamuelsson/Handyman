@@ -127,14 +127,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             var requestHandler1 = new RequestHandler(Task.Run(new Func<string>(() => throw new Exception("1"))));
             var requestHandler2 = new RequestHandler(Task.Run(new Func<string>(() => throw new Exception("2"))));
             var requestHandler3 = new RequestHandler(tcs.Task);
-            var exceptionHandler = new BackgroudExceptionHandler();
+            var exceptionHandler = new BackgroundExceptionHandler();
 
             var services = new ServiceCollection();
 
             services.AddSingleton<IRequestHandler<Request, string>>(requestHandler1);
             services.AddSingleton<IRequestHandler<Request, string>>(requestHandler2);
             services.AddSingleton<IRequestHandler<Request, string>>(requestHandler3);
-            services.AddSingleton<IBackgroudExceptionHandler>(exceptionHandler);
+            services.AddSingleton<IBackgroundExceptionHandler>(exceptionHandler);
 
             var mediator = new Mediator(services.BuildServiceProvider());
 
@@ -192,7 +192,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             }
         }
 
-        private class BackgroudExceptionHandler : IBackgroudExceptionHandler
+        private class BackgroundExceptionHandler : IBackgroundExceptionHandler
         {
             public IEnumerable<Exception> Exceptions { get; set; }
 

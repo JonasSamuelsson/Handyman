@@ -41,7 +41,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
                 if (exceptions != null)
                 {
-                    var exceptionHandler = context.ServiceProvider.GetService<IBackgroudExceptionHandler>();
+                    var exceptionHandler = context.ServiceProvider.GetService<IBackgroundExceptionHandler>();
 
                     if (exceptionHandler != null)
                     {

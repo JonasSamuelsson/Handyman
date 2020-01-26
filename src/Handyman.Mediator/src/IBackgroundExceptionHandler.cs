@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public interface IBackgroudExceptionHandler
+    public interface IBackgroundExceptionHandler
     {
         Task Handle(IEnumerable<Exception> exceptions);
     }
