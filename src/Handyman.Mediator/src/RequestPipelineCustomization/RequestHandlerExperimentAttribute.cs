@@ -13,9 +13,17 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _baselineHandlerType = baselineHandlerType;
         }
 
+        public string ExperimentName { get; set; }
+
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            builder.UseHandlerExecutionStrategy(new RequestHandlerExperimentExecutionStrategy(_baselineHandlerType));
+            var experimentInfo = new RequestHandlerExperimentInfo
+            {
+                BaselineHandlerType = _baselineHandlerType,
+                ExperimentName = ExperimentName
+            };
+
+            builder.UseHandlerExecutionStrategy(new RequestHandlerExperimentExecutionStrategy(experimentInfo));
         }
     }
 }

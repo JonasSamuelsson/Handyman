@@ -10,11 +10,11 @@ namespace Handyman.Mediator.Internals
 {
     internal class RequestHandlerExperimentExecutionStrategy : IRequestHandlerExecutionStrategy
     {
-        private readonly Type _baselineHandlerType;
+        private readonly RequestHandlerExperimentInfo _experimentInfo;
 
-        public RequestHandlerExperimentExecutionStrategy(Type baselineHandlerType)
+        public RequestHandlerExperimentExecutionStrategy(RequestHandlerExperimentInfo experimentInfo)
         {
-            _baselineHandlerType = baselineHandlerType;
+            _experimentInfo = experimentInfo;
         }
 
         public async Task<TResponse> Execute<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
@@ -32,7 +32,7 @@ namespace Handyman.Mediator.Internals
             var request = context.Request;
             var cancellationToken = context.CancellationToken;
 
-            if (!await toggle.IsEnabled<TRequest, TResponse>(request, cancellationToken).ConfigureAwait(false))
+            if (!await toggle.IsEnabled<TRequest, TResponse>(_experimentInfo, cancellationToken).ConfigureAwait(false))
             {
                 return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait(false);
             }
@@ -62,7 +62,7 @@ namespace Handyman.Mediator.Internals
 
             foreach (var handler in handlers)
             {
-                if (handler.GetType() != _baselineHandlerType)
+                if (handler.GetType() != _experimentInfo.BaselineHandlerType)
                     continue;
 
                 if (baselineHandler != null)

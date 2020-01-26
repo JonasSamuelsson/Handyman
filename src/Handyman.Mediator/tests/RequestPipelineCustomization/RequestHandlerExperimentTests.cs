@@ -16,13 +16,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         public async Task ShouldRunExperiment()
         {
             var observer = new Observer();
+            var toggle = new Toggle { Enabled = true };
 
             var services = new ServiceCollection();
 
             services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
             services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
             services.AddSingleton<IRequestHandlerExperimentObserver>(observer);
-            services.AddSingleton<IRequestHandlerExperimentToggle>(new Toggle { Enabled = true });
+            services.AddSingleton<IRequestHandlerExperimentToggle>(toggle);
 
             var mediator = new Mediator(services.BuildServiceProvider());
 
@@ -47,6 +48,9 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             experiment.Task.Exception.ShouldBeNull();
             experiment.Task.Result.ShouldBe("experiment");
             experiment.Task.Status.ShouldBe(TaskStatus.RanToCompletion);
+
+            toggle.ExperimentInfo.BaselineHandlerType.ShouldBe(typeof(BaselineHandler));
+            toggle.ExperimentInfo.ExperimentName.ShouldBe("test");
         }
 
         [Fact]
@@ -99,7 +103,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             observer.Executed.ShouldBeFalse();
         }
 
-        [RequestHandlerExperiment(typeof(BaselineHandler))]
+        [RequestHandlerExperiment(typeof(BaselineHandler), ExperimentName = "test")]
         private class Request : IRequest<string> { }
 
         private class BaselineHandler : BaseHandler { }
@@ -141,10 +145,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class Toggle : IRequestHandlerExperimentToggle
         {
             public bool Enabled { get; set; }
+            public RequestHandlerExperimentInfo ExperimentInfo { get; set; }
 
-            public Task<bool> IsEnabled<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+            public Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentInfo experimentInfo,
+                CancellationToken cancellationToken)
                 where TRequest : IRequest<TResponse>
             {
+                ExperimentInfo = experimentInfo;
                 return Task.FromResult(Enabled);
             }
         }
