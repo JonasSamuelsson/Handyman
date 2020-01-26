@@ -5,7 +5,8 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 {
     public interface IRequestFilterToggle
     {
-        Task<bool> IsEnabled<TRequest, TResponse>(Type requestFilterType, RequestPipelineContext<TRequest> context)
+        Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleInfo toggleInfo,
+            RequestPipelineContext<TRequest> context)
             where TRequest : IRequest<TResponse>;
     }
 }

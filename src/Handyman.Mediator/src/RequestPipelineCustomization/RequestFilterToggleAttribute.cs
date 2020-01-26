@@ -13,13 +13,18 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         }
 
         public Type ToggleDisabledFilterType { get; set; }
+        public string ToggleName { get; set; }
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            builder.AddFilterSelector(new RequestFilterToggleFilterSelector(_toggleEnabledFilterType)
+            var toggleInfo = new RequestFilterToggleInfo
             {
-                ToggleDisabledFilterType = ToggleDisabledFilterType
-            });
+                ToggleDisabledFilterType = ToggleDisabledFilterType,
+                ToggleEnabledFilterType = _toggleEnabledFilterType,
+                ToggleName = ToggleName
+            };
+
+            builder.AddFilterSelector(new RequestFilterToggleFilterSelector(toggleInfo));
         }
     }
 }

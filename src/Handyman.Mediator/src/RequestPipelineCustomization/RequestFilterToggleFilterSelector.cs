@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
     internal class RequestFilterToggleFilterSelector : IRequestFilterSelector
     {
-        private readonly Type _toggleEnabledFilterType;
+        private readonly RequestFilterToggleInfo _toggleInfo;
 
-        public RequestFilterToggleFilterSelector(Type toggleEnabledFilterType)
+        public RequestFilterToggleFilterSelector(RequestFilterToggleInfo toggleInfo)
         {
-            _toggleEnabledFilterType = toggleEnabledFilterType;
+            _toggleInfo = toggleInfo;
         }
-
-        public Type ToggleDisabledFilterType { get; set; }
 
         public async Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
             where TRequest : IRequest<TResponse>
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestFilterToggle>();
-            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleEnabledFilterType, context).ConfigureAwait(false);
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleInfo, context).ConfigureAwait(false);
 
             if (!enabled)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleEnabledFilterType);
+                filters.RemoveAll(x => x.GetType() == _toggleInfo.ToggleEnabledFilterType);
             }
-            else if (ToggleDisabledFilterType != null)
+            else if (_toggleInfo.ToggleDisabledFilterType != null)
             {
-                filters.RemoveAll(x => x.GetType() == ToggleDisabledFilterType);
+                filters.RemoveAll(x => x.GetType() == _toggleInfo.ToggleDisabledFilterType);
             }
         }
     }

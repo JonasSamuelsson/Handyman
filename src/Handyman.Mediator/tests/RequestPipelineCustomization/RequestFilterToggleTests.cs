@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.RequestPipelineCustomization;
+﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.RequestPipelineCustomization
@@ -31,12 +30,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await mediator.Send(new Request());
 
-            toggle.RequestFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
+            toggle.ToggleInfo.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledRequestFilter));
+            toggle.ToggleInfo.ToggleEnabledFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
+            toggle.ToggleInfo.ToggleName.ShouldBe("test");
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestFilterToggle(typeof(ToggledEnabledRequestFilter), ToggleDisabledFilterType = typeof(ToggleDisabledRequestFilter))]
+        [RequestFilterToggle(typeof(ToggledEnabledRequestFilter), ToggleDisabledFilterType = typeof(ToggleDisabledRequestFilter), ToggleName = "test")]
         private class Request : IRequest<object> { }
 
         private class ToggledEnabledRequestFilter : IRequestFilter<Request, object>
@@ -64,12 +65,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class RequestFilterToggle : IRequestFilterToggle
         {
             public bool Enabled { get; set; }
-            public Type RequestFilterType { get; set; }
+            public RequestFilterToggleInfo ToggleInfo { get; set; }
 
-            public Task<bool> IsEnabled<TRequest, TResponse>(Type requestFilterType, RequestPipelineContext<TRequest> context)
+            public Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleInfo toggleInfo,
+                RequestPipelineContext<TRequest> context)
                 where TRequest : IRequest<TResponse>
             {
-                RequestFilterType = requestFilterType;
+                ToggleInfo = toggleInfo;
                 return Task.FromResult(Enabled);
             }
         }
