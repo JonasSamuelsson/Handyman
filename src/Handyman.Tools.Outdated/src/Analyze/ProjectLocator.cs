@@ -86,7 +86,7 @@ namespace Handyman.Tools.Outdated.Analyze
             var includes = tags
                 .Where(x => !x.StartsWith("!"))
                 .Select(x => x.ToLowerInvariant())
-                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+                .ToList();
 
             var excludes = tags
                 .Where(x => x.StartsWith("!"))
@@ -94,7 +94,7 @@ namespace Handyman.Tools.Outdated.Analyze
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
-            if (includes.Any() && !includes.All(x => project.Tags.Any(x.Contains)))
+            if (includes.Any() && !includes.All(x => project.Tags.Any(y => x.Equals(y, StringComparison.InvariantCultureIgnoreCase))))
                 return false;
 
             if (project.Tags.Any(x => excludes.Contains(x)))
