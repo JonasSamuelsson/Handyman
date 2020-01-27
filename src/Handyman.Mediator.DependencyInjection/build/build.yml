@@ -25,6 +25,14 @@ stages:
               versionSpec: '5.4.0'
           - task: UseDotNet@2
             inputs:
+              packageType: 'runtime'
+              version: '2.1'
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'runtime'
+              version: '3.0'
+          - task: UseDotNet@2
+            inputs:
               packageType: 'sdk'
               version: '3.x'  
           - powershell: ./src/Handyman.Mediator.DependencyInjection/build/build.ps1 -artifacts $(artifacts) -buildCounter $(buildCounter)
