@@ -2,5 +2,5 @@
 
 namespace Handyman.DependencyInjection
 {
-    public class IgnoreServiceAttribute : Attribute { }
+    public class ScannerIgnoreAttribute : Attribute { }
 }

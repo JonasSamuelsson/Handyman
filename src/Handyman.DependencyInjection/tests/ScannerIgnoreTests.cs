@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Handyman.DependencyInjection.Tests
 {
-    public class IgnoreServiceAttributeTests
+    public class ScannerIgnoreTests
     {
         [Fact]
         public void ShouldNotScanTypesMarkedWithAttribute()
@@ -37,7 +37,7 @@ namespace Handyman.DependencyInjection.Tests
 
         private class ClassWithoutAttribute : IInterface { }
 
-        [IgnoreService]
+        [ScannerIgnore]
         private class ClassWithAttribute : IInterface { }
     }
 }
