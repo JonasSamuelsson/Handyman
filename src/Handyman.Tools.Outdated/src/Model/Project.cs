@@ -12,5 +12,7 @@ namespace Handyman.Tools.Outdated.Model
         public List<TargetFramework> TargetFrameworks { get; } = new List<TargetFramework>();
         public ProjectConfig Config { get; set; }
         public List<Error> Errors { get; } = new List<Error>();
+
+        public bool HasErrors => Errors
     }
 }
