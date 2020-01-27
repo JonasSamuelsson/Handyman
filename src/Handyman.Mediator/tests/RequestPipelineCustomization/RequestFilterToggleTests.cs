@@ -30,14 +30,16 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await mediator.Send(new Request());
 
+            toggle.ToggleInfo.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleInfo.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledRequestFilter));
             toggle.ToggleInfo.ToggleEnabledFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
             toggle.ToggleInfo.ToggleName.ShouldBe("test");
+
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestFilterToggle(typeof(ToggledEnabledRequestFilter), ToggleDisabledFilterType = typeof(ToggleDisabledRequestFilter), ToggleName = "test")]
+        [RequestFilterToggle(typeof(ToggledEnabledRequestFilter), ToggleDisabledFilterType = typeof(ToggleDisabledRequestFilter), ToggleName = "test", Tags = new[] { "foo" })]
         private class Request : IRequest<object> { }
 
         private class ToggledEnabledRequestFilter : IRequestFilter<Request, object>

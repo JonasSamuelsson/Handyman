@@ -1,7 +1,6 @@
 ﻿using Handyman.Mediator.RequestPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,14 +27,16 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Send(new Request());
 
+            toggle.ToggleInfo.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleInfo.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledRequestHandler));
             toggle.ToggleInfo.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledRequestHandler));
             toggle.ToggleInfo.ToggleName.ShouldBe("test");
+
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler), ToggleName = "test")]
+        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler), ToggleName = "test", Tags = new[] { "foo" })]
         private class Request : IRequest<object> { }
 
         private class ToggleEnabledRequestHandler : RequestHandler<Request, object>

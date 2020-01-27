@@ -12,6 +12,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _toggleEnabledFilterType = toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType));
         }
 
+        public string[] Tags { get; set; } = { };
         public Type ToggleDisabledFilterType { get; set; }
         public string ToggleName { get; set; }
 
@@ -19,6 +20,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         {
             var toggleInfo = new RequestFilterToggleInfo
             {
+                Tags = Tags,
                 ToggleDisabledFilterType = ToggleDisabledFilterType,
                 ToggleEnabledFilterType = _toggleEnabledFilterType,
                 ToggleName = ToggleName

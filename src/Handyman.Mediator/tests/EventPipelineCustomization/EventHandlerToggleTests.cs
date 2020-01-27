@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Handyman.Mediator.EventPipelineCustomization;
+﻿using Handyman.Mediator.EventPipelineCustomization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.EventPipelineCustomization
@@ -27,14 +26,16 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
+            toggle.ToggleInfo.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleInfo.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledEventHandler));
             toggle.ToggleInfo.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledEventHandler));
             toggle.ToggleInfo.ToggleName.ShouldBe("test");
+
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler), ToggleName = "test")]
+        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler), ToggleName = "test", Tags = new[] { "foo" })]
         private class Event : IEvent { }
 
         private class ToggleEnabledEventHandler : EventHandler<Event>
