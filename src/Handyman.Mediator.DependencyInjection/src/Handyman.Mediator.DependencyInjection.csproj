@@ -5,12 +5,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>2.0.0-beta.2001062112</Version>
+		<Version>2.0.0-beta.2001272102</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Handyman.DependencyInjection" Version="2.0.0-beta.2001051555" />
-		<PackageReference Include="Handyman.Mediator" Version="8.0.0-beta.2001052053" />
+		<PackageReference Include="Handyman.DependencyInjection" Version="2.0.0-beta.2001271446" />
+		<PackageReference Include="Handyman.Mediator" Version="8.0.0-beta.2001271447" />
 	</ItemGroup>
 
 </Project>

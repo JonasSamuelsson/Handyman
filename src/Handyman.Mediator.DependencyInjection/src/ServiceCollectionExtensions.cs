@@ -37,11 +37,11 @@ namespace Handyman.Mediator.DependencyInjection
             services.Scan(_ =>
             {
                 _.Types(options.TypesToScan);
+                _.ConfigureConcreteClassesOf(typeof(IBackgroundExceptionHandler));
                 _.ConfigureConcreteClassesOf(typeof(IEventFilter<>));
                 _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle));
                 _.ConfigureConcreteClassesOf(typeof(IEventHandler<>));
                 _.ConfigureConcreteClassesOf(typeof(IEventHandlerToggle));
-                _.ConfigureConcreteClassesOf(typeof(IExceptionHandler));
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>));
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle));
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>));
