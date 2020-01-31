@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Handyman.AspNetCore.ApiVersioning.SemVer
 {
+    [DebuggerDisplay("{Text}")]
     internal sealed class SemVerApiVersion : IApiVersion
     {
         public int Major { get; set; }
@@ -23,7 +25,10 @@ namespace Handyman.AspNetCore.ApiVersioning.SemVer
 
         public int CompareTo(IApiVersion other)
         {
-            throw new NotImplementedException();
+            if (!(other is SemVerApiVersion o))
+                throw new ArgumentException();
+
+            return SemVerApiVersionComparer.Compare(this, o);
         }
 
         public bool IsMatch(IApiVersion other)
