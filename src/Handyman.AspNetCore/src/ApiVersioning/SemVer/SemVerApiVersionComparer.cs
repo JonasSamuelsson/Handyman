@@ -36,9 +36,7 @@ namespace Handyman.AspNetCore.ApiVersioning.SemVer
                 var xLabel = x.PreReleaseLabels[i];
                 var yLabel = y.PreReleaseLabels[i];
 
-                diff = xLabel is int xInt && yLabel is int yInt
-                    ? xInt.CompareTo(yInt)
-                    : StringComparer.OrdinalIgnoreCase.Compare(xLabel, yLabel);
+                diff = ComparePreReleaseLabels(xLabel, yLabel);
 
                 if (diff == 0)
                     continue;
@@ -47,6 +45,39 @@ namespace Handyman.AspNetCore.ApiVersioning.SemVer
             }
 
             return 0;
+        }
+
+        public static bool IsMatch(SemVerApiVersion version, SemVerApiVersion candidate)
+        {
+            if (version.Major != candidate.Major)
+                return false;
+
+            if (version.IsPreRelease != candidate.IsPreRelease)
+                return false;
+
+            if (!version.IsPreRelease)
+                return candidate.Minor <= version.Minor;
+
+            if (version.PreReleaseLabels.Length != candidate.PreReleaseLabels.Length)
+                return false;
+
+            for (var i = 0; i < version.PreReleaseLabels.Length; i++)
+            {
+                var xLabel = version.PreReleaseLabels[i];
+                var yLabel = candidate.PreReleaseLabels[i];
+
+                if (ComparePreReleaseLabels(xLabel, yLabel) != 0)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static int ComparePreReleaseLabels(object xLabel, object yLabel)
+        {
+            return xLabel is int xInt && yLabel is int yInt
+                ? xInt.CompareTo(yInt)
+                : StringComparer.OrdinalIgnoreCase.Compare(xLabel, yLabel);
         }
     }
 }

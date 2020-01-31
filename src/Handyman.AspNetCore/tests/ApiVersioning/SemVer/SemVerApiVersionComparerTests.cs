@@ -53,5 +53,45 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning.SemVer
                 }
             }
         }
+
+        [Theory, MemberData(nameof(GetIsMatchParams))]
+        internal void IsMatch(SemVerApiVersion version, SemVerApiVersion candidate, bool result)
+        {
+            version.IsMatch(candidate).ShouldBe(result);
+        }
+
+        public static IEnumerable<object[]> GetIsMatchParams()
+        {
+            var items = new[]
+            {
+                new object[] {"1.0-alpha", "1.0-alpha", true},
+                new object[] {"1.0-alpha", "1.0-beta", false},
+
+                new object[] {"1.0-beta", "1.0-alpha", false},
+                new object[] {"1.0-beta", "1.0-beta", true},
+                new object[] {"1.0-beta", "1.0", false},
+
+                new object[] {"1.0", "1.0-alpha", false},
+                new object[] {"1.0", "1.0", true},
+                new object[] {"1.0", "1.1", false},
+                new object[] {"1.0", "2.0", false},
+
+                new object[] {"1.1", "1.0", true},
+                new object[] {"1.1", "1.1", true},
+                new object[] {"1.1", "2.0", false},
+
+                new object[] {"2.0", "1.1", false},
+                new object[] {"2.0", "2.0", true},
+            };
+
+            var parser = new SemVerApiVersionParser();
+
+            foreach (var item in items)
+            {
+                var version = parser.Parse((string)item[0]);
+                var candidate = parser.Parse((string)item[1]);
+                yield return new[] { version, candidate, item[2] };
+            }
+        }
     }
 }

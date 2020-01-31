@@ -33,7 +33,7 @@ namespace Handyman.AspNetCore.ApiVersioning.SemVer
 
         public bool IsMatch(IApiVersion other)
         {
-            throw new NotImplementedException();
+            return other is SemVerApiVersion o && SemVerApiVersionComparer.IsMatch(this, o);
         }
     }
 }
