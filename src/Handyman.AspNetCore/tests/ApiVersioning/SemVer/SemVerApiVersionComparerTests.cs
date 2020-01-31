@@ -9,36 +9,24 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning.SemVer
     {
         private static readonly SemVerApiVersionParser Parser = new SemVerApiVersionParser();
 
-        [Theory, MemberData(nameof(GetCompareParams))]
-        internal void Compare(SemVerApiVersion x, SemVerApiVersion y, int result)
+        [Theory, MemberData(nameof(GetCompareToParams))]
+        internal void CompareTo(SemVerApiVersion x, SemVerApiVersion y, int result)
         {
             x.CompareTo(y).ShouldBe(result);
         }
 
-        public static IEnumerable<object[]> GetCompareParams()
+        public static IEnumerable<object[]> GetCompareToParams()
         {
             var versions = new[]
             {
                 "1.0-alpha",
                 "1.0-beta",
                 "1.0-beta.1",
-                "1.0-beta.1.1",
-                "1.0-beta.1.2",
                 "1.0-beta.2",
+                "1.0-beta.10",
                 "1.0",
                 "1.1-alpha",
-                "1.1-beta",
-                "1.1-beta.1",
-                "1.1-beta.1.1",
-                "1.1-beta.1.2",
-                "1.1-beta.2",
                 "1.1",
-                "2.0-alpha",
-                "2.0-beta",
-                "2.0-beta.1",
-                "2.0-beta.1.1",
-                "2.0-beta.1.2",
-                "2.0-beta.2",
                 "2.0",
             };
 
