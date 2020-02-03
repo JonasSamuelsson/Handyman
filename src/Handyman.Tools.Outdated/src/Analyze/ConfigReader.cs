@@ -21,7 +21,7 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             do
             {
-                var files = _fileSystem.Directory.GetFiles(directory, ".handyman-outdated.json",
+                var files = _fileSystem.Directory.GetFiles(directory, "*.handyman-outdated.json",
                     SearchOption.TopDirectoryOnly);
 
                 if (!files.Any())
