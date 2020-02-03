@@ -94,10 +94,10 @@ namespace Handyman.Tools.Outdated.Analyze
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
-            if (includes.Any() && !includes.All(x => project.Tags.Any(y => x.Equals(y, StringComparison.InvariantCultureIgnoreCase))))
+            if (includes.Any() && !includes.All(x => project.Config.Tags.Any(y => x.Equals(y, StringComparison.InvariantCultureIgnoreCase))))
                 return false;
 
-            if (project.Tags.Any(x => excludes.Contains(x)))
+            if (project.Config.Tags.Any(x => excludes.Contains(x)))
                 return false;
 
             return true;
