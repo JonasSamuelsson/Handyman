@@ -25,7 +25,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
             if (projects.Count == 0)
             {
-                _console.WriteLine("No projects found.");
+                _console.WriteLine("No projects found");
                 return;
             }
 

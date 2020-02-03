@@ -49,11 +49,6 @@ namespace Handyman.Tools.Outdated.Analyze
                 _console.WriteLine();
             }
 
-            if (projects.Count == 0)
-            {
-                return 0;
-            }
-
             var counter = 1;
             foreach (var project in projects)
             {
