@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System;
 
@@ -9,8 +8,6 @@ namespace Handyman.AspNetCore.ApiVersioning
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class ApiVersionAttribute : Attribute, IFilterFactory
     {
-        private readonly StringValues _validVersions;
-
         public ApiVersionAttribute(string version)
             : this(new[] { version })
         {
@@ -18,7 +15,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 
         public ApiVersionAttribute(string[] versions)
         {
-            _validVersions = versions;
+            Versions = versions;
         }
 
         /// <summary>
@@ -31,17 +28,11 @@ namespace Handyman.AspNetCore.ApiVersioning
         /// </summary>
         public bool Optional { get; set; }
 
-        /// <summary>
-        /// Custom validator type used for validation.
-        /// </summary>
-        public Type Validator { get; set; }
+        internal StringValues Versions { get; }
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
         {
-            var apiVersionReader = serviceProvider.GetRequiredService<IApiVersionReader>();
-            var apiVersionValidator = (IApiVersionValidator)serviceProvider.GetRequiredService(Validator ?? typeof(IApiVersionValidator));
-
-            return new ApiVersionValidationFilter(_validVersions, Optional, DefaultVersion, apiVersionReader, apiVersionValidator);
+            return new ApiVersionParameterBinderFilter();
         }
 
         bool IFilterFactory.IsReusable { get; } = true;
