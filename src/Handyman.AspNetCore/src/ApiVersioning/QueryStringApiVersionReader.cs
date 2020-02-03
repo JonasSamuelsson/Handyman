@@ -5,9 +5,9 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     internal class QueryStringApiVersionReader : IApiVersionReader
     {
-        public StringValues Read(HttpRequest request)
+        public bool TryReadApiVersion(HttpRequest httpRequest, out StringValues apiVersion)
         {
-            return request.Query["api-version"];
+            return httpRequest.Query.TryGetValue("api-version", out apiVersion);
         }
     }
 }

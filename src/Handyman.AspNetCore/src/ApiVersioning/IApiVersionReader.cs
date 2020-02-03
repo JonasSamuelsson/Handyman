@@ -5,6 +5,6 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     public interface IApiVersionReader
     {
-        StringValues Read(HttpRequest request);
+        bool TryReadApiVersion(HttpRequest httpRequest, out StringValues apiVersion);
     }
 }
