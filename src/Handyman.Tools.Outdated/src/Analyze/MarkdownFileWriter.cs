@@ -31,14 +31,14 @@ namespace Handyman.Tools.Outdated.Analyze
             var outdated = projects.Where(x => x.TargetFrameworks.Any()).ToList();
             var upToDate = projects.Except(errors).Except(outdated).ToList();
 
-            builder.AppendLine("# Summary");
-
             if (!projects.Any())
             {
-                builder.AppendLine("No projects found.");
+                builder.AppendLine("No projects found");
             }
             else
             {
+                builder.AppendLine("# Summary");
+
                 if (errors.Any())
                 {
                     builder.AppendLine($"* {errors.Count} projects failed");
@@ -54,13 +54,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
                     foreach (var project in errors)
                     {
-                        builder.AppendLine($"## {project.Name}");
-                        builder.AppendLine(project.RelativePath);
-
-                        if (project.Config.Tags.Any())
-                        {
-                            builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
-                        }
+                        AppendProjectInfo(builder, project);
 
                         foreach (var error in project.Errors)
                         {
@@ -78,13 +72,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
                     foreach (var project in outdated)
                     {
-                        builder.AppendLine($"## {project.Name}");
-                        builder.AppendLine(project.RelativePath);
-
-                        if (project.Config.Tags.Any())
-                        {
-                            builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
-                        }
+                        AppendProjectInfo(builder, project);
 
                         foreach (var framework in project.TargetFrameworks)
                         {
@@ -115,13 +103,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
                     foreach (var project in outdated)
                     {
-                        builder.AppendLine($"## {project.Name}");
-                        builder.AppendLine(project.RelativePath);
-
-                        if (project.Config.Tags.Any())
-                        {
-                            builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
-                        }
+                        AppendProjectInfo(builder, project);
                     }
 
                     builder.AppendLine();
@@ -136,6 +118,17 @@ namespace Handyman.Tools.Outdated.Analyze
                 _fileSystem.Directory.CreateDirectory(directory);
 
             _fileSystem.File.WriteAllText(path, builder.ToString(), Encoding.UTF8);
+        }
+
+        private static void AppendProjectInfo(StringBuilder builder, Project project)
+        {
+            builder.AppendLine($"## {project.Name}");
+            builder.AppendLine($"Path: {project.RelativePath}  ");
+
+            if (project.Config.Tags.Any())
+            {
+                builder.AppendLine($"Tags: {string.Join(", ", project.Config.Tags)}");
+            }
         }
     }
 }
