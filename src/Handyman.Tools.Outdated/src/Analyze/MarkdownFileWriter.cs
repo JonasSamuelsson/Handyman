@@ -29,7 +29,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
             var errors = projects.Where(x => x.Errors.Any()).ToList();
             var outdated = projects.Where(x => x.TargetFrameworks.Any()).ToList();
-            var upToDate = projects.Except(errors).Except(outdated).ToList();
+            var upToDate = projects.Where(x => !errors.Contains(x) && !outdated.Contains(x)).ToList();
 
             if (!projects.Any())
             {
