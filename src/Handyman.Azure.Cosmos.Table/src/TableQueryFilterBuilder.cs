@@ -1,10 +1,11 @@
-﻿using Microsoft.Azure.Cosmos.Table;
+﻿using Handyman.Azure.Cosmos.Table.Internals;
+using Microsoft.Azure.Cosmos.Table;
 using System;
 using System.Linq.Expressions;
 
-namespace Handyman.Azure.Cosmos.Table.Internals
+namespace Handyman.Azure.Cosmos.Table
 {
-    internal class TableQueryFilterBuilder<TEntity> : ITableQueryFilterBuilder<TEntity>
+    public class TableQueryFilterBuilder<TEntity> : ITableQueryFilterBuilder<TEntity>
         where TEntity : ITableEntity
     {
         private readonly ITableQueryFilterNode _node;

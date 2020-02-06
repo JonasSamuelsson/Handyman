@@ -1,4 +1,3 @@
-using Handyman.Azure.Cosmos.Table.Internals;
 using Microsoft.Azure.Cosmos.Table;
 using Shouldly;
 using System;
