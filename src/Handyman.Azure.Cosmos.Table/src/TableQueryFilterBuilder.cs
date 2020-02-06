@@ -107,7 +107,7 @@ namespace Handyman.Azure.Cosmos.Table
             return ((MemberExpression)property.Body).Member.Name;
         }
 
-        internal string Build()
+        public string Build()
         {
             return _node.Build();
         }
