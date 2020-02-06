@@ -12,8 +12,8 @@ namespace Handyman.Azure.Cosmos.Table
         ITableQueryFilterStringConditionBuilder RowKey { get; }
         ITableQueryFilterConditionBuilder<DateTimeOffset> Timestamp { get; }
 
-        void And( Action<ITableQueryFilterBuilder<TEntity>> actions);
-        void Or( Action<ITableQueryFilterBuilder<TEntity>> actions);
+        void And(Action<ITableQueryFilterBuilder<TEntity>> actions);
+        void Or(Action<ITableQueryFilterBuilder<TEntity>> actions);
         void Not(Action<ITableQueryFilterBuilder<TEntity>> action);
 
         ITableQueryFilterConditionBuilder Property(string name);

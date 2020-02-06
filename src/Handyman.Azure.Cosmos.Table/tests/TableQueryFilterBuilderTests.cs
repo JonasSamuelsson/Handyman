@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Handyman.Azure.Cosmos.Table.Tests
 {
-    public class FilterBuilderTests
+    public class TableQueryFilterBuilderTests
     {
         [Theory, MemberData(nameof(GetShouldBuildFilterParams))]
         public void ShouldBuildFilter(string operation, object value, string expected)

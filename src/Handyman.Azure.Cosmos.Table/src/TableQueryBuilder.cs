@@ -1,8 +1,8 @@
-﻿using Microsoft.Azure.Cosmos.Table;
+﻿using Handyman.Azure.Cosmos.Table.Internals;
+using Microsoft.Azure.Cosmos.Table;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Handyman.Azure.Cosmos.Table.Internals;
 
 namespace Handyman.Azure.Cosmos.Table
 {
@@ -13,12 +13,17 @@ namespace Handyman.Azure.Cosmos.Table
     {
         private readonly TableQuery<TEntity> _query = new TableQuery<TEntity>();
 
+        public TableQueryBuilder<TEntity> Where(string filter)
+        {
+            _query.Where(filter);
+            return this;
+        }
+
         public TableQueryBuilder<TEntity> Where(Action<ITableQueryFilterBuilder<TEntity>> action)
         {
             var builder = new TableQueryFilterBuilder<TEntity>();
             action.Invoke(builder);
-            _query.Where(builder.Build());
-            return this;
+            return Where(builder.Build());
         }
 
         public TableQueryBuilder<TEntity> OrderBy(string propertyName)
