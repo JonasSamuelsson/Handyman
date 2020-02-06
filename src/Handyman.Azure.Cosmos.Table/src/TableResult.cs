@@ -13,18 +13,14 @@ namespace Handyman.Azure.Cosmos.Table
 
         public bool HasSuccessStatusCode => HttpStatusCode < 400;
 
-        public void EnsureSuccessStatusCode()
+        public TableResult<TEntity> EnsureSuccessStatusCode()
         {
-            if (HasSuccessStatusCode)
-                return;
-
-            throw new TableException(HttpStatusCode);
+            return HasSuccessStatusCode ? this : throw new TableException(HttpStatusCode);
         }
 
         public TEntity GetEntityOrThrow()
         {
-            EnsureSuccessStatusCode();
-            return Entity;
+            return EnsureSuccessStatusCode().Entity;
         }
 
         public bool TryGetEntity(out TEntity entity)

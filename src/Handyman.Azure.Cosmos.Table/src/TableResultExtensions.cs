@@ -4,12 +4,9 @@ namespace Handyman.Azure.Cosmos.Table
 {
     public static class TableResultExtensions
     {
-        public static void EnsureSuccessStatusCode(this TableResult result)
+        public static TableResult EnsureSuccessStatusCode(this TableResult result)
         {
-            if (result.HasSuccessStatusCode())
-                return;
-
-            throw new TableException(result.HttpStatusCode);
+            return result.HasSuccessStatusCode() ? result : throw new TableException(result.HttpStatusCode);
         }
 
         public static bool HasSuccessStatusCode(this TableResult result)
