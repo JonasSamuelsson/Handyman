@@ -26,39 +26,39 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             validator.Lifetime.ShouldBe(ServiceLifetime.Singleton);
         }
 
-        [Fact]
-        public void ShouldHonorCustomServiceRegistrations()
-        {
-            var services = new ServiceCollection();
+        //[Fact]
+        //public void ShouldHonorCustomServiceRegistrations()
+        //{
+        //    var services = new ServiceCollection();
 
-            services.AddTransient<IApiVersionReader, TestReader>();
-            services.AddTransient<IApiVersionValidator, TestValidator>();
+        //    services.AddTransient<IApiVersionReader, TestReader>();
+        //    services.AddTransient<IApiVersionValidator, TestValidator>();
 
-            services.AddApiVersioning();
+        //    services.AddApiVersioning();
 
-            services
-                .Single(x => x.ServiceType == typeof(IApiVersionReader))
-                .ImplementationType.ShouldBe(typeof(TestReader));
+        //    services
+        //        .Single(x => x.ServiceType == typeof(IApiVersionReader))
+        //        .ImplementationType.ShouldBe(typeof(TestReader));
 
-            services
-                .Single(x => x.ServiceType == typeof(IApiVersionValidator))
-                .ImplementationType.ShouldBe(typeof(TestValidator));
-        }
+        //    services
+        //        .Single(x => x.ServiceType == typeof(IApiVersionValidator))
+        //        .ImplementationType.ShouldBe(typeof(TestValidator));
+        //}
 
-        public class TestReader : IApiVersionReader
-        {
-            public StringValues Read(HttpRequest request)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public class TestReader : IApiVersionReader
+        //{
+        //    public StringValues Read(HttpRequest request)
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
 
-        public class TestValidator : IApiVersionValidator
-        {
-            public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion, out string error)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        //public class TestValidator : IApiVersionValidator
+        //{
+        //    public bool Validate(string version, bool optional, StringValues validVersions, out string matchedVersion, out string error)
+        //    {
+        //        throw new System.NotImplementedException();
+        //    }
+        //}
     }
 }
