@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System;
+using Shouldly;
 using System.Collections.Generic;
 using Xunit;
 
@@ -36,11 +37,13 @@ namespace Handyman.AspNetCore.Tests
 
         public static IEnumerable<object[]> GetShouldCompareETagToSqlServerRowVersionParams()
         {
-            var rowVersion = ETagConverter.ToSqlServerRowVersion("W/\"01\"");
+            throw new NotImplementedException();
 
-            yield return new object[] { "*", rowVersion, true };
-            yield return new object[] { "W/\"01\"", rowVersion, true };
-            yield return new object[] { "W/\"02\"", rowVersion, false };
+            //var rowVersion = ETagConverter.ToSqlServerRowVersion("W/\"01\"");
+
+            //yield return new object[] { "*", rowVersion, true };
+            //yield return new object[] { "W/\"01\"", rowVersion, true };
+            //yield return new object[] { "W/\"02\"", rowVersion, false };
         }
     }
 }

@@ -1,33 +1,39 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Threading.Tasks;
 
 namespace Handyman.AspNetCore.EtagParameterBinding
 {
     internal class EtagModelBinder : IModelBinder
     {
-        public Task BindModelAsync(ModelBindingContext bindingContext)
-        {
-            if (TryGetEtag(bindingContext.HttpContext.Request.Headers, out var etag))
-                bindingContext.Result = ModelBindingResult.Success(etag);
+        private readonly string _parameterName;
+        private readonly string _headerName;
+        private readonly IETagValidator _validator;
 
-            return Task.CompletedTask;
+        public EtagModelBinder(string parameterName, string headerName, IETagValidator validator)
+        {
+            _parameterName = parameterName;
+            _headerName = headerName;
+            _validator = validator;
         }
 
-        private static bool TryGetEtag(IHeaderDictionary headers, out string etag)
+        public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            var found = headers.TryGetValue(HeaderNames.IfMatch, out var values) ||
-                        headers.TryGetValue(HeaderNames.IfNoneMatch, out values);
+            var headers = bindingContext.HttpContext.Request.Headers;
 
-            if (found)
+            if (headers.TryGetValue(_headerName, out var eTag))
             {
-                etag = values.ToString();
-                return true;
+                if (_validator.IsValidETag(eTag))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(eTag);
+                }
+                else
+                {
+                    bindingContext.ModelState.AddModelError(_parameterName, $"Header {_headerName} contains invalid ETag.");
+                    bindingContext.Result = ModelBindingResult.Failed();
+                }
             }
 
-            etag = null;
-            return false;
+            return Task.CompletedTask;
         }
     }
 }

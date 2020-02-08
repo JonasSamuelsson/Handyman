@@ -5,47 +5,37 @@ using System.Text.RegularExpressions;
 
 namespace Handyman.AspNetCore
 {
-    public static class ETagConverter
+    public class ETagConverter : IETagConverter
     {
         private const NumberStyles NumberStyles = System.Globalization.NumberStyles.AllowHexSpecifier;
         private static readonly Regex Regex = new Regex(@"^W/""[0-9a-fA-F]+""$", RegexOptions.Compiled);
 
-        public static string FromSqlServerRowVersion(byte[] bytes)
+        public string FromByteArray(byte[] bytes)
         {
-            if (bytes == null)
-                throw new ArgumentNullException();
+            if (bytes == null) throw new ArgumentNullException();
+            if (bytes.Length == 0) throw new ArgumentException();
 
-            var strings = bytes
-                .SkipWhile(x => x == 0)
-                .Select(x => x.ToString("x2"));
+            var strings = bytes.Select(x => x.ToString("x2"));
 
             return $"W/\"{string.Join("", strings)}\"";
         }
 
-        public static byte[] ToSqlServerRowVersion(string eTag)
+        public byte[] ToByteArray(string eTag)
         {
-            if (eTag == null)
-                throw new ArgumentNullException();
+            if (eTag == null) throw new ArgumentNullException();
+            if (eTag.Length % 2 != 0 || eTag.Length > 100 || !Regex.IsMatch(eTag)) throw new FormatException();
 
-            if (eTag.Length % 2 != 0 || eTag.Length > 20 || !Regex.IsMatch(eTag))
-                throw new FormatException();
+            var count = (eTag.Length - 4) / 2;
+            var bytes = new byte[count];
 
-            var bytes = new byte[8];
-
-            var byteIndex = 8 - ((eTag.Length - 4) / 2);
-            var stringIndex = 3;
-
-            while (byteIndex < 8)
+            for (var i = 0; i < count; i++)
             {
-                var s = eTag.Substring(stringIndex, 2);
+                var s = eTag.Substring(3 + (i * 2), 2);
 
-                if (!byte.TryParse(s, NumberStyles, null, out var @byte))
+                if (!byte.TryParse(s, NumberStyles, NumberFormatInfo.InvariantInfo, out var @byte))
                     throw new FormatException();
 
-                bytes[byteIndex] = @byte;
-
-                byteIndex += 1;
-                stringIndex += 2;
+                bytes[i] = @byte;
             }
 
             return bytes;

@@ -1,10 +1,24 @@
 ﻿namespace Handyman.AspNetCore
 {
-    public class ETagComparer
+    public class ETagComparer : IETagComparer
     {
-        public static readonly ETagComparer Instance = new ETagComparer();
+        private readonly IETagConverter _converter;
 
-        private ETagComparer() { }
+        public ETagComparer(IETagConverter converter)
+        {
+            _converter = converter;
+        }
+
+        public bool Equals(string eTag, byte[] bytes)
+        {
+            if (eTag == "*")
+                return true;
+
+            if (string.IsNullOrWhiteSpace(eTag))
+                return false;
+
+            return eTag == _converter.FromByteArray(bytes);
+        }
 
         public bool Equals(string eTag1, string eTag2)
         {
@@ -15,17 +29,6 @@
                 return false;
 
             return eTag1 == eTag2;
-        }
-
-        public bool EqualsSqlServerRowVersion(string eTag, byte[] rowVersion)
-        {
-            if (eTag == "*")
-                return true;
-
-            if (string.IsNullOrWhiteSpace(eTag))
-                return false;
-
-            return eTag == ETagConverter.FromSqlServerRowVersion(rowVersion);
         }
     }
 }
