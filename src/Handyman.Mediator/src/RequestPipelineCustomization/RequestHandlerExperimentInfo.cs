@@ -6,5 +6,6 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     {
         public Type BaselineHandlerType { get; internal set; }
         public string ExperimentName { get; internal set; }
+        public string[] Tags { get; set; }
     }
 }

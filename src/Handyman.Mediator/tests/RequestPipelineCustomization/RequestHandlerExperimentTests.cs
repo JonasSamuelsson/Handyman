@@ -51,6 +51,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             toggle.ExperimentInfo.BaselineHandlerType.ShouldBe(typeof(BaselineHandler));
             toggle.ExperimentInfo.ExperimentName.ShouldBe("test");
+            toggle.ExperimentInfo.Tags.ShouldBe(new[] { "1", "2" });
         }
 
         [Fact]
@@ -103,7 +104,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             observer.Executed.ShouldBeFalse();
         }
 
-        [RequestHandlerExperiment(typeof(BaselineHandler), ExperimentName = "test")]
+        [RequestHandlerExperiment(typeof(BaselineHandler), ExperimentName = "test", Tags = new[] { "1", "2" })]
         private class Request : IRequest<string> { }
 
         private class BaselineHandler : BaseHandler { }
@@ -135,8 +136,8 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
                 where TRequest : IRequest<TResponse>
             {
                 Request = (Request)(object)experiment.Request;
-                Baseline = (RequestHandlerExperimentExecution<Request, string>) (object)experiment.BaselineExecution;
-                Experiments = experiment.ExperimentalExecutions.Cast<RequestHandlerExperimentExecution<Request,string>>().ToList();
+                Baseline = (RequestHandlerExperimentExecution<Request, string>)(object)experiment.BaselineExecution;
+                Experiments = experiment.ExperimentalExecutions.Cast<RequestHandlerExperimentExecution<Request, string>>().ToList();
 
                 return Task.CompletedTask;
             }
