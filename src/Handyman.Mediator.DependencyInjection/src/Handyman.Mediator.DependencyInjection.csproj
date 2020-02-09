@@ -11,6 +11,10 @@
 	<ItemGroup>
 		<PackageReference Include="Handyman.DependencyInjection" Version="2.0.0-beta.2001271446" />
 		<PackageReference Include="Handyman.Mediator" Version="8.0.0-beta.2001271447" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 </Project>
