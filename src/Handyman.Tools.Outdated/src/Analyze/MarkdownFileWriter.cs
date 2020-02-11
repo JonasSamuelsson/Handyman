@@ -101,7 +101,7 @@ namespace Handyman.Tools.Outdated.Analyze
                 {
                     builder.AppendLine("# Up to date");
 
-                    foreach (var project in outdated)
+                    foreach (var project in upToDate)
                     {
                         AppendProjectInfo(builder, project);
                     }
