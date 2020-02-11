@@ -196,7 +196,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         {
             public IEnumerable<Exception> Exceptions { get; set; }
 
-            public Task Handle(IEnumerable<Exception> exceptions)
+            public Task Handle(IEnumerable<Exception> exceptions, CancellationToken cancellationToken)
             {
                 Exceptions = exceptions;
                 return Task.CompletedTask;

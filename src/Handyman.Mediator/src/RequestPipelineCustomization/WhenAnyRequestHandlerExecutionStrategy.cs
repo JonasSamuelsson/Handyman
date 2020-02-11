@@ -45,7 +45,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
                     if (exceptionHandler != null)
                     {
-                        await exceptionHandler.Handle(exceptions).ConfigureAwait(false);
+                        await exceptionHandler.Handle(exceptions, context.CancellationToken).ConfigureAwait(false);
                     }
                 }
 
