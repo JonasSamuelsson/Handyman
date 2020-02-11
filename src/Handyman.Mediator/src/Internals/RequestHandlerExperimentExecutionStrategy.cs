@@ -32,7 +32,7 @@ namespace Handyman.Mediator.Internals
             var request = context.Request;
             var cancellationToken = context.CancellationToken;
 
-            if (!await toggle.IsEnabled<TRequest, TResponse>(_experimentInfo, cancellationToken).ConfigureAwait(false))
+            if (!await toggle.IsEnabled<TRequest, TResponse>(_experimentInfo, context).ConfigureAwait(false))
             {
                 return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait(false);
             }

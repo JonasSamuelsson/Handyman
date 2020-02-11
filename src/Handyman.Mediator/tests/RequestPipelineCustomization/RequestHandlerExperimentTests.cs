@@ -149,7 +149,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             public RequestHandlerExperimentInfo ExperimentInfo { get; set; }
 
             public Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentInfo experimentInfo,
-                CancellationToken cancellationToken)
+                RequestPipelineContext<TRequest> context)
                 where TRequest : IRequest<TResponse>
             {
                 ExperimentInfo = experimentInfo;
