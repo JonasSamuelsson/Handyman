@@ -46,6 +46,7 @@ namespace Handyman.Mediator.Internals
             var experiment = new RequestHandlerExperiment<TRequest, TResponse>
             {
                 BaselineExecution = baselineExecution,
+                CancellationToken = cancellationToken,
                 ExperimentalExecutions = experimentExecutions,
                 Request = request
             };
