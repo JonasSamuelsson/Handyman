@@ -8,7 +8,6 @@ namespace Handyman.AspNetCore.ApiVersioning
         public static IServiceCollection AddApiVersioning(this IServiceCollection services)
         {
             services.TryAddSingleton<IApiVersionReader, QueryStringApiVersionReader>();
-            services.TryAddSingleton<IApiVersionValidator, SemanticVersionValidator>();
 
             return services;
         }
