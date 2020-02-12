@@ -6,7 +6,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 {
     // ReSharper disable once RedundantAttributeUsageProperty
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-    public sealed class ApiVersionAttribute : Attribute, IFilterFactory
+    public sealed class ApiVersionAttribute : Attribute, IFilterMetadata
     {
         public ApiVersionAttribute(string version)
             : this(new[] { version })
@@ -29,12 +29,5 @@ namespace Handyman.AspNetCore.ApiVersioning
         public bool Optional { get; set; }
 
         internal StringValues Versions { get; }
-
-        public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
-        {
-            return new ApiVersionParameterBinderFilter();
-        }
-
-        bool IFilterFactory.IsReusable { get; } = true;
     }
 }

@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Handyman.AspNetCore.ApiVersioning.Abstractions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Collections.Concurrent;
 
-namespace Handyman.AspNetCore.ApiVersioning
+namespace Handyman.AspNetCore.ApiVersioning.Filters
 {
     internal class ApiVersionValidatorFilter : IResourceFilter
     {
-        private readonly ApiVersionDescriptorProvider _apiVersionDescriptorProvider;
         private readonly IApiVersionReader _apiVersionReader;
         private readonly IApiVersionParser _apiVersionParser;
-        private readonly ConcurrentDictionary<string, IApiVersion> _apiVersionCache;
 
-        public ApiVersionValidatorFilter(ApiVersionDescriptorProvider apiVersionDescriptorProvider, IApiVersionReader apiVersionReader, IApiVersionParser apiVersionParser)
+        public ApiVersionValidatorFilter(IApiVersionReader apiVersionReader, IApiVersionParser apiVersionParser)
         {
-            _apiVersionDescriptorProvider = apiVersionDescriptorProvider;
             _apiVersionReader = apiVersionReader;
             _apiVersionParser = apiVersionParser;
-            _apiVersionCache = new ConcurrentDictionary<string, IApiVersion>();
         }
 
         public void OnResourceExecuted(ResourceExecutedContext context)
@@ -26,18 +23,15 @@ namespace Handyman.AspNetCore.ApiVersioning
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            var descriptor = _apiVersionDescriptorProvider.GetApiVersionDescriptor(context.ActionDescriptor);
-
-            if (descriptor.Versions.Length == 0)
-                return;
+            var descriptor = context.ActionDescriptor.GetProperty<ApiVersionDescriptor>();
 
             if (!_apiVersionReader.TryReadApiVersion(context.HttpContext.Request, out var rawApiVersion))
             {
-                if (descriptor.Optional)
+                if (descriptor.IsOptional)
                 {
                     var defaultVersion = descriptor.DefaultVersion;
 
-                    if (defaultVersion != null)
+                    if (!string.IsNullOrWhiteSpace(defaultVersion))
                     {
                         AddApiVersionFeature(context.HttpContext, defaultVersion);
                     }
@@ -49,31 +43,30 @@ namespace Handyman.AspNetCore.ApiVersioning
                 return;
             }
 
-            if (!_apiVersionCache.TryGetValue(rawApiVersion, out var apiVersion) && !_apiVersionParser.TryParse(rawApiVersion, out apiVersion))
+            if (!_apiVersionParser.TryParse(rawApiVersion, out var apiVersion))
             {
                 SetBadRequestResponse(context, descriptor.ErrorMessage);
                 return;
             }
 
-            foreach (var descriptorVersion in descriptor.Versions)
+            foreach (var version in descriptor.Versions)
             {
-                if (!descriptorVersion.IsMatch(apiVersion))
+                if (!version.IsMatch(apiVersion))
                     continue;
 
-                _apiVersionCache.TryAdd(rawApiVersion, apiVersion);
-                AddApiVersionFeature(context.HttpContext, descriptorVersion.Text);
+                AddApiVersionFeature(context.HttpContext, version.Text);
                 return;
             }
 
             SetBadRequestResponse(context, descriptor.ErrorMessage);
         }
 
-        private void AddApiVersionFeature(HttpContext httpContext, string apiVersion)
+        private static void AddApiVersionFeature(HttpContext httpContext, string apiVersion)
         {
             httpContext.Features.Set(new ApiVersionFeature { Version = apiVersion });
         }
 
-        private void SetBadRequestResponse(ResourceExecutingContext context, string errorMessage)
+        private static void SetBadRequestResponse(ResourceExecutingContext context, string errorMessage)
         {
             var problemDetails = new ProblemDetails
             {
