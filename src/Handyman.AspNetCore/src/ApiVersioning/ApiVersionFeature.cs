@@ -2,6 +2,6 @@
 {
     internal class ApiVersionFeature
     {
-        internal string Version { get; set; }
+        internal string MatchedVersion { get; set; }
     }
 }

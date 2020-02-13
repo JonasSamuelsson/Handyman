@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System;
 
 namespace Handyman.AspNetCore.ApiVersioning.Filters
 {
-    internal class ApiVersionParameterBinderFilter : ActionFilterAttribute
+    internal class ApiVersionParameterBindingFilter : ActionFilterAttribute
     {
         private readonly string _parameterName;
 
-        public ApiVersionParameterBinderFilter(string parameterName)
+        public ApiVersionParameterBindingFilter(string parameterName)
         {
             _parameterName = parameterName;
         }
@@ -23,14 +22,9 @@ namespace Handyman.AspNetCore.ApiVersioning.Filters
             var feature = context.HttpContext.Features.Get<ApiVersionFeature>();
 
             if (feature == null)
-                throw new InvalidOperationException();
-
-            var version = feature.Version;
-
-            if (string.IsNullOrWhiteSpace(version))
                 return;
 
-            context.ActionArguments[_parameterName] = version;
+            context.ActionArguments[_parameterName] = feature.MatchedVersion;
         }
     }
 }

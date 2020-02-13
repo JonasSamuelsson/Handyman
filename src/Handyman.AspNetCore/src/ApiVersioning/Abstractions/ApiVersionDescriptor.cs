@@ -4,7 +4,6 @@
     {
         public IApiVersion[] Versions { get; set; }
         public bool IsOptional { get; set; }
-        public string DefaultVersion { get; set; }
-        public string ErrorMessage { get; set; }
+        public IApiVersion DefaultVersion { get; set; }
     }
 }

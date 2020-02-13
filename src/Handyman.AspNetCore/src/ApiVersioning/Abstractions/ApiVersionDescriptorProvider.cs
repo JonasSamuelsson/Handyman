@@ -15,7 +15,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
             _apiVersionParser = apiVersionParser;
         }
 
-        public int Order { get; }
+        public int Order { get; } = 0;
 
         public void OnProvidersExecuting(ActionDescriptorProviderContext context)
         {
@@ -27,16 +27,13 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
                     continue;
 
                 var attribute = (ApiVersionAttribute)filterDescriptor.Filter;
-
-                if (attribute.Versions.Count == 0)
-                    throw new InvalidOperationException($"{action.DisplayName} does not have any declared api versions.");
-
-                var apiVersionDescriptor = CreateApiVersionDescriptor(attribute);
-
-                action.SetProperty(apiVersionDescriptor);
+                var apiVersionDescriptor = GetApiVersionDescriptor(action, attribute);
 
 #if NETSTANDARD2_0
                 action.FilterDescriptors.Add(new FilterDescriptor(new ApiVersionValidatorFilterFactory(), filterDescriptor.Scope));
+                action.SetProperty(apiVersionDescriptor);
+#else
+                action.EndpointMetadata.Add(apiVersionDescriptor);
 #endif
 
                 foreach (var parameterDescriptor in action.Parameters)
@@ -44,33 +41,51 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
                     if (!parameterDescriptor.Name.Equals("apiVersion", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    var apiVersionParameterBinderFilter = new ApiVersionParameterBinderFilter(parameterDescriptor.Name);
+                    var apiVersionParameterBinderFilter = new ApiVersionParameterBindingFilter(parameterDescriptor.Name);
                     action.FilterDescriptors.Add(new FilterDescriptor(apiVersionParameterBinderFilter, filterDescriptor.Scope));
                 }
             }
         }
 
-        private ApiVersionDescriptor CreateApiVersionDescriptor(ApiVersionAttribute attribute)
+        private ApiVersionDescriptor GetApiVersionDescriptor(ActionDescriptor action, ApiVersionAttribute apiVersionAttribute)
         {
-            var versions = attribute.Versions
-                .Select(ParseApiVersion)
+            if (apiVersionAttribute.Versions.Count == 0)
+                throw new InvalidOperationException($"{action.DisplayName} : does not have any supported versions.");
+
+            var defaultApiVersion = string.IsNullOrWhiteSpace(apiVersionAttribute.DefaultVersion)
+                ? ParseApiVersion(action, apiVersionAttribute.DefaultVersion)
+                : null;
+
+            var apiVersions = apiVersionAttribute.Versions
+                .Select(x => ParseApiVersion(action, x))
                 .OrderBy(x => x)
                 .ToArray();
 
+            if (defaultApiVersion != null)
+            {
+                foreach (var version in apiVersions)
+                {
+                    if (defaultApiVersion.Text == version.Text)
+                        continue;
+
+                    throw new InvalidOperationException($"{action.DisplayName} : default version does not match any of the supported versions.");
+                }
+            }
+
             return new ApiVersionDescriptor
             {
-                DefaultVersion = attribute.DefaultVersion,
-                ErrorMessage = $"Invalid api version, supported versions are {string.Join(", ", versions.Select(x => x.Text))}.",
-                IsOptional = attribute.Optional,
-                Versions = versions
+                DefaultVersion = defaultApiVersion,
+                IsOptional = apiVersionAttribute.Optional,
+                Versions = apiVersions
             };
         }
 
-        private IApiVersion ParseApiVersion(string s)
+        private IApiVersion ParseApiVersion(ActionDescriptor action, string s)
         {
-            return _apiVersionParser.TryParse(s, out var version)
-                ? version
-                : throw new FormatException("Invalid api version format.");
+            if (_apiVersionParser.TryParse(s, out var apiVersion))
+                return apiVersion;
+
+            throw new FormatException($"{action.DisplayName} : version '{s}' has an invalid format.");
         }
 
         public void OnProvidersExecuted(ActionDescriptorProviderContext context)
