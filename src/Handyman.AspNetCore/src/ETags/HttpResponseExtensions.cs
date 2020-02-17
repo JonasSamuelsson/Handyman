@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
-namespace Handyman.AspNetCore
+namespace Handyman.AspNetCore.ETags
 {
     public static class HttpResponseExtensions
     {

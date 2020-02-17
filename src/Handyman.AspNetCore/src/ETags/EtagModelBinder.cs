@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Handyman.AspNetCore.EtagParameterBinding
+namespace Handyman.AspNetCore.ETags
 {
-    internal class EtagModelBinder : IModelBinder
+    internal class ETagModelBinder : IModelBinder
     {
-        private readonly string _parameterName;
-        private readonly string _headerName;
         private readonly IETagValidator _validator;
 
-        public EtagModelBinder(string parameterName, string headerName, IETagValidator validator)
+        public ETagModelBinder(IETagValidator validator)
         {
-            _parameterName = parameterName;
-            _headerName = headerName;
             _validator = validator;
         }
 
@@ -20,15 +16,19 @@ namespace Handyman.AspNetCore.EtagParameterBinding
         {
             var headers = bindingContext.HttpContext.Request.Headers;
 
-            if (headers.TryGetValue(_headerName, out var eTag))
+            if (headers.TryGetValue(bindingContext.BinderModelName, out var values))
             {
+                var eTag = values.ToString();
+
                 if (_validator.IsValidETag(eTag))
                 {
                     bindingContext.Result = ModelBindingResult.Success(eTag);
                 }
                 else
                 {
-                    bindingContext.ModelState.AddModelError(_parameterName, $"Header {_headerName} contains invalid ETag.");
+                    var key = bindingContext.ModelName;
+                    var error = "Invalid ETag format.";
+                    bindingContext.ModelState.AddModelError(key, error);
                     bindingContext.Result = ModelBindingResult.Failed();
                 }
             }

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Handyman.AspNetCore
+namespace Handyman.AspNetCore.ETags
 {
     public class ETagConverter : IETagConverter
     {

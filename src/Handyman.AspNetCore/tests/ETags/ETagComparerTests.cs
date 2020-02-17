@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Handyman.AspNetCore.ETags;
+using Shouldly;
 using Xunit;
 
 namespace Handyman.AspNetCore.Tests

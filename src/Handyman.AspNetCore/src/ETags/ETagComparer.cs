@@ -1,4 +1,4 @@
-﻿namespace Handyman.AspNetCore
+﻿namespace Handyman.AspNetCore.ETags
 {
     public class ETagComparer : IETagComparer
     {
