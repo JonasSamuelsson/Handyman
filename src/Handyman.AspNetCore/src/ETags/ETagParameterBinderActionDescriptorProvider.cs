@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Net.Http.Headers;
+using System;
+using System.Collections.Generic;
 
 namespace Handyman.AspNetCore.ETags
 {
