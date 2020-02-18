@@ -1,6 +1,6 @@
 ﻿using Handyman.AspNetCore.ApiVersioning.Abstractions;
 using Handyman.AspNetCore.ApiVersioning.Filters;
-using Handyman.AspNetCore.ApiVersioning.SemVer;
+using Handyman.AspNetCore.ApiVersioning.Schemes.MajorMinorPreRelease;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +13,7 @@ namespace Handyman.AspNetCore.ApiVersioning
         public static IServiceCollection AddApiVersioning(this IServiceCollection services)
         {
             services.TryAddSingleton<IActionDescriptorProvider, ApiVersionDescriptorProvider>();
-            services.TryAddSingleton<IApiVersionParser, SemVerApiVersionParser>();
+            services.TryAddSingleton<IApiVersionParser, MajorMinorPreReleaseApiVersionParser>();
             services.TryAddSingleton<IApiVersionReader, QueryStringApiVersionReader>();
 
 #if NETSTANDARD2_0
