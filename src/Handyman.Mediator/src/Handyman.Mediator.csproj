@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
+   <PropertyGroup>
+      <TargetFramework>netstandard2.0</TargetFramework>
+      <LangVersion>latest</LangVersion>
       <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	</PropertyGroup>
+   </PropertyGroup>
 
-	<PropertyGroup>
-		<PackageId>Handyman.Mediator</PackageId>
-		<Version>8.0.0-beta.2002101223</Version>
-		<Authors>Jonas Samuelsson</Authors>
-		<Company />
-		<Product>Handyman</Product>
-		<Description>Mediator implementation for loosely coupled in-process communication.</Description>
-		<PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
-		<PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
-		<PackageTags>mediator request response message command query event notification</PackageTags>
-	</PropertyGroup>
+   <PropertyGroup>
+      <PackageId>Handyman.Mediator</PackageId>
+      <Version>8.0.0</Version>
+      <Authors>Jonas Samuelsson</Authors>
+      <Company />
+      <Product>Handyman</Product>
+      <Description>Mediator implementation for loosely coupled in-process communication.</Description>
+      <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
+      <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
+      <PackageTags>mediator request response message command query event notification</PackageTags>
+   </PropertyGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	</ItemGroup>
+   <ItemGroup>
+      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+         <PrivateAssets>all</PrivateAssets>
+         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+   </ItemGroup>
 
 </Project>
