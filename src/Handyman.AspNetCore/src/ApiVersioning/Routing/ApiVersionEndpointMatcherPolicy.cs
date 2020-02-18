@@ -1,4 +1,4 @@
-﻿#if !NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
 using Handyman.AspNetCore.ApiVersioning.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.AspNetCore.ApiVersioning.Routing
 {
-    internal class ApiVersionEndpointMatcherPolicy : MatcherPolicy, IEndpointComparerPolicy, IEndpointSelectorPolicy, IComparer<Endpoint>
+    internal class ApiVersionEndpointMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
     {
         private static readonly ActionDescriptor EmptyActionDescriptor = new ActionDescriptor();
         private static readonly RouteData EmptyRouteData = new RouteData();
@@ -28,8 +28,6 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
         }
 
         public override int Order { get; } = 0;
-
-        public IComparer<Endpoint> Comparer => this;
 
         public bool AppliesToEndpoints(IReadOnlyList<Endpoint> endpoints)
         {
@@ -146,7 +144,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
             }
 
             var detail = versions.Count == 0
-                ? "Invalid api version"
+                ? "Invalid api version" // this should never happen but just in case...
                 : versions.Count == 1
                     ? $"Invalid api version, supported version is {versions[0]}"
                     : $"Invalid api version, supported versions are {string.Join(", ", versions)}";
@@ -163,23 +161,6 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
         private static void AddApiVersionFeature(HttpContext httpContext, string version)
         {
             httpContext.Features.Set(new ApiVersionFeature { MatchedVersion = version });
-        }
-
-        public int Compare(Endpoint x, Endpoint y)
-        {
-            var xDescriptor = x.Metadata.GetMetadata<ApiVersionDescriptor>();
-            var yDescriptor = y.Metadata.GetMetadata<ApiVersionDescriptor>();
-
-            if (xDescriptor == null && yDescriptor == null)
-                return 0;
-
-            if ((xDescriptor == null) || (yDescriptor == null))
-                return xDescriptor == null ? -1 : 1;
-
-            var xVersion = xDescriptor.Versions[0];
-            var yVersion = yDescriptor.Versions[0];
-
-            return xVersion.CompareTo(yVersion);
         }
     }
 }

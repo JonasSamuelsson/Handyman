@@ -4,7 +4,6 @@
     {
         string Text { get; }
 
-        int CompareTo(IApiVersion other);
         bool IsMatch(IApiVersion other);
     }
 }
