@@ -15,6 +15,8 @@ namespace Handyman.Tools.Outdated
     {
         public static int Main(string[] args)
         {
+            Console.WriteLine("handyman-outdated started executing");
+
             var services = new ServiceCollection()
                 .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IFileWriter, MarkdownFileWriter>()
@@ -43,6 +45,10 @@ namespace Handyman.Tools.Outdated
                 console.ResetColor();
 
                 return 1;
+            }
+            finally
+            {
+                Console.WriteLine("handyman-outdated finished executing");
             }
         }
 
