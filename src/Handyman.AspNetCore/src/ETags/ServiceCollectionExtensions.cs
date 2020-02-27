@@ -1,6 +1,8 @@
 ﻿using Handyman.AspNetCore.ETags.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace Handyman.AspNetCore.ETags
 {
@@ -8,6 +10,10 @@ namespace Handyman.AspNetCore.ETags
     {
         public static IServiceCollection AddETags(this IServiceCollection services)
         {
+            if (services.Any(x => x.ServiceType == typeof(Sentinel)))
+                throw new InvalidOperationException("ETags has already been added.");
+
+            services.AddTransient<Sentinel>();
             services.AddSingleton<IETagComparer, ETagComparer>();
             services.AddSingleton<IETagConverter, ETagConverter>();
             services.AddSingleton<IETagValidator, ETagValidator>();
@@ -17,5 +23,7 @@ namespace Handyman.AspNetCore.ETags
 
             return services;
         }
+
+        private class Sentinel { }
     }
 }
