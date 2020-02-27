@@ -25,12 +25,7 @@ namespace Handyman.AspNetCore.ApiVersioning
             services.TryAddSingleton<IActionDescriptorProvider, ApiVersionDescriptorProvider>();
             services.TryAddSingleton(typeof(IApiVersionParser), options.ApiVersionParserType);
             services.TryAddSingleton<IApiVersionReader, QueryStringApiVersionReader>();
-
-#if NETCOREAPP3_0
-            services.TryAddSingleton<MatcherPolicy, Routing.ApiVersionEndpointMatcherPolicy>();
-#else
-            services.TryAddSingleton<ApiVersionValidatorFilter>();
-#endif
+            services.AddSingleton<MatcherPolicy, ApiVersionEndpointMatcherPolicy>();
 
             return services;
         }

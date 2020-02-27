@@ -28,13 +28,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
 
                 var attribute = (ApiVersionAttribute)filterDescriptor.Filter;
                 var apiVersionDescriptor = GetApiVersionDescriptor(action, attribute);
-
-#if NETSTANDARD2_0
-                action.FilterDescriptors.Add(new FilterDescriptor(new ApiVersionValidatorFilterFactory(), filterDescriptor.Scope));
-                action.SetProperty(apiVersionDescriptor);
-#else
                 action.EndpointMetadata.Add(apiVersionDescriptor);
-#endif
 
                 foreach (var parameterDescriptor in action.Parameters)
                 {

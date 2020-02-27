@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_0
-using Handyman.AspNetCore.ApiVersioning.Abstractions;
+﻿using Handyman.AspNetCore.ApiVersioning.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -164,4 +163,3 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
         }
     }
 }
-#endif

@@ -12,12 +12,7 @@ namespace Handyman.AspNetCore.ETags
             services.AddSingleton<IETagValidator, ETagValidator>();
             services.AddSingleton<ETagModelBinder>();
             services.AddSingleton<IActionDescriptorProvider, ETagParameterBinderActionDescriptorProvider>();
-
-#if NETSTANDARD2_0
-            services.AddMvcCore(options => options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider()));
-#else
             services.AddControllers(options => options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider()));
-#endif
 
             return services;
         }
