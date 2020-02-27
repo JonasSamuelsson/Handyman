@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using System.Linq;
 
 namespace Handyman.AspNetCore.ApiVersioning
 {
@@ -19,6 +20,11 @@ namespace Handyman.AspNetCore.ApiVersioning
 
         public static IServiceCollection AddApiVersioning(this IServiceCollection services, Action<ApiVersioningOptions> configureAction)
         {
+            if (services.Any(x => x.ServiceType == typeof(Sentinel)))
+                throw new InvalidOperationException("Api versioning has already been added.");
+
+            services.AddTransient<Sentinel>();
+
             var options = new ApiVersioningOptions { ApiVersionParserType = typeof(MajorMinorPreReleaseApiVersionParser) };
 
             configureAction.Invoke(options);
@@ -32,5 +38,7 @@ namespace Handyman.AspNetCore.ApiVersioning
 
             return services;
         }
+
+        private class Sentinel { }
     }
 }
