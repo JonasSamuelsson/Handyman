@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Handyman.AspNetCore.ETags
+namespace Handyman.AspNetCore.ETags.ModelBinding
 {
     internal class ETagModelBinder : IModelBinder
     {

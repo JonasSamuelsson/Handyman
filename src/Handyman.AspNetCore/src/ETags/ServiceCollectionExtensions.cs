@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Handyman.AspNetCore.ETags.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Handyman.AspNetCore.ETags
@@ -10,8 +11,8 @@ namespace Handyman.AspNetCore.ETags
             services.AddSingleton<IETagComparer, ETagComparer>();
             services.AddSingleton<IETagConverter, ETagConverter>();
             services.AddSingleton<IETagValidator, ETagValidator>();
+            services.AddSingleton<IActionDescriptorProvider, ETagActionDescriptorProvider>();
             services.AddSingleton<ETagModelBinder>();
-            services.AddSingleton<IActionDescriptorProvider, ETagParameterBinderActionDescriptorProvider>();
             services.AddControllers(options => options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider()));
 
             return services;
