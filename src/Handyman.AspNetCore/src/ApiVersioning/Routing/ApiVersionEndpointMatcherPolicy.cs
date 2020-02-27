@@ -81,6 +81,10 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
                             AddApiVersionFeature(httpContext, descriptor.DefaultVersion.Text);
                         }
                     }
+                    else
+                    {
+                        candidates.SetValidity(i, false);
+                    }
 
                     continue;
                 }
@@ -91,7 +95,10 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
                 foreach (var version in descriptor.Versions)
                 {
                     if (!version.IsMatch(requestedApiVersion))
+                    {
+                        candidates.SetValidity(i, false);
                         continue;
+                    }
 
                     endpointFound = true;
                     candidates.SetValidity(i, true);
