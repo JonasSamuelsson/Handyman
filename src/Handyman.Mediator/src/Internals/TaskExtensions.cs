@@ -7,12 +7,12 @@ namespace Handyman.Mediator.Internals
     {
         internal static ConfiguredTaskAwaitable ConfigureAwait(this Task task)
         {
-            return task.ConfigureAwait(AsyncAwaitOptions.ContinueOnCapturedContext);
+            return task.ConfigureAwait(MediatorAwaiterOptions.ContinueOnCapturedContext);
         }
 
         internal static ConfiguredTaskAwaitable<T> ConfigureAwait<T>(this Task<T> task)
         {
-            return task.ConfigureAwait(AsyncAwaitOptions.ContinueOnCapturedContext);
+            return task.ConfigureAwait(MediatorAwaiterOptions.ContinueOnCapturedContext);
         }
     }
 }
