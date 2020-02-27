@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Handyman.AspNetCore.ETags
 {
-    public class ETagConverter : IETagConverter
+    internal class ETagConverter : IETagConverter
     {
         private const NumberStyles NumberStyles = System.Globalization.NumberStyles.AllowHexSpecifier;
         private static readonly Regex Regex = new Regex(@"^W/""[0-9a-fA-F]+""$", RegexOptions.Compiled);
