@@ -22,7 +22,7 @@ namespace Handyman.Mediator.Internals
         {
             if (handlers.Count <= 1)
             {
-                return await DefaultRequestHandlerExecutionStrategy.Instance.Execute(handlers, context).ConfigureAwait(false);
+                return await DefaultRequestHandlerExecutionStrategy.Instance.Execute(handlers, context).ConfigureAwait();
             }
 
             var baselineHandler = GetBaselineHandler(handlers);
@@ -32,14 +32,14 @@ namespace Handyman.Mediator.Internals
             var request = context.Request;
             var cancellationToken = context.CancellationToken;
 
-            if (!await toggle.IsEnabled<TRequest, TResponse>(_experimentInfo, context).ConfigureAwait(false))
+            if (!await toggle.IsEnabled<TRequest, TResponse>(_experimentInfo, context).ConfigureAwait())
             {
-                return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait(false);
+                return await baselineHandler.Handle(request, cancellationToken).ConfigureAwait();
             }
 
             var observer = context.ServiceProvider.GetRequiredService<IRequestHandlerExperimentObserver>();
             var tasks = handlers.Select(handler => Execute(handler, request, cancellationToken)).ToListOptimized();
-            var executions = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var executions = await Task.WhenAll(tasks).ConfigureAwait();
             var baselineExecution = executions.Single(x => x.Handler == baselineHandler);
             var experimentExecutions = executions.Where(x => x != baselineExecution).ToList();
 
@@ -51,9 +51,9 @@ namespace Handyman.Mediator.Internals
                 Request = request
             };
 
-            await observer.Observe(experiment).ConfigureAwait(false);
+            await observer.Observe(experiment).ConfigureAwait();
 
-            return await baselineExecution.Task.ConfigureAwait(false);
+            return await baselineExecution.Task.ConfigureAwait();
         }
 
         private IRequestHandler<TRequest, TResponse> GetBaselineHandler<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers)

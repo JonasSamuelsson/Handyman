@@ -14,7 +14,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         {
             if (handlers.Count <= 1)
             {
-                return await DefaultRequestHandlerExecutionStrategy.Instance.Execute(handlers, context).ConfigureAwait(false);
+                return await DefaultRequestHandlerExecutionStrategy.Instance.Execute(handlers, context).ConfigureAwait();
             }
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken);
@@ -25,7 +25,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             {
                 context.CancellationToken.ThrowIfCancellationRequested();
 
-                var task = await Task.WhenAny(tasks).ConfigureAwait(false);
+                var task = await Task.WhenAny(tasks).ConfigureAwait();
 
                 if (task.Status != TaskStatus.RanToCompletion)
                 {
@@ -45,7 +45,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
                     if (exceptionHandler != null)
                     {
-                        await exceptionHandler.Handle(exceptions, context.CancellationToken).ConfigureAwait(false);
+                        await exceptionHandler.Handle(exceptions, context.CancellationToken).ConfigureAwait();
                     }
                 }
 

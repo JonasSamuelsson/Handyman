@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.Mediator.Internals;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
@@ -16,7 +17,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             where TRequest : IRequest<TResponse>
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
-            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleInfo, context).ConfigureAwait(false);
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleInfo, context).ConfigureAwait();
 
             if (!enabled)
             {

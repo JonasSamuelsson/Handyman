@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Handyman.Mediator.Internals;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace Handyman.Mediator
     {
         async Task<Void> IRequestHandler<TRequest, Void>.Handle(TRequest request, CancellationToken cancellationToken)
         {
-            await HandleAsync(request, cancellationToken).ConfigureAwait(false);
+            await HandleAsync(request, cancellationToken).ConfigureAwait();
             return Void.Instance;
         }
 

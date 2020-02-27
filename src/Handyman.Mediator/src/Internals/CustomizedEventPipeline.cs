@@ -16,17 +16,17 @@ namespace Handyman.Mediator.Internals
             foreach (var filterSelector in FilterSelectors)
             {
                 context.CancellationToken.ThrowIfCancellationRequested();
-                await filterSelector.SelectFilters(filters, context).ConfigureAwait(false);
+                await filterSelector.SelectFilters(filters, context).ConfigureAwait();
             }
 
             foreach (var handlerSelector in HandlerSelectors)
             {
                 context.CancellationToken.ThrowIfCancellationRequested();
-                await handlerSelector.SelectHandlers(handlers, context).ConfigureAwait(false);
+                await handlerSelector.SelectHandlers(handlers, context).ConfigureAwait();
             }
 
             context.CancellationToken.ThrowIfCancellationRequested();
-            await Execute(filters, handlers, HandlerExecutionStrategy, context).ConfigureAwait(false);
+            await Execute(filters, handlers, HandlerExecutionStrategy, context).ConfigureAwait();
         }
     }
 }
