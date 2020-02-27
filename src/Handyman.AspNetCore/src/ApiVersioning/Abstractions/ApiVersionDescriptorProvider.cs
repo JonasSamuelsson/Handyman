@@ -1,6 +1,4 @@
-﻿using Handyman.AspNetCore.ApiVersioning.Filters;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using System;
 using System.Linq;
 
@@ -29,15 +27,6 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
                 var attribute = (ApiVersionAttribute)filterDescriptor.Filter;
                 var apiVersionDescriptor = GetApiVersionDescriptor(action, attribute);
                 action.EndpointMetadata.Add(apiVersionDescriptor);
-
-                foreach (var parameterDescriptor in action.Parameters)
-                {
-                    if (!parameterDescriptor.Name.Equals("apiVersion", StringComparison.OrdinalIgnoreCase))
-                        continue;
-
-                    var apiVersionParameterBinderFilter = new ApiVersionParameterBindingFilter(parameterDescriptor.Name);
-                    action.FilterDescriptors.Add(new FilterDescriptor(apiVersionParameterBinderFilter, filterDescriptor.Scope));
-                }
             }
         }
 
@@ -46,22 +35,18 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
             if (apiVersionAttribute.Versions.Count == 0)
                 throw new InvalidOperationException($"{action.DisplayName} : does not have any supported versions.");
 
-            var defaultApiVersion = string.IsNullOrWhiteSpace(apiVersionAttribute.DefaultVersion)
-                ? ParseApiVersion(action, apiVersionAttribute.DefaultVersion)
+            var defaultApiVersion = !string.IsNullOrWhiteSpace(apiVersionAttribute.DefaultVersion)
+                ? ParseApiVersion(apiVersionAttribute.DefaultVersion, action)
                 : null;
 
             var apiVersions = apiVersionAttribute.Versions
-                .Select(x => ParseApiVersion(action, x))
-                .OrderBy(x => x)
+                .Select(x => ParseApiVersion(x, action))
                 .ToArray();
 
             if (defaultApiVersion != null)
             {
-                foreach (var version in apiVersions)
+                if (apiVersions.All(x => x.Text != defaultApiVersion.Text))
                 {
-                    if (defaultApiVersion.Text == version.Text)
-                        continue;
-
                     throw new InvalidOperationException($"{action.DisplayName} : default version does not match any of the supported versions.");
                 }
             }
@@ -74,12 +59,12 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
             };
         }
 
-        private IApiVersion ParseApiVersion(ActionDescriptor action, string s)
+        private IApiVersion ParseApiVersion(string version, ActionDescriptor action)
         {
-            if (_apiVersionParser.TryParse(s, out var apiVersion))
+            if (_apiVersionParser.TryParse(version, out var apiVersion))
                 return apiVersion;
 
-            throw new FormatException($"{action.DisplayName} : version '{s}' has an invalid format.");
+            throw new FormatException($"{action.DisplayName} : version '{version}' has an invalid format.");
         }
 
         public void OnProvidersExecuted(ActionDescriptorProviderContext context)

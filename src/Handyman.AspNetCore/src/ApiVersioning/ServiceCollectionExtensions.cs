@@ -1,5 +1,6 @@
 ﻿using Handyman.AspNetCore.ApiVersioning.Abstractions;
-using Handyman.AspNetCore.ApiVersioning.Filters;
+using Handyman.AspNetCore.ApiVersioning.ModelBinding;
+using Handyman.AspNetCore.ApiVersioning.Routing;
 using Handyman.AspNetCore.ApiVersioning.Schemes.MajorMinorPreRelease;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Routing;
@@ -22,9 +23,11 @@ namespace Handyman.AspNetCore.ApiVersioning
 
             configureAction.Invoke(options);
 
-            services.TryAddSingleton<IActionDescriptorProvider, ApiVersionDescriptorProvider>();
+            services.AddSingleton<ApiVersionModelBinder>();
+            services.AddSingleton<IActionDescriptorProvider, ApiVersionDescriptorProvider>();
             services.TryAddSingleton(typeof(IApiVersionParser), options.ApiVersionParserType);
             services.TryAddSingleton<IApiVersionReader, QueryStringApiVersionReader>();
+            services.AddControllers(mvcOptions => mvcOptions.ModelBinderProviders.Insert(0, new ApiVersionModelBinderProvider()));
             services.AddSingleton<MatcherPolicy, ApiVersionEndpointMatcherPolicy>();
 
             return services;
