@@ -2,7 +2,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests
+namespace Handyman.AspNetCore.Tests.ETags
 {
     public class ETagValidatorTests
     {

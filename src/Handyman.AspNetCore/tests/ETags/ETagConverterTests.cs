@@ -1,9 +1,9 @@
-﻿using Shouldly;
-using System;
+﻿using System;
 using Handyman.AspNetCore.ETags;
+using Shouldly;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests
+namespace Handyman.AspNetCore.Tests.ETags
 {
     public class ETagConverterTests
     {
