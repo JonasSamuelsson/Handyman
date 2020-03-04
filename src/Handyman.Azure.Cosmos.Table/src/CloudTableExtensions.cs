@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -72,26 +71,27 @@ namespace Handyman.Azure.Cosmos.Table
             return ExecuteAsync<TEntity>(table, operation, cancellationToken);
         }
 
-        public static Task<List<TEntity>> QueryEntitiesAsync<TEntity>(this CloudTable table, TableQuery<TEntity> query)
+        public static Task<TableQueryResult<TEntity>> QueryEntitiesAsync<TEntity>(this CloudTable table, TableQuery<TEntity> query)
             where TEntity : ITableEntity, new()
         {
             return table.QueryEntitiesAsync(query, CancellationToken.None);
         }
 
-        public static async Task<List<TEntity>> QueryEntitiesAsync<TEntity>(this CloudTable table, TableQuery<TEntity> query, CancellationToken cancellationToken)
+        public static async Task<TableQueryResult<TEntity>> QueryEntitiesAsync<TEntity>(this CloudTable table, TableQuery<TEntity> query, CancellationToken cancellationToken)
             where TEntity : ITableEntity, new()
         {
-            var entities = new List<TEntity>();
             TableContinuationToken continuationToken = null;
+            var result = new TableQueryResult<TEntity>();
 
             do
             {
                 var segment = await table.ExecuteQuerySegmentedAsync(query, continuationToken, cancellationToken);
-                entities.AddRange(segment);
+                result.Entities.AddRange(segment);
+                result.RequestCharge += segment.RequestCharge ?? 0;
                 continuationToken = segment.ContinuationToken;
             } while (continuationToken != null);
 
-            return entities;
+            return result;
         }
 
         public static Task<TableResult<TEntity>> ReplaceEntityAsync<TEntity>(this CloudTable table, TEntity entity)
