@@ -3,6 +3,8 @@
 Handyman.Mediator is a library for loosely coupled in-process communication via messages.  
 It's cross platform targeting `netstandard2.0`.
 
+Samples can be found [here](https://github.com/jonassamuelsson/handyman/src/Handyman.Mediator/samples).
+
 ## Basics
 
 Mediator has two kinds of messages
