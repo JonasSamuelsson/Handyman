@@ -78,21 +78,43 @@ namespace Handyman.Mediator.Internals
             return baselineHandler;
         }
 
-        private static Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
+        private static async Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
             where TRequest : IRequest<TResponse>
         {
+            // if the handler isn't doing any await the task below will never be instantiated
+            // but rather the call to handler.Handle(...) will throw, hence the outer try/catch
+
             var stopwatch = Stopwatch.StartNew();
-            return handler.Handle(request, cancellationToken)
-                .ContinueWith(task =>
+
+            try
+            {
+                var task = handler.Handle(request, cancellationToken);
+
+                try
                 {
-                    var duration = stopwatch.Elapsed;
-                    return new RequestHandlerExperimentExecution<TRequest, TResponse>
-                    {
-                        Duration = duration,
-                        Handler = handler,
-                        Task = task
-                    };
-                }, TaskScheduler.Default);
+                    await task;
+                }
+                catch
+                {
+                    ; // intentionally empty
+                }
+
+                return new RequestHandlerExperimentExecution<TRequest, TResponse>
+                {
+                    Duration = stopwatch.Elapsed,
+                    Handler = handler,
+                    Task = task
+                };
+            }
+            catch (Exception exception)
+            {
+                return new RequestHandlerExperimentExecution<TRequest, TResponse>
+                {
+                    Duration = stopwatch.Elapsed,
+                    Handler = handler,
+                    Task = Task.FromException<TResponse>(exception)
+                };
+            }
         }
     }
 }

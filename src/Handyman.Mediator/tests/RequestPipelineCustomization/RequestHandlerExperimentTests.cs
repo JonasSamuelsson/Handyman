@@ -12,16 +12,20 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 {
     public class RequestHandlerExperimentTests
     {
-        [Fact]
-        public async Task ShouldRunExperiment()
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public async Task ShouldRunExperiment(bool asyncBaselineHandler, bool asyncExperimentHandler)
         {
             var observer = new Observer();
             var toggle = new Toggle { Enabled = true };
 
             var services = new ServiceCollection();
 
-            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
-            services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => "experiment", Delay = 100 });
+            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline", Async = asyncBaselineHandler });
+            services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => "experiment", Async = asyncExperimentHandler });
             services.AddSingleton<IRequestHandlerExperimentObserver>(observer);
             services.AddSingleton<IRequestHandlerExperimentToggle>(toggle);
 
@@ -54,15 +58,19 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             toggle.ExperimentInfo.Tags.ShouldBe(new[] { "1", "2" });
         }
 
-        [Fact]
-        public async Task ShouldSucceedEvenIfExperimentHandlerFails()
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public async Task ShouldSucceedEvenIfExperimentHandlerFails(bool asyncBaselineHandler, bool asyncExperimentHandler)
         {
             var observer = new Observer();
 
             var services = new ServiceCollection();
 
-            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline" });
-            services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => throw new Exception("boom") });
+            services.AddSingleton<IRequestHandler<Request, string>>(new BaselineHandler { Action = () => "baseline", Async = asyncBaselineHandler });
+            services.AddSingleton<IRequestHandler<Request, string>>(new ExperimentHandler { Action = () => throw new Exception("boom"), Async = asyncExperimentHandler });
             services.AddSingleton<IRequestHandlerExperimentObserver>(observer);
             services.AddSingleton<IRequestHandlerExperimentToggle>(new Toggle { Enabled = true });
 
@@ -114,14 +122,24 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private abstract class BaseHandler : IRequestHandler<Request, string>
         {
             public Func<string> Action { get; set; }
-            public int Delay { get; set; }
+            public bool Async { get; set; }
             public bool Executed { get; set; }
 
-            public async Task<string> Handle(Request request, CancellationToken cancellationToken)
+            public Task<string> Handle(Request request, CancellationToken cancellationToken)
             {
                 Executed = true;
-                await Task.Delay(Delay, cancellationToken);
-                return Action.Invoke();
+                return Async ? ExecuteAsync() : Execute();
+            }
+
+            private async Task<string> ExecuteAsync()
+            {
+                await Task.Delay(100);
+                return Action();
+            }
+
+            private Task<string> Execute()
+            {
+                return Task.FromResult(Action());
             }
         }
 
