@@ -81,8 +81,7 @@ namespace Handyman.Mediator.Internals
         private static async Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
             where TRequest : IRequest<TResponse>
         {
-            // if the handler isn't doing any await the task below will never be instantiated
-            // but rather the call to handler.Handle(...) will throw, hence the outer try/catch
+            // if the the code in handler.Handle(...) throws before doing any async/await the task will not be returned, hence the outer try/catch
 
             var stopwatch = Stopwatch.StartNew();
 
@@ -92,7 +91,7 @@ namespace Handyman.Mediator.Internals
 
                 try
                 {
-                    await task;
+                    await task.ConfigureAwait();
                 }
                 catch
                 {
