@@ -77,18 +77,21 @@ namespace Handyman.Tools.Outdated.Analyze
                         foreach (var framework in project.TargetFrameworks)
                         {
                             builder.AppendLine($"### {framework.Name}");
-                            builder.AppendLine("| Package | Current | Major | Minor | Patch | Transitive |");
+                            builder.AppendLine("| Package | Current | Major | Minor | Patch |");
                             builder.AppendLine("| - | - | - | - | - | - |");
 
                             foreach (var package in framework.Packages)
                             {
+                                var name = package.IsTransitive
+                                    ? $"{package.Name} (transitive)"
+                                    : package.Name;
+
                                 builder
-                                    .Append($"| {package.Name} |")
+                                    .Append($"| {name} |")
                                     .Append($" {package.CurrentVersion} |")
                                     .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Major)} |")
                                     .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Minor)} |")
                                     .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Patch)} |")
-                                    .Append($" {package.IsTransitive.ToString().ToLowerInvariant()} |")
                                     .AppendLine();
                             }
                         }
