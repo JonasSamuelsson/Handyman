@@ -1,5 +1,7 @@
 # handyman-outdated
 
+[changelog](./changelog.md)
+
 `handyman-outdated` is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools) for listing outdated dependencies.
 
 Install using `dotnet tool install -g handyman-outdated`.
