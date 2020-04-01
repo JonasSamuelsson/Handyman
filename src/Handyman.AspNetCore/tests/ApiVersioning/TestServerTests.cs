@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Handyman.AspNetCore.Tests.ApiVersioning
 {
-    [ApiController, Route("test")]
+    [ApiController, Route("api-versioning")]
     public class TestServerTests : ControllerBase
     {
         [Theory]
@@ -35,7 +35,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
 
             var client = host.GetTestClient();
 
-            var response = await client.GetAsync($"test?{query}");
+            var response = await client.GetAsync($"api-versioning?{query}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -43,6 +43,8 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
                 return;
             }
 
+            response.Content.Headers.ContentType.CharSet.ShouldBe("utf-8");
+            response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var json = await response.Content.ReadAsStringAsync();
