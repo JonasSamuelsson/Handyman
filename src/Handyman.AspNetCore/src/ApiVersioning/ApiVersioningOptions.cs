@@ -1,5 +1,5 @@
-﻿using System;
-using Handyman.AspNetCore.ApiVersioning.Schemes.Literal;
+﻿using Handyman.AspNetCore.ApiVersioning.Schemes.Literal;
+using System;
 
 namespace Handyman.AspNetCore.ApiVersioning
 {
@@ -7,7 +7,7 @@ namespace Handyman.AspNetCore.ApiVersioning
     {
         internal Type ApiVersionParserType { get; set; }
 
-        public void UseLiteralApiVersioningScheme()
+        public void UseLiteralScheme()
         {
             ApiVersionParserType = typeof(LiteralApiVersionParser);
         }
