@@ -5,13 +5,13 @@
 ### Added
 
 * Added integration with asp.net core routing system.
-* Added `major-minor-prerelease` versioning scheme.
-* ETag convertion/comparison/validation can be replaced with custom implementations.
+* ETag convertion/comparison/validation can be replaced with custom implementations using dependency injection.
 
 ### Changed
 
-* ETag implementation is now designed to work with dependecy injection.
+* Changed how the default versioning scheme works.
+  * Still uses the same format but requires exact major/minor match, ie `1` does not match `1.0`.
 
 ### Removed
 
-* Removed `semver` versioning scheme.
+* Removed asp.net core 2.x support.
