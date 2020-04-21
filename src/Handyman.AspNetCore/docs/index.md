@@ -89,7 +89,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Customize where to read requested version
 
-Register a custom `IApiVersionReader` implementation in the service collection to change where the requested version is read from.
+Register a custom `IApiVersionReader` implementation in the service collection to change how to read the requested version.
 
 ``` csharp
 public class HeaderApiVersionReader : IApiVersionReader
@@ -113,7 +113,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Multiple versions per endpoint
 
-It is possible to have a single endpoint support multiple versions. In that case use the overloaded `ApiVersionAttribute` constructor that takes multple versions.
+It is possible to have a single endpoint support multiple versions by passing an array of strings to the `ApiVersionAttribute` constructor.
 
 ``` csharp
 [HttpGet, ApiVersion(new[] { "1.0", "1.1" })]
@@ -137,7 +137,7 @@ public IEnumerable<string> GetValues(string apiVersion)
 
 ### Optional versioning
 
-If versioning is added to an existing api it might not be possible to require a version on every request without breaking existing consumers. For those cases it is possible to configure the versioning to be optional.
+Versioning can be configured as optional per endpoint.
 
 ``` csharp
 [HttpGet, ApiVersion("1.0", Optional = true)]
@@ -173,7 +173,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-Add a `string` parameter named `ifMatch` or `ifNoneMatch`.
+Add a `string` parameter named `ifMatch`, `ifMatchETag`, `ifNoneMatch` or `ifNoneMatchETag` to read from the corresponding header.
 
 ``` csharp
 [HttpPut]
