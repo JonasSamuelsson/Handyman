@@ -8,26 +8,10 @@ namespace Handyman.AspNetCore.ApiVersioning.MajorMinorPreReleaseVersionScheme
 
         public bool TryParse(string candidate, out IApiVersion version)
         {
-            if (candidate == null || !Regex.IsMatch(candidate))
+            if (string.IsNullOrWhiteSpace(candidate) || !Regex.IsMatch(candidate))
             {
                 version = null;
                 return false;
-            }
-
-            var dotIndex = candidate.IndexOf('.');
-
-            if (dotIndex == -1)
-            {
-                var dashIndex = candidate.IndexOf('-');
-
-                if (dashIndex == -1)
-                {
-                    candidate += ".0";
-                }
-                else
-                {
-                    candidate = candidate.Insert(dashIndex, ".0");
-                }
             }
 
             version = new MajorMinorPreReleaseApiVersion(candidate);

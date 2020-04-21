@@ -43,9 +43,8 @@ public class ValuesController : ControllerBase
 
 #### Major.Minor-PreRelease (default)
 
-This is the default versioning scheme. It requires all declared and requested versions to be in one of the following formats `<major>`, `<major>.<minor>`, `<major>-<prerelease>`, `<major>.<minor>-<prerelease>`.  
-`<major>` and `<minor>` must be numerical while `<prerelease>` can contain any character.  
-`<major>` is interperted as `<major>.0` and `<major>-<prerelease>` as `<major>.0-<prerelease>`.
+This scheme requires all declared and requested versions to be in one of the following formats `<major>`, `<major>.<minor>`, `<major>-<prerelease>`, `<major>.<minor>-<prerelease>`.  
+`<major>` and `<minor>` must be numerical while `<prerelease>` can contain characters `.0-9a-z`.
 
 Requests with an api version that doesn't conform to the version format will result in a `400 Bad Request` response.
 

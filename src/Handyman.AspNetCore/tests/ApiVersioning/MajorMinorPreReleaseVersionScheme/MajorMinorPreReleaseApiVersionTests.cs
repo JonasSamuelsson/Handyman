@@ -1,5 +1,8 @@
 ﻿using Handyman.AspNetCore.ApiVersioning.MajorMinorPreReleaseVersionScheme;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Handyman.AspNetCore.Tests.ApiVersioning.MajorMinorPreReleaseVersionScheme
@@ -7,19 +10,30 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning.MajorMinorPreReleaseVersionSch
     public class MajorMinorPreReleaseApiVersionTests
     {
         [Theory]
-        [InlineData("1", "1", true)]
-        [InlineData("1", "1.0", true)]
-        [InlineData("1.0", "1.0", true)]
-        [InlineData("1-alpha", "1.0-ALPHA", true)]
-        [InlineData("1", "1-alpha", false)]
-        [InlineData("1", "1.1", false)]
-        [InlineData("1", "2", false)]
-        public void ShouldCompareVersions(string a, string b, bool result)
+        [MemberData(nameof(GetParams))]
+        public void ShouldCompareVersions(string versionX, string versionY, bool result)
         {
             var parser = new MajorMinorPreReleaseApiVersionParser();
-            parser.TryParse(a, out var x).ShouldBeTrue();
-            parser.TryParse(b, out var y).ShouldBeTrue();
-            x.IsMatch(y).ShouldBe(result);
+            parser.TryParse(versionX, out var apiVersionX).ShouldBeTrue();
+            parser.TryParse(versionY, out var apiVersionY).ShouldBeTrue();
+            apiVersionX.IsMatch(apiVersionY).ShouldBe(result);
+        }
+
+        public static IEnumerable<object[]> GetParams()
+        {
+            var majors = new[] { "1", "2" };
+            var minors = new[] { "", ".0", ".1" };
+            var preReleases = new[] { "", "-alpha", "-ALPHA", "-beta" };
+
+            var versions = (from major in majors from minor in minors from preRelease in preReleases select $"{major}{minor}{preRelease}").ToList();
+
+            foreach (var x in versions)
+            {
+                foreach (var y in versions)
+                {
+                    yield return new object[] { x, y, x.Equals(y, StringComparison.OrdinalIgnoreCase) };
+                }
+            }
         }
     }
 }

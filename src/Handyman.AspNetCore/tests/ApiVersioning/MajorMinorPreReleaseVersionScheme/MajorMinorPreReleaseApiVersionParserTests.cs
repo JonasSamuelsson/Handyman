@@ -7,15 +7,16 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning.MajorMinorPreReleaseVersionSch
     public class MajorMinorPreReleaseApiVersionParserTests
     {
         [Theory]
-        [InlineData("1", "1.0")]
-        [InlineData("1-alpha", "1.0-alpha")]
-        [InlineData("1.0", "1.0")]
-        [InlineData("1.1", "1.1")]
-        [InlineData("1.1-alpha", "1.1-alpha")]
-        public void ShouldParse(string candidate, string text)
+        [InlineData("1")]
+        [InlineData("1-alpha")]
+        [InlineData("1.0")]
+        [InlineData("1.0-alpha")]
+        [InlineData("1.123")]
+        [InlineData("1.123-alpha")]
+        public void ShouldParse(string version)
         {
-            new MajorMinorPreReleaseApiVersionParser().TryParse(candidate, out var apiVersion).ShouldBeTrue();
-            apiVersion.Text.ShouldBe(text);
+            new MajorMinorPreReleaseApiVersionParser().TryParse(version, out var apiVersion).ShouldBeTrue();
+            apiVersion.Text.ShouldBe(version);
         }
 
         [Theory]
@@ -26,6 +27,8 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning.MajorMinorPreReleaseVersionSch
         [InlineData("1.")]
         [InlineData("1.2.3")]
         [InlineData("1-")]
+        [InlineData("1-?")]
+        [InlineData("1-alpha-beta")]
         public void ShouldNotParse(string candidate)
         {
             new MajorMinorPreReleaseApiVersionParser().TryParse(candidate, out _).ShouldBeFalse();
