@@ -39,9 +39,9 @@ public class ValuesController : ControllerBase
 }
 ```
 
-### Version schemes
+### Versioning schemes
 
-#### Major.Minor-PreRelease scheme
+#### Major.Minor-PreRelease (default)
 
 This is the default versioning scheme. It requires all declared and requested versions to be in one of the following formats `<major>`, `<major>.<minor>`, `<major>-<prerelease>`, `<major>.<minor>-<prerelease>`.  
 `<major>` and `<minor>` must be numerical while `<prerelease>` can contain any character.  
@@ -49,47 +49,33 @@ This is the default versioning scheme. It requires all declared and requested ve
 
 Requests with an api version that doesn't conform to the version format will result in a `400 Bad Request` response.
 
-#### Literal scheme
-
-This scheme accepts versions in any format.
-
-Use the following approach to enable this scheme.
-
-``` csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddApiVersioning(options => options.UseLiteralScheme());
-}
-```
-
 #### Custom scheme
 
 Register a custom `IApiVersionParser` implementation to use a custom version scheme.
 
 ``` csharp
-public class IntApiVersionParser : IApiVersionParser
+public class LiteralApiVersionParser : IApiVersionParser
 {
     public bool TryParse(string candidate, out IApiVersion version)
     {
-        version = null;
-        
-        if (!int.TryParse(candidate, out var i))
+        if (string.IsNullOrWhiteSpace(candidate))
+        {
+            version = null;
             return false;
+        }
 
-        version = new IntApiVersion { Version = i };
+        version = new LiteralApiVersion { Text = candidate };
         return true;
     }
 }
 
-public class IntApiVersion : IApiVersion
+public class LiteralApiVersion : IApiVersion
 {
-    public string Text => Version.ToString();
-
-    public int Version { get; set; }
+    public string Text { get; set; }
 
     public bool IsMatch(IApiVersion other)
     {
-        return other is IntApiVersion o && Version == o.Version;
+        return other is LiteralApiVersion o && Text == o.Text;
     }
 }
 ```
@@ -97,7 +83,7 @@ public class IntApiVersion : IApiVersion
 ``` csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddSingleton<IApiVersionParser, IntApiVersionParser>();
+    services.AddSingleton<IApiVersionParser, LiteralApiVersionParser>();
     services.AddApiVersioning();
 }
 ```

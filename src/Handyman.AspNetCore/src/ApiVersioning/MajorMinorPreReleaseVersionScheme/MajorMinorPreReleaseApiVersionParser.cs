@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Handyman.AspNetCore.ApiVersioning.Schemes.MajorMinorPreRelease
+namespace Handyman.AspNetCore.ApiVersioning.MajorMinorPreReleaseVersionScheme
 {
     internal class MajorMinorPreReleaseApiVersionParser : IApiVersionParser
     {

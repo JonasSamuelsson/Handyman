@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Handyman.AspNetCore.ApiVersioning.Schemes.MajorMinorPreRelease
+namespace Handyman.AspNetCore.ApiVersioning.MajorMinorPreReleaseVersionScheme
 {
     [DebuggerDisplay("major/minor/pre-release: {Text}")]
     internal class MajorMinorPreReleaseApiVersion : IApiVersion

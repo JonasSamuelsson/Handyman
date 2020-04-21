@@ -1,8 +1,8 @@
-﻿using Handyman.AspNetCore.ApiVersioning.Schemes.MajorMinorPreRelease;
+﻿using Handyman.AspNetCore.ApiVersioning.MajorMinorPreReleaseVersionScheme;
 using Shouldly;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests.ApiVersioning.MajorMinorPreRelease
+namespace Handyman.AspNetCore.Tests.ApiVersioning.MajorMinorPreReleaseVersionScheme
 {
     public class MajorMinorPreReleaseApiVersionTests
     {
