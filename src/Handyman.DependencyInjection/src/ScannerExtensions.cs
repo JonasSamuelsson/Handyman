@@ -32,6 +32,11 @@ namespace Handyman.DependencyInjection
             return scanner.Assembly(System.Reflection.Assembly.GetEntryAssembly());
         }
 
+        public static IScanner ConfigureClassesWithServiceAttribute(this IScanner scanner)
+        {
+            return scanner.Using(new ConfigureClassesWithServiceAttributeConvention());
+        }
+
         public static IScanner ConfigureConcreteClassesOf<T>(this IScanner scanner)
         {
             return scanner.ConfigureConcreteClassesOf<T>(null);
