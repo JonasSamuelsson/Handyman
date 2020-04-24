@@ -2,6 +2,8 @@
 
 This package provides `IServiceCollection` extensions that simplifies service configuration.
 
+[changelog](./changelog.md)
+
 ## AddDiagnostics
 
 `AddDiagnostics()` configures an instance of `IDiagnostics` whitch has two methods for getting information about configured services (`GetServiceDescriptionsString()` & `GetServiceDescriptionsString()`).
@@ -11,7 +13,25 @@ This package provides `IServiceCollection` extensions that simplifies service co
 `Scan(...)` enables convention based service configuration.  
 The scanner provides methods for defining which types to scan, how to filter them and the registration convention to use.
 
-Three conventions are provided out of the box; `ConfigureConcreteClassesOf`, `ConfigureDefaultImplementations` & `UsingServiceConfigurationPolicies`.
+These conventions are provided out of the box `ConfigureClassesWithServiceAttribute`, `ConfigureConcreteClassesOf`, `ConfigureDefaultImplementations` & `UsingServiceConfigurationPolicies`.
+
+### Classes with service attribute
+
+This convention configures classes decorated with the `ServiceAttribute`.  
+
+With the `ServiceAttribute` services doesn't need to be configured from the same place in the code but in stead types can be decorated with the configuration to use.
+
+```
+public interface IFoo { }
+
+[Service(typeof(IFoo))]
+public class Foo : IFoo { }
+
+public interface IBar { }
+
+[Service(typeof(IBar), ServiceLifetime.Singleton)]
+public class Bar : IBar { }
+```
 
 ### Concrete classes of
 
