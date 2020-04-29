@@ -3,6 +3,7 @@ using Handyman.Tools.Outdated.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
@@ -15,7 +16,7 @@ namespace Handyman.Tools.Outdated.Analyze
             _processRunner = processRunner;
         }
 
-        public void Restore(Project project)
+        public async Task Restore(Project project)
         {
             var errors = new List<string>();
 
@@ -27,7 +28,7 @@ namespace Handyman.Tools.Outdated.Analyze
                 StandardOutputHandler = delegate { }
             };
 
-            _processRunner.Start(info).Task.Wait();
+            await _processRunner.Start(info).Task;
 
             errors.RemoveAll(string.IsNullOrWhiteSpace);
 

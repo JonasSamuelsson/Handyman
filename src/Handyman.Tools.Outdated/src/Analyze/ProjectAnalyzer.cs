@@ -4,6 +4,7 @@ using Handyman.Tools.Outdated.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ProcessStartInfo = Handyman.Tools.Outdated.IO.ProcessStartInfo;
 
 namespace Handyman.Tools.Outdated.Analyze
@@ -17,9 +18,9 @@ namespace Handyman.Tools.Outdated.Analyze
             _processRunner = processRunner;
         }
 
-        public void Analyze(Project project)
+        public async Task Analyze(Project project)
         {
-            var results = CheckForUpdates(project).ToList();
+            var results = (await CheckForUpdates(project)).ToList();
 
             foreach (var frameworks in results.SelectMany(x => x.Frameworks).GroupBy(x => x.Name))
             {
@@ -60,8 +61,10 @@ namespace Handyman.Tools.Outdated.Analyze
             }
         }
 
-        private IEnumerable<DotnetListPackageResult> CheckForUpdates(Project project)
+        private async Task<IEnumerable<DotnetListPackageResult>> CheckForUpdates(Project project)
         {
+            var results = new List<DotnetListPackageResult>();
+
             foreach (var severity in new[] { "", " --highest-minor", " --highest-patch" })
             {
                 var transitive = project.Config.IncludeTransitive ? " --include-transitive" : "";
@@ -78,7 +81,7 @@ namespace Handyman.Tools.Outdated.Analyze
                     StandardOutputHandler = s => output.Add(s)
                 };
 
-                _processRunner.Start(info).Task.Wait();
+                await _processRunner.Start(info).Task;
 
                 errors.RemoveAll(string.IsNullOrWhiteSpace);
                 output.RemoveAll(string.IsNullOrWhiteSpace);
@@ -91,7 +94,7 @@ namespace Handyman.Tools.Outdated.Analyze
                         Stage = "analyze"
                     });
 
-                    yield break;
+                    break;
                 }
 
                 var parser = new DotnetListPackageResultParser();
@@ -101,8 +104,10 @@ namespace Handyman.Tools.Outdated.Analyze
                 if (!result.Frameworks.Any())
                     continue;
 
-                yield return result;
+                results.Add(result);
             }
+
+            return results;
         }
 
         private static Severity GetUpdateSeverity(string current, string available)

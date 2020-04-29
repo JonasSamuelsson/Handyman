@@ -2,6 +2,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
@@ -38,7 +39,7 @@ namespace Handyman.Tools.Outdated.Analyze
         [Option]
         public Verbosity Verbosity { get; set; }
 
-        public int OnExecute()
+        public async Task<int> OnExecute()
         {
             var projects = _projectLocator.GetProjects(Path, Tags.ToList());
 
@@ -56,9 +57,9 @@ namespace Handyman.Tools.Outdated.Analyze
                     _console.WriteLine($"Analyzing {project.RelativePath} ({counter++} of {projects.Count})");
 
                 if (NoRestore == false)
-                    _projectUtil.Restore(project);
+                    await _projectUtil.Restore(project);
 
-                _projectAnalyzer.Analyze(project);
+                await _projectAnalyzer.Analyze(project);
             }
 
             new ResultConsoleWriter(_console, Verbosity).WriteResult(projects);
