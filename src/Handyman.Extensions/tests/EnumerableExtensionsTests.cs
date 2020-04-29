@@ -463,5 +463,46 @@ namespace Handyman.Extensions.Tests
 
             task.IsCompleted.ShouldBeTrue();
         }
+
+        [Theory]
+        [InlineData(0, false, null)]
+        [InlineData(1, true, "11")]
+        [InlineData(2, true, "12")]
+        public void ShouldTryGetFirst(int i, bool result, string expectedValue)
+        {
+            var items = new[] { "11", "12", "21", "22" };
+            items.TryGetFirst(s => s.Contains(i.ToString()), out var value).ShouldBe(result);
+            value.ShouldBe(expectedValue);
+        }
+
+        [Theory]
+        [InlineData(0, false, null)]
+        [InlineData(1, true, "21")]
+        [InlineData(2, true, "22")]
+        public void ShouldTryGetLast(int i, bool result, string expectedValue)
+        {
+            var items = new[] { "11", "12", "21", "22" };
+            items.TryGetLast(s => s.Contains(i.ToString()), out var value).ShouldBe(result);
+            value.ShouldBe(expectedValue);
+        }
+
+        [Theory]
+        [InlineData(1, true, false, null)]
+        [InlineData(11, false, true, "11")]
+        [InlineData(111, false, false, null)]
+        public void ShouldTryGetSingle(int i, bool @throw, bool result, string expectedValue)
+        {
+            var items = new[] { "1", "11" };
+
+            if (@throw)
+            {
+                Should.Throw<InvalidOperationException>(() => items.TryGetSingle(s => s.Contains(i.ToString()), out _));
+            }
+            else
+            {
+                items.TryGetSingle(s => s.Contains(i.ToString()), out var value).ShouldBe(result);
+                value.ShouldBe(expectedValue);
+            }
+        }
     }
 }

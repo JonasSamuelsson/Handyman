@@ -335,5 +335,55 @@ namespace Handyman.Extensions
         {
             return Task.WhenAny(tasks);
         }
+
+        public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)
+        {
+            foreach (var item in source)
+            {
+                if (!predicate.Invoke(item))
+                    continue;
+
+                value = item;
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
+        public static bool TryGetLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)
+        {
+            foreach (var item in source.Reverse())
+            {
+                if (!predicate.Invoke(item))
+                    continue;
+
+                value = item;
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
+        public static bool TryGetSingle<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)
+        {
+            value = default;
+            var found = false;
+
+            foreach (var item in source)
+            {
+                if (!predicate.Invoke(item))
+                    continue;
+
+                if (found)
+                    throw new InvalidOperationException("Sequence contains more than one matching element");
+
+                value = item;
+                found = true;
+            }
+
+            return found;
+        }
     }
 }
