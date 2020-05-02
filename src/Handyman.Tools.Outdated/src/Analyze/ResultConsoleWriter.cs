@@ -129,7 +129,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
         private void WriteUpToDate(IReadOnlyCollection<Project> projects)
         {
-            projects = projects.Where(x => !x.Errors.Any() || !x.TargetFrameworks.Any()).ToList();
+            projects = projects.Where(x => !x.Errors.Any() && !x.TargetFrameworks.Any()).ToList();
 
             if (!projects.Any())
                 return;
