@@ -64,9 +64,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
             new ResultConsoleWriter(_console, Verbosity).WriteResult(projects);
 
-            _console.WriteLine("pre write to disk");
             WriteResultToFile(projects);
-            _console.WriteLine("post write to disk");
 
             return 0;
         }

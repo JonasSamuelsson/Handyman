@@ -46,10 +46,6 @@ namespace Handyman.Tools.Outdated
 
                 return 1;
             }
-            finally
-            {
-                Console.WriteLine("handyman-outdated finished executing");
-            }
         }
 
         public void OnExecute(CommandLineApplication app)
