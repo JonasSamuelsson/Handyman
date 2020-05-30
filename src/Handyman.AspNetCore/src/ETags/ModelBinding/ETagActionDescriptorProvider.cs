@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Collections.Generic;
 
 namespace Handyman.AspNetCore.ETags.ModelBinding
 {
@@ -33,9 +33,12 @@ namespace Handyman.AspNetCore.ETags.ModelBinding
                     if (!HeaderNames.TryGetValue(parameter.Name, out var headerName))
                         continue;
 
-                    parameter.BindingInfo.BinderModelName = headerName;
-                    parameter.BindingInfo.BindingSource = BindingSource.Header;
-                    parameter.BindingInfo.BinderType = typeof(ETagModelBinder);
+                    parameter.BindingInfo = new BindingInfo
+                    {
+                        BinderModelName = headerName,
+                        BindingSource = BindingSource.Header,
+                        BinderType = typeof(ETagModelBinder)
+                    };
                 }
             }
         }
