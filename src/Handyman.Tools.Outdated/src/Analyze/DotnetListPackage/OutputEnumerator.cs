@@ -5,14 +5,14 @@ using System.Linq;
 namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
 {
     [DebuggerDisplay("{Current}")]
-    public class StringCollection
+    public class OutputEnumerator
     {
         private readonly List<string> _lines;
         private int _index;
 
-        public StringCollection(IEnumerable<string> lines)
+        public OutputEnumerator(IEnumerable<string> lines)
         {
-            _lines = lines.Select(x => x.Trim()).ToList();
+            _lines = lines.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
 
         public string Current => _lines.ElementAtOrDefault(_index) ?? string.Empty;

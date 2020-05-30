@@ -3,6 +3,7 @@ using Handyman.Tools.Outdated.IO;
 using Handyman.Tools.Outdated.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ProcessStartInfo = Handyman.Tools.Outdated.IO.ProcessStartInfo;
@@ -20,55 +21,25 @@ namespace Handyman.Tools.Outdated.Analyze
 
         public async Task Analyze(Project project)
         {
-            var results = (await CheckForUpdates(project)).ToList();
-
-            foreach (var frameworks in results.SelectMany(x => x.Frameworks).GroupBy(x => x.Name))
-            {
-                var framework = new TargetFramework { Name = frameworks.Key };
-                var frameworkConfig = project.Config.TargetFrameworks.FirstOrDefault(x => x.Filter.IsMatch(framework.Name));
-
-                foreach (var packages in frameworks.SelectMany(x => x.Dependencies).GroupBy(x => x.Name))
-                {
-                    var package = new Package
-                    {
-                        CurrentVersion = packages.First().CurrentVersion,
-                        IsTransitive = packages.First().IsTransitive,
-                        Name = packages.Key
-                    };
-
-                    var packageConfig = frameworkConfig?.Packages.FirstOrDefault(x => x.NameFilter.IsMatch(package.Name));
-
-                    foreach (var updates in packages.GroupBy(x => GetUpdateSeverity(x.CurrentVersion, x.AvailableVersion)))
-                    {
-                        var version = updates.First().AvailableVersion;
-
-                        if (packageConfig?.VersionFilter.IsMatch(version) == true)
-                            continue;
-
-                        package.AvailableVersions[updates.Key] = version;
-                    }
-
-                    if (!package.AvailableVersions.Any())
-                        continue;
-
-                    framework.Packages.Add(package);
-                }
-
-                if (!framework.Packages.Any())
-                    continue;
-
-                project.TargetFrameworks.Add(framework);
-            }
+            await InvokeExternalAnalyzer(project);
+            ApplyConfiguration(project);
         }
 
-        private async Task<IEnumerable<DotnetListPackageResult>> CheckForUpdates(Project project)
+        private async Task InvokeExternalAnalyzer(Project project)
         {
-            var results = new List<DotnetListPackageResult>();
+            var includeTransitive = project.Config.IncludeTransitive ? "--include-transitive" : "";
 
-            foreach (var severity in new[] { "", " --highest-minor", " --highest-patch" })
+            var argumentsSuffixes = new[]
             {
-                var transitive = project.Config.IncludeTransitive ? " --include-transitive" : "";
-                var arguments = $"list {project.FullPath} package --outdated{transitive}{severity}";
+                $"--outdated {includeTransitive}",
+                $"--outdated --highest-minor {includeTransitive}",
+                $"--outdated --highest-patch {includeTransitive}",
+                $"--deprecated {includeTransitive}"
+            };
+
+            foreach (var argumentsSuffix in argumentsSuffixes)
+            {
+                var arguments = $"list {project.FullPath} package {argumentsSuffix}";
 
                 var errors = new List<string>();
                 var output = new List<string>();
@@ -97,29 +68,41 @@ namespace Handyman.Tools.Outdated.Analyze
                     break;
                 }
 
-                var parser = new DotnetListPackageResultParser();
-
-                var result = parser.Parse(output);
-
-                if (!result.Frameworks.Any())
-                    continue;
-
-                results.Add(result);
+                new ResultReader().Read(output, project.TargetFrameworks);
             }
-
-            return results;
         }
 
-        private static Severity GetUpdateSeverity(string current, string available)
+        private static void ApplyConfiguration(Project project)
         {
-            var x = current.Split('.');
-            var y = available.Split('.');
+            foreach (var framework in project.TargetFrameworks.ToList())
+            {
+                var frameworkConfig = project.Config.TargetFrameworks.FirstOrDefault(x => x.Filter.IsMatch(framework.Name));
 
-            return x[0] != y[0]
-                ? Severity.Major
-                : x[1] != y[1]
-                    ? Severity.Minor
-                    : Severity.Patch;
+                foreach (var package in framework.Packages.ToList())
+                {
+                    if (project.Config.IncludeTransitive == false && package.IsTransitive)
+                    {
+                        framework.Packages.Remove(package);
+                        continue;
+                    }
+
+                    var packageConfig = frameworkConfig?.Packages.FirstOrDefault(x => x.NameFilter.IsMatch(package.Name));
+
+                    foreach (var (severity, update) in package.Updates.ToList())
+                    {
+                        if (packageConfig?.VersionFilter.IsMatch(update.Version) != true)
+                            continue;
+
+                        package.Updates.Remove(severity);
+                    }
+
+                    if (package.NeedsAttention == false)
+                        framework.Packages.Remove(package);
+                }
+
+                if (framework.Packages.Any() == false)
+                    project.TargetFrameworks.Remove(framework);
+            }
         }
     }
 }

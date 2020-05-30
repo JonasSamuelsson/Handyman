@@ -28,8 +28,8 @@ namespace Handyman.Tools.Outdated.Analyze
             projects = projects.ToList();
 
             var errors = projects.Where(x => x.Errors.Any()).ToList();
-            var outdated = projects.Where(x => x.TargetFrameworks.Any()).ToList();
-            var upToDate = projects.Where(x => !errors.Contains(x) && !outdated.Contains(x)).ToList();
+            var needsAttention = projects.Where(x => x.TargetFrameworks.Any()).ToList();
+            var upToDate = projects.Where(x => !errors.Contains(x) && !needsAttention.Contains(x)).ToList();
 
             if (!projects.Any())
             {
@@ -41,16 +41,24 @@ namespace Handyman.Tools.Outdated.Analyze
 
                 if (errors.Any())
                 {
-                    builder.AppendLine($"* {errors.Count} projects failed");
+                    builder.AppendLine($"* {errors.Count} projects could not be analyzed");
                 }
 
-                builder.AppendLine($"* {outdated.Count} projects has outdated dependencies");
-                builder.AppendLine($"* {upToDate.Count} projects are up to date");
+                if (needsAttention.Any())
+                {
+                    builder.AppendLine($"* {needsAttention.Count} projects needs attention");
+                }
+
+                if (upToDate.Any())
+                {
+                    builder.AppendLine($"* {upToDate.Count} projects are up to date");
+                }
+
                 builder.AppendLine();
 
                 if (errors.Any())
                 {
-                    builder.AppendLine("# Failed");
+                    builder.AppendLine("# Could not be analyzed");
 
                     foreach (var project in errors)
                     {
@@ -66,19 +74,19 @@ namespace Handyman.Tools.Outdated.Analyze
                     builder.AppendLine();
                 }
 
-                if (outdated.Any())
+                if (needsAttention.Any())
                 {
-                    builder.AppendLine("# Outdated");
+                    builder.AppendLine("# Needs attention");
 
-                    foreach (var project in outdated)
+                    foreach (var project in needsAttention)
                     {
                         AppendProjectInfo(builder, project);
 
                         foreach (var framework in project.TargetFrameworks)
                         {
                             builder.AppendLine($"### {framework.Name}");
-                            builder.AppendLine("| Package | Current | Major | Minor | Patch |");
-                            builder.AppendLine("| - | - | - | - | - | - |");
+                            builder.AppendLine("| Package | Current | Major | Minor | Patch | Info |");
+                            builder.AppendLine("| - | - | - | - | - | - | - |");
 
                             foreach (var package in framework.Packages)
                             {
@@ -86,13 +94,44 @@ namespace Handyman.Tools.Outdated.Analyze
                                     ? $"{package.Name} (transitive)"
                                     : package.Name;
 
-                                builder
-                                    .Append($"| {name} |")
+                                builder.Append("|")
+                                    .Append($" {name} |")
                                     .Append($" {package.CurrentVersion} |")
-                                    .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Major)} |")
-                                    .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Minor)} |")
-                                    .Append($" {package.AvailableVersions.GetValueOrDefault(Severity.Patch)} |")
+                                    .Append($" {FormatUpdate(package.Updates, UpdateSeverity.Major)} |")
+                                    .Append($" {FormatUpdate(package.Updates, UpdateSeverity.Minor)} |")
+                                    .Append($" {FormatUpdate(package.Updates, UpdateSeverity.Patch)} |")
+                                    .Append($" {FormatInfoAndDeprecation(package)} |")
                                     .AppendLine();
+
+                                static string FormatUpdate(Dictionary<UpdateSeverity, PackageUpdate> updates, UpdateSeverity severity)
+                                {
+                                    if (!updates.TryGetValue(severity, out var update))
+                                        return string.Empty;
+
+                                    return $"{update.Version} {update.Info}".Trim();
+                                }
+
+                                static string FormatInfoAndDeprecation(Package package)
+                                {
+                                    var result = string.Empty;
+
+                                    if (!string.IsNullOrWhiteSpace(package.Info))
+                                    {
+                                        result += package.Info;
+                                    }
+
+                                    if (!string.IsNullOrWhiteSpace(package.Deprecation.Reason))
+                                    {
+                                        result += $" Deprecated: {package.Deprecation.Reason}";
+
+                                        if (!string.IsNullOrWhiteSpace(package.Deprecation.Alternative))
+                                        {
+                                            result += $", alternative: {package.Deprecation.Alternative}";
+                                        }
+                                    }
+
+                                    return result.Trim();
+                                }
                             }
                         }
                     }

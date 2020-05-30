@@ -30,25 +30,18 @@ namespace Handyman.Tools.Outdated.Analyze
             }
 
             var totalCount = projects.Count;
-            var errorCount = projects.Count(x => x.Errors.Any());
-            var outdatedCount = projects.Count(x => x.TargetFrameworks.Any());
-            var updatedCount = totalCount - (errorCount + outdatedCount);
+            var errors = projects.Where(x => x.Errors.Any()).ToList();
+            var needsAttention = projects.Where(x => x.TargetFrameworks.Any()).ToList();
+            var upToDate = projects.Except(errors).Except(needsAttention).ToList();
 
-            _console.WriteLine($"Out of {totalCount} projects");
-            if (errorCount != 0)
-            {
-                _console.WriteLine($"  {errorCount} could not be analyzed");
-            }
-            _console.WriteLine($"  {outdatedCount} have outdated dependencies");
-            _console.WriteLine($"  {updatedCount} are up to date");
-            _console.WriteLine();
+            WriteSummary(totalCount, errors, needsAttention, upToDate);
 
             if (!ShouldWrite(Verbosity.Normal))
                 return;
 
-            WriteErrors(projects);
-            WriteOutdated(projects);
-            WriteUpToDate(projects);
+            WriteErrors(errors);
+            WriteNeedsAttention(needsAttention);
+            WriteUpToDate(upToDate);
         }
 
         private bool ShouldWrite(Verbosity required)
@@ -56,15 +49,35 @@ namespace Handyman.Tools.Outdated.Analyze
             return _verbosity != Verbosity.Quiet && (int)required <= (int)_verbosity;
         }
 
+        private void WriteSummary(int totalCount, List<Project> errors, List<Project> needsAttention, List<Project> upToDate)
+        {
+            _console.WriteLine($"Out of {totalCount} projects");
+
+            if (errors.Any())
+            {
+                _console.WriteLine($"  {errors.Count} could not be analyzed");
+            }
+
+            if (needsAttention.Any())
+            {
+                _console.WriteLine($"  {needsAttention.Count} needs attention");
+            }
+
+            if (upToDate.Any())
+            {
+                _console.WriteLine($"  {upToDate.Count} are up to date");
+            }
+
+            _console.WriteLine();
+        }
+
         private void WriteErrors(IReadOnlyCollection<Project> projects)
         {
-            projects = projects.Where(x => x.Errors.Any()).ToList();
-
             if (!projects.Any())
                 return;
 
-            _console.WriteLine(" Errors");
-            _console.WriteLine("==============");
+            _console.WriteLine(" Could not be analyzed");
+            _console.WriteLine("=========================");
             _console.WriteLine();
 
             foreach (var project in projects)
@@ -82,15 +95,13 @@ namespace Handyman.Tools.Outdated.Analyze
             _console.WriteLine();
         }
 
-        private void WriteOutdated(IReadOnlyCollection<Project> projects)
+        private void WriteNeedsAttention(IReadOnlyCollection<Project> projects)
         {
-            projects = projects.Where(x => x.TargetFrameworks.Any()).ToList();
-
             if (!projects.Any())
                 return;
 
-            _console.WriteLine(" Outdated");
-            _console.WriteLine("==============");
+            _console.WriteLine(" Needs attention");
+            _console.WriteLine("===================");
             _console.WriteLine();
 
             foreach (var project in projects)
@@ -101,23 +112,38 @@ namespace Handyman.Tools.Outdated.Analyze
                 {
                     _console.WriteLine($"  {framework.Name}");
 
-                    foreach (var dependency in framework.Packages)
+                    foreach (var package in framework.Packages)
                     {
-                        _console.Write($"    {dependency.Name} {dependency.CurrentVersion}");
+                        _console.Write($"    {package.Name} {package.CurrentVersion}");
 
-                        if (dependency.IsTransitive)
-                            _console.Write(" (T)");
+                        if (package.IsTransitive)
+                            _console.Write(" (transitive)");
 
                         _console.WriteLine();
 
-                        if (dependency.AvailableVersions.TryGetValue(Severity.Major, out var v))
-                            _console.WriteLine($"      Major: {v}");
+                        if (!string.IsNullOrWhiteSpace(package.Info))
+                            _console.WriteLine($"      Info: {package.Info}");
 
-                        if (dependency.AvailableVersions.TryGetValue(Severity.Minor, out v))
-                            _console.WriteLine($"      Minor: {v}");
+                        if (!string.IsNullOrWhiteSpace(package.Deprecation.Reason))
+                        {
+                            _console.Write($"      Deprecated: {(package.Deprecation.Reason)}");
 
-                        if (dependency.AvailableVersions.TryGetValue(Severity.Patch, out v))
-                            _console.WriteLine($"      Patch: {v}");
+                            if (!string.IsNullOrWhiteSpace(package.Deprecation.Alternative))
+                                _console.Write($", alternative: {package.Deprecation.Alternative}");
+
+                            _console.WriteLine();
+                        }
+
+                        if (package.Updates.TryGetValue(UpdateSeverity.Major, out var x))
+                            _console.WriteLine($"      Major update: {FormatUpdate(x)}");
+
+                        if (package.Updates.TryGetValue(UpdateSeverity.Minor, out x))
+                            _console.WriteLine($"      Minor update: {FormatUpdate(x)}");
+
+                        if (package.Updates.TryGetValue(UpdateSeverity.Patch, out x))
+                            _console.WriteLine($"      Patch update: {FormatUpdate(x)}");
+
+                        static string FormatUpdate(PackageUpdate update) => $"{update.Version} {update.Info}".Trim();
                     }
                 }
 
@@ -129,8 +155,6 @@ namespace Handyman.Tools.Outdated.Analyze
 
         private void WriteUpToDate(IReadOnlyCollection<Project> projects)
         {
-            projects = projects.Where(x => !x.Errors.Any() && !x.TargetFrameworks.Any()).ToList();
-
             if (!projects.Any())
                 return;
 

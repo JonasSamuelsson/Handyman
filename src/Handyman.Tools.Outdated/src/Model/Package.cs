@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Handyman.Tools.Outdated.Model
 {
@@ -6,7 +7,11 @@ namespace Handyman.Tools.Outdated.Model
     {
         public string Name { get; set; }
         public string CurrentVersion { get; set; }
-        public Dictionary<Severity, string> AvailableVersions { get; } = new Dictionary<Severity, string>();
+        public Dictionary<UpdateSeverity, PackageUpdate> Updates { get; } = new Dictionary<UpdateSeverity, PackageUpdate>();
         public bool IsTransitive { get; set; }
+        public PackageDeprecation Deprecation { get; } = new PackageDeprecation();
+        public string Info { get; set; } = string.Empty;
+
+        public bool NeedsAttention => !string.IsNullOrEmpty(Info) || !string.IsNullOrEmpty(Deprecation.Reason) || Updates.Any();
     }
 }

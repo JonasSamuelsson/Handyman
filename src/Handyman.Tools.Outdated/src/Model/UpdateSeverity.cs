@@ -1,6 +1,6 @@
 ﻿namespace Handyman.Tools.Outdated.Model
 {
-    public enum Severity
+    public enum UpdateSeverity
     {
         Major,
         Minor,

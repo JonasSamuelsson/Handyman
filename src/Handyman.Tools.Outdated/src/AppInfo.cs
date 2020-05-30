@@ -1,4 +1,6 @@
-﻿namespace Handyman.Tools.Outdated
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Handyman.Tools.Outdated.Tests")]
+
+namespace Handyman.Tools.Outdated
 {
     public static class AppInfo
     {

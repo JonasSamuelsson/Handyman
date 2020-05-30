@@ -15,8 +15,6 @@ namespace Handyman.Tools.Outdated
     {
         public static int Main(string[] args)
         {
-            Console.WriteLine("handyman-outdated started executing");
-
             var services = new ServiceCollection()
                 .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IFileWriter, MarkdownFileWriter>()
