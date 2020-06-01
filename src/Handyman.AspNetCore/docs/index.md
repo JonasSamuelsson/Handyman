@@ -180,7 +180,7 @@ public void Configure(IApplicationBuilder app)
 }
 ```
 
-:warning: The e-tags middleware must be added after any exception handling middleware (like [Hellang.Middleware.ProblemDetails](https://www.nuget.org/packages/Hellang.Middleware.ProblemDetails/)) to work.
+:information_source: The e-tags middleware must be added after any exception handling middleware (like [Hellang.Middleware.ProblemDetails](https://www.nuget.org/packages/Hellang.Middleware.ProblemDetails/)) to work.
 
 ### Access request e-tag
 
