@@ -199,8 +199,8 @@ Use `IETagComparer` to see if the incoming e-tag is up to date.
 ``` csharp
 public class Repository
 {
-    private DbContext _dbContext;
-    private IETagComparer _eTagComparer;
+    private readonly DbContext _dbContext;
+    private readonly IETagComparer _eTagComparer;
 
     public Repository(DbContext dbContext, IETagComparer eTagComparer)
     {
@@ -219,6 +219,16 @@ public class Repository
         await _dbContext.SaveChangesAsync();
     }
 }
+```
+
+### Generate e-tag string from byte array (sql server row version).
+
+Use `IETagConverter` to convert byte arrays to string.
+
+``` csharp
+var converter = serviceProvider.GetRequiredService<IETagConverter>();
+byte[] bytes = ...;
+string eTag = converter.FromByteArray(bytes);
 ```
 
 ### Write response e-tag header

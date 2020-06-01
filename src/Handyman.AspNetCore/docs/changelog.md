@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 3.1.0
+
+### Added
+
+* Added `IETagConverter`.
+
 ## 3.0.0
 
 ### Added
