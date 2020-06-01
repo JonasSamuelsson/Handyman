@@ -162,16 +162,25 @@ public IEnumerable<string> GetValues(string apiVersion)
 This feature simplifies accessing the `e-tag` from `If-Match` and `If-None-Match` headers.  
 It will also make sure that the e-tag conforms to the e-tag format.
 
-### Access request e-tag
+### Setup
 
-Add the required services.
+Add required services and middleware.
 
 ``` csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddETags();
 }
+
+public void Configure(IApplicationBuilder app)
+{
+    app.UseRouting();
+    app.UseETags();
+    app.UseEndpoints(endpoints => endpoints.MapControllers());
+}
 ```
+
+### Access request e-tag
 
 Add a `string` parameter named `ifMatch`, `ifMatchETag`, `ifNoneMatch` or `ifNoneMatchETag` to read from the corresponding header.
 
@@ -180,6 +189,35 @@ Add a `string` parameter named `ifMatch`, `ifMatchETag`, `ifNoneMatch` or `ifNon
 public void Store(Payload payload, string ifMatch)
 {
     ...
+}
+```
+
+### Compare e-tags
+
+Use `IETagComparer` to see if the incoming e-tag is up to date.
+
+``` csharp
+public class Repository
+{
+    private DbContext _dbContext;
+    private IETagComparer _eTagComparer;
+
+    public Repository(DbContext dbContext, IETagComparer eTagComparer)
+    {
+        _dbContext = dbCOntext;
+        _eTagComparer = eTagComparer;
+    }
+
+    public async Task SaveItem(int id, Item item, string ifMatchETag)
+    {
+        var dbItem = await _dbContext.Items.SingleAsync(x => x.Id == id);
+
+        _eTagComparer.EnsureEquals(ifMatchETag, item.RowVersion);
+
+        // update dbItem from item
+
+        await _dbContext.SaveChangesAsync();
+    }
 }
 ```
 

@@ -1,4 +1,5 @@
-﻿using Handyman.AspNetCore.ETags.ModelBinding;
+﻿using Handyman.AspNetCore.ETags.Middleware;
+using Handyman.AspNetCore.ETags.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace Handyman.AspNetCore.ETags
 {
-    public static class ServiceCollectionExtensions
+    public static class ETagsServiceCollectionExtensions
     {
         public static IServiceCollection AddETags(this IServiceCollection services)
         {
@@ -19,6 +20,9 @@ namespace Handyman.AspNetCore.ETags
             services.AddSingleton<IETagValidator, ETagValidator>();
             services.AddSingleton<IActionDescriptorProvider, ETagActionDescriptorProvider>();
             services.AddSingleton<ETagModelBinder>();
+            services.AddSingleton<ETagValidatorMiddleware>();
+            services.AddSingleton<PreconditionFailedExceptionHandlerMiddleware>();
+            services.AddSingleton<ProblemDetailsResponseWriter>();
             services.AddControllers(options => options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider()));
 
             return services;

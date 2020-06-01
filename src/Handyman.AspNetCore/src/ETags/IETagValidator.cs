@@ -1,6 +1,6 @@
 ﻿namespace Handyman.AspNetCore.ETags
 {
-    public interface IETagValidator
+    internal interface IETagValidator
     {
         bool IsValidETag(string candidate);
     }

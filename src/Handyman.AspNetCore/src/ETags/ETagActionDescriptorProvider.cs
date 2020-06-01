@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Handyman.AspNetCore.ETags.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 
-namespace Handyman.AspNetCore.ETags.ModelBinding
+namespace Handyman.AspNetCore.ETags
 {
     internal class ETagActionDescriptorProvider : IActionDescriptorProvider
     {
@@ -39,6 +40,11 @@ namespace Handyman.AspNetCore.ETags.ModelBinding
                         BindingSource = BindingSource.Header,
                         BinderType = typeof(ETagModelBinder)
                     };
+
+                    if (headerName == Microsoft.Net.Http.Headers.HeaderNames.IfMatch)
+                    {
+                        action.EndpointMetadata.Add(new EnsureRequestHasIfMatchHeader());
+                    }
                 }
             }
         }

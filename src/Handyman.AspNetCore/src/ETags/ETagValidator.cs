@@ -1,14 +1,34 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Handyman.AspNetCore.ETags
+﻿namespace Handyman.AspNetCore.ETags
 {
     internal class ETagValidator : IETagValidator
     {
-        private static readonly Regex Regex = new Regex("^(W/)?\".+\"$", RegexOptions.Compiled);
-
         public bool IsValidETag(string candidate)
         {
-            return Regex.IsMatch(candidate);
+            if (string.IsNullOrEmpty(candidate))
+                return false;
+
+            if (candidate == "*")
+                return true;
+
+            if (!candidate.EndsWith("\""))
+                return false;
+
+            int start;
+
+            if (candidate.StartsWith("W/\""))
+            {
+                start = 3;
+            }
+            else if (candidate.StartsWith("\""))
+            {
+                start = 1;
+            }
+            else
+            {
+                return false;
+            }
+
+            return candidate.Length > (start + 1);
         }
     }
 }

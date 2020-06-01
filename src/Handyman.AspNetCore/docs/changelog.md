@@ -1,5 +1,20 @@
 # Handyman.AspNetCore changelog
 
+## 3.0.0
+
+### Added
+
+* Added `EnsureEquals(...)` methods to `IETagComparer`.
+* Started using middleware for e-tag request validation and error handling.
+
+### Removed
+
+* Removed `IETagConverter` & `IETagValidator`, these are now implementation details.
+
+### Fixed
+
+* Returning the correct http status code if the `If-Match` header isn't provided.
+
 ## 2.0.0
 
 ### Added

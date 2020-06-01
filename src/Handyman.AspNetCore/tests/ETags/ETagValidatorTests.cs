@@ -7,6 +7,7 @@ namespace Handyman.AspNetCore.Tests.ETags
     public class ETagValidatorTests
     {
         [Theory]
+        [InlineData("*")]
         [InlineData("\"x\"")]
         [InlineData("W/\"x\"")]
         [InlineData("W/\"iuwyehf72tw45ii7yhw734ydh287rygw87ryug8wd7yhr8w37yr8w37jry8\"")]

@@ -9,6 +9,22 @@
             _converter = converter;
         }
 
+        public void EnsureEquals(string eTag, byte[] bytes)
+        {
+            if (Equals(eTag, bytes))
+                return;
+
+            throw new PreconditionFailedException();
+        }
+
+        public void EnsureEquals(string eTag1, string eTag2)
+        {
+            if (Equals(eTag1, eTag2))
+                return;
+
+            throw new PreconditionFailedException();
+        }
+
         public bool Equals(string eTag, byte[] bytes)
         {
             if (eTag == "*")

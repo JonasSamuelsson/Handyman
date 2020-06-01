@@ -1,17 +1,12 @@
 ﻿using Handyman.AspNetCore.ETags;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,48 +17,28 @@ namespace Handyman.AspNetCore.Tests.ETags
     [ApiController, Route("eTags")]
     public class TestServerTests : ControllerBase
     {
-        [Fact]
-        public async Task ShouldReadETagsFromHeaders()
-        {
-            var builder = new HostBuilder()
-                .ConfigureWebHost(webHost =>
-                {
-                    webHost.UseTestServer();
-                    webHost.UseStartup<Startup>();
-                });
-
-            var host = await builder.StartAsync();
-
-            var client = host.GetTestClient();
-
-            var request = new HttpRequestMessage
-            {
-                Headers =
-                {
-                    {HeaderNames.IfMatch, "W/\"a\"" },
-                    {HeaderNames.IfNoneMatch, "W/\"b\"" },
-                },
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("eTags/optional", UriKind.Relative)
-            };
-
-            var response = await client.SendAsync(request);
-
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-            var json = await response.Content.ReadAsStringAsync();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-
-            dictionary["ifMatch"].ShouldBe("W/\"a\"");
-            dictionary["ifMatchETag"].ShouldBe("W/\"a\"");
-            dictionary["ifNoneMatch"].ShouldBe("W/\"b\"");
-            dictionary["ifNoneMatchETag"].ShouldBe("W/\"b\"");
-        }
-
         [Theory]
-        [InlineData("If-Match")]
-        [InlineData("If-None-Match")]
-        public async Task ShouldReturn400ResponseIfEtagHasInvalidFormat(string headerName)
+        [InlineData("ifMatch", null, null, null, HttpStatusCode.PreconditionRequired)]
+        [InlineData("ifMatch", "if-match", "fail", "W/\"pass\"", HttpStatusCode.BadRequest)]
+        [InlineData("ifMatch", "if-match", "W/\"fail\"", "W/\"pass\"", HttpStatusCode.PreconditionFailed)]
+        [InlineData("ifMatch", "if-match", "W/\"pass\"", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("ifMatch", "if-match", "*", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("ifMatchETag", null, null, null, HttpStatusCode.PreconditionRequired)]
+        [InlineData("ifMatchETag", "if-match", "fail", "W/\"pass\"", HttpStatusCode.BadRequest)]
+        [InlineData("ifMatchETag", "if-match", "W/\"fail\"", "W/\"pass\"", HttpStatusCode.PreconditionFailed)]
+        [InlineData("ifMatchETag", "if-match", "W/\"pass\"", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("ifMatchETag", "if-match", "*", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("IfNoneMatch", null, null, null, HttpStatusCode.OK)]
+        [InlineData("ifNoneMatch", "if-none-match", "fail", "W/\"pass\"", HttpStatusCode.BadRequest)]
+        [InlineData("ifNoneMatch", "if-none-match", "W/\"fail\"", "W/\"pass\"", HttpStatusCode.PreconditionFailed)]
+        [InlineData("ifNoneMatch", "if-none-match", "W/\"pass\"", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("ifNoneMatch", "if-none-match", "*", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("IfNoneMatchETag", null, null, null, HttpStatusCode.OK)]
+        [InlineData("ifNoneMatchETag", "if-none-match", "fail", "W/\"pass\"", HttpStatusCode.BadRequest)]
+        [InlineData("ifNoneMatchETag", "if-none-match", "W/\"fail\"", "W/\"pass\"", HttpStatusCode.PreconditionFailed)]
+        [InlineData("ifNoneMatchETag", "if-none-match", "W/\"pass\"", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("ifNoneMatchETag", "if-none-match", "*", "W/\"pass\"", HttpStatusCode.OK)]
+        public async Task ShouldTest(string path, string headerName, string headerValue, string expectedETag, HttpStatusCode expectedStatusCode)
         {
             var builder = new HostBuilder()
                 .ConfigureWebHost(webHost =>
@@ -79,65 +54,17 @@ namespace Handyman.AspNetCore.Tests.ETags
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("eTags/optional", UriKind.Relative)
+                RequestUri = new Uri($"eTags/{path}?expectedETag={expectedETag}", UriKind.Relative)
             };
 
-            request.Headers.TryAddWithoutValidation(headerName, "invalid");
-
-            var response = await client.SendAsync(request);
-
-            response.Content.Headers.ContentType.CharSet.ShouldBe("utf-8");
-            response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-
-            var json = await response.Content.ReadAsStringAsync();
-            var details = JsonConvert.DeserializeObject<ProblemDetails>(json);
-
-            // since we are using the built in model binding/validation we only assert the status code
-
-            //details.Detail.ShouldBe("Invalid ETag format");
-            details.Status.ShouldBe(StatusCodes.Status400BadRequest);
-            //details.Title.ShouldBe("Bad Request");
-            //details.Type.ShouldBe("https://httpstatuses.com/400");
-        }
-
-        [Fact]
-        public async Task ShouldReturn400ResponseIfRequiredETagIsNotProvided()
-        {
-            var builder = new HostBuilder()
-                .ConfigureWebHost(webHost =>
-                {
-                    webHost.UseTestServer();
-                    webHost.UseStartup<Startup>();
-                });
-
-            var host = await builder.StartAsync();
-
-            var client = host.GetTestClient();
-
-            var request = new HttpRequestMessage
+            if (headerValue != null)
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("eTags/required", UriKind.Relative)
-            };
-
-            request.Headers.TryAddWithoutValidation(HeaderNames.IfMatch, "fail");
+                request.Headers.TryAddWithoutValidation(headerName, headerValue);
+            }
 
             var response = await client.SendAsync(request);
 
-            response.Content.Headers.ContentType.CharSet.ShouldBe("utf-8");
-            response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-
-            var json = await response.Content.ReadAsStringAsync();
-            var details = JsonConvert.DeserializeObject<ProblemDetails>(json);
-
-            // since we are using the built in model binding/validation we only assert the status code
-
-            //details.Detail.ShouldBe("Invalid ETag format");
-            details.Status.ShouldBe(StatusCodes.Status400BadRequest);
-            //details.Title.ShouldBe("Bad Request");
-            //details.Type.ShouldBe("https://httpstatuses.com/400");
+            response.StatusCode.ShouldBe(expectedStatusCode);
         }
 
         public class Startup
@@ -151,23 +78,41 @@ namespace Handyman.AspNetCore.Tests.ETags
             public void Configure(IApplicationBuilder app)
             {
                 app.UseRouting();
+                app.UseETags();
                 app.UseEndpoints(endpoints => endpoints.MapControllers());
             }
         }
 
-        [HttpGet("optional")]
-        public object Get(string ifMatch, string ifMatchETag, string ifNoneMatch, string ifNoneMatchETag)
+        [HttpGet("ifMatch")]
+        public void IfMatch(string ifMatch, string expectedETag, [FromServices]IETagComparer comparer)
         {
-            return new
-            {
-                ifMatch,
-                ifMatchETag,
-                ifNoneMatch,
-                ifNoneMatchETag
-            };
+            Compare(ifMatch, expectedETag, comparer);
         }
 
-        [HttpGet("required")]
-        public void GetRequired([Required]string ifMatch) { }
+        [HttpGet("ifMatchETag")]
+        public void IfMatchETag(string ifMatchETag, string expectedETag, [FromServices]IETagComparer comparer)
+        {
+            Compare(ifMatchETag, expectedETag, comparer);
+        }
+
+        [HttpGet("ifNoneMatch")]
+        public void IfNoneMatch(string ifNoneMatch, string expectedETag, [FromServices]IETagComparer comparer)
+        {
+            Compare(ifNoneMatch, expectedETag, comparer);
+        }
+
+        [HttpGet("ifNoneMatchETag")]
+        public void IfNoneMatchETag(string ifNoneMatchETag, string expectedETag, [FromServices]IETagComparer comparer)
+        {
+            Compare(ifNoneMatchETag, expectedETag, comparer);
+        }
+
+        private static void Compare(string headerETag, string expectedETag, IETagComparer comparer)
+        {
+            if (expectedETag == null)
+                return;
+
+            comparer.EnsureEquals(headerETag, expectedETag);
+        }
     }
 }
