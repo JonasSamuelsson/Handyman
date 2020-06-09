@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Shouldly;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -24,16 +25,7 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
         [InlineData("api-version=3.0", null)]
         public async Task ShouldInvokeCorrectEndpoint(string query, string content)
         {
-            var builder = new HostBuilder()
-                .ConfigureWebHost(webHost =>
-                {
-                    webHost.UseTestServer();
-                    webHost.UseStartup<Startup>();
-                });
-
-            var host = await builder.StartAsync();
-
-            var client = host.GetTestClient();
+            var client = await CreateTestClient();
 
             var response = await client.GetAsync($"api-versioning?{query}");
 
@@ -54,6 +46,33 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             details.Status.ShouldBe(StatusCodes.Status400BadRequest);
             details.Title.ShouldBe("Bad Request");
             details.Type.ShouldBe("https://httpstatuses.com/400");
+        }
+
+        [Theory]
+        [InlineData("1")]
+        [InlineData("2")]
+        public async Task ShouldSupportMultipleVersions(string apiVersion)
+        {
+            var client = await CreateTestClient();
+
+            var response = await client.GetAsync($"api-versioning/multiple-versions?api-version={apiVersion}");
+
+            response.IsSuccessStatusCode.ShouldBeTrue();
+        }
+
+        private static async Task<HttpClient> CreateTestClient()
+        {
+            var builder = new HostBuilder()
+                .ConfigureWebHost(webHost =>
+                {
+                    webHost.UseTestServer();
+                    webHost.UseStartup<Startup>();
+                });
+
+            var host = await builder.StartAsync();
+
+            var client = host.GetTestClient();
+            return client;
         }
 
         public class Startup
@@ -87,6 +106,12 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
         public string Get2(string apiVersion)
         {
             return $"Get2:{apiVersion}";
+        }
+
+        [HttpGet("multiple-versions"), ApiVersion(new[] { "1", "2" })]
+        public string MultipleVersions(string apiVersion)
+        {
+            return apiVersion;
         }
     }
 }

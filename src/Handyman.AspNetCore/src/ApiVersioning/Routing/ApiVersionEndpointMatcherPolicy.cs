@@ -103,6 +103,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
                     endpointFound = true;
                     candidates.SetValidity(i, true);
                     AddApiVersionFeature(httpContext, version.Text);
+                    break;
                 }
             }
 
