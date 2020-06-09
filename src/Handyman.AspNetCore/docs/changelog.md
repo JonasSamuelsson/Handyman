@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 3.1.1
+
+### Fixed
+
+* Fixed api version routing issue.
+
 ## 3.1.0
 
 ### Added
