@@ -206,7 +206,7 @@ public class Repository
 
     public Repository(DbContext dbContext, IETagComparer eTagComparer)
     {
-        _dbContext = dbCOntext;
+        _dbContext = dbContext;
         _eTagComparer = eTagComparer;
     }
 
