@@ -12,7 +12,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
             _toggleEnabledHandlerType = toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType));
         }
 
-        public string[] Tags { get; set; } = { };
+        public string[] Tags { get; set; }
         public Type ToggleDisabledHandlerType { get; set; }
         public string ToggleName { get; set; }
 
