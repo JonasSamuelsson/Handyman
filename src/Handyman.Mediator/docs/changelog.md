@@ -1,5 +1,11 @@
 # Handyman.Mediator changelog
 
+## 9.0.0
+
+### Changed
+
+* All toggle attributes uses `null` as the default value for the `Tags` property.
+
 ## 8.1.3
 
 ### Fixed
