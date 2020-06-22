@@ -66,7 +66,7 @@
 [h.m-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=4
 [h.m-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Mediator?branchName=master
 
-[h.m.di-docs]: src/Handyman.Mediator/docs/index.md
+[h.m.di-docs]: src/Handyman.Mediator.DependencyInjection/docs/index.md
 [h.m.di-nuget]: https://www.nuget.org/packages/Handyman.Mediator.DependencyInjection/
 [h.m.di-nuget-version]: https://img.shields.io/nuget/v/Handyman.Mediator.DependencyInjection.svg
 [h.m.di-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Mediator.DependencyInjection.svg
