@@ -1,8 +1,7 @@
 trigger:
   branches:
     include:
-      - master
-      - outdated-debug
+      - handyman-outdated-debug
   paths:
     include:
     - src/Handyman.Tools.Outdated/*
