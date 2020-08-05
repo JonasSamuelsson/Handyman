@@ -66,6 +66,8 @@ namespace Handyman.Tools.Outdated.Analyze
 
             WriteResultToFile(projects);
 
+            DebugUtil.WriteProcessInfo();
+
             return 0;
         }
 
