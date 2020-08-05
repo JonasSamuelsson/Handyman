@@ -10,8 +10,9 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
             if (strings.Length == 0)
                 return;
 
-            package.Deprecation.Reason = strings[0];
             package.Deprecation.Alternative = strings.ElementAtOrDefault(1) ?? string.Empty;
+            package.Deprecation.IsDeprecated = true;
+            package.Deprecation.Reason = strings[0];
         }
     }
 }

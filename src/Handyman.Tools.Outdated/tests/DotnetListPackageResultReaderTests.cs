@@ -68,6 +68,7 @@ namespace Handyman.Tools.Outdated.Tests
             var package = framework.Packages.Single(x => x.Name == "Alpha");
             package.CurrentVersion.Should().Be("1.0.0");
             package.Deprecation.Alternative.Should().BeEmpty();
+            package.Deprecation.IsDeprecated.Should().BeTrue();
             package.Deprecation.Reason.Should().Be("Foo");
             package.Info.Should().BeEmpty();
             package.IsTransitive.Should().BeFalse();
@@ -78,12 +79,13 @@ namespace Handyman.Tools.Outdated.Tests
             update.Version.Should().Be("1.1.0");
 
             update = package.Updates[UpdateSeverity.Patch];
-            update.Info.Should().Be("deprecated");
+            update.Info.Should().Be("Deprecated");
             update.Version.Should().Be("1.0.2");
 
             package = framework.Packages.Single(x => x.Name == "Beta");
             package.CurrentVersion.Should().Be("1.1.0");
             package.Deprecation.Alternative.Should().BeEmpty();
+            package.Deprecation.IsDeprecated.Should().BeFalse();
             package.Deprecation.Reason.Should().BeEmpty();
             package.Info.Should().Be("Not found at the sources");
             package.IsTransitive.Should().BeFalse();
@@ -92,6 +94,7 @@ namespace Handyman.Tools.Outdated.Tests
             package = framework.Packages.Single(x => x.Name == "Gamma");
             package.CurrentVersion.Should().Be("1.0.0");
             package.Deprecation.Alternative.Should().Be("Something else");
+            package.Deprecation.IsDeprecated.Should().BeTrue();
             package.Deprecation.Reason.Should().Be("Bar");
             package.Info.Should().BeEmpty();
             package.IsTransitive.Should().BeTrue();
@@ -106,6 +109,7 @@ namespace Handyman.Tools.Outdated.Tests
             package = framework.Packages.Single();
             package.CurrentVersion.Should().Be("1.0.0");
             package.Deprecation.Alternative.Should().BeEmpty();
+            package.Deprecation.IsDeprecated.Should().BeFalse();
             package.Deprecation.Reason.Should().BeEmpty();
             package.Name.Should().Be("Alpha");
             package.Info.Should().BeEmpty();

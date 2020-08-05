@@ -12,6 +12,6 @@ namespace Handyman.Tools.Outdated.Model
         public PackageDeprecation Deprecation { get; } = new PackageDeprecation();
         public string Info { get; set; } = string.Empty;
 
-        public bool NeedsAttention => !string.IsNullOrEmpty(Info) || !string.IsNullOrEmpty(Deprecation.Reason) || Updates.Any();
+        public bool NeedsAttention => !string.IsNullOrEmpty(Info) || Deprecation.IsDeprecated || Updates.Any();
     }
 }

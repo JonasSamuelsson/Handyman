@@ -1,5 +1,4 @@
 ﻿using Handyman.Tools.Outdated.Model;
-using System.Text.RegularExpressions;
 
 namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
 {
@@ -7,9 +6,16 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
     {
         protected override void Read(string[] strings, Package package)
         {
-            if (TryParseVersion(strings[0], out var version, out var info))
+            if (TryParseVersion(strings[0], out var version, out var info, out var deprecated))
             {
                 var severity = GetUpdateSeverity(package.CurrentVersion, version);
+
+                if (deprecated)
+                {
+                    info = string.IsNullOrEmpty(info)
+                        ? "Deprecated"
+                        : $"Deprecated, {info}";
+                }
 
                 package.Updates[severity] = new PackageUpdate
                 {
@@ -21,28 +27,6 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
             {
                 package.Info = info;
             }
-        }
-
-        private static bool TryParseVersion(string s, out string version, out string info)
-        {
-            var match = Regex.Match(s, @"^(?<version>\d+\.\d+\.\d+\S*)( (?<info>.+))?$");
-
-            if (match.Success == false)
-            {
-                version = string.Empty;
-                info = s;
-                return false;
-            }
-
-            version = match.Groups["version"].Value;
-            info = match.Groups["info"].Value;
-
-            if (info == "(D)")
-            {
-                info = "deprecated";
-            }
-
-            return true;
         }
 
         private static UpdateSeverity GetUpdateSeverity(string currentVersion, string updateVersion)

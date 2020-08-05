@@ -120,11 +120,16 @@ namespace Handyman.Tools.Outdated.Analyze
                                         result += package.Info;
                                     }
 
-                                    if (!string.IsNullOrWhiteSpace(package.Deprecation.Reason))
+                                    if (package.Deprecation.IsDeprecated)
                                     {
-                                        result += $" Deprecated: {package.Deprecation.Reason}";
+                                        result += " Deprecated";
 
-                                        if (!string.IsNullOrWhiteSpace(package.Deprecation.Alternative))
+                                        if (!string.IsNullOrEmpty(package.Deprecation.Reason))
+                                        {
+                                            result += $", reason: {package.Deprecation.Reason}";
+                                        }
+
+                                        if (!string.IsNullOrEmpty(package.Deprecation.Alternative))
                                         {
                                             result += $", alternative: {package.Deprecation.Alternative}";
                                         }

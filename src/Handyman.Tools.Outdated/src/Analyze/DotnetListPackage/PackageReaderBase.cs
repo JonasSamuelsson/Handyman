@@ -1,6 +1,7 @@
 ﻿using Handyman.Tools.Outdated.Model;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
 {
@@ -23,14 +24,26 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
                 {
                     var package = targetFramework.Packages.GetOrAdd(x => x.Name == name, factory: () =>
                     {
-                        var currentVersion = strings[currentVersionIndex];
-
-                        return new Package
+                        var pkg = new Package
                         {
-                            CurrentVersion = currentVersion,
                             IsTransitive = isTransitive,
-                            Name = name
+                            Name = name,
                         };
+
+                        var currentVersionCandidate = strings[currentVersionIndex];
+
+                        if (TryParseVersion(currentVersionCandidate, out var currentVersion, out var info, out var deprecated))
+                        {
+                            pkg.CurrentVersion = currentVersion;
+                            pkg.Deprecation.IsDeprecated = deprecated;
+                            pkg.Info = info;
+                        }
+                        else
+                        {
+                            pkg.Info = currentVersionCandidate;
+                        }
+
+                        return pkg;
                     });
 
                     Read(strings.Skip(currentVersionIndex + 1).ToArray(), package);
@@ -93,5 +106,30 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
         }
 
         protected abstract void Read(string[] strings, Package package);
+
+        protected static bool TryParseVersion(string s, out string version, out string info, out bool deprecated)
+        {
+            var match = Regex.Match(s, @"^(?<version>\d+\.\d+\.\d+\S*)( (?<info>.+))?$");
+
+            deprecated = false;
+
+            if (match.Success == false)
+            {
+                version = string.Empty;
+                info = s;
+                return false;
+            }
+
+            version = match.Groups["version"].Value;
+            info = match.Groups["info"].Value;
+
+            if (info == "(D)")
+            {
+                deprecated = true;
+                info = string.Empty;
+            }
+
+            return true;
+        }
     }
 }

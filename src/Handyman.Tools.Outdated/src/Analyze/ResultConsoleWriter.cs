@@ -124,12 +124,19 @@ namespace Handyman.Tools.Outdated.Analyze
                         if (!string.IsNullOrWhiteSpace(package.Info))
                             _console.WriteLine($"      Info: {package.Info}");
 
-                        if (!string.IsNullOrWhiteSpace(package.Deprecation.Reason))
+                        if (package.Deprecation.IsDeprecated)
                         {
-                            _console.Write($"      Deprecated: {(package.Deprecation.Reason)}");
+                            _console.Write("      Deprecated");
 
-                            if (!string.IsNullOrWhiteSpace(package.Deprecation.Alternative))
-                                _console.Write($", alternative: {package.Deprecation.Alternative}");
+                            if (!string.IsNullOrEmpty(package.Deprecation.Reason))
+                            {
+                                _console.Write($", reason: {(package.Deprecation.Reason)}");
+                            }
+
+                            if (!string.IsNullOrEmpty(package.Deprecation.Alternative))
+                            {
+                                _console.Write($", alternative: {(package.Deprecation.Alternative)}");
+                            }
 
                             _console.WriteLine();
                         }
