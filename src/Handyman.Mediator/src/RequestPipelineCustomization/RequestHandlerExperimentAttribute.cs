@@ -21,7 +21,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             var experimentInfo = new RequestHandlerExperimentMetaData
             {
                 BaselineHandlerType = _baselineHandlerType,
-                ExperimentName = Name,
+                Name = Name,
                 Tags = Tags
             };
 

@@ -54,7 +54,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             experiment.Task.Status.ShouldBe(TaskStatus.RanToCompletion);
 
             toggle.ExperimentMetaData.BaselineHandlerType.ShouldBe(typeof(BaselineHandler));
-            toggle.ExperimentMetaData.ExperimentName.ShouldBe("test");
+            toggle.ExperimentMetaData.Name.ShouldBe("test");
             toggle.ExperimentMetaData.Tags.ShouldBe(new[] { "1", "2" });
         }
 
