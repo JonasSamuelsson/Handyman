@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Handyman.Mediator.PipelineCustomization;
+using System;
 using System.Collections.Generic;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    public class EventFilterToggleMetaData
+    public class EventFilterToggleMetaData : IToggleMetaData
     {
         public string Name { get; internal set; }
         public IEnumerable<string> Tags { get; internal set; }
