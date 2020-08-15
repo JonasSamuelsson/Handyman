@@ -20,10 +20,10 @@ namespace Handyman.Mediator.EventPipelineCustomization
         {
             var toggleInfo = new EventHandlerToggleMetaData
             {
+                Name = Name,
                 Tags = Tags,
                 ToggleDisabledHandlerType = ToggleDisabledHandlerType,
-                ToggleEnabledHandlerType = _toggleEnabledHandlerType,
-                ToggleName = Name
+                ToggleEnabledHandlerType = _toggleEnabledHandlerType
             };
 
             builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector(toggleInfo));

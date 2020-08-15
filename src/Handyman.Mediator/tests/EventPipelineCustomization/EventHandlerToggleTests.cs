@@ -26,10 +26,10 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
+            toggle.ToggleMetaData.Name.ShouldBe("test");
             toggle.ToggleMetaData.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleMetaData.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledEventHandler));
             toggle.ToggleMetaData.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledEventHandler));
-            toggle.ToggleMetaData.ToggleName.ShouldBe("test");
 
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
