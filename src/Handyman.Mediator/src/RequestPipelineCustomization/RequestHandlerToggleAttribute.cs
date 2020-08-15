@@ -12,9 +12,9 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _toggleEnabledHandlerType = toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType));
         }
 
+        public string Name { get; set; }
         public string[] Tags { get; set; }
         public Type ToggleDisabledHandlerType { get; set; }
-        public string ToggleName { get; set; }
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
@@ -23,7 +23,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
                 Tags = Tags,
                 ToggleDisabledHandlerType = ToggleDisabledHandlerType,
                 ToggleEnabledHandlerType = _toggleEnabledHandlerType,
-                ToggleName = ToggleName
+                ToggleName = Name
             };
 
             builder.AddHandlerSelector(new RequestHandlerToggleHandlerSelector(toggleInfo));

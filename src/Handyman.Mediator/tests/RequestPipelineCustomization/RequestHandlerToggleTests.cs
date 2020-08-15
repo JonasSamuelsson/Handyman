@@ -36,7 +36,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler), ToggleName = "test", Tags = new[] { "foo" })]
+        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler), Name = "test", Tags = new[] { "foo" })]
         private class Request : IRequest<object> { }
 
         private class ToggleEnabledRequestHandler : RequestHandler<Request, object>
