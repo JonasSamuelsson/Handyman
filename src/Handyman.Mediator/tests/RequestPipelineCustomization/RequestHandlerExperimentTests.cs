@@ -167,7 +167,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             public RequestHandlerExperimentMetadata ExperimentMetadata { get; set; }
 
             public Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentMetadata experimentMetadata,
-                RequestPipelineContext<TRequest> context)
+                RequestPipelineContext<TRequest> pipelineContext)
                 where TRequest : IRequest<TResponse>
             {
                 ExperimentMetadata = experimentMetadata;

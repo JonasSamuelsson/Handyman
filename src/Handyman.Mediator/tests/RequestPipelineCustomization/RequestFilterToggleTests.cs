@@ -70,7 +70,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             public RequestFilterToggleMetadata ToggleMetadata { get; set; }
 
             public Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleMetadata toggleMetadata,
-                RequestPipelineContext<TRequest> context)
+                RequestPipelineContext<TRequest> pipelineContext)
                 where TRequest : IRequest<TResponse>
             {
                 ToggleMetadata = toggleMetadata;
