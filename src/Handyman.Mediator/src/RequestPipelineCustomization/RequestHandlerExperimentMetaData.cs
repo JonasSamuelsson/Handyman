@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Handyman.Mediator.PipelineCustomization;
+using System;
+using System.Collections.Generic;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public class RequestHandlerExperimentMetaData
+    public class RequestHandlerExperimentMetaData : IToggleMetaData
     {
         public Type BaselineHandlerType { get; internal set; }
         public string Name { get; internal set; }
-        public string[] Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }
