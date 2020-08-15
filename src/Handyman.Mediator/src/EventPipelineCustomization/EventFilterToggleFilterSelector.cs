@@ -6,25 +6,25 @@ namespace Handyman.Mediator.EventPipelineCustomization
 {
     internal class EventFilterToggleFilterSelector : IEventFilterSelector
     {
-        private readonly EventFilterToggleInfo _toggleInfo;
+        private readonly EventFilterToggleMetaData _toggleMetaData;
 
-        public EventFilterToggleFilterSelector(EventFilterToggleInfo toggleInfo)
+        public EventFilterToggleFilterSelector(EventFilterToggleMetaData toggleMetaData)
         {
-            _toggleInfo = toggleInfo;
+            _toggleMetaData = toggleMetaData;
         }
 
         public async Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventFilterToggle>();
-            var enabled = await toggle.IsEnabled(_toggleInfo, context).ConfigureAwait();
+            var enabled = await toggle.IsEnabled(_toggleMetaData, context).ConfigureAwait();
 
             if (!enabled)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleInfo.ToggleEnabledFilterType);
+                filters.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleEnabledFilterType);
             }
-            else if (_toggleInfo.ToggleDisabledFilterType != null)
+            else if (_toggleMetaData.ToggleDisabledFilterType != null)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleInfo.ToggleDisabledFilterType);
+                filters.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleDisabledFilterType);
             }
         }
     }

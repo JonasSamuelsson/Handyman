@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    public class EventFilterToggleInfo
+    public class EventFilterToggleMetaData
     {
         public IEnumerable<string> Tags { get; internal set; }
         public Type ToggleDisabledFilterType { get; internal set; }
