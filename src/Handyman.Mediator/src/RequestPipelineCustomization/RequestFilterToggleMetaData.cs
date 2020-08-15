@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public class RequestFilterToggleInfo
+    public class RequestFilterToggleMetaData
     {
         public IEnumerable<string> Tags { get; internal set; }
         public Type ToggleDisabledFilterType { get; internal set; }

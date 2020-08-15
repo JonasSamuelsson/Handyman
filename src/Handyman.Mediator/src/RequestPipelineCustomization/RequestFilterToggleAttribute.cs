@@ -18,7 +18,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            var toggleInfo = new RequestFilterToggleInfo
+            var toggleInfo = new RequestFilterToggleMetaData
             {
                 Tags = Tags,
                 ToggleDisabledFilterType = ToggleDisabledFilterType,

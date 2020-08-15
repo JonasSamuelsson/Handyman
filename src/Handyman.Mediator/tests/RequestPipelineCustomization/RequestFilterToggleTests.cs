@@ -30,10 +30,10 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await mediator.Send(new Request());
 
-            toggle.ToggleInfo.Tags.ShouldBe(new[] { "foo" });
-            toggle.ToggleInfo.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledRequestFilter));
-            toggle.ToggleInfo.ToggleEnabledFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
-            toggle.ToggleInfo.ToggleName.ShouldBe("test");
+            toggle.ToggleMetaData.Tags.ShouldBe(new[] { "foo" });
+            toggle.ToggleMetaData.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledRequestFilter));
+            toggle.ToggleMetaData.ToggleEnabledFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
+            toggle.ToggleMetaData.ToggleName.ShouldBe("test");
 
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
@@ -67,13 +67,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class RequestFilterToggle : IRequestFilterToggle
         {
             public bool Enabled { get; set; }
-            public RequestFilterToggleInfo ToggleInfo { get; set; }
+            public RequestFilterToggleMetaData ToggleMetaData { get; set; }
 
-            public Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleInfo toggleInfo,
+            public Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleMetaData toggleMetaData,
                 RequestPipelineContext<TRequest> context)
                 where TRequest : IRequest<TResponse>
             {
-                ToggleInfo = toggleInfo;
+                ToggleMetaData = toggleMetaData;
                 return Task.FromResult(Enabled);
             }
         }
