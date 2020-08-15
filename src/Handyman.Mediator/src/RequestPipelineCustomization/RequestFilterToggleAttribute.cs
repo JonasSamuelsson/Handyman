@@ -20,10 +20,10 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         {
             var toggleInfo = new RequestFilterToggleMetaData
             {
+                Name = Name,
                 Tags = Tags,
                 ToggleDisabledFilterType = ToggleDisabledFilterType,
-                ToggleEnabledFilterType = _toggleEnabledFilterType,
-                ToggleName = Name
+                ToggleEnabledFilterType = _toggleEnabledFilterType
             };
 
             builder.AddFilterSelector(new RequestFilterToggleFilterSelector(toggleInfo));

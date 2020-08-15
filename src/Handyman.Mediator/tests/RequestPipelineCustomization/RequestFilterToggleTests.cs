@@ -30,10 +30,10 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await mediator.Send(new Request());
 
+            toggle.ToggleMetaData.Name.ShouldBe("test");
             toggle.ToggleMetaData.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleMetaData.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledRequestFilter));
             toggle.ToggleMetaData.ToggleEnabledFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
-            toggle.ToggleMetaData.ToggleName.ShouldBe("test");
 
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
