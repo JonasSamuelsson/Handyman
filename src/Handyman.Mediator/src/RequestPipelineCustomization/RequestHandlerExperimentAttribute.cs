@@ -13,7 +13,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             _baselineHandlerType = baselineHandlerType;
         }
 
-        public string ExperimentName { get; set; }
+        public string Name { get; set; }
         public string[] Tags { get; set; }
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
@@ -21,7 +21,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
             var experimentInfo = new RequestHandlerExperimentMetaData
             {
                 BaselineHandlerType = _baselineHandlerType,
-                ExperimentName = ExperimentName,
+                ExperimentName = Name,
                 Tags = Tags
             };
 

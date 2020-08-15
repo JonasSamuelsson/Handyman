@@ -112,7 +112,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             observer.Executed.ShouldBeFalse();
         }
 
-        [RequestHandlerExperiment(typeof(BaselineHandler), ExperimentName = "test", Tags = new[] { "1", "2" })]
+        [RequestHandlerExperiment(typeof(BaselineHandler), Name = "test", Tags = new[] { "1", "2" })]
         private class Request : IRequest<string> { }
 
         private class BaselineHandler : BaseHandler { }
