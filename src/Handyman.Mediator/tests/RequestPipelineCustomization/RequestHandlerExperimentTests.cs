@@ -53,9 +53,9 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
             experiment.Task.Result.ShouldBe("experiment");
             experiment.Task.Status.ShouldBe(TaskStatus.RanToCompletion);
 
-            toggle.ExperimentInfo.BaselineHandlerType.ShouldBe(typeof(BaselineHandler));
-            toggle.ExperimentInfo.ExperimentName.ShouldBe("test");
-            toggle.ExperimentInfo.Tags.ShouldBe(new[] { "1", "2" });
+            toggle.ExperimentMetaData.BaselineHandlerType.ShouldBe(typeof(BaselineHandler));
+            toggle.ExperimentMetaData.ExperimentName.ShouldBe("test");
+            toggle.ExperimentMetaData.Tags.ShouldBe(new[] { "1", "2" });
         }
 
         [Theory]
@@ -164,13 +164,13 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         private class Toggle : IRequestHandlerExperimentToggle
         {
             public bool Enabled { get; set; }
-            public RequestHandlerExperimentInfo ExperimentInfo { get; set; }
+            public RequestHandlerExperimentMetaData ExperimentMetaData { get; set; }
 
-            public Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentInfo experimentInfo,
+            public Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentMetaData experimentMetaData,
                 RequestPipelineContext<TRequest> context)
                 where TRequest : IRequest<TResponse>
             {
-                ExperimentInfo = experimentInfo;
+                ExperimentMetaData = experimentMetaData;
                 return Task.FromResult(Enabled);
             }
         }

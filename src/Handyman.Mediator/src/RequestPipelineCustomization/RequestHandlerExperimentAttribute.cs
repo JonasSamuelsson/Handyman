@@ -18,7 +18,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            var experimentInfo = new RequestHandlerExperimentInfo
+            var experimentInfo = new RequestHandlerExperimentMetaData
             {
                 BaselineHandlerType = _baselineHandlerType,
                 ExperimentName = ExperimentName,

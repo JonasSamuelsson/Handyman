@@ -2,7 +2,7 @@
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public class RequestHandlerExperimentInfo
+    public class RequestHandlerExperimentMetaData
     {
         public Type BaselineHandlerType { get; internal set; }
         public string ExperimentName { get; internal set; }
