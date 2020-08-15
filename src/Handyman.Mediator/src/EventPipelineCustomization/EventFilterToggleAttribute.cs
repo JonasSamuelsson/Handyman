@@ -20,10 +20,10 @@ namespace Handyman.Mediator.EventPipelineCustomization
         {
             var toggleInfo = new EventFilterToggleMetaData
             {
+                Name = Name,
                 Tags = Tags,
                 ToggleDisabledFilterType = ToggleDisabledFilterType,
-                ToggleEnabledFilterType = _toggleEnabledFilterType,
-                ToggleName = Name
+                ToggleEnabledFilterType = _toggleEnabledFilterType
             };
 
             builder.AddFilterSelector(new EventFilterToggleFilterSelector(toggleInfo));

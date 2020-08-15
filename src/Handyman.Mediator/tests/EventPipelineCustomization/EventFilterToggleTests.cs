@@ -26,10 +26,10 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
 
+            toggle.ToggleMetaData.Name.ShouldBe("test");
             toggle.ToggleMetaData.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleMetaData.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledEventFilter));
             toggle.ToggleMetaData.ToggleEnabledFilterType.ShouldBe(typeof(ToggleEnabledEventFilter));
-            toggle.ToggleMetaData.ToggleName.ShouldBe("test");
 
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
