@@ -6,25 +6,25 @@ namespace Handyman.Mediator.EventPipelineCustomization
 {
     internal class EventHandlerToggleHandlerSelector : IEventHandlerSelector
     {
-        private readonly EventHandlerToggleInfo _toggleInfo;
+        private readonly EventHandlerToggleMetaData _toggleMetaData;
 
-        public EventHandlerToggleHandlerSelector(EventHandlerToggleInfo toggleInfo)
+        public EventHandlerToggleHandlerSelector(EventHandlerToggleMetaData toggleMetaData)
         {
-            _toggleInfo = toggleInfo;
+            _toggleMetaData = toggleMetaData;
         }
 
         public async Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventHandlerToggle>();
-            var enabled = await toggle.IsEnabled(_toggleInfo, context).ConfigureAwait();
+            var enabled = await toggle.IsEnabled(_toggleMetaData, context).ConfigureAwait();
 
             if (!enabled)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggleInfo.ToggleEnabledHandlerType);
+                handlers.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleEnabledHandlerType);
             }
-            else if (_toggleInfo.ToggleDisabledHandlerType != null)
+            else if (_toggleMetaData.ToggleDisabledHandlerType != null)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggleInfo.ToggleDisabledHandlerType);
+                handlers.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleDisabledHandlerType);
             }
         }
     }

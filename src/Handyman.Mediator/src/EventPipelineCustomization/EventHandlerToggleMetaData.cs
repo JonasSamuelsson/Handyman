@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
-    public class EventHandlerToggleInfo
+    public class EventHandlerToggleMetaData
     {
         public IEnumerable<string> Tags { get; internal set; }
         public Type ToggleDisabledHandlerType { get; internal set; }
