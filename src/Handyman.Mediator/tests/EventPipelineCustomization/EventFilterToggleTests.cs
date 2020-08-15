@@ -28,14 +28,14 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
 
             toggle.ToggleMetadata.Name.ShouldBe("test");
             toggle.ToggleMetadata.Tags.ShouldBe(new[] { "foo" });
-            toggle.ToggleMetadata.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledEventFilter));
-            toggle.ToggleMetadata.ToggleEnabledFilterType.ShouldBe(typeof(ToggleEnabledEventFilter));
+            toggle.ToggleMetadata.ToggleDisabledFilterTypes.ShouldBe(new[] { typeof(ToggleDisabledEventFilter) });
+            toggle.ToggleMetadata.ToggleEnabledFilterTypes.ShouldBe(new[] { typeof(ToggleEnabledEventFilter) });
 
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventFilterToggle(typeof(ToggleEnabledEventFilter), ToggleDisabledFilterType = typeof(ToggleDisabledEventFilter), Name = "test", Tags = new[] { "foo" })]
+        [EventFilterToggle(new[] { typeof(ToggleEnabledEventFilter) }, ToggleDisabledFilterTypes = new[] { typeof(ToggleDisabledEventFilter) }, Name = "test", Tags = new[] { "foo" })]
         private class Event : IEvent { }
 
         private class ToggleEnabledEventFilter : IEventFilter<Event>

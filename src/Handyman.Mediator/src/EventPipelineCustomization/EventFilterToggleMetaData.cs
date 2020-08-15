@@ -8,7 +8,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
     {
         public string Name { get; internal set; }
         public IEnumerable<string> Tags { get; internal set; }
-        public Type ToggleDisabledFilterType { get; internal set; }
-        public Type ToggleEnabledFilterType { get; internal set; }
+        public IEnumerable<Type> ToggleDisabledFilterTypes { get; internal set; }
+        public IEnumerable<Type> ToggleEnabledFilterTypes { get; internal set; }
     }
 }

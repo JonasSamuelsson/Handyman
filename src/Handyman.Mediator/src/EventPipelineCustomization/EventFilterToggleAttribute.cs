@@ -1,32 +1,44 @@
 ﻿using System;
+using System.Linq;
 
 namespace Handyman.Mediator.EventPipelineCustomization
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class EventFilterToggleAttribute : EventPipelineBuilderAttribute
     {
-        private readonly Type _toggleEnabledFilterType;
+        private readonly Lazy<EventFilterToggleMetadata> _metadata;
+        private readonly Type[] _toggleEnabledFilterTypes;
 
-        public EventFilterToggleAttribute(Type toggleEnabledFilterType)
+        public EventFilterToggleAttribute(Type[] toggleEnabledFilterTypes)
         {
-            _toggleEnabledFilterType = toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType));
+            if (toggleEnabledFilterTypes == null)
+                throw new ArgumentNullException(nameof(toggleEnabledFilterTypes));
+
+            if (!toggleEnabledFilterTypes.Any())
+                throw new ArgumentException();
+
+            _metadata = new Lazy<EventFilterToggleMetadata>(CreateMetadata);
+            _toggleEnabledFilterTypes = toggleEnabledFilterTypes;
         }
 
         public string Name { get; set; }
         public string[] Tags { get; set; }
-        public Type ToggleDisabledFilterType { get; set; }
+        public Type[] ToggleDisabledFilterTypes { get; set; }
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            var toggleInfo = new EventFilterToggleMetadata
+            builder.AddFilterSelector(new EventFilterToggleFilterSelector(_metadata.Value));
+        }
+
+        private EventFilterToggleMetadata CreateMetadata()
+        {
+            return new EventFilterToggleMetadata
             {
                 Name = Name,
                 Tags = Tags,
-                ToggleDisabledFilterType = ToggleDisabledFilterType,
-                ToggleEnabledFilterType = _toggleEnabledFilterType
+                ToggleDisabledFilterTypes = ToggleDisabledFilterTypes ?? Enumerable.Empty<Type>(),
+                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes ?? Enumerable.Empty<Type>()
             };
-
-            builder.AddFilterSelector(new EventFilterToggleFilterSelector(toggleInfo));
         }
     }
 }
