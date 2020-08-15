@@ -6,25 +6,25 @@ namespace Handyman.Mediator.EventPipelineCustomization
 {
     internal class EventFilterToggleFilterSelector : IEventFilterSelector
     {
-        private readonly EventFilterToggleMetaData _toggleMetaData;
+        private readonly EventFilterToggleMetadata _toggleMetadata;
 
-        public EventFilterToggleFilterSelector(EventFilterToggleMetaData toggleMetaData)
+        public EventFilterToggleFilterSelector(EventFilterToggleMetadata toggleMetadata)
         {
-            _toggleMetaData = toggleMetaData;
+            _toggleMetadata = toggleMetadata;
         }
 
         public async Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventFilterToggle>();
-            var enabled = await toggle.IsEnabled(_toggleMetaData, context).ConfigureAwait();
+            var enabled = await toggle.IsEnabled(_toggleMetadata, context).ConfigureAwait();
 
             if (!enabled)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleEnabledFilterType);
+                filters.RemoveAll(x => x.GetType() == _toggleMetadata.ToggleEnabledFilterType);
             }
-            else if (_toggleMetaData.ToggleDisabledFilterType != null)
+            else if (_toggleMetadata.ToggleDisabledFilterType != null)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleDisabledFilterType);
+                filters.RemoveAll(x => x.GetType() == _toggleMetadata.ToggleDisabledFilterType);
             }
         }
     }

@@ -6,32 +6,32 @@ namespace Handyman.Mediator.PipelineCustomization
 {
     public abstract class ToggleBase : IEventFilterToggle, IEventHandlerToggle, IRequestFilterToggle, IRequestHandlerToggle, IRequestHandlerExperimentToggle
     {
-        public virtual Task<bool> IsEnabled<TEvent>(EventFilterToggleMetaData toggleMetaData, EventPipelineContext<TEvent> context) where TEvent : IEvent
+        public virtual Task<bool> IsEnabled<TEvent>(EventFilterToggleMetadata toggleMetadata, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
-            return IsEnabled((IToggleMetaData)toggleMetaData, context);
+            return IsEnabled((IToggleMetadata)toggleMetadata, context);
         }
 
-        public virtual Task<bool> IsEnabled<TEvent>(EventHandlerToggleMetaData toggleMetaData, EventPipelineContext<TEvent> context) where TEvent : IEvent
+        public virtual Task<bool> IsEnabled<TEvent>(EventHandlerToggleMetadata toggleMetadata, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
-            return IsEnabled((IToggleMetaData)toggleMetaData, context);
+            return IsEnabled((IToggleMetadata)toggleMetadata, context);
         }
 
-        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleMetaData toggleMetaData, RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
+        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleMetadata toggleMetadata, RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
         {
-            return IsEnabled(toggleMetaData, context);
+            return IsEnabled(toggleMetadata, context);
         }
 
-        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerToggleMetaData toggleMetaData, RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
+        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerToggleMetadata toggleMetadata, RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
         {
-            return IsEnabled(toggleMetaData, context);
+            return IsEnabled(toggleMetadata, context);
         }
 
-        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentMetaData experimentMetaData,
+        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentMetadata experimentMetadata,
             RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
         {
-            return IsEnabled(experimentMetaData, context);
+            return IsEnabled(experimentMetadata, context);
         }
 
-        protected abstract Task<bool> IsEnabled(IToggleMetaData metaData, IPipelineContext context);
+        protected abstract Task<bool> IsEnabled(IToggleMetadata metadata, IPipelineContext context);
     }
 }

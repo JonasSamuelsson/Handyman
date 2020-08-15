@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
 {
-    public class RequestHandlerExperimentMetaData : IToggleMetaData
+    public class RequestHandlerExperimentMetadata : IToggleMetadata
     {
         public Type BaselineHandlerType { get; internal set; }
         public string Name { get; internal set; }

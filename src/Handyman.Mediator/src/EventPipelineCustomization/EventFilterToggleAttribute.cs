@@ -18,7 +18,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            var toggleInfo = new EventFilterToggleMetaData
+            var toggleInfo = new EventFilterToggleMetadata
             {
                 Name = Name,
                 Tags = Tags,

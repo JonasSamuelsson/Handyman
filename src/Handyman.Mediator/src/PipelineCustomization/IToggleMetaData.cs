@@ -2,7 +2,7 @@
 
 namespace Handyman.Mediator.PipelineCustomization
 {
-    public interface IToggleMetaData
+    public interface IToggleMetadata
     {
         string Name { get; }
         IEnumerable<string> Tags { get; }
