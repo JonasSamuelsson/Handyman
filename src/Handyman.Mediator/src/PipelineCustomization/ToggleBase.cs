@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator.PipelineCustomization
 {
-    public abstract class ToggleBase : IEventFilterToggle, IEventHandlerToggle, IRequestFilterToggle, IRequestHandlerToggle
+    public abstract class ToggleBase : IEventFilterToggle, IEventHandlerToggle, IRequestFilterToggle, IRequestHandlerToggle, IRequestHandlerExperimentToggle
     {
         public virtual Task<bool> IsEnabled<TEvent>(EventFilterToggleMetaData toggleMetaData, EventPipelineContext<TEvent> context) where TEvent : IEvent
         {
@@ -24,6 +24,12 @@ namespace Handyman.Mediator.PipelineCustomization
         public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerToggleMetaData toggleMetaData, RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
         {
             return IsEnabled(toggleMetaData, context);
+        }
+
+        public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerExperimentMetaData experimentMetaData,
+            RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>
+        {
+            return IsEnabled(experimentMetaData, context);
         }
 
         protected abstract Task<bool> IsEnabled(IToggleMetaData metaData, IPipelineContext context);
