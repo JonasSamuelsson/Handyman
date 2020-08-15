@@ -6,26 +6,26 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 {
     internal class RequestHandlerToggleHandlerSelector : IRequestHandlerSelector
     {
-        private readonly RequestHandlerToggleInfo _toggleInfo;
+        private readonly RequestHandlerToggleMetaData _toggleMetaData;
 
-        public RequestHandlerToggleHandlerSelector(RequestHandlerToggleInfo toggleInfo)
+        public RequestHandlerToggleHandlerSelector(RequestHandlerToggleMetaData toggleMetaData)
         {
-            _toggleInfo = toggleInfo;
+            _toggleMetaData = toggleMetaData;
         }
 
         public async Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
             where TRequest : IRequest<TResponse>
         {
             var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
-            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleInfo, context).ConfigureAwait();
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleMetaData, context).ConfigureAwait();
 
             if (!enabled)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggleInfo.ToggleEnabledHandlerType);
+                handlers.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleEnabledHandlerType);
             }
-            else if (_toggleInfo.ToggleDisabledHandlerType != null)
+            else if (_toggleMetaData.ToggleDisabledHandlerType != null)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggleInfo.ToggleDisabledHandlerType);
+                handlers.RemoveAll(x => x.GetType() == _toggleMetaData.ToggleDisabledHandlerType);
             }
         }
     }
