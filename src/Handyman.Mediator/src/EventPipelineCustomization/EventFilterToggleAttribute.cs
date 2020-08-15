@@ -12,9 +12,9 @@ namespace Handyman.Mediator.EventPipelineCustomization
             _toggleEnabledFilterType = toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType));
         }
 
+        public string Name { get; set; }
         public string[] Tags { get; set; }
         public Type ToggleDisabledFilterType { get; set; }
-        public string ToggleName { get; set; }
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
@@ -23,7 +23,7 @@ namespace Handyman.Mediator.EventPipelineCustomization
                 Tags = Tags,
                 ToggleDisabledFilterType = ToggleDisabledFilterType,
                 ToggleEnabledFilterType = _toggleEnabledFilterType,
-                ToggleName = ToggleName
+                ToggleName = Name
             };
 
             builder.AddFilterSelector(new EventFilterToggleFilterSelector(toggleInfo));
