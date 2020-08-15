@@ -35,7 +35,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler), ToggleName = "test", Tags = new[] { "foo" })]
+        [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledEventHandler), Name = "test", Tags = new[] { "foo" })]
         private class Event : IEvent { }
 
         private class ToggleEnabledEventHandler : EventHandler<Event>
