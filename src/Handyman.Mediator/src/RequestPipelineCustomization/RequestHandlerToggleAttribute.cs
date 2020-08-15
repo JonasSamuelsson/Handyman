@@ -20,10 +20,10 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         {
             var toggleInfo = new RequestHandlerToggleMetaData
             {
+                Name = Name,
                 Tags = Tags,
                 ToggleDisabledHandlerType = ToggleDisabledHandlerType,
-                ToggleEnabledHandlerType = _toggleEnabledHandlerType,
-                ToggleName = Name
+                ToggleEnabledHandlerType = _toggleEnabledHandlerType
             };
 
             builder.AddHandlerSelector(new RequestHandlerToggleHandlerSelector(toggleInfo));

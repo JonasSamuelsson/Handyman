@@ -27,10 +27,10 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             await services.BuildServiceProvider().GetService<IMediator>().Send(new Request());
 
+            toggle.ToggleMetaData.Name.ShouldBe("test");
             toggle.ToggleMetaData.Tags.ShouldBe(new[] { "foo" });
             toggle.ToggleMetaData.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledRequestHandler));
             toggle.ToggleMetaData.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledRequestHandler));
-            toggle.ToggleMetaData.ToggleName.ShouldBe("test");
 
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
