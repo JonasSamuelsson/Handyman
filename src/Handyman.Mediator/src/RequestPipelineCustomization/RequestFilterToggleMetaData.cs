@@ -8,7 +8,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
     {
         public string Name { get; internal set; }
         public IEnumerable<string> Tags { get; internal set; }
-        public Type ToggleDisabledFilterType { get; internal set; }
-        public Type ToggleEnabledFilterType { get; internal set; }
+        public Type[] ToggleDisabledFilterTypes { get; internal set; }
+        public Type[] ToggleEnabledFilterTypes { get; internal set; }
     }
 }

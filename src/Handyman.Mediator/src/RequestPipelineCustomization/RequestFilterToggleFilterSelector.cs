@@ -1,5 +1,6 @@
 ﻿using Handyman.Mediator.Internals;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.RequestPipelineCustomization
@@ -21,11 +22,11 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
             if (!enabled)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleMetadata.ToggleEnabledFilterType);
+                filters.RemoveAll(x => _toggleMetadata.ToggleEnabledFilterTypes.Contains(x.GetType()));
             }
-            else if (_toggleMetadata.ToggleDisabledFilterType != null)
+            else if (_toggleMetadata.ToggleDisabledFilterTypes != null)
             {
-                filters.RemoveAll(x => x.GetType() == _toggleMetadata.ToggleDisabledFilterType);
+                filters.RemoveAll(x => _toggleMetadata.ToggleDisabledFilterTypes.Contains(x.GetType()));
             }
         }
     }

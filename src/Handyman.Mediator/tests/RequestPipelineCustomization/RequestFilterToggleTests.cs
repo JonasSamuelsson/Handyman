@@ -15,7 +15,7 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
         public async Task ShouldToggleRequestFilter(bool toggleEnabled)
         {
             var toggle = new RequestFilterToggle { Enabled = toggleEnabled };
-            var toggledFilter = new ToggledEnabledRequestFilter();
+            var toggledFilter = new ToggleEnabledRequestFilter();
             var fallbackFilter = new ToggleDisabledRequestFilter();
 
             var services = new ServiceCollection();
@@ -32,17 +32,17 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             toggle.ToggleMetadata.Name.ShouldBe("test");
             toggle.ToggleMetadata.Tags.ShouldBe(new[] { "foo" });
-            toggle.ToggleMetadata.ToggleDisabledFilterType.ShouldBe(typeof(ToggleDisabledRequestFilter));
-            toggle.ToggleMetadata.ToggleEnabledFilterType.ShouldBe(typeof(ToggledEnabledRequestFilter));
+            toggle.ToggleMetadata.ToggleDisabledFilterTypes.ShouldBe(new[] { typeof(ToggleDisabledRequestFilter) });
+            toggle.ToggleMetadata.ToggleEnabledFilterTypes.ShouldBe(new[] { typeof(ToggleEnabledRequestFilter) });
 
             toggledFilter.Executed.ShouldBe(toggleEnabled);
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestFilterToggle(typeof(ToggledEnabledRequestFilter), ToggleDisabledFilterType = typeof(ToggleDisabledRequestFilter), Name = "test", Tags = new[] { "foo" })]
+        [RequestFilterToggle(new[] { typeof(ToggleEnabledRequestFilter) }, ToggleDisabledFilterTypes = new[] { typeof(ToggleDisabledRequestFilter) }, Name = "test", Tags = new[] { "foo" })]
         private class Request : IRequest<object> { }
 
-        private class ToggledEnabledRequestFilter : IRequestFilter<Request, object>
+        private class ToggleEnabledRequestFilter : IRequestFilter<Request, object>
         {
             public bool Executed { get; set; }
 
