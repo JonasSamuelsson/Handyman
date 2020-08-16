@@ -1,5 +1,6 @@
 ﻿using Handyman.Mediator.Internals;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.EventPipelineCustomization
@@ -20,11 +21,11 @@ namespace Handyman.Mediator.EventPipelineCustomization
 
             if (!enabled)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggleMetadata.ToggleEnabledHandlerType);
+                handlers.RemoveAll(x => _toggleMetadata.ToggleEnabledHandlerTypes.Contains(x.GetType()));
             }
-            else if (_toggleMetadata.ToggleDisabledHandlerType != null)
+            else if (_toggleMetadata.ToggleDisabledHandlerTypes != null)
             {
-                handlers.RemoveAll(x => x.GetType() == _toggleMetadata.ToggleDisabledHandlerType);
+                handlers.RemoveAll(x => _toggleMetadata.ToggleDisabledHandlerTypes.Contains(x.GetType()));
             }
         }
     }
