@@ -29,14 +29,14 @@ namespace Handyman.Mediator.Tests.RequestPipelineCustomization
 
             toggle.ToggleMetadata.Name.ShouldBe("test");
             toggle.ToggleMetadata.Tags.ShouldBe(new[] { "foo" });
-            toggle.ToggleMetadata.ToggleDisabledHandlerType.ShouldBe(typeof(ToggleDisabledRequestHandler));
-            toggle.ToggleMetadata.ToggleEnabledHandlerType.ShouldBe(typeof(ToggleEnabledRequestHandler));
+            toggle.ToggleMetadata.ToggleDisabledHandlerTypes.ShouldBe(new[] { typeof(ToggleDisabledRequestHandler) });
+            toggle.ToggleMetadata.ToggleEnabledHandlerTypes.ShouldBe(new[] { typeof(ToggleEnabledRequestHandler) });
 
             toggledHandler.Executed.ShouldBe(toggleEnabled);
             fallbackHandler.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerType = typeof(ToggleDisabledRequestHandler), Name = "test", Tags = new[] { "foo" })]
+        [RequestHandlerToggle(new[] { typeof(ToggleEnabledRequestHandler) }, ToggleDisabledHandlerTypes = new[] { typeof(ToggleDisabledRequestHandler) }, Name = "test", Tags = new[] { "foo" })]
         private class Request : IRequest<object> { }
 
         private class ToggleEnabledRequestHandler : RequestHandler<Request, object>
