@@ -46,19 +46,25 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             string parentPid = "0";
             Process myParent;
-
-            using (ManagementObject mo = new ManagementObject("win32_process.handle='" + Id.ToString() + "'"))
+            try
             {
-                try
+                using (ManagementObject mo = new ManagementObject("win32_process.handle='" + Id.ToString() + "'"))
                 {
-                    mo.Get();
-                    parentPid = Convert.ToInt32(mo["ParentProcessId"]).ToString();
-                    myParent = Process.GetProcessById(Convert.ToInt32(parentPid));
+                    try
+                    {
+                        mo.Get();
+                        parentPid = Convert.ToInt32(mo["ParentProcessId"]).ToString();
+                        myParent = Process.GetProcessById(Convert.ToInt32(parentPid));
+                    }
+                    catch (Exception ex)
+                    {
+                        return "0";
+                    }
                 }
-                catch (Exception ex)
-                {
-                    return "0";
-                }
+            }
+            catch (Exception ex)
+            {
+                return "0";
             }
 
             return myParent.ProcessName + "-" + parentPid;
