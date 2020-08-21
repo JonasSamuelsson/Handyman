@@ -44,8 +44,6 @@ namespace Handyman.Tools.Outdated.Analyze
 
         private static string GetParentProcess(int Id)
         {
-            string parentPid = "0";
-            Process myParent;
             try
             {
                 using (ManagementObject mo = new ManagementObject("win32_process.handle='" + Id.ToString() + "'"))
@@ -53,21 +51,20 @@ namespace Handyman.Tools.Outdated.Analyze
                     try
                     {
                         mo.Get();
-                        parentPid = Convert.ToInt32(mo["ParentProcessId"]).ToString();
-                        myParent = Process.GetProcessById(Convert.ToInt32(parentPid));
+                        var parentPid = Convert.ToInt32(mo["ParentProcessId"]);
+                        var parent = Process.GetProcessById(parentPid);
+                        return $"{parent.ProcessName}-{parentPid}";
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         return "0";
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return "0";
             }
-
-            return myParent.ProcessName + "-" + parentPid;
         }
     }
 }
