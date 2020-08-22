@@ -10,7 +10,7 @@ namespace Handyman.Mediator.RequestPipelineCustomization
 
         public RequestHandlerExperimentAttribute(Type baselineHandlerType)
         {
-            _baselineHandlerType = baselineHandlerType;
+            _baselineHandlerType = baselineHandlerType ?? throw new ArgumentNullException(nameof(baselineHandlerType));
         }
 
         public string Name { get; set; }
