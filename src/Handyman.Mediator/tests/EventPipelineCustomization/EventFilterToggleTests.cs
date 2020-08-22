@@ -35,7 +35,7 @@ namespace Handyman.Mediator.Tests.EventPipelineCustomization
             fallbackFilter.Executed.ShouldBe(!toggleEnabled);
         }
 
-        [EventFilterToggle(new[] { typeof(ToggleEnabledEventFilter) }, ToggleDisabledFilterTypes = new[] { typeof(ToggleDisabledEventFilter) }, Name = "test", Tags = new[] { "foo" })]
+        [EventFilterToggle(typeof(ToggleEnabledEventFilter), ToggleDisabledFilterTypes = new[] { typeof(ToggleDisabledEventFilter) }, Name = "test", Tags = new[] { "foo" })]
         private class Event : IEvent { }
 
         private class ToggleEnabledEventFilter : IEventFilter<Event>

@@ -9,6 +9,11 @@ namespace Handyman.Mediator.EventPipelineCustomization
         private readonly Lazy<EventFilterToggleMetadata> _metadata;
         private readonly Type[] _toggleEnabledFilterTypes;
 
+        public EventFilterToggleAttribute(Type toggleEnabledFilterType)
+            : this(new[] { toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType)) })
+        {
+        }
+
         public EventFilterToggleAttribute(Type[] toggleEnabledFilterTypes)
         {
             if (toggleEnabledFilterTypes == null)

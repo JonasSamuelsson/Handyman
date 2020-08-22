@@ -9,6 +9,11 @@ namespace Handyman.Mediator.EventPipelineCustomization
         private readonly Lazy<EventHandlerToggleMetadata> _metadata;
         private readonly Type[] _toggleEnabledHandlerTypes;
 
+        public EventHandlerToggleAttribute(Type toggleEnabledHandlerType)
+            : this(new[] { toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType)) })
+        {
+        }
+
         public EventHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes)
         {
             if (toggleEnabledHandlerTypes == null)

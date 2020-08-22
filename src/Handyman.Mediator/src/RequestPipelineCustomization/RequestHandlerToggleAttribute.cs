@@ -9,6 +9,11 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         private readonly Lazy<RequestHandlerToggleMetadata> _metadata;
         private readonly Type[] _toggleEnabledHandlerTypes;
 
+        public RequestHandlerToggleAttribute(Type toggleEnabledHandlerType)
+            : this(new[] { toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType)) })
+        {
+        }
+
         public RequestHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes)
         {
             if (toggleEnabledHandlerTypes == null)

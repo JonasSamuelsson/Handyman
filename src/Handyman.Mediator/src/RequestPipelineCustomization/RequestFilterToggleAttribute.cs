@@ -9,6 +9,11 @@ namespace Handyman.Mediator.RequestPipelineCustomization
         private readonly Lazy<RequestFilterToggleMetadata> _metadata;
         private readonly Type[] _toggleEnabledFilterTypes;
 
+        public RequestFilterToggleAttribute(Type toggleEnabledFilterType)
+            : this(new[] { toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType)) })
+        {
+        }
+
         public RequestFilterToggleAttribute(Type[] toggleEnabledFilterTypes)
         {
             if (toggleEnabledFilterTypes == null)
