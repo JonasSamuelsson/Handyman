@@ -1,4 +1,4 @@
-﻿using Handyman.Mediator.Internals;
+﻿using Handyman.Mediator.Pipelines;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

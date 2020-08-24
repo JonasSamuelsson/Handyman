@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.Pipelines;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;

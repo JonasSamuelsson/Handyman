@@ -1,5 +1,4 @@
-﻿using Handyman.Mediator.EventPipelineCustomization;
-using Handyman.Mediator.Internals;
+﻿using Handyman.Mediator.Pipelines;
 
 namespace Handyman.Mediator
 {

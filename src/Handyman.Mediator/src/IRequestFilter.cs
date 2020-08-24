@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Handyman.Mediator.Pipelines;
 
 namespace Handyman.Mediator
 {
