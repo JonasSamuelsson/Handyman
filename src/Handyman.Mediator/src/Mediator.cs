@@ -1,7 +1,7 @@
-﻿using Handyman.Mediator.Pipelines;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Handyman.Mediator.Pipeline;
 
 namespace Handyman.Mediator
 {

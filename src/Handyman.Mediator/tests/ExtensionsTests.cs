@@ -1,6 +1,6 @@
 ﻿using Shouldly;
 using System.Collections.Generic;
-using Handyman.Mediator.Pipelines;
+using Handyman.Mediator.Pipeline;
 using Xunit;
 
 namespace Handyman.Mediator.Tests

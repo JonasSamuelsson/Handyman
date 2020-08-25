@@ -1,4 +1,4 @@
-﻿using Handyman.Mediator.Pipelines;
+﻿using Handyman.Mediator.Pipeline;
 
 namespace Handyman.Mediator
 {
