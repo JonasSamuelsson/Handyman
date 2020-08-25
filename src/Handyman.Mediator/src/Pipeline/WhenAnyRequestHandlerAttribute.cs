@@ -7,7 +7,7 @@ namespace Handyman.Mediator.Pipeline
     {
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            builder.UseHandlerExecutionStrategy(new WhenAnyRequestHandlerExecutionStrategy());
+            builder.AddHandlerSelector(new WhenAnyRequestHandlerSelector());
         }
     }
 }
