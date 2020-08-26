@@ -46,6 +46,11 @@ namespace Handyman.Mediator.Pipeline
                 {
                     var builder = new RequestPipelineBuilder();
 
+                    if (attributes.Count != 1)
+                    {
+                        attributes.Sort((x, y) => x.ExecutionOrder.CompareTo(y.ExecutionOrder));
+                    }
+
                     foreach (var attribute in attributes)
                     {
                         attribute.Configure(builder, serviceProvider);
