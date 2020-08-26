@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Handyman.Mediator.Tests.Pipeline
 {
-    public class EventPipelineCustomizationOrderingTests
+    public class EventPipelineBuilderExecutionOrderTests
     {
         [Fact]
         public async Task ShouldExecuteCustomizationsInSpecifiedOrder()
@@ -23,12 +23,12 @@ namespace Handyman.Mediator.Tests.Pipeline
             strings.ShouldBe(new[] { "first", "middle", "last" });
         }
 
-        [MyCustomization(ExecutionOrder = ExecutionOrder.Last, Text = "last")]
-        [MyCustomization(ExecutionOrder = ExecutionOrder.First, Text = "first")]
-        [MyCustomization(Text = "middle")]
+        [PipelineBuilder(ExecutionOrder = ExecutionOrder.Last, Text = "last")]
+        [PipelineBuilder(ExecutionOrder = ExecutionOrder.First, Text = "first")]
+        [PipelineBuilder(Text = "middle")]
         private class MyEvent : IEvent { }
 
-        private class MyCustomizationAttribute : EventPipelineBuilderAttribute
+        private class PipelineBuilderAttribute : EventPipelineBuilderAttribute
         {
             public string Text { get; set; }
 

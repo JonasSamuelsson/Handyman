@@ -50,7 +50,7 @@ namespace Handyman.Mediator.Pipeline
 
                     if (attributes.Count != 1)
                     {
-                        attributes.Sort((x, y) => x.Order.CompareTo(y.Order));
+                        attributes.Sort((x, y) => x.ExecutionOrder.CompareTo(y.ExecutionOrder));
                     }
 
                     foreach (var attribute in attributes)
