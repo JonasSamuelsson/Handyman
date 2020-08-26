@@ -28,20 +28,18 @@ namespace Handyman.Mediator.Pipeline
 
         internal abstract Task<TResponse> Execute(RequestPipelineContext<TRequest> context);
 
-        protected Task<TResponse> Execute(List<IRequestFilter<TRequest, TResponse>> filters,
-            RequestHandlerDelegate<TRequest, TResponse> handler, RequestPipelineContext<TRequest> context)
+        protected Task<TResponse> Execute(List<IRequestFilter<TRequest, TResponse>> filters, IRequestHandler<TRequest, TResponse> handler, IRequestHandlerExecutionStrategy executionStrategy, RequestPipelineContext<TRequest> context)
         {
             if (filters.Count == 0)
             {
                 context.CancellationToken.ThrowIfCancellationRequested();
-                return handler.Invoke(context);
+                return executionStrategy.Execute(handler, context);
             }
 
             filters.Sort(FilterComparer.CompareFilters);
 
             var index = 0;
             var filterCount = filters.Count;
-
 
             return Execute();
 
@@ -54,7 +52,7 @@ namespace Handyman.Mediator.Pipeline
                 }
 
                 context.CancellationToken.ThrowIfCancellationRequested();
-                return handler.Invoke(context);
+                return executionStrategy.Execute(handler, context);
             }
         }
     }

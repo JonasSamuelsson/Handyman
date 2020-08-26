@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline
@@ -27,8 +28,24 @@ namespace Handyman.Mediator.Pipeline
                 await handlerSelector.SelectHandlers(handlers, context).ConfigureAwait();
             }
 
+            AssertThereIsSingleHandlerToExecute(context, handlers);
+
             context.CancellationToken.ThrowIfCancellationRequested();
-            return await Execute(filters, ctx => HandlerExecutionStrategy.Execute(handlers, ctx), context).ConfigureAwait();
+
+            return await Execute(filters, handlers[0], HandlerExecutionStrategy, context).ConfigureAwait();
+        }
+
+        private static void AssertThereIsSingleHandlerToExecute(RequestPipelineContext<TRequest> context, List<IRequestHandler<TRequest, TResponse>> handlers)
+        {
+            if (handlers.Count == 0)
+            {
+                throw new InvalidOperationException($"No handlers for request of type '{context.Request.GetType().FullName}'.");
+            }
+
+            if (handlers.Count > 1)
+            {
+                throw new InvalidOperationException($"Multiple handlers for request of type '{context.Request.GetType().FullName}'.");
+            }
         }
     }
 }

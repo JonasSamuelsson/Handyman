@@ -80,11 +80,12 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public Action<string> Action { get; set; }
 
-            public Task<TResponse> Execute<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            public Task<TResponse> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler,
+                RequestPipelineContext<TRequest> context)
                 where TRequest : IRequest<TResponse>
             {
                 Action.Invoke("execution strategy");
-                return handlers.Single().Handle(context.Request, context.CancellationToken);
+                return handler.Handle(context.Request, context.CancellationToken);
             }
         }
 
