@@ -17,14 +17,14 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
-            var experimentInfo = new RequestHandlerExperimentMetadata
+            var metadata = new RequestHandlerExperimentMetadata
             {
                 BaselineHandlerType = _baselineHandlerType,
                 Name = Name,
                 Tags = Tags
             };
 
-            builder.UseHandlerExecutionStrategy(new RequestHandlerExperimentExecutionStrategy(experimentInfo));
+            builder.AddHandlerSelector(new RequestHandlerExperimentHandlerSelector(metadata, serviceProvider));
         }
     }
 }
