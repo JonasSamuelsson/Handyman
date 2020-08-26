@@ -48,6 +48,11 @@ namespace Handyman.Mediator.Pipeline
                 {
                     var builder = new EventPipelineBuilder();
 
+                    if (attributes.Count != 1)
+                    {
+                        attributes.Sort((x, y) => x.Order.CompareTo(y.Order));
+                    }
+
                     foreach (var attribute in attributes)
                     {
                         attribute.Configure(builder, serviceProvider);
