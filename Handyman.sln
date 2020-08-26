@@ -53,6 +53,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Tools.Outdated", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Tools.Outdated.Tests", "src\Handyman.Tools.Outdated\tests\Handyman.Tools.Outdated.Tests.csproj", "{9084F391-FCED-4C6E-B0C5-59C4B8DBF8F3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DuckTyping", "src\Handyman.DuckTyping\src\Handyman.DuckTyping.csproj", "{12BC49B7-5CA9-47D7-8763-33A6FBF7BAD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DuckTyping.Tests", "src\Handyman.DuckTyping\test\Handyman.DuckTyping.Tests.csproj", "{6E70686A-195B-4EB2-859A-8A83581CB644}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.DuckTyping.Benchmarks", "src\Handyman.DuckTyping\benchmarks\Handyman.DuckTyping.Benchmarks.csproj", "{2D1E8A24-791C-48B1-9880-5C7896CC8AAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +153,18 @@ Global
 		{9084F391-FCED-4C6E-B0C5-59C4B8DBF8F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9084F391-FCED-4C6E-B0C5-59C4B8DBF8F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9084F391-FCED-4C6E-B0C5-59C4B8DBF8F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12BC49B7-5CA9-47D7-8763-33A6FBF7BAD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12BC49B7-5CA9-47D7-8763-33A6FBF7BAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12BC49B7-5CA9-47D7-8763-33A6FBF7BAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12BC49B7-5CA9-47D7-8763-33A6FBF7BAD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E70686A-195B-4EB2-859A-8A83581CB644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E70686A-195B-4EB2-859A-8A83581CB644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E70686A-195B-4EB2-859A-8A83581CB644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E70686A-195B-4EB2-859A-8A83581CB644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D1E8A24-791C-48B1-9880-5C7896CC8AAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D1E8A24-791C-48B1-9880-5C7896CC8AAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D1E8A24-791C-48B1-9880-5C7896CC8AAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D1E8A24-791C-48B1-9880-5C7896CC8AAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

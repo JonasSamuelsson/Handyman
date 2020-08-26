@@ -1,0 +1,16 @@
+<Project>
+    <PropertyGroup>
+        <!-- project -->
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <!-- nuget -->
+        <Authors>Jonas Samuelsson</Authors>
+        <Company />
+        <Product>Handyman</Product>
+        <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
+        <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
+    </PropertyGroup>
+</Project>
