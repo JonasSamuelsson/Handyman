@@ -25,14 +25,16 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             var toggle = _serviceProvider.GetRequiredService<IRequestHandlerExperimentToggle>();
             var isEnabled = await toggle.IsEnabled<TRequest, TResponse>(_metadata, context).ConfigureAwait();
 
+            var experimentalHandlerTypes = GetExperimentalHandlerTypes(handlers);
+
             if (isEnabled == false)
             {
-                handlers.RemoveAll(x => x.GetType() != _metadata.BaselineHandlerType);
+                handlers.RemoveAll(x => experimentalHandlerTypes.Contains(x.GetType()));
                 return;
             }
 
             var baselineHandler = GetBaselineHandler(handlers);
-            var experimentalHandlers = handlers.Where(x => x != baselineHandler).ToList();
+            var experimentalHandlers = handlers.Where(x => experimentalHandlerTypes.Contains(x.GetType())).ToList();
             var observer = _serviceProvider.GetRequiredService<IRequestHandlerExperimentObserver>();
 
             handlers.Clear();
@@ -43,6 +45,14 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
         private IRequestHandler<TRequest, TResponse> GetBaselineHandler<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers) where TRequest : IRequest<TResponse>
         {
             return handlers.Single(x => x.GetType() == _metadata.BaselineHandlerType);
+        }
+
+        private Type[] GetExperimentalHandlerTypes<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers) where TRequest : IRequest<TResponse>
+        {
+            return _metadata.ExperimentalHandlerTypes ??
+                   handlers.Select(x => x.GetType())
+                       .Where(x => x != _metadata.BaselineHandlerType)
+                       .ToArray();
         }
     }
 }

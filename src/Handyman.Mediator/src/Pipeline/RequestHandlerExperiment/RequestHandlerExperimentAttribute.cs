@@ -12,6 +12,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             _baselineHandlerType = baselineHandlerType ?? throw new ArgumentNullException(nameof(baselineHandlerType));
         }
 
+        public Type[] ExperimentalHandlerTypes { get; set; }
         public string Name { get; set; }
         public string[] Tags { get; set; }
 
@@ -20,6 +21,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             var metadata = new RequestHandlerExperimentMetadata
             {
                 BaselineHandlerType = _baselineHandlerType,
+                ExperimentalHandlerTypes = ExperimentalHandlerTypes,
                 Name = Name,
                 Tags = Tags
             };
