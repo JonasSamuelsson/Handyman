@@ -8,20 +8,6 @@ namespace Handyman.Mediator.Pipeline
     internal abstract class EventPipeline
     {
         internal abstract Task Execute(IEvent @event, IServiceProvider serviceProvider, CancellationToken cancellationToken);
-
-        private static Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var tasks = new List<Task>(handlers.Count);
-
-            foreach (var handler in handlers)
-            {
-                tasks.Add(handler.Handle(@event, cancellationToken));
-            }
-
-            return Task.WhenAll(tasks);
-        }
     }
 
     internal abstract class EventPipeline<TEvent> : EventPipeline
@@ -65,7 +51,7 @@ namespace Handyman.Mediator.Pipeline
                 if (index < filterCount)
                 {
                     context.CancellationToken.ThrowIfCancellationRequested();
-                    return filters[index++].Execute(context, Execute);
+                    return filters[index++].Execute(context.Event, context, Execute);
                 }
 
                 context.CancellationToken.ThrowIfCancellationRequested();

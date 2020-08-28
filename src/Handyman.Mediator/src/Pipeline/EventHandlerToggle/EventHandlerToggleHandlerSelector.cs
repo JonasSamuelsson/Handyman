@@ -13,7 +13,8 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
             _toggleMetadata = toggleMetadata;
         }
 
-        public async Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
+        public async Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+            where TEvent : IEvent
         {
             var toggle = context.ServiceProvider.GetRequiredService<IEventHandlerToggle>();
             var enabled = await toggle.IsEnabled(_toggleMetadata, context).ConfigureAwait();

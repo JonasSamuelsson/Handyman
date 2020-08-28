@@ -42,7 +42,8 @@ namespace Handyman.Mediator.Tests.Pipeline
 
         private class EventFilterSelector : IEventFilterSelector
         {
-            public Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context) where TEvent : IEvent
+            public Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context)
+                where TEvent : IEvent
             {
                 filters.Add(new EventFilter<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
@@ -59,11 +60,10 @@ namespace Handyman.Mediator.Tests.Pipeline
         }
 
         private class EventFilter<TEvent> : IEventFilter<TEvent>
-            where TEvent : IEvent
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute(EventPipelineContext<TEvent> context, EventFilterExecutionDelegate next)
+            public Task Execute(TEvent @event, IEventFilterContext context, EventFilterExecutionDelegate next)
             {
                 Action("filter");
                 return next();

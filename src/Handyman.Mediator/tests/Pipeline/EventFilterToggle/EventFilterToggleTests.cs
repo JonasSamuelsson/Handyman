@@ -43,7 +43,7 @@ namespace Handyman.Mediator.Tests.Pipeline.EventFilterToggle
         {
             public bool Executed { get; set; }
 
-            public Task Execute(EventPipelineContext<Event> context, EventFilterExecutionDelegate next)
+            public Task Execute(Event @event, IEventFilterContext context, EventFilterExecutionDelegate next)
             {
                 Executed = true;
                 return next();
@@ -54,7 +54,7 @@ namespace Handyman.Mediator.Tests.Pipeline.EventFilterToggle
         {
             public bool Executed { get; set; }
 
-            public Task Execute(EventPipelineContext<Event> context, EventFilterExecutionDelegate next)
+            public Task Execute(Event @event, IEventFilterContext context, EventFilterExecutionDelegate next)
             {
                 Executed = true;
                 return next();
@@ -66,8 +66,8 @@ namespace Handyman.Mediator.Tests.Pipeline.EventFilterToggle
             public bool Enabled { get; set; }
             public EventFilterToggleMetadata ToggleMetadata { get; set; }
 
-            public Task<bool> IsEnabled<TEvent>(EventFilterToggleMetadata toggleMetadata,
-                EventPipelineContext<TEvent> pipelineContext) where TEvent : IEvent
+            public Task<bool> IsEnabled<TEvent>(EventFilterToggleMetadata toggleMetadata, EventPipelineContext<TEvent> pipelineContext)
+                where TEvent : IEvent
             {
                 ToggleMetadata = toggleMetadata;
                 return Task.FromResult(Enabled);
