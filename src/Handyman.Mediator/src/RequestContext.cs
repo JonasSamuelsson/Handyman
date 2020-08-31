@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Handyman.Mediator.Pipeline
+namespace Handyman.Mediator
 {
     public class RequestContext<TRequest> : IPipelineContext
     {
