@@ -5,6 +5,6 @@ namespace Handyman.Mediator
 {
     public interface IEventFilter<TEvent>
     {
-        Task Execute(EventPipelineContext<TEvent> pipelineContext, EventFilterExecutionDelegate next);
+        Task Execute(EventContext<TEvent> eventContext, EventFilterExecutionDelegate next);
     }
 }

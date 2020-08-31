@@ -9,16 +9,16 @@ namespace Handyman.Mediator.Pipeline
 {
     public abstract class ToggleBase : IEventFilterToggle, IEventHandlerToggle, IRequestFilterToggle, IRequestHandlerToggle, IRequestHandlerExperimentToggle
     {
-        public virtual Task<bool> IsEnabled<TEvent>(EventFilterToggleMetadata toggleMetadata, EventPipelineContext<TEvent> pipelineContext)
+        public virtual Task<bool> IsEnabled<TEvent>(EventFilterToggleMetadata toggleMetadata, EventContext<TEvent> eventContext)
             where TEvent : IEvent
         {
-            return IsEnabled((IToggleMetadata)toggleMetadata, pipelineContext);
+            return IsEnabled((IToggleMetadata)toggleMetadata, eventContext);
         }
 
-        public virtual Task<bool> IsEnabled<TEvent>(EventHandlerToggleMetadata toggleMetadata, EventPipelineContext<TEvent> pipelineContext)
+        public virtual Task<bool> IsEnabled<TEvent>(EventHandlerToggleMetadata toggleMetadata, EventContext<TEvent> eventContext)
             where TEvent : IEvent
         {
-            return IsEnabled((IToggleMetadata)toggleMetadata, pipelineContext);
+            return IsEnabled((IToggleMetadata)toggleMetadata, eventContext);
         }
 
         public virtual Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleMetadata toggleMetadata, RequestPipelineContext<TRequest> pipelineContext)

@@ -15,9 +15,9 @@ namespace Handyman.Mediator.Pipeline
             _executionStrategy = executionStrategy;
         }
 
-        protected override Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+        protected override Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext)
         {
-            return Execute(filters, handlers, _executionStrategy, context);
+            return Execute(filters, handlers, _executionStrategy, eventContext);
         }
     }
 }

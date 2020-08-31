@@ -10,22 +10,22 @@ namespace Handyman.Mediator.Pipeline
         public List<IEventHandlerSelector> HandlerSelectors { get; set; }
         public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
 
-        protected override async Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+        protected override async Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext)
         {
             foreach (var filterSelector in FilterSelectors)
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                await filterSelector.SelectFilters(filters, context).ConfigureAwait();
+                eventContext.CancellationToken.ThrowIfCancellationRequested();
+                await filterSelector.SelectFilters(filters, eventContext).ConfigureAwait();
             }
 
             foreach (var handlerSelector in HandlerSelectors)
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                await handlerSelector.SelectHandlers(handlers, context).ConfigureAwait();
+                eventContext.CancellationToken.ThrowIfCancellationRequested();
+                await handlerSelector.SelectHandlers(handlers, eventContext).ConfigureAwait();
             }
 
-            context.CancellationToken.ThrowIfCancellationRequested();
-            await Execute(filters, handlers, HandlerExecutionStrategy, context).ConfigureAwait();
+            eventContext.CancellationToken.ThrowIfCancellationRequested();
+            await Execute(filters, handlers, HandlerExecutionStrategy, eventContext).ConfigureAwait();
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Lamar;
+﻿using Handyman.Mediator.Pipeline;
+using Lamar;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,25 +15,62 @@ namespace Handyman.Mediator.Tests
         {
             // using Lamar for dependency injection as it has support for constrained open generics
 
-            var container = new Container(services => services.AddTransient<IEventFilter<IMarker>, Filter>());
+            var testContext = new TestContext();
+
+            var container = new Container(services =>
+            {
+                services.AddSingleton(testContext);
+                services.AddTransient(typeof(IEventFilter<>), typeof(Filter1<>));
+                services.AddTransient(typeof(IEventFilter<>), typeof(Filter2<>));
+            });
 
             await new Mediator(container).Publish(new Event());
 
-            Filter.Executed.ShouldBeTrue();
+            testContext.ExecutedFilters.ShouldBe(new[] { "Filter1" });
         }
 
-        private class Event : IEvent, IMarker { }
+        private class Event : IEvent, IMarker1 { }
 
-        private interface IMarker { }
+        private interface IMarker1 { }
 
-        private class Filter : IEventFilter<IMarker>
+        private interface IMarker2 { }
+
+        private class TestContext
         {
-            public static bool Executed;
+            public List<string> ExecutedFilters { get; set; } = new List<string>();
+        }
 
-            public Task Execute(IMarker @event, IEventFilterContext context, EventFilterExecutionDelegate next)
+        private class Filter1<TEvent> : IEventFilter<TEvent>
+            where TEvent : IMarker1
+        {
+            private readonly TestContext _testContext;
+
+            public Filter1(TestContext testContext)
             {
-                Executed = true;
-                return Task.CompletedTask;
+                _testContext = testContext;
+            }
+
+            public Task Execute(EventContext<TEvent> eventContext, EventFilterExecutionDelegate next)
+            {
+                _testContext.ExecutedFilters.Add("Filter1");
+                return next();
+            }
+        }
+
+        private class Filter2<TEvent> : IEventFilter<TEvent>
+            where TEvent : IMarker2
+        {
+            private readonly TestContext _testContext;
+
+            public Filter2(TestContext testContext)
+            {
+                _testContext = testContext;
+            }
+
+            public Task Execute(EventContext<TEvent> eventContext, EventFilterExecutionDelegate next)
+            {
+                _testContext.ExecutedFilters.Add("Filter2");
+                return next();
             }
         }
     }

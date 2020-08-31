@@ -42,19 +42,19 @@ namespace Handyman.Mediator.Tests.Pipeline
 
         private class EventFilterSelector : IEventFilterSelector
         {
-            public Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventPipelineContext<TEvent> context)
+            public Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventContext<TEvent> eventContext)
                 where TEvent : IEvent
             {
-                filters.Add(new EventFilter<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
+                filters.Add(new EventFilter<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
             }
         }
 
         private class EventHandlerSelector : IEventHandlerSelector
         {
-            public Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
+            public Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext) where TEvent : IEvent
             {
-                handlers.Add(new EventHandler<TEvent> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
+                handlers.Add(new EventHandler<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
             }
         }
@@ -63,7 +63,7 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute(EventPipelineContext<TEvent> pipelineContext, EventFilterExecutionDelegate next)
+            public Task Execute(EventContext<TEvent> eventContext, EventFilterExecutionDelegate next)
             {
                 Action("filter");
                 return next();
@@ -86,10 +86,10 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
+            public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext) where TEvent : IEvent
             {
                 Action("execution strategy");
-                return WhenAllEventHandlerExecutionStrategy.Instance.Execute(handlers, context);
+                return WhenAllEventHandlerExecutionStrategy.Instance.Execute(handlers, eventContext);
             }
         }
     }

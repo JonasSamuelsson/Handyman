@@ -18,26 +18,26 @@ namespace Handyman.Mediator.Pipeline
             var filters = serviceProvider.GetServices<IEventFilter<TEvent>>().ToListOptimized();
             var handlers = serviceProvider.GetServices<IEventHandler<TEvent>>().ToListOptimized();
 
-            var context = new EventPipelineContext<TEvent>
+            var eventContext = new EventContext<TEvent>
             {
                 CancellationToken = cancellationToken,
                 Event = (TEvent)@event,
                 ServiceProvider = serviceProvider
             };
 
-            return Execute(filters, handlers, context);
+            return Execute(filters, handlers, eventContext);
         }
 
-        protected abstract Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context);
+        protected abstract Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext);
 
-        protected Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, IEventHandlerExecutionStrategy executionStrategy, EventPipelineContext<TEvent> context)
+        protected Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, IEventHandlerExecutionStrategy executionStrategy, EventContext<TEvent> eventContext)
         {
             var filterCount = filters.Count;
 
             if (filterCount == 0)
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                return executionStrategy.Execute(handlers, context);
+                eventContext.CancellationToken.ThrowIfCancellationRequested();
+                return executionStrategy.Execute(handlers, eventContext);
             }
 
             filters.Sort(FilterComparer.CompareFilters);
@@ -50,12 +50,12 @@ namespace Handyman.Mediator.Pipeline
             {
                 if (index < filterCount)
                 {
-                    context.CancellationToken.ThrowIfCancellationRequested();
-                    return filters[index++].Execute(context, Execute);
+                    eventContext.CancellationToken.ThrowIfCancellationRequested();
+                    return filters[index++].Execute(eventContext, Execute);
                 }
 
-                context.CancellationToken.ThrowIfCancellationRequested();
-                return executionStrategy.Execute(handlers, context);
+                eventContext.CancellationToken.ThrowIfCancellationRequested();
+                return executionStrategy.Execute(handlers, eventContext);
             }
         }
     }

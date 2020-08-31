@@ -37,9 +37,9 @@ namespace Handyman.Mediator.Tests
             public int Order { get; set; }
             public string Text { get; set; }
 
-            public Task Execute(EventPipelineContext<Event> pipelineContext, EventFilterExecutionDelegate next)
+            public Task Execute(EventContext<Event> eventContext, EventFilterExecutionDelegate next)
             {
-                pipelineContext.Event.Text += Text;
+                eventContext.Event.Text += Text;
                 return next();
             }
         }

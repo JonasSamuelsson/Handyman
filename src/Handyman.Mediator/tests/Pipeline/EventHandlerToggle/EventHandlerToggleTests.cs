@@ -64,7 +64,7 @@ namespace Handyman.Mediator.Tests.Pipeline.EventHandlerToggle
             public bool Enabled { get; set; }
             public EventHandlerToggleMetadata ToggleMetadata { get; set; }
 
-            public Task<bool> IsEnabled<TEvent>(EventHandlerToggleMetadata toggleMetadata, EventPipelineContext<TEvent> pipelineContext)
+            public Task<bool> IsEnabled<TEvent>(EventHandlerToggleMetadata toggleMetadata, EventContext<TEvent> eventContext)
                 where TEvent : IEvent
             {
                 ToggleMetadata = toggleMetadata;

@@ -8,10 +8,10 @@ namespace Handyman.Mediator.Pipeline
     {
         public static readonly IEventHandlerExecutionStrategy Instance = new WhenAllEventHandlerExecutionStrategy();
 
-        public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+        public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext)
             where TEvent : IEvent
         {
-            return Task.WhenAll(handlers.Select(x => x.Handle(context.Event, context.CancellationToken)));
+            return Task.WhenAll(handlers.Select(x => x.Handle(eventContext.Event, eventContext.CancellationToken)));
         }
     }
 }

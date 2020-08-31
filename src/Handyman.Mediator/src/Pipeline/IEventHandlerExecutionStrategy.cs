@@ -5,7 +5,7 @@ namespace Handyman.Mediator.Pipeline
 {
     public interface IEventHandlerExecutionStrategy
     {
-        Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context)
+        Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext)
             where TEvent : IEvent;
     }
 }
