@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 
-namespace Handyman.Mediator
+namespace Handyman.Mediator.Pipeline
 {
-    public class EventContext<TEvent>
+    public class MessageContext
     {
         public CancellationToken CancellationToken { get; set; }
-        public TEvent Event { get; set; }
+        public object Message { get; set; }
         public IServiceProvider ServiceProvider { get; set; }
     }
 }
