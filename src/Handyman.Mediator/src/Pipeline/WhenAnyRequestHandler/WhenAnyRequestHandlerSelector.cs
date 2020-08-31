@@ -6,12 +6,12 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
 {
     internal class WhenAnyRequestHandlerSelector : IRequestHandlerSelector
     {
-        public Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestContext<TRequest> requestContext)
             where TRequest : IRequest<TResponse>
         {
             if (handlers.Count > 1)
             {
-                var handler = new WhenAnyRequestHandler<TRequest, TResponse>(handlers.ToList(), context.ServiceProvider);
+                var handler = new WhenAnyRequestHandler<TRequest, TResponse>(handlers.ToList(), requestContext.ServiceProvider);
                 handlers.Clear();
                 handlers.Add(handler);
             }

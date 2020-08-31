@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Handyman.Mediator.Pipeline;
+﻿using Handyman.Mediator.Pipeline;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
     public interface IRequestFilter<TRequest, TResponse>
     {
-        Task<TResponse> Execute(RequestPipelineContext<TRequest> context, RequestFilterExecutionDelegate<TResponse> next);
+        Task<TResponse> Execute(RequestContext<TRequest> requestContext, RequestFilterExecutionDelegate<TResponse> next);
     }
 }

@@ -61,7 +61,7 @@ namespace Handyman.Mediator.Tests
 
             protected abstract string Text { get; }
 
-            public Task<TResponse> Execute(RequestPipelineContext<TRequest> requestContext, RequestFilterExecutionDelegate<TResponse> next)
+            public Task<TResponse> Execute(RequestContext<TRequest> requestContext, RequestFilterExecutionDelegate<TResponse> next)
             {
                 _testContext.ExecutedFilters.Add(Text);
                 return next();

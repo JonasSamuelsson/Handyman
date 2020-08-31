@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -46,20 +45,20 @@ namespace Handyman.Mediator.Tests.Pipeline
 
         private class RequestFilterSelector : IRequestFilterSelector
         {
-            public Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestPipelineContext<TRequest> context)
+            public Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestContext<TRequest> requestContext)
                 where TRequest : IRequest<TResponse>
             {
-                filters.Add(new RequestFilter<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
+                filters.Add(new RequestFilter<TRequest, TResponse> { Action = requestContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
             }
         }
 
         private class RequestHandlerSelector : IRequestHandlerSelector
         {
-            public Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+            public Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestContext<TRequest> requestContext)
                 where TRequest : IRequest<TResponse>
             {
-                handlers.Add(new RequestHandler<TRequest, TResponse> { Action = context.ServiceProvider.GetRequiredService<Action<string>>() });
+                handlers.Add(new RequestHandler<TRequest, TResponse> { Action = requestContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
             }
         }
@@ -69,7 +68,7 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public Action<string> Action { get; set; }
 
-            public Task<TResponse> Execute(RequestPipelineContext<TRequest> context, RequestFilterExecutionDelegate<TResponse> next)
+            public Task<TResponse> Execute(RequestContext<TRequest> requestContext, RequestFilterExecutionDelegate<TResponse> next)
             {
                 Action.Invoke("filter");
                 return next();
@@ -80,12 +79,11 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public Action<string> Action { get; set; }
 
-            public Task<TResponse> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler,
-                RequestPipelineContext<TRequest> context)
+            public Task<TResponse> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, RequestContext<TRequest> requestContext)
                 where TRequest : IRequest<TResponse>
             {
                 Action.Invoke("execution strategy");
-                return handler.Handle(context.Request, context.CancellationToken);
+                return handler.Handle(requestContext.Request, requestContext.CancellationToken);
             }
         }
 

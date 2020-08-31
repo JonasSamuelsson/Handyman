@@ -47,7 +47,7 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestFilterToggle
         {
             public bool Executed { get; set; }
 
-            public Task<object> Execute(RequestPipelineContext<Request> context, RequestFilterExecutionDelegate<object> next)
+            public Task<object> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<object> next)
             {
                 Executed = true;
                 return next();
@@ -58,7 +58,7 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestFilterToggle
         {
             public bool Executed { get; set; }
 
-            public Task<object> Execute(RequestPipelineContext<Request> context, RequestFilterExecutionDelegate<object> next)
+            public Task<object> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<object> next)
             {
                 Executed = true;
                 return next();
@@ -71,7 +71,7 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestFilterToggle
             public RequestFilterToggleMetadata ToggleMetadata { get; set; }
 
             public Task<bool> IsEnabled<TRequest, TResponse>(RequestFilterToggleMetadata toggleMetadata,
-                RequestPipelineContext<TRequest> pipelineContext)
+                RequestContext<TRequest> requestContext)
                 where TRequest : IRequest<TResponse>
             {
                 ToggleMetadata = toggleMetadata;

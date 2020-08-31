@@ -3,9 +3,9 @@
 namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
 {
     public interface IRequestHandlerToggle
-    {
-        Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerToggleMetadata toggleMetadata,
-            RequestPipelineContext<TRequest> pipelineContext)
-            where TRequest : IRequest<TResponse>;
-    }
+   {
+      Task<bool> IsEnabled<TRequest, TResponse>(RequestHandlerToggleMetadata toggleMetadata,
+          RequestContext<TRequest> requestContext)
+          where TRequest : IRequest<TResponse>;
+   }
 }

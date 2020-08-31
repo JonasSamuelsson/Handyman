@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline
 {
@@ -8,10 +7,10 @@ namespace Handyman.Mediator.Pipeline
         public static IRequestHandlerExecutionStrategy Instance = new DefaultRequestHandlerExecutionStrategy();
 
         public Task<TResponse> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler,
-            RequestPipelineContext<TRequest> context)
+            RequestContext<TRequest> requestContext)
             where TRequest : IRequest<TResponse>
         {
-            return handler.Handle(context.Request, context.CancellationToken);
+            return handler.Handle(requestContext.Request, requestContext.CancellationToken);
         }
     }
 }

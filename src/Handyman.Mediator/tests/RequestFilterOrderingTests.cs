@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.Pipeline;
+﻿using Handyman.Mediator.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -35,10 +35,10 @@ namespace Handyman.Mediator.Tests
             public int Order { get; set; }
             public string Text { get; set; }
 
-            public Task<string> Execute(RequestPipelineContext<Request> context,
+            public Task<string> Execute(RequestContext<Request> requestContext,
                 RequestFilterExecutionDelegate<string> next)
             {
-                context.Request.Text += Text;
+                requestContext.Request.Text += Text;
                 return next();
             }
         }

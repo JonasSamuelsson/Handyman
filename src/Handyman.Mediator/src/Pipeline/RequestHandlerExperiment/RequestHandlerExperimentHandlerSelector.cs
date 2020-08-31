@@ -16,14 +16,14 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             _serviceProvider = serviceProvider;
         }
 
-        public async Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public async Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestContext<TRequest> requestContext)
             where TRequest : IRequest<TResponse>
         {
             if (handlers.Count <= 1)
                 return;
 
             var toggle = _serviceProvider.GetRequiredService<IRequestHandlerExperimentToggle>();
-            var isEnabled = await toggle.IsEnabled<TRequest, TResponse>(_metadata, context).ConfigureAwait();
+            var isEnabled = await toggle.IsEnabled<TRequest, TResponse>(_metadata, requestContext).ConfigureAwait();
 
             var experimentalHandlerTypes = GetExperimentalHandlerTypes(handlers);
 

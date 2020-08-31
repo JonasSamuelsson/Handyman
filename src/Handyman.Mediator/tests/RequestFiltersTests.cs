@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Handyman.Mediator.Pipeline;
+﻿using Handyman.Mediator.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -51,7 +51,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task<Response> Execute(RequestPipelineContext<Request> context, RequestFilterExecutionDelegate<Response> next)
+            public Task<Response> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<Response> next)
             {
                 Executed = true;
                 return next();

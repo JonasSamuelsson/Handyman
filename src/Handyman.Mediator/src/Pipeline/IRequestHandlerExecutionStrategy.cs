@@ -5,6 +5,6 @@ namespace Handyman.Mediator.Pipeline
     public interface IRequestHandlerExecutionStrategy
     {
         Task<TResponse> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler,
-            RequestPipelineContext<TRequest> context) where TRequest : IRequest<TResponse>;
+            RequestContext<TRequest> requestContext) where TRequest : IRequest<TResponse>;
     }
 }

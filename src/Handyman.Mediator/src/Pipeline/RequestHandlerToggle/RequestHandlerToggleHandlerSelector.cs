@@ -13,11 +13,11 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
             _toggleMetadata = toggleMetadata;
         }
 
-        public async Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestPipelineContext<TRequest> context)
+        public async Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestContext<TRequest> requestContext)
             where TRequest : IRequest<TResponse>
         {
-            var toggle = context.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
-            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleMetadata, context).ConfigureAwait();
+            var toggle = requestContext.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleMetadata, requestContext).ConfigureAwait();
 
             if (!enabled)
             {

@@ -2,5 +2,5 @@
 
 namespace Handyman.Mediator.Pipeline
 {
-    internal delegate Task<TResponse> RequestHandlerDelegate<TRequest, TResponse>(RequestPipelineContext<TRequest> context);
+    internal delegate Task<TResponse> RequestHandlerDelegate<TRequest, TResponse>(RequestContext<TRequest> requestContext);
 }

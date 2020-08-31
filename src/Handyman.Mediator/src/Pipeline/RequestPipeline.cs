@@ -16,24 +16,24 @@ namespace Handyman.Mediator.Pipeline
     {
         internal override Task<TResponse> Execute(IRequest<TResponse> request, IServiceProvider serviceProvider, CancellationToken cancellationToken)
         {
-            var context = new RequestPipelineContext<TRequest>
+            var requestContext = new RequestContext<TRequest>
             {
                 CancellationToken = cancellationToken,
                 Request = (TRequest)request,
                 ServiceProvider = serviceProvider
             };
 
-            return Execute(context);
+            return Execute(requestContext);
         }
 
-        internal abstract Task<TResponse> Execute(RequestPipelineContext<TRequest> context);
+        internal abstract Task<TResponse> Execute(RequestContext<TRequest> requestContext);
 
-        protected Task<TResponse> Execute(List<IRequestFilter<TRequest, TResponse>> filters, IRequestHandler<TRequest, TResponse> handler, IRequestHandlerExecutionStrategy executionStrategy, RequestPipelineContext<TRequest> context)
+        protected Task<TResponse> Execute(List<IRequestFilter<TRequest, TResponse>> filters, IRequestHandler<TRequest, TResponse> handler, IRequestHandlerExecutionStrategy executionStrategy, RequestContext<TRequest> requestContext)
         {
             if (filters.Count == 0)
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                return executionStrategy.Execute(handler, context);
+                requestContext.CancellationToken.ThrowIfCancellationRequested();
+                return executionStrategy.Execute(handler, requestContext);
             }
 
             filters.Sort(FilterComparer.CompareFilters);
@@ -47,12 +47,12 @@ namespace Handyman.Mediator.Pipeline
             {
                 if (index < filterCount)
                 {
-                    context.CancellationToken.ThrowIfCancellationRequested();
-                    return filters[index++].Execute(context, Execute);
+                    requestContext.CancellationToken.ThrowIfCancellationRequested();
+                    return filters[index++].Execute(requestContext, Execute);
                 }
 
-                context.CancellationToken.ThrowIfCancellationRequested();
-                return executionStrategy.Execute(handler, context);
+                requestContext.CancellationToken.ThrowIfCancellationRequested();
+                return executionStrategy.Execute(handler, requestContext);
             }
         }
     }
