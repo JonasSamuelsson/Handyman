@@ -51,7 +51,7 @@ namespace Handyman.Mediator.Pipeline
                 if (index < filterCount)
                 {
                     context.CancellationToken.ThrowIfCancellationRequested();
-                    return filters[index++].Execute(context.Event, context, Execute);
+                    return filters[index++].Execute(context, Execute);
                 }
 
                 context.CancellationToken.ThrowIfCancellationRequested();

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Handyman.Mediator.Pipeline;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            public Task Execute(Event @event, IEventFilterContext context, EventFilterExecutionDelegate next)
+            public Task Execute(EventPipelineContext<Event> pipelineContext, EventFilterExecutionDelegate next)
             {
                 Executed = true;
                 return next();

@@ -63,7 +63,7 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public Action<string> Action { get; set; }
 
-            public Task Execute(TEvent @event, IEventFilterContext context, EventFilterExecutionDelegate next)
+            public Task Execute(EventPipelineContext<TEvent> pipelineContext, EventFilterExecutionDelegate next)
             {
                 Action("filter");
                 return next();

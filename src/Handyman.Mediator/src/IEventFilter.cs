@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using Handyman.Mediator.Pipeline;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public interface IEventFilter<in TEvent>
+    public interface IEventFilter<TEvent>
     {
-        Task Execute(TEvent @event, IEventFilterContext context, EventFilterExecutionDelegate next);
+        Task Execute(EventPipelineContext<TEvent> pipelineContext, EventFilterExecutionDelegate next);
     }
 }
