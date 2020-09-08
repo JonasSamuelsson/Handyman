@@ -5,12 +5,12 @@ namespace Handyman.Mediator.Pipeline
 {
     internal static class TaskExtensions
     {
-        internal static ConfiguredTaskAwaitable ConfigureAwait(this Task task)
+        internal static ConfiguredTaskAwaitable WithGloballyConfiguredAwait(this Task task)
         {
             return task.ConfigureAwait(MediatorAwaiterOptions.ContinueOnCapturedContext);
         }
 
-        internal static ConfiguredTaskAwaitable<T> ConfigureAwait<T>(this Task<T> task)
+        internal static ConfiguredTaskAwaitable<T> WithGloballyConfiguredAwait<T>(this Task<T> task)
         {
             return task.ConfigureAwait(MediatorAwaiterOptions.ContinueOnCapturedContext);
         }

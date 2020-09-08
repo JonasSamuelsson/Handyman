@@ -23,7 +23,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
                 return;
 
             var toggle = _serviceProvider.GetRequiredService<IRequestHandlerExperimentToggle>();
-            var isEnabled = await toggle.IsEnabled<TRequest, TResponse>(_metadata, requestContext).ConfigureAwait();
+            var isEnabled = await toggle.IsEnabled<TRequest, TResponse>(_metadata, requestContext).WithGloballyConfiguredAwait();
 
             var experimentalHandlerTypes = GetExperimentalHandlerTypes(handlers);
 

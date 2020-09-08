@@ -15,17 +15,17 @@ namespace Handyman.Mediator.Pipeline
             foreach (var filterSelector in FilterSelectors)
             {
                 eventContext.CancellationToken.ThrowIfCancellationRequested();
-                await filterSelector.SelectFilters(filters, eventContext).ConfigureAwait();
+                await filterSelector.SelectFilters(filters, eventContext).WithGloballyConfiguredAwait();
             }
 
             foreach (var handlerSelector in HandlerSelectors)
             {
                 eventContext.CancellationToken.ThrowIfCancellationRequested();
-                await handlerSelector.SelectHandlers(handlers, eventContext).ConfigureAwait();
+                await handlerSelector.SelectHandlers(handlers, eventContext).WithGloballyConfiguredAwait();
             }
 
             eventContext.CancellationToken.ThrowIfCancellationRequested();
-            await Execute(filters, handlers, HandlerExecutionStrategy, eventContext).ConfigureAwait();
+            await Execute(filters, handlers, HandlerExecutionStrategy, eventContext).WithGloballyConfiguredAwait();
         }
     }
 }

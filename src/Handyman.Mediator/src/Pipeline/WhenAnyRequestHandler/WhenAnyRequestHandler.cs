@@ -28,7 +28,7 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var task = await Task.WhenAny(tasks).ConfigureAwait();
+                var task = await Task.WhenAny(tasks).WithGloballyConfiguredAwait();
 
                 if (task.Status != TaskStatus.RanToCompletion)
                 {
@@ -48,7 +48,7 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
 
                     if (exceptionHandler != null)
                     {
-                        await exceptionHandler.Handle(exceptions, cancellationToken).ConfigureAwait();
+                        await exceptionHandler.Handle(exceptions, cancellationToken).WithGloballyConfiguredAwait();
                     }
                 }
 

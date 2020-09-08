@@ -17,7 +17,7 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
             where TEvent : IEvent
         {
             var toggle = eventContext.ServiceProvider.GetRequiredService<IEventHandlerToggle>();
-            var enabled = await toggle.IsEnabled(_toggleMetadata, eventContext).ConfigureAwait();
+            var enabled = await toggle.IsEnabled(_toggleMetadata, eventContext).WithGloballyConfiguredAwait();
 
             if (!enabled)
             {

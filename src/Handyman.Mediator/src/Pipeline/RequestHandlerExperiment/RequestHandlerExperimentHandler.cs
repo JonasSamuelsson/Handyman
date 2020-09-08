@@ -30,7 +30,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
                 tasks.Add(Execute(experimentalHandler, request, cancellationToken));
             }
 
-            var executions = await Task.WhenAll(tasks).ConfigureAwait();
+            var executions = await Task.WhenAll(tasks).WithGloballyConfiguredAwait();
             var baselineExecution = executions.Single(x => x.Handler == _baselineHandler);
             var experimentalExecutions = executions.Where(x => x != baselineExecution).ToList();
 
@@ -42,9 +42,9 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
                 Request = request
             };
 
-            await _observer.Observe(experiment).ConfigureAwait();
+            await _observer.Observe(experiment).WithGloballyConfiguredAwait();
 
-            return await baselineExecution.Task.ConfigureAwait();
+            return await baselineExecution.Task.WithGloballyConfiguredAwait();
         }
 
         private static async Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
@@ -60,7 +60,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
 
                 try
                 {
-                    await task.ConfigureAwait();
+                    await task.WithGloballyConfiguredAwait();
                 }
                 catch
                 {

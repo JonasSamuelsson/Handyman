@@ -17,7 +17,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
             where TRequest : IRequest<TResponse>
         {
             var toggle = requestContext.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
-            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleMetadata, requestContext).ConfigureAwait();
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(_toggleMetadata, requestContext).WithGloballyConfiguredAwait();
 
             if (!enabled)
             {

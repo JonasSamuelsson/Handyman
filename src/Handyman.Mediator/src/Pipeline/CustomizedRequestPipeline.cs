@@ -19,20 +19,20 @@ namespace Handyman.Mediator.Pipeline
             foreach (var filterSelector in FilterSelectors)
             {
                 requestContext.CancellationToken.ThrowIfCancellationRequested();
-                await filterSelector.SelectFilters(filters, requestContext).ConfigureAwait();
+                await filterSelector.SelectFilters(filters, requestContext).WithGloballyConfiguredAwait();
             }
 
             foreach (var handlerSelector in HandlerSelectors)
             {
                 requestContext.CancellationToken.ThrowIfCancellationRequested();
-                await handlerSelector.SelectHandlers(handlers, requestContext).ConfigureAwait();
+                await handlerSelector.SelectHandlers(handlers, requestContext).WithGloballyConfiguredAwait();
             }
 
             AssertThereIsSingleHandlerToExecute(requestContext, handlers);
 
             requestContext.CancellationToken.ThrowIfCancellationRequested();
 
-            return await Execute(filters, handlers[0], HandlerExecutionStrategy, requestContext).ConfigureAwait();
+            return await Execute(filters, handlers[0], HandlerExecutionStrategy, requestContext).WithGloballyConfiguredAwait();
         }
 
         private static void AssertThereIsSingleHandlerToExecute(RequestContext<TRequest> requestContext, List<IRequestHandler<TRequest, TResponse>> handlers)
