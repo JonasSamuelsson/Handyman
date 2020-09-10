@@ -8,4 +8,9 @@ namespace Handyman.Mediator
     {
         Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     }
+
+    public interface IRequestHandler<TRequest> : IRequestHandler<TRequest, Void>
+        where TRequest : IRequest
+    {
+    }
 }
