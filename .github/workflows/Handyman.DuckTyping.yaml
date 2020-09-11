@@ -42,4 +42,4 @@ jobs:
       if: ${{ github.event.inputs.publish == 'true' }}
       run: |
         dotnet pack src/Handyman.DuckTyping.csproj --configuration release --include-symbols --no-restore --no-build --output .artifacts
-        dotnet nuget push ./.artifacts/*.nupkg --api-key ${{ secrets.NUGET }}
+        dotnet nuget push ./.artifacts/*.nupkg --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json
