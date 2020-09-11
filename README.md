@@ -9,7 +9,7 @@
 | Handyman.DuckTyping | [![h.dt-nuget-version] ![h.dt-nuget-downloads]][h.dt-nuget] | ![Handyman.DuckTyping][h.dt-gha] |
 | Handyman.Dynamics | [![h.d-nuget-version] ![h.d-nuget-downloads]][h.d-nuget] | [![h.d-ado-status]][h.d-ado] |
 | Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | [![h.e-ado-status]][h.e-ado] |
-| [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | [![h.m-ado-status]][h.m-ado] |
+| [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | ![Handyman.Mediator][h.m-gha] |
 | [Handyman.Mediator.DependencyInjection][h.m.di-docs] | [![h.m.di-nuget-version] ![h.m.di-nuget-downloads]][h.m.di-nuget] | [![h.m.di-ado-status]][h.m.di-ado] |
 | Handyman.Wpf | [![h.wpf-nuget-version] ![h.wpf-nuget-downloads]][h.wpf-nuget] | |
 
@@ -69,8 +69,7 @@
 [h.m-nuget]: https://www.nuget.org/packages/Handyman.Mediator/
 [h.m-nuget-version]: https://img.shields.io/nuget/v/Handyman.Mediator.svg
 [h.m-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Mediator.svg
-[h.m-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=4
-[h.m-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Mediator?branchName=master
+[h.m-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.Mediator/badge.svg
 
 [h.m.di-docs]: src/Handyman.Mediator.DependencyInjection/docs/index.md
 [h.m.di-nuget]: https://www.nuget.org/packages/Handyman.Mediator.DependencyInjection/
