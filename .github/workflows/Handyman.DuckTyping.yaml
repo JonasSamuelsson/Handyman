@@ -13,8 +13,8 @@ on:
     - 'src/Handyman.DuckTyping/test/**'
   workflow_dispatch:
     inputs:
-      publish_package:
-        description: 'Push to nuget (true/false)'
+      publish:
+        description: 'Publish to nuget (true/false)'
         required: false
         default: 'false'
 
@@ -34,11 +34,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
-    - run: dotnet build src/Handyman.DuckTyping.csproj --configuration release
-    - run: dotnet build test/Handyman.DuckTyping.Tests.csproj --configuration release
-    - run: dotnet test test/Handyman.DuckTyping.Tests.csproj --configuration release --no-restore --no-build
+    - name: build
+      run: dotnet build src/Handyman.DuckTyping.csproj --configuration release
+    - name: test
+      run: dotnet test test/Handyman.DuckTyping.Tests.csproj --configuration release
     - name: publish to nuget
-      if: ${{ github.event.inputs.publish_package == true }}
+      if: ${{ github.event.inputs.publish == 'true' }}
       run: |
         dotnet pack src/Handyman.DuckTyping.csproj --configuration release --include-symbols --no-restore --no-build --output .artifacts
         dotnet nuget push ./.artifacts/*.nupkg --api-key ${{ secrets.NUGET }}
