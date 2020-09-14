@@ -8,43 +8,30 @@ namespace Handyman.DuckTyping
 {
     public abstract class DuckTypedObject
     {
-        protected DuckTypedObject() : this(new ExpandoObject())
-        {
-        }
-
-        protected DuckTypedObject(DuckTypedObject duckTypedObject) : this(duckTypedObject.Dictionary)
-        {
-        }
-
-        protected DuckTypedObject(ExpandoObject expando) : this((IDictionary<string, object>)expando)
+        protected DuckTypedObject() : this(DuckTyped.GetDefaultStorage())
         {
         }
 
         protected DuckTypedObject(object storage)
         {
-            if (storage is ExpandoObject expando)
-            {
-                Initialize(expando);
-            }
-            else if (storage is DuckTypedObject dto)
-            {
-                Initialize(dto.Dictionary);
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
+            Initialize(GetDictionary(storage));
         }
 
-        private DuckTypedObject(IDictionary<string, object> dictionary)
+        private void Initialize(object storage)
         {
-            Initialize(dictionary);
-        }
-
-        private void Initialize(IDictionary<string, object> dictionary)
-        {
-            Dictionary = dictionary;
+            Dictionary = GetDictionary(storage);
             SerializationInfo.Initialize(this);
+        }
+
+        private static IDictionary<string, object> GetDictionary(object storage)
+        {
+            if (storage is ExpandoObject expando)
+                return expando;
+
+            if (storage is DuckTypedObject dto)
+                return dto.Dictionary;
+
+            throw new ArgumentException();
         }
 
         public static bool UseCaching { get; set; }
@@ -55,7 +42,7 @@ namespace Handyman.DuckTyping
         {
             var type = typeof(T);
 
-            if (IsDuckTypedObject(type))
+            if (DuckTyped.IsDuckTypedObject(type))
             {
                 return GetDuckTypedObject<T>(property);
             }
@@ -72,7 +59,7 @@ namespace Handyman.DuckTyping
         {
             var type = typeof(T);
 
-            if (IsDuckTypedObject(type))
+            if (DuckTyped.IsDuckTypedObject(type))
             {
                 SetDuckTypedObject(property, value);
             }
@@ -112,19 +99,6 @@ namespace Handyman.DuckTyping
             Dictionary[key] = value;
         }
 
-        internal static bool IsDuckTypedObject(Type type)
-        {
-            do
-            {
-                if (type == typeof(DuckTypedObject))
-                    return true;
-
-                type = type.BaseType;
-            } while (type != null);
-
-            return false;
-        }
-
         private T GetDuckTypedObject<T>(string property)
         {
             if (UseCaching && TryGetCached<T>(property, out var item))
@@ -135,7 +109,7 @@ namespace Handyman.DuckTyping
             if (dictionary == null)
                 return default;
 
-            var dto = CreateDuckTypedObject<T>(dictionary);
+            var dto = DuckTyped.CreateDuckTypedObject<T>(dictionary);
 
             UpdateCache(property, dto);
 
@@ -186,11 +160,5 @@ namespace Handyman.DuckTyping
         }
 
         private static readonly ConcurrentDictionary<long, string> KeyCache = new ConcurrentDictionary<long, string>();
-
-        private static T CreateDuckTypedObject<T>(IDictionary<string, object> dictionary)
-        {
-            // todo this can probably be optimized using compiled expression
-            return (T)Activator.CreateInstance(typeof(T), dictionary);
-        }
     }
 }

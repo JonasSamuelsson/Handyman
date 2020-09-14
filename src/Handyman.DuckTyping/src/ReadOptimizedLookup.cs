@@ -8,7 +8,11 @@ namespace Handyman.DuckTyping
         private readonly object _lock = new object();
         private Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
 
-        internal TValue this[TKey key] => _dictionary[key];
+        internal TValue this[TKey key]
+        {
+            get => _dictionary[key];
+            set => Add(key, value);
+        }
 
         internal void Add(TKey key, TValue value)
         {

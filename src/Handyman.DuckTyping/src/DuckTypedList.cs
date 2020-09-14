@@ -24,7 +24,6 @@ namespace Handyman.DuckTyping
     }
 
     public class DuckTypedList<T> : DuckTypedList, IList<T>
-        where T : DuckTypedObject
     {
         public DuckTypedList() : this(new List<IDictionary<string, object>>())
         {
@@ -33,6 +32,7 @@ namespace Handyman.DuckTyping
         // todo make this internal?
         public DuckTypedList(List<IDictionary<string, object>> dictionaries)
         {
+            DuckTyped.EnsureIsDuckTypedObject<T>();
             Dictionaries = dictionaries;
         }
 
@@ -98,12 +98,12 @@ namespace Handyman.DuckTyping
 
         private static T GetDto(IDictionary<string, object> dictionary)
         {
-            return (T)Activator.CreateInstance(typeof(T), dictionary);
+            return DuckTyped.CreateDuckTypedObject<T>(dictionary);
         }
 
         private static IDictionary<string, object> GetDictionary(T item)
         {
-            return item.Dictionary;
+            return ((DuckTypedObject)(object)item).Dictionary;
         }
     }
 }

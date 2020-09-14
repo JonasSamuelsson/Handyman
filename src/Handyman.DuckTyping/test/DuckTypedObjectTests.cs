@@ -17,7 +17,7 @@ namespace Handyman.DuckTyping.Tests
                 Value = 123
             };
 
-            var dto2 = new Dto2(expando);
+            var dto2 = DuckTyped.Object<IDto2>(expando);
 
             dto2.Value.ShouldBe(123);
 
@@ -39,7 +39,7 @@ namespace Handyman.DuckTyping.Tests
                 }
             };
 
-            var dto2 = new Dto2(expando);
+            var dto2 = DuckTyped.Object<IDto2>(expando);
 
             dto2.Object.Value.ShouldBe(123);
 
@@ -64,11 +64,11 @@ namespace Handyman.DuckTyping.Tests
                 }
             };
 
-            var dto2 = new Dto2(expando);
+            var dto2 = DuckTyped.Object<IDto2>(expando);
 
             dto2.List[0].Value.ShouldBe(123);
 
-            dto2.List.Add(new Dto2 { Value = 321 });
+            dto2.List.Add(DuckTyped.Object<IDto2>(x => x.Value = 321));
 
             dto1.List.Sum(x => x.Value).ShouldBe(444);
         }
@@ -106,28 +106,20 @@ namespace Handyman.DuckTyping.Tests
             }
         }
 
-        public class Dto2 : DuckTypedObject
+        [DuckTypedObjectContract]
+        public interface IDto2
         {
-            public Dto2() { }
-            public Dto2(ExpandoObject expando) : base(expando) { }
-
-            public DuckTypedList<Dto2> List
-            {
-                get => Get<DuckTypedList<Dto2>>(nameof(List));
-                set => Set(nameof(List), value);
-            }
-
-            public Dto2 Object
-            {
-                get => Get<Dto2>(nameof(Object));
-                set => Set(nameof(Object), value);
-            }
-
-            public int Value
-            {
-                get => Get<int>(nameof(Value));
-                set => Set(nameof(Value), value);
-            }
+            DuckTypedList<IDto2> List { get; set; }
+            IDto2 Object { get; set; }
+            int Value { get; set; }
         }
+
+        [Fact]
+        public void test()
+        {
+            var type = typeof(Nested);
+        }
+
+        private class Nested { }
     }
 }
