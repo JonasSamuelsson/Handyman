@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Handyman.Mediator
+namespace Handyman.Mediator.Tests
 {
-    public static class MediatorExtensions
+    internal static class MediatorExtensions
     {
         public static Task Publish(this IMediator mediator, IEvent @event)
         {
