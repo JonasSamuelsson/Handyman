@@ -1,4 +1,5 @@
-﻿using Handyman.DataContractValidator.Collections;
+﻿using Handyman.DataContractValidator.Anything;
+using Handyman.DataContractValidator.Collections;
 using Handyman.DataContractValidator.Dictionaries;
 using Handyman.DataContractValidator.Enums;
 using Handyman.DataContractValidator.Objects;
@@ -13,6 +14,7 @@ namespace Handyman.DataContractValidator
     {
         private static readonly IEnumerable<IHandler> Handlers = new IHandler[]
         {
+            new AnyHandler(),
             new EnumHandler(),
             new ValueHandler(),
             new DictionaryHandler(),
