@@ -1,6 +1,8 @@
 # Handyman.DataContractValidator
 
-Handyman.DataContractValidtor is a library for data contract validation.
+[changelog](changelog.md)
+
+Handyman.DataContractValidator is a library for data contract validation.
 
 The idea behind this library is to validate the structure of the types.
 
@@ -8,11 +10,25 @@ The idea behind this library is to validate the structure of the types.
 
 Data contract validator can handle the following types;
 
+* Anything
 * Enums (regular & flags)
 * Value types (bool, int, string, etc)
 * Objects
 * Collections
 * Dictionaries
+
+### Anything
+
+``` csharp
+// type definition
+class Item
+{
+    public int Value {get; set; }
+}
+
+// validation
+new DataContractValidator().Validate(typeof(Item), new { Value = typeof(Any) });
+```
 
 ### Enums
 
