@@ -6,7 +6,7 @@
 | [Handyman.Azure.Cosmos.Table][h.a.c.t-docs] | [![h.a.c.t-nuget-version] ![h.a.c.t-nuget-downloads]][h.a.c.t-nuget] | [![h.a.c.t-ado-status]][h.a.c.t-ado] |
 | [Handyman.DataContractValidator][h.dcv-docs] | [![h.dcv-nuget-version] ![h.dcv-nuget-downloads]][h.dcv-nuget] | [![h.dcv-ado-status]][h.dcv-ado] |
 | [Handyman.DependencyInjection][h.di-docs] | [![h.di-nuget-version] ![h.di-nuget-downloads]][h.di-nuget] | [![h.di-ado-status]][h.di-ado] |
-| Handyman.DuckTyping | | ![Handyman.DuckTyping][h.dt-gha] |
+| Handyman.DuckTyping | [![h.dt-nuget-version] ![h.dt-nuget-downloads]][h.dt-nuget] | ![Handyman.DuckTyping][h.dt-gha] |
 | Handyman.Dynamics | [![h.d-nuget-version] ![h.d-nuget-downloads]][h.d-nuget] | [![h.d-ado-status]][h.d-ado] |
 | Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | [![h.e-ado-status]][h.e-ado] |
 | [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | [![h.m-ado-status]][h.m-ado] |
@@ -48,7 +48,10 @@
 [h.di-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=17
 [h.di-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.DependencyInjection?branchName=master
 
-[h.dt-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.DuckTyping/badge.svg
+[h.dt-nuget]: https://www.nuget.org/packages/Handyman.DuckTyping/
+[h.dt-nuget-version]: https://img.shields.io/nuget/v/Handyman.DuckTyping.svg
+[h.dt-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.DuckTyping.svg
+[h.dt-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.DuckTyped/badge.svg
 
 [h.d-nuget]: https://www.nuget.org/packages/Handyman.Dynamics/
 [h.d-nuget-version]: https://img.shields.io/nuget/v/Handyman.Dynamics.svg
