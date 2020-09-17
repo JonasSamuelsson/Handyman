@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Handyman.Mediator
@@ -6,7 +7,7 @@ namespace Handyman.Mediator
     public class RequestContext<TRequest>
     {
         public CancellationToken CancellationToken { get; set; }
-        public TRequest Request { get; set; }
-        public IServiceProvider ServiceProvider { get; set; }
+        [DisallowNull, NotNull] public TRequest Request { get; set; } = default!;
+        public IServiceProvider ServiceProvider { get; set; } = null!;
     }
 }

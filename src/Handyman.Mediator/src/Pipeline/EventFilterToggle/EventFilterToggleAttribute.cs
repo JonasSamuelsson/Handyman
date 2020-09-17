@@ -26,9 +26,9 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
             _toggleEnabledFilterTypes = toggleEnabledFilterTypes;
         }
 
-        public string Name { get; set; }
-        public string[] Tags { get; set; }
-        public Type[] ToggleDisabledFilterTypes { get; set; }
+        public string? Name { get; set; }
+        public string[]? Tags { get; set; }
+        public Type[]? ToggleDisabledFilterTypes { get; set; }
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
@@ -41,8 +41,8 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
             {
                 Name = Name,
                 Tags = Tags,
-                ToggleDisabledFilterTypes = ToggleDisabledFilterTypes ?? Enumerable.Empty<Type>(),
-                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes ?? Enumerable.Empty<Type>()
+                ToggleDisabledFilterTypes = ToggleDisabledFilterTypes ?? Type.EmptyTypes,
+                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes
             };
         }
     }

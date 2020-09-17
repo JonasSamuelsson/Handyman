@@ -26,9 +26,9 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
             _toggleEnabledFilterTypes = toggleEnabledFilterTypes;
         }
 
-        public string Name { get; set; }
-        public string[] Tags { get; set; }
-        public Type[] ToggleDisabledFilterTypes { get; set; }
+        public string? Name { get; set; }
+        public string[]? Tags { get; set; }
+        public Type[]? ToggleDisabledFilterTypes { get; set; }
 
         public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
         {
@@ -41,7 +41,7 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
             {
                 Name = Name,
                 Tags = Tags,
-                ToggleDisabledFilterTypes = ToggleDisabledFilterTypes,
+                ToggleDisabledFilterTypes = ToggleDisabledFilterTypes ?? Type.EmptyTypes,
                 ToggleEnabledFilterTypes = _toggleEnabledFilterTypes
             };
         }

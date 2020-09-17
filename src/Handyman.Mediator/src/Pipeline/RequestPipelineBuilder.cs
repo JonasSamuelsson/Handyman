@@ -5,9 +5,9 @@ namespace Handyman.Mediator.Pipeline
 {
     internal class RequestPipelineBuilder : IRequestPipelineBuilder
     {
-        public List<IRequestFilterSelector> FilterSelectors { get; set; } = new List<IRequestFilterSelector>();
-        public List<IRequestHandlerSelector> HandlerSelectors { get; set; } = new List<IRequestHandlerSelector>();
-        public IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
+        public List<IRequestFilterSelector> FilterSelectors { get; } = new List<IRequestFilterSelector>();
+        public List<IRequestHandlerSelector> HandlerSelectors { get; } = new List<IRequestHandlerSelector>();
+        public IRequestHandlerExecutionStrategy? HandlerExecutionStrategy { get; set; }
 
         public void AddFilterSelector(IRequestFilterSelector requestFilterSelector)
         {

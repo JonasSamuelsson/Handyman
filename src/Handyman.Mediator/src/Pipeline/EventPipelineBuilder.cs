@@ -5,9 +5,9 @@ namespace Handyman.Mediator.Pipeline
 {
     internal class EventPipelineBuilder : IEventPipelineBuilder
     {
-        public List<IEventFilterSelector> FilterSelectors { get; set; } = new List<IEventFilterSelector>();
-        public List<IEventHandlerSelector> HandlerSelectors { get; set; } = new List<IEventHandlerSelector>();
-        public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
+        internal List<IEventFilterSelector> FilterSelectors { get; } = new List<IEventFilterSelector>();
+        internal List<IEventHandlerSelector> HandlerSelectors { get; } = new List<IEventHandlerSelector>();
+        internal IEventHandlerExecutionStrategy? HandlerExecutionStrategy { get; set; }
 
 
         public void AddFilterSelector(IEventFilterSelector eventFilterSelector)

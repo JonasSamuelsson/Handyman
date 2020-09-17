@@ -47,8 +47,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             return await baselineExecution.Task.WithGloballyConfiguredAwait();
         }
 
-        private static async Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
-            where TRequest : IRequest<TResponse>
+        private static async Task<RequestHandlerExperimentExecution<TRequest, TResponse>> Execute(IRequestHandler<TRequest, TResponse> handler, TRequest request, CancellationToken cancellationToken)
         {
             // if the the code in handler.Handle(...) throws before doing any async/await the task will not be returned, hence the outer try/catch
 

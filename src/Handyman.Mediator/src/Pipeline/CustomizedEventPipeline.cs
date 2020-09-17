@@ -6,9 +6,9 @@ namespace Handyman.Mediator.Pipeline
     internal class CustomizedEventPipeline<TEvent> : EventPipeline<TEvent>
         where TEvent : IEvent
     {
-        public List<IEventFilterSelector> FilterSelectors { get; set; }
-        public List<IEventHandlerSelector> HandlerSelectors { get; set; }
-        public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; }
+        public List<IEventFilterSelector> FilterSelectors { get; set; } = null!;
+        public List<IEventHandlerSelector> HandlerSelectors { get; set; } = null!;
+        public IEventHandlerExecutionStrategy HandlerExecutionStrategy { get; set; } = null!;
 
         protected override async Task Execute(List<IEventFilter<TEvent>> filters, List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext)
         {

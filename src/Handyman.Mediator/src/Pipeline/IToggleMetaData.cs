@@ -4,7 +4,7 @@ namespace Handyman.Mediator.Pipeline
 {
     public interface IToggleMetadata
     {
-        string Name { get; }
-        IEnumerable<string> Tags { get; }
+        string? Name { get; }
+        IEnumerable<string>? Tags { get; }
     }
 }

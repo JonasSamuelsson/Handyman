@@ -26,9 +26,9 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
             _toggleEnabledHandlerTypes = toggleEnabledHandlerTypes;
         }
 
-        public string Name { get; set; }
-        public string[] Tags { get; set; }
-        public Type[] ToggleDisabledHandlerTypes { get; set; }
+        public string? Name { get; set; }
+        public string[]? Tags { get; set; }
+        public Type[]? ToggleDisabledHandlerTypes { get; set; }
 
         public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
         {
@@ -41,8 +41,8 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
             {
                 Name = Name,
                 Tags = Tags,
-                ToggleDisabledHandlerTypes = ToggleDisabledHandlerTypes ?? Enumerable.Empty<Type>(),
-                ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes ?? Enumerable.Empty<Type>()
+                ToggleDisabledHandlerTypes = ToggleDisabledHandlerTypes ?? Type.EmptyTypes,
+                ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes
             };
         }
     }

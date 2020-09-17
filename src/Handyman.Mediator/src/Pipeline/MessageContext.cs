@@ -6,7 +6,7 @@ namespace Handyman.Mediator.Pipeline
     public class MessageContext
     {
         public CancellationToken CancellationToken { get; set; }
-        public object Message { get; set; }
-        public IServiceProvider ServiceProvider { get; set; }
+        public object Message { get; set; } = null!;
+        public IServiceProvider ServiceProvider { get; set; } = null!;
     }
 }

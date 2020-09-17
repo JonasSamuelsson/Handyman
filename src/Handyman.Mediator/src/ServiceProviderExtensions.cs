@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Handyman.Mediator
 {
@@ -16,6 +17,7 @@ namespace Handyman.Mediator
             throw new InvalidOperationException(message);
         }
 
+        [return: MaybeNull]
         public static T GetService<T>(this IServiceProvider serviceProvider)
         {
             return (T)serviceProvider.GetService(typeof(T));

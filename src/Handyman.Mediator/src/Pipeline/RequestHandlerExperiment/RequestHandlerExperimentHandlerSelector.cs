@@ -49,10 +49,12 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
 
         private Type[] GetExperimentalHandlerTypes<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers) where TRequest : IRequest<TResponse>
         {
-            return _metadata.ExperimentalHandlerTypes ??
-                   handlers.Select(x => x.GetType())
-                       .Where(x => x != _metadata.BaselineHandlerType)
-                       .ToArray();
+            if (_metadata.ExperimentalHandlerTypes.Length != 0)
+                return _metadata.ExperimentalHandlerTypes;
+
+            return handlers.Select(x => x.GetType())
+                .Where(x => x != _metadata.BaselineHandlerType)
+                .ToArray();
         }
     }
 }

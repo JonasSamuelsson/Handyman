@@ -22,7 +22,7 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
         {
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             var tasks = _innerHandlers.Select(x => x.Handle(request, cts.Token)).ToList();
-            List<Exception> exceptions = null;
+            List<Exception>? exceptions = null;
 
             while (tasks.Count != 0)
             {
