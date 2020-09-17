@@ -51,7 +51,7 @@
 [h.dt-nuget]: https://www.nuget.org/packages/Handyman.DuckTyping/
 [h.dt-nuget-version]: https://img.shields.io/nuget/v/Handyman.DuckTyping.svg
 [h.dt-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.DuckTyping.svg
-[h.dt-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.DuckTyped/badge.svg
+[h.dt-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.DuckTyping/badge.svg
 
 [h.d-nuget]: https://www.nuget.org/packages/Handyman.Dynamics/
 [h.d-nuget-version]: https://img.shields.io/nuget/v/Handyman.Dynamics.svg
