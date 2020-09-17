@@ -47,6 +47,8 @@ jobs:
         if (!$version) {
           write-error "version not found"
         }
-        $tag = "${{ github.workflow }} v$version"
+        $tag = "Handyman.DuckTyping_v$version"
+        git config user.email "github-actions@github.com"
+        git config user.name "GitHub"
         git tag -a $tag -m $tag
         git push origin --tags
