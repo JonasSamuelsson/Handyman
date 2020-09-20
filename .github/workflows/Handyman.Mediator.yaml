@@ -6,11 +6,15 @@ on:
     - '.github/workflows/Handyman.Mediator.yaml'
     - 'src/Handyman.Mediator/src/**'
     - 'src/Handyman.Mediator/tests/**'
+    tags-ignore:
+    - '**'
   pull_request:
     paths:
     - '.github/workflows/Handyman.Mediator.yaml'
     - 'src/Handyman.Mediator/src/**'
     - 'src/Handyman.Mediator/tests/**'
+    tags-ignore:
+    - '**'
   workflow_dispatch:
     inputs:
       publish_package:

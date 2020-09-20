@@ -6,11 +6,15 @@ on:
     - '.github/workflows/Handyman.DataContractValidator.yaml'
     - 'src/Handyman.DataContractValidator/src/**'
     - 'src/Handyman.DataContractValidator/tests/**'
+    tags-ignore:
+    - '**'
   pull_request:
     paths:
     - '.github/workflows/Handyman.DataContractValidator.yaml'
     - 'src/Handyman.DataContractValidator/src/**'
     - 'src/Handyman.DataContractValidator/tests/**'
+    tags-ignore:
+    - '**'
   workflow_dispatch:
     inputs:
       publish:

@@ -6,11 +6,15 @@ on:
     - '.github/workflows/Handyman.Mediator.DependencyInjection.yaml'
     - 'src/Handyman.Mediator.DependencyInjection/src/**'
     - 'src/Handyman.Mediator.DependencyInjection/tests/**'
+    tags-ignore:
+    - '**'
   pull_request:
     paths:
     - '.github/workflows/Handyman.Mediator.DependencyInjection.yaml'
     - 'src/Handyman.Mediator.DependencyInjection/src/**'
     - 'src/Handyman.Mediator.DependencyInjection/tests/**'
+    tags-ignore:
+    - '**'
   workflow_dispatch:
     inputs:
       publish_package:
