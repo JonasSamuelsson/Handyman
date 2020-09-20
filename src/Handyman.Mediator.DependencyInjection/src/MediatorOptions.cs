@@ -1,4 +1,4 @@
-﻿using Handyman.Mediator.EventPipelineCustomization;
+﻿using Handyman.Mediator.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

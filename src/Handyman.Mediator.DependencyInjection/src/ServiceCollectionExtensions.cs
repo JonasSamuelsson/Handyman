@@ -1,7 +1,12 @@
 ﻿using Handyman.DependencyInjection;
-using Handyman.Mediator.EventPipelineCustomization;
-using Handyman.Mediator.RequestPipelineCustomization;
+using Handyman.Mediator.Pipeline;
+using Handyman.Mediator.Pipeline.EventFilterToggle;
+using Handyman.Mediator.Pipeline.EventHandlerToggle;
+using Handyman.Mediator.Pipeline.RequestFilterToggle;
+using Handyman.Mediator.Pipeline.RequestHandlerExperiment;
+using Handyman.Mediator.Pipeline.RequestHandlerToggle;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -33,6 +38,9 @@ namespace Handyman.Mediator.DependencyInjection
                 EventHandlerExecutionStrategy = options.EventHandlerExecutionStrategy
             };
             services.Add(new ServiceDescriptor(typeof(IMediator), sp => new Mediator(sp, mediatorOptions), options.MediatorLifetime));
+            services.TryAddTransient(typeof(IEventDispatcher<>), typeof(EventDispatcher<>));
+            services.TryAddTransient(typeof(IRequestDispatcher<>), typeof(RequestDispatcher<>));
+            services.TryAddTransient(typeof(IRequestDispatcher<,>), typeof(RequestDispatcher<,>));
 
             services.Scan(_ =>
             {
@@ -48,6 +56,7 @@ namespace Handyman.Mediator.DependencyInjection
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentObserver));
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle));
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle));
+                _.ConfigureConcreteClassesOf(typeof(IToggle));
             });
 
             return services;

@@ -1,7 +1,8 @@
-﻿using Handyman.Mediator.EventPipelineCustomization;
+﻿using Handyman.Mediator.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,7 +23,7 @@ namespace Handyman.Mediator.DependencyInjection.Tests
                 x.EventHandlerExecutionStrategy = executionStrategy;
             });
 
-            await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event());
+            await services.BuildServiceProvider().GetService<IMediator>().Publish(new Event(), CancellationToken.None);
 
             executionStrategy.Executed.ShouldBeTrue();
         }
@@ -31,7 +32,7 @@ namespace Handyman.Mediator.DependencyInjection.Tests
         {
             public bool Executed { get; set; }
 
-            public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventPipelineContext<TEvent> context) where TEvent : IEvent
+            public Task Execute<TEvent>(List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext) where TEvent : IEvent
             {
                 Executed = true;
                 return Task.CompletedTask;
