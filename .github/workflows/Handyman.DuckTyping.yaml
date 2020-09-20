@@ -6,15 +6,11 @@ on:
     - '.github/workflows/Handyman.DuckTyping.yaml'
     - 'src/Handyman.DuckTyping/src/**'
     - 'src/Handyman.DuckTyping/test/**'
-    tags-ignore:
-    - '**'
   pull_request:
     paths:
     - '.github/workflows/Handyman.DuckTyping.yaml'
     - 'src/Handyman.DuckTyping/src/**'
     - 'src/Handyman.DuckTyping/test/**'
-    tags-ignore:
-    - '**'
   workflow_dispatch:
     inputs:
       publish:
