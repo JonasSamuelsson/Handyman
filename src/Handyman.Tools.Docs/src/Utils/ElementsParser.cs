@@ -7,10 +7,10 @@ namespace Handyman.Tools.Docs.Utils
 {
     public class ElementsParser
     {
-        private readonly IEnumerable<IAttributesParser> _attributesParsers;
+        private readonly IEnumerable<IAttributesValidator> _attributesParsers;
         private const string Pattern = "^(?<prefix>.*?)<(?<close>/)?handyman-docs:(?<name>[a-z0-9-._]+)( +(?<attributes>[a-z]+=\"[^\"]*\"))* *(?<selfClose>/)?>(?<suffix>.*)$";
 
-        public ElementsParser(IEnumerable<IAttributesParser> attributesParsers)
+        public ElementsParser(IEnumerable<IAttributesValidator> attributesParsers)
         {
             _attributesParsers = attributesParsers;
         }
@@ -78,7 +78,7 @@ namespace Handyman.Tools.Docs.Utils
                 if (elementName != null && tag.Name != elementName)
                     continue;
 
-                _attributesParsers.SingleOrDefault(x => x.CanHandle(tag.Name))?.Validate(tag.Attributes);
+                _attributesParsers.SingleOrDefault(x => x.CanHandle(tag.Name))?.Validate(tag.Attributes, new List<string>());
 
                 var lineCount = Math.Max(0, closingLineIndex - tag.LineIndex) + 1;
 
@@ -87,7 +87,9 @@ namespace Handyman.Tools.Docs.Utils
                     Attributes = tag.Attributes,
                     FromLineIndex = tag.LineIndex,
                     LineCount = lineCount,
-                    Name = tag.Name
+                    Name = tag.Name,
+                    Prefix = tag.Prefix,
+                    Suffix = tag.Suffix
                 });
             }
 

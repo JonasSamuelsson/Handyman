@@ -18,7 +18,7 @@ namespace Handyman.Tools.Docs.Tests
                 "// </handyman-docs:import-code>"
             };
 
-            var elements = new ElementsParser(Enumerable.Empty<IAttributesParser>()).Parse("import-code", lines);
+            var elements = new ElementsParser(Enumerable.Empty<IAttributesValidator>()).Parse("import-code", lines);
 
             var element = elements.Single();
 

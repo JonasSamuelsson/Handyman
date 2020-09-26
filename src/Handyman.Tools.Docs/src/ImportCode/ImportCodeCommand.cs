@@ -13,10 +13,10 @@ namespace Handyman.Tools.Docs.ImportCode
     {
         private readonly IFileSystem _fileSystem;
         private readonly ElementsParser _elementsParser;
-        private readonly IAttributesParser<ImportCodeElementAttributes> _attributesParser;
+        private readonly IAttributesDeserializer<ImportCodeElementAttributes> _attributesParser;
         private readonly IElementWriter _elementWriter;
 
-        public ImportCodeCommand(IFileSystem fileSystem, ElementsParser elementsParser, IAttributesParser<ImportCodeElementAttributes> attributesParser, IElementWriter elementWriter)
+        public ImportCodeCommand(IFileSystem fileSystem, ElementsParser elementsParser, IAttributesDeserializer<ImportCodeElementAttributes> attributesParser, IElementWriter elementWriter)
         {
             _fileSystem = fileSystem;
             _elementsParser = elementsParser;
@@ -51,13 +51,16 @@ namespace Handyman.Tools.Docs.ImportCode
 
                     var sourceLines = _fileSystem.File.ReadLines(sourcePath).ToList();
 
-                    if (attributes.Source != null)
+                    if (attributes.Id != null)
                     {
                         // todo
                     }
-                    else if (attributes.FromLineNumber.HasValue)
+                    else if (attributes.Lines != null)
                     {
-                        // todo
+                        sourceLines = sourceLines
+                            .Skip(attributes.Lines.FromLineIndex)
+                            .Take(attributes.Lines.LineCount)
+                            .ToList();
                     }
 
                     TrimIndentation(sourceLines);
@@ -65,6 +68,8 @@ namespace Handyman.Tools.Docs.ImportCode
 
                     _elementWriter.Write(targetLines, element, sourceLines);
                 }
+
+                _fileSystem.File.WriteAllLines(targetPath, targetLines);
             }
         }
 
