@@ -14,9 +14,11 @@
    </PropertyGroup>
 
    <ItemGroup>
+      <PackageReference Include="Handyman.DependencyInjection" Version="2.1.0" />
       <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
       <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="3.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
+      <PackageReference Include="System.IO.Abstractions" Version="12.1.10" />
    </ItemGroup>
 
 </Project>
