@@ -14,13 +14,15 @@ namespace Handyman.Tools.Docs.ImportCode
         private readonly IFileSystem _fileSystem;
         private readonly ElementsParser _elementsParser;
         private readonly IAttributesDeserializer<ImportCodeElementAttributes> _attributesParser;
+        private readonly IAttributesDeserializer<ReferenceElementAttributes> _refAttrDeserializer;
         private readonly IElementWriter _elementWriter;
 
-        public ImportCodeCommand(IFileSystem fileSystem, ElementsParser elementsParser, IAttributesDeserializer<ImportCodeElementAttributes> attributesParser, IElementWriter elementWriter)
+        public ImportCodeCommand(IFileSystem fileSystem, ElementsParser elementsParser, IAttributesDeserializer<ImportCodeElementAttributes> attributesParser, IAttributesDeserializer<ReferenceElementAttributes> refAttrDeserializer, IElementWriter elementWriter)
         {
             _fileSystem = fileSystem;
             _elementsParser = elementsParser;
             _attributesParser = attributesParser;
+            _refAttrDeserializer = refAttrDeserializer;
             _elementWriter = elementWriter;
         }
 
@@ -53,10 +55,25 @@ namespace Handyman.Tools.Docs.ImportCode
 
                     if (attributes.Id != null)
                     {
+                        var refElements = _elementsParser.Parse("reference", sourceLines);
+
+                        foreach (var refElement in refElements)
+                        {
+                            // todo reduce number of dependencies
+                            // todo validate
+                            // todo error handling
+                            var attr = _refAttrDeserializer.Deserialize(refElement.Attributes);
+                            if (attr.Id != attributes.Id) continue;
+                            sourceLines = sourceLines
+                                .Skip(refElement.ContentLineIndex ?? 0)
+                                .Take(refElement.ContentLineCount)
+                                .ToList();
+                        }
                         // todo
                     }
                     else if (attributes.Lines != null)
                     {
+                        // todo check line numbers
                         sourceLines = sourceLines
                             .Skip(attributes.Lines.FromLineIndex)
                             .Take(attributes.Lines.LineCount)

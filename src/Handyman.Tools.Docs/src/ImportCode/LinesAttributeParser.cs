@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.Tools.Docs.Utils;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Handyman.Tools.Docs.ImportCode
@@ -52,5 +54,33 @@ namespace Handyman.Tools.Docs.ImportCode
                 LineCount = toIndex - fromIndex
             };
         }
+    }
+
+    public class ReferenceElementAttributeParser : IAttributesValidator, IAttributesDeserializer<ReferenceElementAttributes>
+    {
+        public bool CanHandle(string elementName)
+        {
+            return elementName == "region";
+        }
+
+        public bool Validate(IReadOnlyCollection<Attribute> attributes, List<string> errors)
+        {
+            var dictionary = attributes.ToDictionary(x => x.Name, x => x.Value);
+
+            return dictionary.TryGetValue("id", out var id) && !string.IsNullOrWhiteSpace(id);
+        }
+
+        public ReferenceElementAttributes Deserialize(IReadOnlyCollection<Attribute> attributes)
+        {
+            return new ReferenceElementAttributes
+            {
+                Id = attributes.Single(x => x.Name == "id").Value
+            };
+        }
+    }
+
+    public class ReferenceElementAttributes
+    {
+        public string Id { get; set; }
     }
 }

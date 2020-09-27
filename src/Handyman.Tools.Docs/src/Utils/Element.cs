@@ -12,6 +12,8 @@ namespace Handyman.Tools.Docs.Utils
         public string Suffix { get; set; }
 
         public int FromLineNumber => FromLineIndex + 1;
+        public int? ContentLineIndex { get; set; }
+        public int ContentLineCount { get; set; }
 
         public IEnumerable<string> Write(IEnumerable<string> content)
         {

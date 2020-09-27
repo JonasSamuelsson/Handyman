@@ -85,6 +85,8 @@ namespace Handyman.Tools.Docs.Utils
                 elements.Add(new Element
                 {
                     Attributes = tag.Attributes,
+                    ContentLineCount = lineCount <= 2 ? 0 : lineCount - 2,
+                    ContentLineIndex = lineCount <= 2 ? default(int?) : tag.LineIndex + 1,
                     FromLineIndex = tag.LineIndex,
                     LineCount = lineCount,
                     Name = tag.Name,
