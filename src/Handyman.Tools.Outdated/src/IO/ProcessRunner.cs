@@ -43,21 +43,32 @@ namespace Handyman.Tools.Outdated.IO
             var process = new Process { StartInfo = psi };
             var actions = new List<Action>();
 
+            // there has been times where the [Error/Output]DataReceived events has fired after the process has exited
+            // adding a little layer of indirection to mitigate that
+            var handlers = new Handlers();
+
             if (startInfo.StandardErrorHandler != null)
             {
-                process.ErrorDataReceived += (_, args) => startInfo.StandardErrorHandler.Invoke(args.Data);
+                handlers.Error = startInfo.StandardErrorHandler;
+                process.ErrorDataReceived += (_, args) => handlers.Error.Invoke(args.Data);
                 actions.Add(() => process.BeginErrorReadLine());
             }
 
             if (startInfo.StandardOutputHandler != null)
             {
-                process.OutputDataReceived += (_, args) => startInfo.StandardOutputHandler.Invoke(args.Data);
+                handlers.Output = startInfo.StandardOutputHandler;
+                process.OutputDataReceived += (_, args) => handlers.Output.Invoke(args.Data);
                 actions.Add(() => process.BeginOutputReadLine());
             }
 
             var tcs = new TaskCompletionSource<int>();
             process.EnableRaisingEvents = true;
-            process.Exited += (_, args) => tcs.SetResult(process.ExitCode);
+            process.Exited += (_, args) =>
+            {
+                handlers.Error = delegate { };
+                handlers.Output = delegate { };
+                tcs.SetResult(process.ExitCode);
+            };
             var task = tcs.Task;
 
             process.Start();
@@ -65,6 +76,12 @@ namespace Handyman.Tools.Outdated.IO
             actions.ForEach(x => x.Invoke());
 
             return new ProcessInfo(process, task);
+        }
+
+        private class Handlers
+        {
+            public Action<string> Error { get; set; }
+            public Action<string> Output { get; set; }
         }
     }
 }
