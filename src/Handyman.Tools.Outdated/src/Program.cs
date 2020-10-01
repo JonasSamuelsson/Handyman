@@ -5,6 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO.Abstractions;
+using System.Threading.Tasks;
 
 namespace Handyman.Tools.Outdated
 {
@@ -13,7 +14,7 @@ namespace Handyman.Tools.Outdated
     [Subcommand(typeof(GenerateConfigCommand))]
     public class Program
     {
-        public static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             var services = new ServiceCollection()
                 .AddSingleton<IFileSystem, FileSystem>()
@@ -33,7 +34,7 @@ namespace Handyman.Tools.Outdated
 
             try
             {
-                return app.Execute(args);
+                return await app.ExecuteAsync(args);
             }
             catch (Exception exception)
             {
