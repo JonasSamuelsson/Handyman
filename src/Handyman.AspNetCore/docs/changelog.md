@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 3.1.2
+
+### Fixed
+
+* Fixed null reference exception in etag validator middleware.
+
 ## 3.1.1
 
 ### Fixed
