@@ -4,13 +4,13 @@
 |-|-|-|
 | [Handyman.AspNetCore][h.anc-docs] | [![h.anc-nuget-version] ![h.anc-nuget-downloads]][h.anc-nuget] | ![Handyman.AspNetCore][h.anc-gha] |
 | [Handyman.Azure.Cosmos.Table][h.a.c.t-docs] | [![h.a.c.t-nuget-version] ![h.a.c.t-nuget-downloads]][h.a.c.t-nuget] | [![h.a.c.t-ado-status]][h.a.c.t-ado] |
-| [Handyman.DataContractValidator][h.dcv-docs] | [![h.dcv-nuget-version] ![h.dcv-nuget-downloads]][h.dcv-nuget] | [![h.dcv-ado-status]][h.dcv-ado] |
-| [Handyman.DependencyInjection][h.di-docs] | [![h.di-nuget-version] ![h.di-nuget-downloads]][h.di-nuget] | [![h.di-ado-status]][h.di-ado] |
+| [Handyman.DataContractValidator][h.dcv-docs] | [![h.dcv-nuget-version] ![h.dcv-nuget-downloads]][h.dcv-nuget] | ![Handyman.DataContractValidator][h.dcv-gha] |
+| [Handyman.DependencyInjection][h.di-docs] | [![h.di-nuget-version] ![h.di-nuget-downloads]][h.di-nuget] | ![Handyman.DependencyInjection][h.di-gha] |
 | Handyman.DuckTyping | [![h.dt-nuget-version] ![h.dt-nuget-downloads]][h.dt-nuget] | ![Handyman.DuckTyping][h.dt-gha] |
 | Handyman.Dynamics | [![h.d-nuget-version] ![h.d-nuget-downloads]][h.d-nuget] | [![h.d-ado-status]][h.d-ado] |
-| Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | [![h.e-ado-status]][h.e-ado] |
+| Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | ![Handyman.Extensions][h.e-gha] |
 | [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | ![Handyman.Mediator][h.m-gha] |
-| [Handyman.Mediator.DependencyInjection][h.m.di-docs] | [![h.m.di-nuget-version] ![h.m.di-nuget-downloads]][h.m.di-nuget] | [![h.m.di-ado-status]][h.m.di-ado] |
+| [Handyman.Mediator.DependencyInjection][h.m.di-docs] | [![h.m.di-nuget-version] ![h.m.di-nuget-downloads]][h.m.di-nuget] | ![Handyman.Mediator.DependencyInjection][h.m.di-gha] |
 | Handyman.Wpf | [![h.wpf-nuget-version] ![h.wpf-nuget-downloads]][h.wpf-nuget] | |
 
 ## Tools
@@ -37,15 +37,13 @@
 [h.dcv-nuget]: https://www.nuget.org/packages/Handyman.DataContractValidator
 [h.dcv-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.DataContractValidator.svg
 [h.dcv-nuget-version]: https://img.shields.io/nuget/v/Handyman.DataContractValidator.svg
-[h.dcv-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=3
-[h.dcv-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.DataContractValidator?branchName=master
+[h.dcv-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.DataContractValidator/badge.svg
 
 [h.di-docs]: src/Handyman.DependencyInjection/docs/index.md
 [h.di-nuget]: https://www.nuget.org/packages/Handyman.DependencyInjection/
 [h.di-nuget-version]: https://img.shields.io/nuget/v/Handyman.DependencyInjection.svg
 [h.di-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.DependencyInjection.svg
-[h.di-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=17
-[h.di-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.DependencyInjection?branchName=master
+[h.di-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.DependencyInjection/badge.svg
 
 [h.dt-nuget]: https://www.nuget.org/packages/Handyman.DuckTyping/
 [h.dt-nuget-version]: https://img.shields.io/nuget/v/Handyman.DuckTyping.svg
@@ -61,8 +59,7 @@
 [h.e-nuget]: https://www.nuget.org/packages/Handyman.Extensions/
 [h.e-nuget-version]: https://img.shields.io/nuget/v/Handyman.Extensions.svg
 [h.e-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Extensions.svg
-[h.e-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=8
-[h.e-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Extensions?branchName=master
+[h.e-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.Extensions/badge.svg
 
 [h.m-docs]: src/Handyman.Mediator/docs/index.md
 [h.m-nuget]: https://www.nuget.org/packages/Handyman.Mediator/
@@ -74,8 +71,7 @@
 [h.m.di-nuget]: https://www.nuget.org/packages/Handyman.Mediator.DependencyInjection/
 [h.m.di-nuget-version]: https://img.shields.io/nuget/v/Handyman.Mediator.DependencyInjection.svg
 [h.m.di-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Mediator.DependencyInjection.svg
-[h.m.di-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=18
-[h.m.di-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Mediator.DependencyInjection?branchName=master
+[h.m.di-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.Mediator.DependencyInjection/badge.svg
 
 [h.t.ado-docs]: src/Handyman.Tools.Ado/docs/index.md
 [h.t.ado-nuget]: https://www.nuget.org/packages/handyman-ado/
