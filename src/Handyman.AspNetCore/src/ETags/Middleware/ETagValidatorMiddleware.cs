@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Handyman.AspNetCore.ETags.Middleware
 {
@@ -21,10 +21,9 @@ namespace Handyman.AspNetCore.ETags.Middleware
 
         public Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var endpoint = context.GetEndpoint();
             var headers = context.Request.Headers;
 
-            if (endpoint.Metadata.GetMetadata<EnsureRequestHasIfMatchHeader>() != null)
+            if (context.GetEndpoint()?.Metadata.GetMetadata<EnsureRequestHasIfMatchHeader>() != null)
             {
                 if (!headers.TryGetValue(HeaderNames.IfMatch, out var ifMatch))
                 {
