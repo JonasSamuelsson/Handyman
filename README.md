@@ -2,7 +2,7 @@
 
 | | NuGet | Build status |
 |-|-|-|
-| [Handyman.AspNetCore][h.anc-docs] | [![h.anc-nuget-version] ![h.anc-nuget-downloads]][h.anc-nuget] | [![h.anc-ado-status]][h.anc-ado] |
+| [Handyman.AspNetCore][h.anc-docs] | [![h.anc-nuget-version] ![h.anc-nuget-downloads]][h.anc-nuget] | ![Handyman.AspNetCore][h.anc-gha] |
 | [Handyman.Azure.Cosmos.Table][h.a.c.t-docs] | [![h.a.c.t-nuget-version] ![h.a.c.t-nuget-downloads]][h.a.c.t-nuget] | [![h.a.c.t-ado-status]][h.a.c.t-ado] |
 | [Handyman.DataContractValidator][h.dcv-docs] | [![h.dcv-nuget-version] ![h.dcv-nuget-downloads]][h.dcv-nuget] | [![h.dcv-ado-status]][h.dcv-ado] |
 | [Handyman.DependencyInjection][h.di-docs] | [![h.di-nuget-version] ![h.di-nuget-downloads]][h.di-nuget] | [![h.di-ado-status]][h.di-ado] |
@@ -24,8 +24,7 @@
 [h.anc-nuget]: https://www.nuget.org/packages/Handyman.AspNetCore
 [h.anc-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.AspNetCore.svg
 [h.anc-nuget-version]: https://img.shields.io/nuget/v/Handyman.AspNetCore.svg
-[h.anc-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=6
-[h.anc-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.AspNetCore?branchName=master
+[h.anc-gha]: https://github.com/JonasSamuelsson/Handyman/workflows/Handyman.AspNetCore/badge.svg
 
 [h.a.c.t-docs]: src/Handyman.Azure.Cosmos.Table/docs/index.md
 [h.a.c.t-nuget]: https://www.nuget.org/packages/Handyman.Azure.Cosmos.Table
