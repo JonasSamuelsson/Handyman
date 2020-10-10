@@ -1,5 +1,4 @@
-﻿using Handyman.Mediator.Pipeline;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
 using System.Threading;
@@ -131,11 +130,11 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class EventHandler : EventHandler<Event>
+        private class EventHandler : SyncEventHandler<Event>
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Event @event)
+            protected override void Handle(Event @event, CancellationToken cancellationToken)
             {
                 Executed = true;
             }

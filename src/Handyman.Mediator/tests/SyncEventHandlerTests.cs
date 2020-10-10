@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
 {
-    public class EventHandlerTests
+    public class SyncEventHandlerTests
     {
         [Fact]
         public async Task SyncImplementation()
@@ -18,9 +19,9 @@ namespace Handyman.Mediator.Tests
 
         private class Event : IEvent { }
 
-        private class EventHandler : EventHandler<Event>
+        private class EventHandler : SyncEventHandler<Event>
         {
-            protected override void Handle(Event @event)
+            protected override void Handle(Event @event, CancellationToken cancellationToken)
             {
             }
         }

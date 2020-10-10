@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -35,9 +35,9 @@ namespace Handyman.Mediator.Tests
             public bool Handeled { get; set; }
         }
 
-        private class TestEventHandler : EventHandler<TestEvent>
+        private class TestEventHandler : SyncEventHandler<TestEvent>
         {
-            protected override void Handle(TestEvent @event)
+            protected override void Handle(TestEvent @event, CancellationToken cancellationToken)
             {
                 @event.Handeled = true;
             }

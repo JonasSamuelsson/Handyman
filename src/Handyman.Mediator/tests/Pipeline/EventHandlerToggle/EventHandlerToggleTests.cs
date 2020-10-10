@@ -1,7 +1,7 @@
-﻿using Handyman.Mediator.Pipeline;
-using Handyman.Mediator.Pipeline.EventHandlerToggle;
+﻿using Handyman.Mediator.Pipeline.EventHandlerToggle;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -39,21 +39,21 @@ namespace Handyman.Mediator.Tests.Pipeline.EventHandlerToggle
         [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerTypes = new[] { typeof(ToggleDisabledEventHandler) }, Name = "test", Tags = new[] { "foo" })]
         private class Event : IEvent { }
 
-        private class ToggleEnabledEventHandler : EventHandler<Event>
+        private class ToggleEnabledEventHandler : SyncEventHandler<Event>
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Event @event)
+            protected override void Handle(Event @event, CancellationToken cancellationToken)
             {
                 Executed = true;
             }
         }
 
-        private class ToggleDisabledEventHandler : EventHandler<Event>
+        private class ToggleDisabledEventHandler : SyncEventHandler<Event>
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Event @event)
+            protected override void Handle(Event @event, CancellationToken cancellationToken)
             {
                 Executed = true;
             }
