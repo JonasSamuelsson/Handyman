@@ -3,7 +3,12 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public interface IEventDispatcher<TEvent>
+    public interface IPublisher
+    {
+        Task Publish(IEvent @event, CancellationToken cancellationToken);
+    }
+
+    public interface IPublisher<TEvent>
         where TEvent : IEvent
     {
         Task Publish(TEvent @event, CancellationToken cancellationToken);

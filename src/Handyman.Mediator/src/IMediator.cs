@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public interface IMediator
+    public interface IMediator : IPublisher
     {
-        Task Publish(IEvent @event, CancellationToken cancellationToken);
         Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken);
     }
 }

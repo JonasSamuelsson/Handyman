@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -9,33 +9,66 @@ namespace Handyman.Mediator.Tests
     public class PublishEventTests
     {
         [Fact]
-        public async Task ShouldPublishEvent()
+        public async Task ShouldPublishEventUsingMediator()
         {
-            var handler1 = new EventHandler();
-            var handler2 = new EventHandler();
+            var mediator = new ServiceCollection()
+                .AddTransient<IMediator>(sp => new Mediator(sp))
+                .AddTransient<IEventHandler<Event>, EventHandler>()
+                .BuildServiceProvider()
+                .GetRequiredService<IMediator>();
 
-            var services = new ServiceCollection();
+            var @event = new Event();
 
-            services.AddSingleton<IEventHandler<Event>>(handler1);
-            services.AddSingleton<IEventHandler<Event>>(handler2);
+            await mediator.Publish(@event, CancellationToken.None);
 
-            var mediator = new Mediator(services.BuildServiceProvider());
-
-            await Task.WhenAll(mediator.Publish(new Event(), CancellationToken.None));
-
-            handler1.Executed.ShouldBeTrue();
-            handler2.Executed.ShouldBeTrue();
+            @event.Handled.ShouldBeTrue();
         }
 
-        private class Event : IEvent { }
+        [Fact]
+        public async Task ShouldPublishEventUsingNonGenericPublisher()
+        {
+            var publisher = new ServiceCollection()
+                .AddTransient<IMediator>(sp => new Mediator(sp))
+                .AddTransient<IPublisher>(sp => sp.GetRequiredService<IMediator>())
+                .AddTransient<IEventHandler<Event>, EventHandler>()
+                .BuildServiceProvider()
+                .GetRequiredService<IPublisher>();
+
+            var @event = new Event();
+
+            await publisher.Publish(@event, CancellationToken.None);
+
+            @event.Handled.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task ShouldPublishEventUsingGenericPublisher()
+        {
+            var publisher = new ServiceCollection()
+                .AddTransient<IMediator>(sp => new Mediator(sp))
+                .AddTransient<IPublisher>(sp => sp.GetRequiredService<IMediator>())
+                .AddTransient(typeof(IPublisher<>), typeof(Publisher<>))
+                .AddTransient<IEventHandler<Event>, EventHandler>()
+                .BuildServiceProvider()
+                .GetRequiredService<IPublisher<Event>>();
+
+            var @event = new Event();
+
+            await publisher.Publish(@event, CancellationToken.None);
+
+            @event.Handled.ShouldBeTrue();
+        }
+
+        private class Event : IEvent
+        {
+            public bool Handled { get; set; }
+        }
 
         private class EventHandler : IEventHandler<Event>
         {
-            public bool Executed { get; set; }
-
             public Task Handle(Event @event, CancellationToken cancellationToken)
             {
-                Executed = true;
+                @event.Handled = true;
                 return Task.CompletedTask;
             }
         }
