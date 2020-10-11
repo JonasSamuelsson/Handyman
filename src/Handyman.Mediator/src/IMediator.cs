@@ -1,10 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace Handyman.Mediator
+﻿namespace Handyman.Mediator
 {
-    public interface IMediator : IPublisher
+    public interface IMediator : IPublisher, ISender
     {
-        Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken);
     }
 }

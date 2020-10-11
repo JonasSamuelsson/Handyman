@@ -28,8 +28,8 @@ namespace Handyman.Mediator.Tests
         public async Task ShouldPublishEventUsingNonGenericPublisher()
         {
             var publisher = new ServiceCollection()
-                .AddTransient<IMediator>(sp => new Mediator(sp))
                 .AddTransient<IPublisher>(sp => sp.GetRequiredService<IMediator>())
+                .AddTransient<IMediator>(sp => new Mediator(sp))
                 .AddTransient<IEventHandler<Event>, EventHandler>()
                 .BuildServiceProvider()
                 .GetRequiredService<IPublisher>();
@@ -45,9 +45,8 @@ namespace Handyman.Mediator.Tests
         public async Task ShouldPublishEventUsingGenericPublisher()
         {
             var publisher = new ServiceCollection()
-                .AddTransient<IMediator>(sp => new Mediator(sp))
-                .AddTransient<IPublisher>(sp => sp.GetRequiredService<IMediator>())
                 .AddTransient(typeof(IPublisher<>), typeof(Publisher<>))
+                .AddTransient<IMediator>(sp => new Mediator(sp))
                 .AddTransient<IEventHandler<Event>, EventHandler>()
                 .BuildServiceProvider()
                 .GetRequiredService<IPublisher<Event>>();

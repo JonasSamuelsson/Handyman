@@ -6,16 +6,16 @@ namespace Handyman.Mediator
     public class Publisher<TEvent> : IPublisher<TEvent>
         where TEvent : IEvent
     {
-        private readonly IPublisher _publisher;
+        private readonly IMediator _mediator;
 
-        public Publisher(IPublisher publisher)
+        public Publisher(IMediator mediator)
         {
-            _publisher = publisher;
+            _mediator = mediator;
         }
 
         public Task Publish(TEvent @event, CancellationToken cancellationToken)
         {
-            return _publisher.Publish(@event, cancellationToken);
+            return _mediator.Publish(@event, cancellationToken);
         }
     }
 }

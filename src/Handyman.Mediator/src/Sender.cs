@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace Handyman.Mediator
 {
-    public class RequestDispatcher<TRequest> : IRequestDispatcher<TRequest>
+    public class Sender<TRequest> : ISender<TRequest>
         where TRequest : IRequest
     {
         private readonly IMediator _mediator;
 
-        public RequestDispatcher(IMediator mediator)
+        public Sender(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -19,12 +19,12 @@ namespace Handyman.Mediator
         }
     }
 
-    public class RequestDispatcher<TRequest, TResponse> : IRequestDispatcher<TRequest, TResponse>
+    public class Sender<TRequest, TResponse> : ISender<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
         private readonly IMediator _mediator;
 
-        public RequestDispatcher(IMediator mediator)
+        public Sender(IMediator mediator)
         {
             _mediator = mediator;
         }
