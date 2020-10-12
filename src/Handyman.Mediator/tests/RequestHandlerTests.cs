@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -45,7 +45,7 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class SyncVoidHandler : RequestHandler<VoidRequest>
+        private class SyncVoidHandler : SyncRequestHandler<VoidRequest>
         {
             protected override void Handle(VoidRequest request, CancellationToken cancellationToken)
             {
@@ -54,7 +54,7 @@ namespace Handyman.Mediator.Tests
 
         private class StringRequest : IRequest<string> { }
 
-        private class SyncHandler : RequestHandler<StringRequest, string>
+        private class SyncHandler : SyncRequestHandler<StringRequest, string>
         {
             protected override string Handle(StringRequest request, CancellationToken cancellationToken)
             {
