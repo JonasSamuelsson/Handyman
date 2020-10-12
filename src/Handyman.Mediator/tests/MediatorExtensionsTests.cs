@@ -48,7 +48,7 @@ namespace Handyman.Mediator.Tests
             public string Response { get; set; }
         }
 
-        private class TestRequestHandler : RequestHandler<TestRequest, string>
+        private class TestRequestHandler : SyncRequestHandler<TestRequest, string>
         {
             protected override string Handle(TestRequest request, CancellationToken cancellationToken) => request.Response;
         }

@@ -1,5 +1,4 @@
-﻿using Handyman.Mediator.Pipeline;
-using Handyman.Mediator.Pipeline.RequestFilterToggle;
+﻿using Handyman.Mediator.Pipeline.RequestFilterToggle;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Threading;
@@ -79,7 +78,7 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestFilterToggle
             }
         }
 
-        private class RequestHandler : RequestHandler<Request, object>
+        private class RequestHandler : SyncRequestHandler<Request, object>
         {
             protected override object Handle(Request request, CancellationToken cancellationToken)
             {
