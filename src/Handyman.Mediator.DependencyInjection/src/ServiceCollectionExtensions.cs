@@ -38,9 +38,11 @@ namespace Handyman.Mediator.DependencyInjection
                 EventHandlerExecutionStrategy = options.EventHandlerExecutionStrategy
             };
             services.Add(new ServiceDescriptor(typeof(IMediator), sp => new Mediator(sp, mediatorOptions), options.MediatorLifetime));
-            services.TryAddTransient(typeof(IEventDispatcher<>), typeof(EventDispatcher<>));
-            services.TryAddTransient(typeof(IRequestDispatcher<>), typeof(RequestDispatcher<>));
-            services.TryAddTransient(typeof(IRequestDispatcher<,>), typeof(RequestDispatcher<,>));
+            services.TryAddTransient<IPublisher>(sp => sp.GetRequiredService<IMediator>());
+            services.TryAddTransient(typeof(IPublisher<>), typeof(Publisher<>));
+            services.TryAddTransient<ISender>(sp => sp.GetRequiredService<IMediator>());
+            services.TryAddTransient(typeof(ISender<>), typeof(Sender<>));
+            services.TryAddTransient(typeof(ISender<,>), typeof(Sender<,>));
 
             services.Scan(_ =>
             {

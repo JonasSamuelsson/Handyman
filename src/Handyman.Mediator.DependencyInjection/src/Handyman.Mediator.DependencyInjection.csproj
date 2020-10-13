@@ -6,12 +6,12 @@
    </PropertyGroup>
 
    <PropertyGroup>
-      <Version>4.0.0</Version>
+      <Version>5.0.0</Version>
    </PropertyGroup>
 
    <ItemGroup>
       <PackageReference Include="Handyman.DependencyInjection" Version="2.1.0" />
-      <PackageReference Include="Handyman.Mediator" Version="10.0.0" />
+      <PackageReference Include="Handyman.Mediator" Version="11.0.0" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
          <PrivateAssets>all</PrivateAssets>
          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
