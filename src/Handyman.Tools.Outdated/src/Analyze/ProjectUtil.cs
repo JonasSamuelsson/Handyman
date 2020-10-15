@@ -22,7 +22,7 @@ namespace Handyman.Tools.Outdated.Analyze
 
             var info = new ProcessStartInfo
             {
-                Arguments = $"restore {project.FullPath}",
+                Arguments = $"restore {project.FullPath} -m:1",
                 FileName = "dotnet",
                 StandardErrorHandler = s => errors.Add(s),
                 StandardOutputHandler = delegate { }
