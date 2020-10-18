@@ -1,4 +1,4 @@
-﻿using Handyman.Tools.Docs.Utils.Deprecated;
+﻿using Handyman.Tools.Docs.Utils;
 using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
@@ -12,18 +12,12 @@ namespace Handyman.Tools.Docs.ImportCode
     public class ImportCodeCommand
     {
         private readonly IFileSystem _fileSystem;
-        private readonly ElementsParser _elementsParser;
-        private readonly IAttributesDeserializer<ImportCodeElementAttributes> _attributesParser;
-        private readonly IAttributesDeserializer<ReferenceElementAttributes> _refAttrDeserializer;
-        private readonly IElementWriter _elementWriter;
+        private readonly IElementSerializer<ImportCodeAttributes> _importCodeElementSerializer;
 
-        public ImportCodeCommand(IFileSystem fileSystem, ElementsParser elementsParser, IAttributesDeserializer<ImportCodeElementAttributes> attributesParser, IAttributesDeserializer<ReferenceElementAttributes> refAttrDeserializer, IElementWriter elementWriter)
+        public ImportCodeCommand(IFileSystem fileSystem, IElementSerializer<ImportCodeAttributes> importCodeElementSerializer)
         {
             _fileSystem = fileSystem;
-            _elementsParser = elementsParser;
-            _attributesParser = attributesParser;
-            _refAttrDeserializer = refAttrDeserializer;
-            _elementWriter = elementWriter;
+            _importCodeElementSerializer = importCodeElementSerializer;
         }
 
         [Argument(0)]
@@ -33,17 +27,17 @@ namespace Handyman.Tools.Docs.ImportCode
         {
             var files = GetFiles();
 
-            foreach (var targetPath in files)
+            foreach (var file in files)
             {
-                var targetLines = _fileSystem.File.ReadLines(targetPath).ToList();
+                var lines = _fileSystem.File.ReadLines(file).ToList();
 
-                var elements = _elementsParser.Parse("import-code", targetLines);
+                var elements = _importCodeElementSerializer.TryDeserializeElements(lines, "import-code");
 
                 foreach (var element in elements.Reverse())
                 {
-                    var attributes = _attributesParser.Deserialize(element.Attributes);
+                    var attributes = element.Attributes;
 
-                    var sourcePath = GetSourcePath(attributes.Source, targetPath);
+                    var sourcePath = GetSourcePath(attributes.Source, file);
 
                     if (!_fileSystem.File.Exists(sourcePath))
                     {
@@ -83,10 +77,10 @@ namespace Handyman.Tools.Docs.ImportCode
                     TrimIndentation(sourceLines);
                     AddSyntaxHighlighting(sourceLines, _fileSystem.Path.GetExtension(sourcePath));
 
-                    _elementWriter.Write(targetLines, element, sourceLines);
+                    _elementWriter.Write(lines, element, sourceLines);
                 }
 
-                _fileSystem.File.WriteAllLines(targetPath, targetLines);
+                _fileSystem.File.WriteAllLines(file, lines);
             }
         }
 

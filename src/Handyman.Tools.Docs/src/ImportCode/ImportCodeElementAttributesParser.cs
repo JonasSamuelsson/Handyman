@@ -6,7 +6,7 @@ using Attribute = Handyman.Tools.Docs.Utils.Deprecated.Attribute;
 
 namespace Handyman.Tools.Docs.ImportCode
 {
-    public class ImportCodeElementAttributesParser : IAttributesValidator, IAttributesDeserializer<ImportCodeElementAttributes>
+    public class ImportCodeElementAttributesParser : IAttributesValidator, IAttributesDeserializer<ImportCodeAttributes>
     {
         public bool CanHandle(string elementName)
         {
@@ -58,11 +58,11 @@ namespace Handyman.Tools.Docs.ImportCode
             return isValid;
         }
 
-        public ImportCodeElementAttributes Deserialize(IReadOnlyCollection<Attribute> attributes)
+        public ImportCodeAttributes Deserialize(IReadOnlyCollection<Attribute> attributes)
         {
             var dictionary = attributes.ToDictionary(x => x.Name, x => x.Value);
 
-            var result = new ImportCodeElementAttributes();
+            var result = new ImportCodeAttributes();
 
             if (dictionary.TryGetValue("id", out var id))
             {
