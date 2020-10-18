@@ -5,24 +5,24 @@ using System.Text.RegularExpressions;
 
 namespace Handyman.Tools.Docs.Utils
 {
-    public interface IElementsSerializer<TAttributes>
+    public interface IElementSerializer<TAttributes>
     {
-        IEnumerable<Element<TAttributes>> ReadElement(string elementName, IReadOnlyList<string> lines);
+        IEnumerable<Element<TAttributes>> TryDeserializeElements(IReadOnlyList<string> lines, string elementName);
         void WriteElement(Element<TAttributes> element, IEnumerable<string> content, List<string> lines);
     }
 
-    public class ElementsSerializer<TAttributes> : IElementsSerializer<TAttributes>
+    public class ElementSerializer<TAttributes> : IElementSerializer<TAttributes>
     {
         private const string Pattern = "^(?<prefix>.*?)<(?<close>/)?handyman-docs:(?<name>[a-z0-9-._]+)( +(?<attributes>[a-z]+=\"[^\"]*\"))* *(?<selfClose>/)?>(?<suffix>.*)$";
 
         private readonly IAttributesParser<TAttributes> _attributesParser;
 
-        public ElementsSerializer(IAttributesParser<TAttributes> attributesParser)
+        public ElementSerializer(IAttributesParser<TAttributes> attributesParser)
         {
             _attributesParser = attributesParser;
         }
 
-        public IEnumerable<Element<TAttributes>> ReadElement(string elementName, IReadOnlyList<string> lines)
+        public IEnumerable<Element<TAttributes>> TryDeserializeElements(IReadOnlyList<string> lines, string elementName)
         {
             var regex = new Regex(Pattern, RegexOptions.IgnoreCase);
 

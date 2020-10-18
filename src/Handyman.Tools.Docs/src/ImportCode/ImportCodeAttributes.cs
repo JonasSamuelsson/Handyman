@@ -2,7 +2,7 @@
 
 namespace Handyman.Tools.Docs.ImportCode
 {
-    public class ImportCodeElementAttributes
+    public class ImportCodeAttributes
     {
         [Xor]
         public string Id { get; set; }
