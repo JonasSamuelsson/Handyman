@@ -1,7 +1,7 @@
 ﻿using Handyman.DependencyInjection;
 using Handyman.Tools.Docs.ImportCode;
 using Handyman.Tools.Docs.TableOfContent;
-using Handyman.Tools.Docs.Utils;
+using Handyman.Tools.Docs.Utils.Deprecated;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Handyman.Tools.Docs.Utils
+namespace Handyman.Tools.Docs.Utils.Deprecated
 {
     public interface IElementWriter
     {

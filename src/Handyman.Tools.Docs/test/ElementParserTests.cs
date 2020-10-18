@@ -1,4 +1,4 @@
-﻿using Handyman.Tools.Docs.Utils;
+﻿using Handyman.Tools.Docs.Utils.Deprecated;
 using Shouldly;
 using System.Linq;
 using Xunit;

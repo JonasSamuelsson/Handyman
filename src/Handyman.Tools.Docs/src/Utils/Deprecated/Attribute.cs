@@ -1,4 +1,4 @@
-﻿namespace Handyman.Tools.Docs.Utils
+﻿namespace Handyman.Tools.Docs.Utils.Deprecated
 {
     public class Attribute
     {

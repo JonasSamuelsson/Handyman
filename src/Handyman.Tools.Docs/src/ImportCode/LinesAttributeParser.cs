@@ -1,4 +1,4 @@
-﻿using Handyman.Tools.Docs.Utils;
+﻿using Handyman.Tools.Docs.Utils.Deprecated;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;

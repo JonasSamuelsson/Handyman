@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Handyman.Tools.Docs.Utils
+namespace Handyman.Tools.Docs.Utils.Deprecated
 {
     public class ElementsParser
     {

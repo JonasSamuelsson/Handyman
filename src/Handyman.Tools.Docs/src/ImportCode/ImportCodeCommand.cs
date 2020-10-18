@@ -1,4 +1,4 @@
-﻿using Handyman.Tools.Docs.Utils;
+﻿using Handyman.Tools.Docs.Utils.Deprecated;
 using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
