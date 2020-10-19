@@ -11,13 +11,15 @@ namespace Handyman.Tools.Docs.ImportCode
     [Command("import-code")]
     public class ImportCodeCommand
     {
+        private readonly ILogger _logger;
         private readonly IFileSystem _fileSystem;
-        private readonly IElementSerializer<ImportCodeAttributes> _importCodeElementSerializer;
+        private readonly IElementSerializer<CodeBlockData> _codeElementSerializer;
 
-        public ImportCodeCommand(IFileSystem fileSystem, IElementSerializer<ImportCodeAttributes> importCodeElementSerializer)
+        public ImportCodeCommand(ILogger logger, IFileSystem fileSystem, IElementSerializer<CodeBlockData> codeElementSerializer)
         {
+            _logger = logger;
             _fileSystem = fileSystem;
-            _importCodeElementSerializer = importCodeElementSerializer;
+            _codeElementSerializer = codeElementSerializer;
         }
 
         [Argument(0)]
@@ -31,13 +33,13 @@ namespace Handyman.Tools.Docs.ImportCode
             {
                 var lines = _fileSystem.File.ReadLines(file).ToList();
 
-                var elements = _importCodeElementSerializer.TryDeserializeElements(lines, "import-code");
+                var elements = _codeElementSerializer.TryDeserializeElements("code-block", lines, _logger);
 
                 foreach (var element in elements.Reverse())
                 {
-                    var attributes = element.Attributes;
+                    var data = element.Data;
 
-                    var sourcePath = GetSourcePath(attributes.Source, file);
+                    var sourcePath = GetSourcePath(data.Source, file);
 
                     if (!_fileSystem.File.Exists(sourcePath))
                     {
@@ -45,39 +47,28 @@ namespace Handyman.Tools.Docs.ImportCode
                         continue;
                     }
 
-                    var sourceLines = _fileSystem.File.ReadLines(sourcePath).ToList();
+                    var contentLines = _fileSystem.File.ReadLines(sourcePath).ToList();
 
-                    if (attributes.Id != null)
-                    {
-                        var refElements = _elementsParser.Parse("reference", sourceLines);
+                    // todo id ref, use Lines on element as well?
 
-                        foreach (var refElement in refElements)
-                        {
-                            // todo reduce number of dependencies
-                            // todo validate
-                            // todo error handling
-                            var attr = _refAttrDeserializer.Deserialize(refElement.Attributes);
-                            if (attr.Id != attributes.Id) continue;
-                            sourceLines = sourceLines
-                                .Skip(refElement.ContentLineIndex ?? 0)
-                                .Take(refElement.ContentLineCount)
-                                .ToList();
-                        }
-                        // todo
-                    }
-                    else if (attributes.Lines != null)
+                    if (data.Lines != null)
                     {
+                        if (!data.Lines.IsInRange(contentLines, _logger))
+                            continue;
+
                         // todo check line numbers
-                        sourceLines = sourceLines
-                            .Skip(attributes.Lines.FromLineIndex)
-                            .Take(attributes.Lines.LineCount)
+                        contentLines = contentLines
+                            .Skip(data.Lines.FromIndex)
+                            .Take(data.Lines.Count)
                             .ToList();
                     }
 
-                    TrimIndentation(sourceLines);
-                    AddSyntaxHighlighting(sourceLines, _fileSystem.Path.GetExtension(sourcePath));
+                    TrimIndentation(contentLines);
 
-                    _elementWriter.Write(lines, element, sourceLines);
+                    var language = data.Language ?? GetDefaultLanguage(sourcePath);
+                    AddSyntaxHighlighting(contentLines, language);
+
+                    _codeElementSerializer.WriteElement(element, contentLines, lines);
                 }
 
                 _fileSystem.File.WriteAllLines(file, lines);
@@ -127,9 +118,15 @@ namespace Handyman.Tools.Docs.ImportCode
             }
         }
 
-        public static void AddSyntaxHighlighting(List<string> lines, string extension)
+        private string GetDefaultLanguage(string path)
         {
-            lines.Insert(0, $"```{ExtensionToLanguageLookup.GetLanguage(extension)}");
+            var extension = _fileSystem.Path.GetExtension(path);
+            return ExtensionToLanguageLookup.GetLanguage(extension);
+        }
+
+        public static void AddSyntaxHighlighting(List<string> lines, string language)
+        {
+            lines.Insert(0, $"```{language}");
             lines.Add("```");
         }
 

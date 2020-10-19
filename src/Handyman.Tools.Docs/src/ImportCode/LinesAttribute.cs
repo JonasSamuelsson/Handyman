@@ -2,7 +2,9 @@
 {
     public class LinesAttribute
     {
-        public int FromLineIndex { get; set; }
+        public int FromLineNumber { get; set; }
         public int LineCount { get; set; }
+
+        public int FromLineIndex => FromLineNumber - 1;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Handyman.Tools.Docs.Utils.Deprecated;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 
 namespace Handyman.Tools.Docs.ImportCode
@@ -42,17 +43,18 @@ namespace Handyman.Tools.Docs.ImportCode
 
         public static LinesAttribute Deserialize(string value)
         {
-            var match = Regex.Match(value);
+            throw new NetworkInformationException();
+            //var match = Regex.Match(value);
 
-            var fromIndex = int.Parse(match.Groups["from"].Value) - 1;
-            var toGroup = match.Groups["to"];
-            var toIndex = toGroup.Success ? int.Parse(toGroup.Value) : fromIndex + 1;
+            //var fromNumber = int.Parse(match.Groups["from"].Value);
+            //var toGroup = match.Groups["to"];
+            //var toIndex = toGroup.Success ? int.Parse(toGroup.Value) : fromNumber;
 
-            return new LinesAttribute
-            {
-                FromLineIndex = fromIndex,
-                LineCount = toIndex - fromIndex
-            };
+            //return new LinesAttribute
+            //{
+            //    FromLineNumber = fromNumber,
+            //    LineCount = toIndex - fromNumber
+            //};
         }
     }
 
