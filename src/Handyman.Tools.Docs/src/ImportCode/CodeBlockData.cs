@@ -2,7 +2,7 @@
 
 namespace Handyman.Tools.Docs.ImportCode
 {
-    public class CodeBlockData
+    public class CodeBlockData : ElementData
     {
         [Xor]
         public string Id { get; set; }

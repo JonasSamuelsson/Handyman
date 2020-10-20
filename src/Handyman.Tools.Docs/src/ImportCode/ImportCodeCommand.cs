@@ -14,12 +14,14 @@ namespace Handyman.Tools.Docs.ImportCode
         private readonly ILogger _logger;
         private readonly IFileSystem _fileSystem;
         private readonly IElementSerializer<CodeBlockData> _codeElementSerializer;
+        private readonly IElementSerializer<CodeBlockSourceData> _sourceElementSerializer;
 
-        public ImportCodeCommand(ILogger logger, IFileSystem fileSystem, IElementSerializer<CodeBlockData> codeElementSerializer)
+        public ImportCodeCommand(ILogger logger, IFileSystem fileSystem, IElementSerializer<CodeBlockData> codeElementSerializer, IElementSerializer<CodeBlockSourceData> sourceElementSerializer)
         {
             _logger = logger;
             _fileSystem = fileSystem;
             _codeElementSerializer = codeElementSerializer;
+            _sourceElementSerializer = sourceElementSerializer;
         }
 
         [Argument(0)]
@@ -49,18 +51,37 @@ namespace Handyman.Tools.Docs.ImportCode
 
                     var contentLines = _fileSystem.File.ReadLines(sourcePath).ToList();
 
-                    // todo id ref, use Lines on element as well?
+                    if (data.Id != null)
+                    {
+                        var sourceElements = _sourceElementSerializer.TryDeserializeElements("code-block-source", contentLines, _logger);
 
-                    if (data.Lines != null)
+                        var sourceElement = sourceElements.FirstOrDefault(x => x.Data.Id == data.Id);
+
+                        if (sourceElement == null)
+                        {
+                            // todo log
+                            continue;
+                        }
+
+                        if (sourceElement.ContentLines == null)
+                        {
+                            // todo log
+                            continue;
+                        }
+
+                        if (!sourceElement.ContentLines.IsInRange(contentLines, _logger))
+                        {
+                            continue;
+                        }
+
+                        contentLines = sourceElement.ContentLines.Apply(contentLines);
+                    }
+                    else if (data.Lines != null)
                     {
                         if (!data.Lines.IsInRange(contentLines, _logger))
                             continue;
 
-                        // todo check line numbers
-                        contentLines = contentLines
-                            .Skip(data.Lines.FromIndex)
-                            .Take(data.Lines.Count)
-                            .ToList();
+                        contentLines = data.Lines.Apply(contentLines);
                     }
 
                     TrimIndentation(contentLines);

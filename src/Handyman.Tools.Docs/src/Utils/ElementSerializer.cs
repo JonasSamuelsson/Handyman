@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 namespace Handyman.Tools.Docs.Utils
 {
     public class ElementSerializer<TData> : IElementSerializer<TData>
+        where TData : ElementData
     {
         private const string Pattern = "^(?<prefix>.*?)<(?<close>/)?handyman-docs:(?<name>[a-z0-9-._]+)( +(?<attributes>[a-z]+=\"[^\"]*\"))* *(?<selfClose>/)?>(?<suffix>.*)$";
 
@@ -91,10 +92,16 @@ namespace Handyman.Tools.Docs.Utils
                 elements.Add(new Element<TData>
                 {
                     Data = data,
-                    ContentLineCount = lineCount <= 2 ? 0 : lineCount - 2,
-                    ContentLineIndex = lineCount <= 2 ? 0 : tag.LineIndex + 1,
-                    ElementLineIndex = tag.LineIndex,
-                    ElementLineCount = lineCount,
+                    ContentLines = lineCount <= 2 ? null : new Lines
+                    {
+                        Count = lineCount - 2,
+                        FromNumber = tag.LineIndex + 2,
+                    },
+                    ElementLines = new Lines
+                    {
+                        Count = lineCount,
+                        FromNumber = tag.LineIndex + 1
+                    },
                     Name = tag.Name,
                     Prefix = tag.Prefix,
                     Suffix = tag.Suffix
@@ -106,9 +113,9 @@ namespace Handyman.Tools.Docs.Utils
 
         public void WriteElement(Element<TData> element, IReadOnlyCollection<string> content, List<string> lines)
         {
-            var index = element.ElementLineIndex;
+            var index = element.ElementLines.FromIndex;
 
-            lines.RemoveRange(index, element.ElementLineCount);
+            lines.RemoveRange(index, element.ElementLines.Count);
 
             lines.Insert(index++, GenerateOpeningTag(element));
             lines.InsertRange(index, content);

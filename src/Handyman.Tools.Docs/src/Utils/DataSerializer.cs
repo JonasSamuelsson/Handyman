@@ -6,6 +6,7 @@ using System.Reflection;
 namespace Handyman.Tools.Docs.Utils
 {
     public class DataSerializer<TData> : IDataSerializer<TData>
+        where TData : ElementData
     {
         private static readonly StringComparer StringComparerOrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
 
@@ -35,12 +36,14 @@ namespace Handyman.Tools.Docs.Utils
 
             var dictionary = keyValuePairs.ToDictionary(x => x.Key, x => x.Value, StringComparerOrdinalIgnoreCase);
 
+            data.AttributeOrder = keyValuePairs.Select(x => x.Key).ToList();
+
             return TryDeserialize(dictionary, data, logger);
         }
 
         private static bool TryDeserialize(Dictionary<string, string> dictionary, TData data, ILogger logger)
         {
-            var properties = typeof(TData).GetProperties();
+            var properties = GetProperties();
 
             var xorProperties = properties
                 .Where(x => x.GetCustomAttributes<XorAttribute>().Any())
@@ -85,12 +88,21 @@ namespace Handyman.Tools.Docs.Utils
             return success;
         }
 
+        private static IReadOnlyCollection<PropertyInfo> GetProperties()
+        {
+            return typeof(TData).GetProperties()
+                .Where(x => x.Name != nameof(ElementData.AttributeOrder))
+                .ToList();
+        }
+
         public string Serialize(TData data)
         {
             var strings = new List<string>();
 
+            var properties = GetProperties().ToDictionary(x => x.Name, StringComparerOrdinalIgnoreCase);
+
             // todo fix ordering
-            foreach (var property in typeof(TData).GetProperties().OrderBy(x => x.Name))
+            foreach (var property in data.AttributeOrder.Select(x => properties[x]))
             {
                 var value = property.GetValue(data);
 

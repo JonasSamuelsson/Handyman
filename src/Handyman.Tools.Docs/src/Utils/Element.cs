@@ -6,11 +6,8 @@
         public string Name { get; set; }
         public string Prefix { get; set; }
         public string Suffix { get; set; }
-        public int ElementLineIndex { get; set; }
-        public int ElementLineCount { get; set; }
-        public int ContentLineIndex { get; set; }
-        public int ContentLineCount { get; set; }
 
-        public bool HasContent => ContentLineCount != 0;
+        public Lines ElementLines { get; set; }
+        public Lines ContentLines { get; set; }
     }
 }

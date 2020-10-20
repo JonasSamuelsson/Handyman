@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Handyman.Tools.Docs.Utils
 {
@@ -14,6 +15,14 @@ namespace Handyman.Tools.Docs.Utils
         {
             // todo validate, needs nullable count & to properties
             return true;
+        }
+
+        public List<string> Apply(IReadOnlyCollection<string> lines)
+        {
+            return lines
+                .Skip(FromIndex)
+                .Take(Count)
+                .ToList();
         }
     }
 }
