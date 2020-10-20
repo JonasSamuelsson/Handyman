@@ -12,7 +12,7 @@ namespace Handyman.Tools.Docs.Utils
             {
                 if (from < 1)
                 {
-                    logger.Log($"Invalid format '{s}', value can't be less than 1.");
+                    logger.WriteError($"Invalid format '{s}', value can't be less than 1.");
                     return false;
                 }
 
@@ -30,13 +30,13 @@ namespace Handyman.Tools.Docs.Utils
             {
                 if (from < 1)
                 {
-                    logger.Log($"Invalid format '{s}', from can't be less than 1.");
+                    logger.WriteError($"Invalid format '{s}', from can't be less than 1.");
                     return false;
                 }
 
                 if (to < @from)
                 {
-                    logger.Log($"Invalid format '{s}', from can't greater than to.");
+                    logger.WriteError($"Invalid format '{s}', from can't greater than to.");
                     return false;
                 }
 
@@ -54,13 +54,13 @@ namespace Handyman.Tools.Docs.Utils
             {
                 if (from < 1)
                 {
-                    logger.Log($"Invalid format '{s}', from can't be less than 1.");
+                    logger.WriteError($"Invalid format '{s}', from can't be less than 1.");
                     return false;
                 }
 
                 if (count < 1)
                 {
-                    logger.Log($"Invalid format '{s}', count can't be less than 1.");
+                    logger.WriteError($"Invalid format '{s}', count can't be less than 1.");
                     return false;
                 }
 
@@ -74,7 +74,7 @@ namespace Handyman.Tools.Docs.Utils
                 return true;
             }
 
-            logger.Log($"Invalid format '{s}'.");
+            logger.WriteError($"Invalid format '{s}'.");
             return false;
         }
 

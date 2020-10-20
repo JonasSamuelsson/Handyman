@@ -25,7 +25,7 @@ namespace Handyman.Tools.Docs.Utils
                 if (group.Count() == 1)
                     continue;
 
-                logger.Log($"Duplicate '{group.Key}' attributes.");
+                logger.WriteError($"Duplicate '{group.Key}' attributes.");
                 success = false;
             }
 
@@ -53,7 +53,7 @@ namespace Handyman.Tools.Docs.Utils
             if (xorProperties.Count > 1)
             {
                 var xorPropertyNames = xorProperties.Select(x => $"'{x.Name}'").OrderBy(x => x);
-                logger.Log($"Attributes {string.Join(", ", xorPropertyNames)} can't be combined.");
+                logger.WriteError($"Attributes {string.Join(", ", xorPropertyNames)} can't be combined.");
                 return false;
             }
 
@@ -67,7 +67,7 @@ namespace Handyman.Tools.Docs.Utils
 
                     if (required)
                     {
-                        logger.Log($"Attribute '{property.Name}' is required but not provided.");
+                        logger.WriteError($"Attribute '{property.Name}' is required but not provided.");
                         success = false;
                     }
 

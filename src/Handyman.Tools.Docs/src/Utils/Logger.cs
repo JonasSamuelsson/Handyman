@@ -1,20 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Handyman.Tools.Docs.Utils
 {
     public class Logger : ILogger
     {
-        public List<string> Messages { get; } = new List<string>();
-
-        public void Log(string message)
+        public IDisposable CreateScope(string message)
         {
-            Messages.Add(message);
+            return new Disposable();
         }
 
         public IDisposable UsePrefix(string prefix)
         {
-            return new Disposable(); // todo add action
+            return new Disposable();
+        }
+
+        public void WriteError(string message)
+        {
+            // todo
+        }
+
+        public void WriteInfo(string message)
+        {
+            // todo
         }
     }
 }

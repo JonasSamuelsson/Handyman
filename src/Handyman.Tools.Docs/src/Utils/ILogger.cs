@@ -4,7 +4,9 @@ namespace Handyman.Tools.Docs.Utils
 {
     public interface ILogger
     {
-        void Log(string message);
+        IDisposable CreateScope(string message);
         IDisposable UsePrefix(string prefix);
+        void WriteError(string message);
+        void WriteInfo(string message);
     }
 }
