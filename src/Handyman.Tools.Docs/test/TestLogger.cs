@@ -1,31 +1,36 @@
 ﻿using Handyman.Tools.Docs.Utils;
-using System;
 using System.Collections.Generic;
 
 namespace Handyman.Tools.Docs.Tests
 {
-    internal class TestLogger : ILogger
+    internal class TestLogger : Logger
     {
-        public List<string> Messages { get;  }=new List<string>();
+        private readonly TestConsoleWriter _consoleWriter;
 
-        public IDisposable CreateScope(string message)
+        public TestLogger() : this(new TestConsoleWriter())
         {
-            return new Disposable();
         }
 
-        public IDisposable UsePrefix(string prefix)
+        private TestLogger(TestConsoleWriter consoleWriter) : base(consoleWriter)
         {
-            return new Disposable();
+            _consoleWriter = consoleWriter;
         }
 
-        public void WriteError(string message)
-        {
-            // todo
-        }
+        public IReadOnlyList<string> Messages => _consoleWriter.Messages;
 
-        public void WriteInfo(string message)
+        private class TestConsoleWriter : IConsoleWriter
         {
-            // todo
+            public List<string> Messages { get; } = new List<string>();
+
+            public void WriteError(string message)
+            {
+                Messages.Add($"e:{message}");
+            }
+
+            public void WriteInfo(string message)
+            {
+                Messages.Add($"i:{message}");
+            }
         }
     }
 }

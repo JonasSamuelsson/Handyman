@@ -47,13 +47,13 @@ namespace Handyman.Tools.Docs.Tests.Utils
         }
 
         [Theory]
-        [InlineData("-1", "Invalid format '-1', value can't be less than 1.")]
-        [InlineData("0", "Invalid format '0', value can't be less than 1.")]
-        [InlineData("x", "Invalid format 'x'.")]
-        [InlineData("4-3", "Invalid format '4-3', from can't greater than to.")]
-        [InlineData("4-x", "Invalid format '4-x'.")]
-        [InlineData("4+-1", "Invalid format '4+-1', count can't be less than 1.")]
-        [InlineData("4+x", "Invalid format '4+x'.")]
+        [InlineData("-1", "e:Invalid format '-1', value can't be less than 1.")]
+        [InlineData("0", "e:Invalid format '0', value can't be less than 1.")]
+        [InlineData("x", "e:Invalid format 'x'.")]
+        [InlineData("4-3", "e:Invalid format '4-3', from can't greater than to.")]
+        [InlineData("4-x", "e:Invalid format '4-x'.")]
+        [InlineData("4+-1", "e:Invalid format '4+-1', count can't be less than 1.")]
+        [InlineData("4+x", "e:Invalid format '4+x'.")]
         public void ShouldNotConvert(string s, string message)
         {
             var logger = new TestLogger();

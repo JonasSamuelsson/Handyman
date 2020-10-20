@@ -4,24 +4,35 @@ namespace Handyman.Tools.Docs.Utils
 {
     public class Logger : ILogger
     {
+        private readonly IConsoleWriter _consoleWriter;
+        private string _prefix = string.Empty;
+
+        public Logger(IConsoleWriter consoleWriter)
+        {
+            _consoleWriter = consoleWriter;
+        }
+
         public IDisposable CreateScope(string message)
         {
-            return new Disposable();
+            WriteInfo($" > {message}");
+            return UsePrefix("   ");
         }
 
         public IDisposable UsePrefix(string prefix)
         {
-            return new Disposable();
+            var x = _prefix;
+            _prefix += prefix;
+            return new Disposable { Action = () => _prefix = x };
         }
 
         public void WriteError(string message)
         {
-            // todo
+            _consoleWriter.WriteError($"{_prefix}{message}");
         }
 
         public void WriteInfo(string message)
         {
-            // todo
+            _consoleWriter.WriteInfo($"{_prefix}{message}");
         }
     }
 }

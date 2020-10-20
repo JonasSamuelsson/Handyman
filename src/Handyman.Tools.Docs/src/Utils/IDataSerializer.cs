@@ -8,9 +8,4 @@ namespace Handyman.Tools.Docs.Utils
         bool TryDeserialize(IReadOnlyList<KeyValuePair<string, string>> keyValuePairs, ILogger logger, out TData data);
         string Serialize(TData data);
     }
-
-    public abstract class ElementData
-    {
-        public IReadOnlyCollection<string> AttributeOrder { get; set; }
-    }
 }
