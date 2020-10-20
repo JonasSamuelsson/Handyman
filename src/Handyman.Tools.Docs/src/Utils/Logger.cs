@@ -7,6 +7,10 @@ namespace Handyman.Tools.Docs.Utils
         private readonly IConsoleWriter _consoleWriter;
         private string _prefix = string.Empty;
 
+        public Logger() : this(new ConsoleWriter())
+        {
+        }
+
         public Logger(IConsoleWriter consoleWriter)
         {
             _consoleWriter = consoleWriter;
