@@ -33,66 +33,74 @@ namespace Handyman.Tools.Docs.ImportCode
 
             foreach (var file in files)
             {
-                var lines = _fileSystem.File.ReadLines(file).ToList();
-
-                var elements = _codeElementSerializer.TryDeserializeElements("code-block", lines, _logger);
-
-                foreach (var element in elements.Reverse())
+                using (_logger.CreateScope(file))
                 {
-                    var data = element.Data;
+                    var lines = _fileSystem.File.ReadLines(file).ToList();
+                    var elements = _codeElementSerializer.TryDeserializeElements("code-block", lines, _logger);
 
-                    var sourcePath = GetSourcePath(data.Source, file);
-
-                    if (!_fileSystem.File.Exists(sourcePath))
+                    foreach (var element in elements.Reverse())
                     {
-                        // todo
-                        continue;
+                        using (_logger.CreateScope($"code-block on line {element.ElementLines.FromNumber}."))
+                        {
+                            var data = element.Data;
+
+                            var sourcePath = GetSourcePath(data.Source, file);
+
+                            using (_logger.CreateScope($"Source file '{sourcePath}'."))
+                            {
+                                if (!_fileSystem.File.Exists(sourcePath))
+                                {
+                                    _logger.WriteError("File not found.");
+                                    continue;
+                                }
+
+                                var contentLines = _fileSystem.File.ReadLines(sourcePath).ToList();
+
+                                if (data.Id != null)
+                                {
+                                    var sourceElements = _sourceElementSerializer.TryDeserializeElements("code-block-source", contentLines, _logger);
+
+                                    var sourceElement = sourceElements.FirstOrDefault(x => x.Data.Id == data.Id);
+
+                                    if (sourceElement == null)
+                                    {
+                                        _logger.WriteError($"code-block-source id '{data.Id}' not found.");
+                                        continue;
+                                    }
+
+                                    if (sourceElement.ContentLines == null)
+                                    {
+                                        _logger.WriteError($"code-block-source id '{data.Id}' has no content.");
+                                        continue;
+                                    }
+
+                                    if (!sourceElement.ContentLines.TryTrim(contentLines))
+                                    {
+                                        _logger.WriteError($"code-block-source id '{data.Id}' has invalid line range.");
+                                        continue;
+                                    }
+                                }
+                                else if (data.Lines != null)
+                                {
+                                    if (!data.Lines.TryTrim(contentLines))
+                                    {
+                                        _logger.WriteError("Invalid line range.");
+                                        continue;
+                                    }
+                                }
+
+                                TrimIndentation(contentLines);
+
+                                var language = data.Language ?? GetDefaultLanguage(sourcePath);
+                                AddSyntaxHighlighting(contentLines, language);
+
+                                _codeElementSerializer.WriteElement(element, contentLines, lines);
+                            }
+                        }
                     }
 
-                    var contentLines = _fileSystem.File.ReadLines(sourcePath).ToList();
-
-                    if (data.Id != null)
-                    {
-                        var sourceElements = _sourceElementSerializer.TryDeserializeElements("code-block-source", contentLines, _logger);
-
-                        var sourceElement = sourceElements.FirstOrDefault(x => x.Data.Id == data.Id);
-
-                        if (sourceElement == null)
-                        {
-                            // todo log
-                            continue;
-                        }
-
-                        if (sourceElement.ContentLines == null)
-                        {
-                            // todo log
-                            continue;
-                        }
-
-                        if (!sourceElement.ContentLines.IsInRange(contentLines, _logger))
-                        {
-                            continue;
-                        }
-
-                        contentLines = sourceElement.ContentLines.Apply(contentLines);
-                    }
-                    else if (data.Lines != null)
-                    {
-                        if (!data.Lines.IsInRange(contentLines, _logger))
-                            continue;
-
-                        contentLines = data.Lines.Apply(contentLines);
-                    }
-
-                    TrimIndentation(contentLines);
-
-                    var language = data.Language ?? GetDefaultLanguage(sourcePath);
-                    AddSyntaxHighlighting(contentLines, language);
-
-                    _codeElementSerializer.WriteElement(element, contentLines, lines);
+                    _fileSystem.File.WriteAllLines(file, lines);
                 }
-
-                _fileSystem.File.WriteAllLines(file, lines);
             }
         }
 

@@ -11,18 +11,20 @@ namespace Handyman.Tools.Docs.Utils
 
         public int FromIndex => FromNumber - 1;
 
-        public bool IsInRange(IReadOnlyCollection<string> lines, ILogger logger)
+        public bool TryTrim(List<string> lines)
         {
-            // todo validate, needs nullable count & to properties
-            return true;
-        }
+            if (FromIndex + Count >= lines.Count)
+                return false;
 
-        public List<string> Apply(IReadOnlyCollection<string> lines)
-        {
-            return lines
+            var temp = lines
                 .Skip(FromIndex)
                 .Take(Count)
                 .ToList();
+
+            lines.Clear();
+            lines.AddRange(temp);
+
+            return true;
         }
     }
 }
