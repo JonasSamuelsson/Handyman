@@ -26,5 +26,12 @@ namespace Handyman.Tools.Docs.Utils
 
             return true;
         }
+
+        public string ToUserFriendlyString()
+        {
+            return Count == 1
+                ? $"line {FromNumber}"
+                : $"lines {FromNumber}-{FromNumber + Count}";
+        }
     }
 }

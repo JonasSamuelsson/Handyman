@@ -8,15 +8,15 @@ using System.Linq;
 
 namespace Handyman.Tools.Docs.ImportCode
 {
-    [Command("import-code")]
-    public class ImportCodeCommand
+    [Command("code-blocks")]
+    public class CodeBlocksCommand
     {
         private readonly ILogger _logger;
         private readonly IFileSystem _fileSystem;
         private readonly IElementSerializer<CodeBlockData> _codeElementSerializer;
         private readonly IElementSerializer<CodeBlockSourceData> _sourceElementSerializer;
 
-        public ImportCodeCommand(ILogger logger, IFileSystem fileSystem, IElementSerializer<CodeBlockData> codeElementSerializer, IElementSerializer<CodeBlockSourceData> sourceElementSerializer)
+        public CodeBlocksCommand(ILogger logger, IFileSystem fileSystem, IElementSerializer<CodeBlockData> codeElementSerializer, IElementSerializer<CodeBlockSourceData> sourceElementSerializer)
         {
             _logger = logger;
             _fileSystem = fileSystem;
@@ -29,24 +29,26 @@ namespace Handyman.Tools.Docs.ImportCode
 
         public void OnExecute()
         {
-            var files = GetFiles();
+            var markdownFiles = GetMarkdownFiles();
 
-            foreach (var file in files)
+            foreach (var markdownFile in markdownFiles)
             {
-                using (_logger.CreateScope(file))
+                using (_logger.CreateScope($"File: {markdownFile}"))
                 {
-                    var lines = _fileSystem.File.ReadLines(file).ToList();
-                    var elements = _codeElementSerializer.TryDeserializeElements("code-block", lines, _logger);
+                    var lines = _fileSystem.File.ReadLines(markdownFile).ToList();
 
-                    foreach (var element in elements.Reverse())
+                    if (!_codeElementSerializer.TryDeserializeElements("code-block", lines, _logger, out var codeBlockElements))
+                        continue;
+
+                    foreach (var codeBlockElement in codeBlockElements.Reverse())
                     {
-                        using (_logger.CreateScope($"code-block on line {element.ElementLines.FromNumber}."))
+                        using (_logger.CreateScope($"code-block: line {codeBlockElement.ElementLines.FromNumber}"))
                         {
-                            var data = element.Data;
+                            var data = codeBlockElement.Data;
 
-                            var sourcePath = GetSourcePath(data.Source, file);
+                            var sourcePath = GetSourcePath(data.Source, markdownFile);
 
-                            using (_logger.CreateScope($"Source file '{sourcePath}'."))
+                            using (_logger.CreateScope($"Source: '{sourcePath}'"))
                             {
                                 if (!_fileSystem.File.Exists(sourcePath))
                                 {
@@ -56,35 +58,39 @@ namespace Handyman.Tools.Docs.ImportCode
 
                                 var contentLines = _fileSystem.File.ReadLines(sourcePath).ToList();
 
-                                if (data.Id != null)
+                                if (data.Lines != null)
                                 {
-                                    var sourceElements = _sourceElementSerializer.TryDeserializeElements("code-block-source", contentLines, _logger);
+                                    if (!data.Lines.TryTrim(contentLines))
+                                    {
+                                        var codeBlockElementLines = codeBlockElement.ElementLines.ToUserFriendlyString();
+                                        _logger.WriteError($"code-block on {codeBlockElementLines} has invalid lines range.");
+                                        continue;
+                                    }
+                                }
+                                else if (data.Id != null)
+                                {
+                                    if (!_sourceElementSerializer.TryDeserializeElements("code-block-source", contentLines, _logger, out var sourceElements))
+                                        continue;
 
                                     var sourceElement = sourceElements.FirstOrDefault(x => x.Data.Id == data.Id);
 
                                     if (sourceElement == null)
                                     {
-                                        _logger.WriteError($"code-block-source id '{data.Id}' not found.");
+                                        _logger.WriteError($"code-block-source id='{data.Id}' not found.");
                                         continue;
                                     }
 
-                                    if (sourceElement.ContentLines == null)
+                                    var sourceLines = sourceElement.Data.Lines ?? sourceElement.ContentLines;
+
+                                    if (sourceLines == null)
                                     {
-                                        _logger.WriteError($"code-block-source id '{data.Id}' has no content.");
+                                        _logger.WriteError($"code-block-source id='{data.Id}' has no content.");
                                         continue;
                                     }
 
-                                    if (!sourceElement.ContentLines.TryTrim(contentLines))
+                                    if (!sourceLines.TryTrim(contentLines))
                                     {
-                                        _logger.WriteError($"code-block-source id '{data.Id}' has invalid line range.");
-                                        continue;
-                                    }
-                                }
-                                else if (data.Lines != null)
-                                {
-                                    if (!data.Lines.TryTrim(contentLines))
-                                    {
-                                        _logger.WriteError("Invalid line range.");
+                                        _logger.WriteError($"code-block-source id='{data.Id}' has invalid lines range.");
                                         continue;
                                     }
                                 }
@@ -94,12 +100,12 @@ namespace Handyman.Tools.Docs.ImportCode
                                 var language = data.Language ?? GetDefaultLanguage(sourcePath);
                                 AddSyntaxHighlighting(contentLines, language);
 
-                                _codeElementSerializer.WriteElement(element, contentLines, lines);
+                                _codeElementSerializer.WriteElement(codeBlockElement, contentLines, lines);
                             }
                         }
                     }
 
-                    _fileSystem.File.WriteAllLines(file, lines);
+                    _fileSystem.File.WriteAllLines(markdownFile, lines);
                 }
             }
         }
@@ -159,7 +165,7 @@ namespace Handyman.Tools.Docs.ImportCode
             lines.Add("```");
         }
 
-        private IEnumerable<string> GetFiles()
+        private IEnumerable<string> GetMarkdownFiles()
         {
             var target = Path.GetFullPath(Target ?? Environment.CurrentDirectory);
 

@@ -9,6 +9,7 @@ namespace Handyman.Tools.Docs.Utils
         where TData : ElementData
     {
         private static readonly StringComparer StringComparerOrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
+        private static readonly StringComparison StringComparisonOrdinalIgnoreCase = StringComparison.OrdinalIgnoreCase;
 
         public bool TryDeserialize(IReadOnlyList<KeyValuePair<string, string>> keyValuePairs, ILogger logger, out TData data)
         {
@@ -85,6 +86,15 @@ namespace Handyman.Tools.Docs.Utils
                 }
             }
 
+            foreach (var key in dictionary.Keys)
+            {
+                if (properties.Any(x => x.Name.Equals(key, StringComparisonOrdinalIgnoreCase)))
+                    continue;
+
+                logger.WriteError($"Unsupported attribute '{key}'.");
+                success = false;
+            }
+
             return success;
         }
 
@@ -101,7 +111,6 @@ namespace Handyman.Tools.Docs.Utils
 
             var properties = GetProperties().ToDictionary(x => x.Name, StringComparerOrdinalIgnoreCase);
 
-            // todo fix ordering
             foreach (var property in data.AttributeOrder.Select(x => properties[x]))
             {
                 var value = property.GetValue(data);

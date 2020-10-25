@@ -27,7 +27,7 @@ namespace Handyman.Tools.Docs.Tests
 
             fileSystem.File.WriteAllLines("c:/file.txt", new[] { "success" });
 
-            new ImportCodeCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
+            new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
             {
                 Target = "c:/"
             }
@@ -68,7 +68,7 @@ namespace Handyman.Tools.Docs.Tests
                     "third"
                 });
 
-            new ImportCodeCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
+            new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
             {
                 Target = "c:/"
             }
@@ -111,7 +111,7 @@ namespace Handyman.Tools.Docs.Tests
                     "third"
                 });
 
-            new ImportCodeCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
+            new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
             {
                 Target = "c:/"
             }
@@ -149,7 +149,7 @@ namespace Handyman.Tools.Docs.Tests
             fileSystem.File.WriteAllLines("c:/file1.txt", new[] { "one" });
             fileSystem.File.WriteAllLines("c:/file2.txt", new[] { "two" });
 
-            new ImportCodeCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
+            new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
             {
                 Target = "c:/"
             }

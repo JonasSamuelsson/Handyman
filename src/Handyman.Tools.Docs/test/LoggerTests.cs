@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Shouldly;
+﻿using Shouldly;
+using System.Linq;
+using Handyman.Tools.Docs.Utils;
 using Xunit;
 
 namespace Handyman.Tools.Docs.Tests
@@ -9,72 +10,124 @@ namespace Handyman.Tools.Docs.Tests
         [Fact]
         public void ShouldWriteError()
         {
-            var logger = new TestLogger();
+            var writer = new TestConsoleWriter();
+            var logger = new Logger(writer);
 
             logger.WriteError("foo");
 
-            logger.Messages.Single().ShouldBe("e:foo");
+            writer.Messages.Single().ShouldBe("e:foo");
         }
 
         [Fact]
         public void ShouldWriteInfo()
         {
-            var logger = new TestLogger();
+            var writer = new TestConsoleWriter();
+            var logger = new Logger(writer);
 
             logger.WriteInfo("foo");
 
-            logger.Messages.Single().ShouldBe("i:foo");
+            writer.Messages.Single().ShouldBe("i:foo");
         }
 
         [Fact]
         public void ShouldHandlePrefixes()
         {
-            var logger = new TestLogger();
+            var writer = new TestConsoleWriter();
+            var logger = new Logger(writer);
 
+            logger.WriteError("one");
             logger.WriteInfo("one");
 
-            using (logger.UsePrefix("-"))
+            using (logger.UsePrefix("1"))
+                ;
+
+            logger.WriteError("two");
+            logger.WriteInfo("two");
+
+            using (logger.UsePrefix("2"))
             {
-                logger.WriteError("two");
-                logger.WriteInfo("two");
+                logger.WriteError("three");
+                logger.WriteInfo("three");
+
+                using (logger.UsePrefix("3"))
+                {
+                    logger.WriteError("four");
+                    logger.WriteInfo("four");
+                }
+
+                logger.WriteError("five");
+                logger.WriteInfo("five");
             }
 
-            logger.WriteInfo("three");
+            logger.WriteError("six");
+            logger.WriteInfo("six");
 
-            logger.Messages.ShouldBe(new[]
+            writer.Messages.ShouldBe(new[]
             {
+                "e:one",
                 "i:one",
-                "e:-two",
-                "i:-two",
-                "i:three"
+                "e:two",
+                "i:two",
+                "e:2three",
+                "i:2three",
+                "e:23four",
+                "i:23four",
+                "e:2five",
+                "i:2five",
+                "e:six",
+                "i:six"
             });
         }
 
         [Fact]
         public void ShouldHandleScopes()
         {
-            var logger = new TestLogger();
+            var writer = new TestConsoleWriter();
+            var logger = new Logger(writer);
 
+            logger.WriteError("one");
             logger.WriteInfo("one");
 
             using (logger.CreateScope("1"))
-            {
-                logger.WriteError("two");
+                ;
 
-                using (logger.CreateScope("2"))
-                    logger.WriteInfo("three");
+            logger.WriteError("two");
+            logger.WriteInfo("two");
+
+            using (logger.CreateScope("2"))
+            {
+                logger.WriteError("three");
+                logger.WriteInfo("three");
+
+                using (logger.CreateScope("3"))
+                {
+                    logger.WriteError("four");
+                    logger.WriteInfo("four");
+                }
+
+                logger.WriteError("five");
+                logger.WriteInfo("five");
             }
 
-            logger.WriteInfo("four");
+            logger.WriteError("six");
+            logger.WriteInfo("six");
 
-            logger.Messages.ShouldBe(new[]
+            writer.Messages.ShouldBe(new[]
             {
+                "e:one",
                 "i:one",
-                "i: > 1",
-                "e:   two",
-                "i:    > 2",
-                "i:      three",
-                "i:four"
+                "e:two",
+                "i:two",
+                "i:2",
+                "e:  three",
+                "i:  three",
+                "i:  3",
+                "e:    four",
+                "i:    four",
+                "e:  five",
+                "i:  five",
+                "e:six",
+                "i:six"
             });
         }
     }

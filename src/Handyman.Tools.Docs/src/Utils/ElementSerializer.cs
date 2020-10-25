@@ -17,7 +17,7 @@ namespace Handyman.Tools.Docs.Utils
             _dataSerializer = dataSerializer;
         }
 
-        public IEnumerable<Element<TData>> TryDeserializeElements(string elementName, IReadOnlyList<string> lines, ILogger logger)
+        public bool TryDeserializeElements(string elementName, IReadOnlyList<string> lines, ILogger logger, out IReadOnlyList<Element<TData>> elements)
         {
             var regex = new Regex(Pattern, RegexOptions.IgnoreCase);
 
@@ -48,7 +48,9 @@ namespace Handyman.Tools.Docs.Utils
                 tags.Add(tag);
             }
 
-            var elements = new List<Element<TData>>();
+            elements = null;
+
+            var list = new List<Element<TData>>();
 
             for (var i = 0; i < tags.Count; i++)
             {
@@ -64,51 +66,66 @@ namespace Handyman.Tools.Docs.Utils
                 else if (tag.IsOpening)
                 {
                     if (isLastTag)
-                        throw new NotImplementedException("matching close tag not found");
+                    {
+                        logger.WriteError(
+                            $"{tag.Name} tag on line {tag.LineNumber} does not have a matching close tag.");
+                        return false;
+                    }
 
                     var nextTag = tags[i + 1];
 
                     if (tag.Name != nextTag.Name || !nextTag.IsClosing)
-                        throw new NotImplementedException("matching close tag not found");
+                    {
+                        logger.WriteError(
+                            $"{tag.Name} tag on line {tag.LineNumber} does not have a matching close tag.");
+                        return false;
+                    }
 
                     closingLineIndex = nextTag.LineIndex;
                     i++;
                 }
                 else
                 {
-                    throw new NotImplementedException("found unexpected close tag");
+                    {
+                        logger.WriteError($"found Unexpected {tag.Name} close tag on line {tag.LineNumber}.");
+                        return false;
+                    }
                 }
 
                 if (elementName != null && tag.Name != elementName)
                     continue;
 
-                if (!_dataSerializer.TryDeserialize(tag.Attributes, logger, out var data))
+                using (logger.CreateScope($"Parsing {tag.Name} on line {tag.LineNumber}"))
                 {
-                    // todo
+                    if (!_dataSerializer.TryDeserialize(tag.Attributes, logger, out var data))
+                        return false;
+
+                    var lineCount = Math.Max(0, closingLineIndex - tag.LineIndex) + 1;
+
+                    list.Add(new Element<TData>
+                    {
+                        Data = data,
+                        ContentLines = lineCount <= 2
+                            ? null
+                            : new Lines
+                            {
+                                Count = lineCount - 2,
+                                FromNumber = tag.LineIndex + 2,
+                            },
+                        ElementLines = new Lines
+                        {
+                            Count = lineCount,
+                            FromNumber = tag.LineIndex + 1
+                        },
+                        Name = tag.Name,
+                        Prefix = tag.Prefix,
+                        Suffix = tag.Suffix
+                    });
                 }
-
-                var lineCount = Math.Max(0, closingLineIndex - tag.LineIndex) + 1;
-
-                elements.Add(new Element<TData>
-                {
-                    Data = data,
-                    ContentLines = lineCount <= 2 ? null : new Lines
-                    {
-                        Count = lineCount - 2,
-                        FromNumber = tag.LineIndex + 2,
-                    },
-                    ElementLines = new Lines
-                    {
-                        Count = lineCount,
-                        FromNumber = tag.LineIndex + 1
-                    },
-                    Name = tag.Name,
-                    Prefix = tag.Prefix,
-                    Suffix = tag.Suffix
-                });
             }
 
-            return elements;
+            elements = list;
+            return true;
         }
 
         public void WriteElement(Element<TData> element, IReadOnlyCollection<string> content, List<string> lines)
@@ -157,6 +174,7 @@ namespace Handyman.Tools.Docs.Utils
             public string Suffix { get; set; }
 
             public bool IsOpening => !IsClosing && !IsSelfClosing;
+            public int LineNumber => LineIndex + 1;
         }
     }
 }

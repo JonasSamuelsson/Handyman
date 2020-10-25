@@ -17,20 +17,20 @@ namespace Handyman.Tools.Docs.Tests
         }
 
         public IReadOnlyList<string> Messages => _consoleWriter.Messages;
+    }
 
-        private class TestConsoleWriter : IConsoleWriter
+    internal class TestConsoleWriter : IConsoleWriter
+    {
+        public List<string> Messages { get; } = new List<string>();
+
+        public void WriteError(string message)
         {
-            public List<string> Messages { get; } = new List<string>();
+            Messages.Add($"e:{message}");
+        }
 
-            public void WriteError(string message)
-            {
-                Messages.Add($"e:{message}");
-            }
-
-            public void WriteInfo(string message)
-            {
-                Messages.Add($"i:{message}");
-            }
+        public void WriteInfo(string message)
+        {
+            Messages.Add($"i:{message}");
         }
     }
 }

@@ -12,26 +12,11 @@ namespace Handyman.Tools.Docs.Tests
         {
             var lines = new List<string> { "foo" };
 
-            ImportCodeCommand.AddSyntaxHighlighting(lines, ".cs");
+            CodeBlocksCommand.AddSyntaxHighlighting(lines, "csharp");
 
             lines.ShouldBe(new[]
             {
                 "```csharp",
-                "foo",
-                "```"
-            });
-        }
-
-        [Fact]
-        public void ShouldUseExtensionAsLanguageIfNotKnown()
-        {
-            var lines = new List<string> { "foo" };
-
-            ImportCodeCommand.AddSyntaxHighlighting(lines, ".iowrweuior");
-
-            lines.ShouldBe(new[]
-            {
-                "```iowrweuior",
                 "foo",
                 "```"
             });

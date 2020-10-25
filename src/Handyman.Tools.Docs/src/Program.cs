@@ -1,7 +1,7 @@
 ﻿using Handyman.DependencyInjection;
 using Handyman.Tools.Docs.ImportCode;
 using Handyman.Tools.Docs.TableOfContent;
-using Handyman.Tools.Docs.Utils.Deprecated;
+using Handyman.Tools.Docs.Utils;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Handyman.Tools.Docs
 {
     [Subcommand(typeof(TableOfContentCommand))]
-    [Subcommand(typeof(ImportCodeCommand))]
+    [Subcommand(typeof(CodeBlocksCommand))]
     public class Program
     {
         public static Task<int> Main(string[] args)
@@ -31,14 +31,13 @@ namespace Handyman.Tools.Docs
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IFileSystem, FileSystem>();
-            services.AddSingleton<ElementsParser>();
-            services.AddSingleton<IElementWriter, ElementWriter>();
+            services.AddSingleton<ILogger, Logger>();
 
             services.Scan(x =>
             {
                 x.AssemblyContaining<Program>();
-                x.ConfigureConcreteClassesOf<IAttributesValidator>();
-                x.ConfigureConcreteClassesOf(typeof(IAttributesDeserializer<>));
+                x.ConfigureConcreteClassesOf(typeof(IElementSerializer<>));
+                x.ConfigureConcreteClassesOf(typeof(IDataSerializer<>));
             });
         }
 

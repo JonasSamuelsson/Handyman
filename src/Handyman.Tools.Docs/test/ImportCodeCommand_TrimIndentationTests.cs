@@ -16,7 +16,7 @@ namespace Handyman.Tools.Docs.Tests
                 "  bar"
             };
 
-            ImportCodeCommand.TrimIndentation(lines);
+            CodeBlocksCommand.TrimIndentation(lines);
 
             lines.ShouldBe(new[]
             {
@@ -34,7 +34,7 @@ namespace Handyman.Tools.Docs.Tests
                 "\t\tbar"
             };
 
-            ImportCodeCommand.TrimIndentation(lines);
+            CodeBlocksCommand.TrimIndentation(lines);
 
             lines.ShouldBe(new[]
             {
@@ -52,7 +52,7 @@ namespace Handyman.Tools.Docs.Tests
                 "\tbar"
             };
 
-            ImportCodeCommand.TrimIndentation(lines);
+            CodeBlocksCommand.TrimIndentation(lines);
 
             lines.ShouldBe(new[]
             {
@@ -74,7 +74,7 @@ namespace Handyman.Tools.Docs.Tests
                 ""
             };
 
-            ImportCodeCommand.TrimIndentation(lines);
+            CodeBlocksCommand.TrimIndentation(lines);
 
             lines.ShouldBe(new[]
             {
