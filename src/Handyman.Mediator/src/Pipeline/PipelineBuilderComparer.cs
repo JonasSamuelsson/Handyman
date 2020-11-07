@@ -9,7 +9,7 @@
 
         private static int GetOrder(object o)
         {
-            return (o as IOrderedPipelineBuilder)?.ExecutionOrder ?? MediatorDefaults.Order.Default;
+            return (o as IOrderedPipelineBuilder)?.Order ?? MediatorDefaults.Order.Default;
         }
     }
 }

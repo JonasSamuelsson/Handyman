@@ -2,6 +2,6 @@
 {
     public interface IOrderedPipelineBuilder
     {
-        int ExecutionOrder { get; }
+        int Order { get; }
     }
 }
