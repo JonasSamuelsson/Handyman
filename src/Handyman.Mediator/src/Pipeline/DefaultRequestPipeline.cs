@@ -14,7 +14,7 @@ namespace Handyman.Mediator.Pipeline
             var filters = requestContext.ServiceProvider.GetServices<IRequestFilter<TRequest, TResponse>>().ToListOptimized();
             var handler = requestContext.ServiceProvider.GetRequiredService<IRequestHandler<TRequest, TResponse>>();
 
-            return Execute(filters, handler, Defaults.RequestHandlerExecutionStrategy, requestContext);
+            return Execute(filters, handler, MediatorDefaults.RequestHandlerExecutionStrategy, requestContext);
         }
     }
 }

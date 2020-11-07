@@ -26,8 +26,8 @@ namespace Handyman.Mediator.Tests.Pipeline
         }
 
         [PipelineBuilder(Text = "middle")]
-        [PipelineBuilder(ExecutionOrder = Defaults.Order.Last, Text = "last")]
-        [PipelineBuilder(ExecutionOrder = Defaults.Order.First, Text = "first")]
+        [PipelineBuilder(ExecutionOrder = MediatorDefaults.Order.Last, Text = "last")]
+        [PipelineBuilder(ExecutionOrder = MediatorDefaults.Order.First, Text = "first")]
         private class Request : IRequest { }
 
         private class Handler : IRequestHandler<Request, Void>

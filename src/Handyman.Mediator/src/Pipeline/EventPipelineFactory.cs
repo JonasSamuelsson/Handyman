@@ -31,7 +31,7 @@ namespace Handyman.Mediator.Pipeline
         private class FactoryMethodBuilder<TEvent> : FactoryMethodBuilder
             where TEvent : IEvent
         {
-            private static readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(Defaults.EventHandlerExecutionStrategy);
+            private static readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(MediatorDefaults.EventHandlerExecutionStrategy);
 
             internal override Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod()
             {

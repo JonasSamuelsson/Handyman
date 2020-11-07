@@ -1,6 +1,6 @@
 ﻿namespace Handyman.Mediator.Pipeline
 {
-    public static class Defaults
+    public static class MediatorDefaults
     {
         public static readonly IEventHandlerExecutionStrategy EventHandlerExecutionStrategy = new WhenAllEventHandlerExecutionStrategy();
         public static readonly IRequestHandlerExecutionStrategy RequestHandlerExecutionStrategy = new DefaultRequestHandlerExecutionStrategy();

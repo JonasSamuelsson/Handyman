@@ -25,7 +25,7 @@ namespace Handyman.Mediator.Pipeline
             }
 
             eventContext.CancellationToken.ThrowIfCancellationRequested();
-            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? Defaults.EventHandlerExecutionStrategy;
+            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? MediatorDefaults.EventHandlerExecutionStrategy;
             await Execute(filters, handlers, handlerExecutionStrategy, eventContext).WithGloballyConfiguredAwait();
         }
     }

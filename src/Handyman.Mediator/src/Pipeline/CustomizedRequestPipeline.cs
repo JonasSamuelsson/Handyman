@@ -31,7 +31,7 @@ namespace Handyman.Mediator.Pipeline
 
             var filters = pipelineBuilderContext.Filters;
             var handler = pipelineBuilderContext.Handlers[0];
-            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? Defaults.RequestHandlerExecutionStrategy;
+            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? MediatorDefaults.RequestHandlerExecutionStrategy;
 
             return await Execute(filters, handler, handlerExecutionStrategy, requestContext).WithGloballyConfiguredAwait();
         }

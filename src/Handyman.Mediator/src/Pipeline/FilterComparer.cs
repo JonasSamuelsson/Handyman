@@ -9,7 +9,7 @@
 
         private static int GetExecutionOrder(object o)
         {
-            return (o as IOrderedFilter)?.Order ?? Defaults.Order.Default;
+            return (o as IOrderedFilter)?.Order ?? MediatorDefaults.Order.Default;
         }
     }
 }

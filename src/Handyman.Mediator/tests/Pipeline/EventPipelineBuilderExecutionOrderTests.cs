@@ -22,8 +22,8 @@ namespace Handyman.Mediator.Tests.Pipeline
             strings.ShouldBe(new[] { "first", "middle", "last" });
         }
 
-        [PipelineBuilder(ExecutionOrder = Defaults.Order.Last, Text = "last")]
-        [PipelineBuilder(ExecutionOrder = Defaults.Order.First, Text = "first")]
+        [PipelineBuilder(ExecutionOrder = MediatorDefaults.Order.Last, Text = "last")]
+        [PipelineBuilder(ExecutionOrder = MediatorDefaults.Order.First, Text = "first")]
         [PipelineBuilder(Text = "middle")]
         private class MyEvent : IEvent { }
 
