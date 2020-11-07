@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.RequestFilterToggle
 {
@@ -30,9 +31,21 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledFilterTypes { get; set; }
 
-        public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
+        public override async Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
         {
-            builder.AddFilterSelector(new RequestFilterToggleFilterSelector(_metadata.Value));
+            var metadata = _metadata.Value;
+
+            var toggle = requestContext.ServiceProvider.GetRequiredService<IRequestFilterToggle>();
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(metadata, requestContext).WithGloballyConfiguredAwait();
+
+            if (!enabled)
+            {
+                pipelineBuilderContext.Filters.RemoveAll(x => metadata.ToggleEnabledFilterTypes.Contains(x.GetType()));
+            }
+            else if (metadata.ToggleDisabledFilterTypes.Any())
+            {
+                pipelineBuilderContext.Filters.RemoveAll(x => metadata.ToggleDisabledFilterTypes.Contains(x.GetType()));
+            }
         }
 
         private RequestFilterToggleMetadata CreateMetadata()

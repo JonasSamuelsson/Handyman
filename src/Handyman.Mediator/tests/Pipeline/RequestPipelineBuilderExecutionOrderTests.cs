@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Handyman.Mediator.Pipeline;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Handyman.Mediator.Pipeline;
-using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
 using Xunit;
 
 namespace Handyman.Mediator.Tests.Pipeline
@@ -43,9 +42,10 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public string Text { get; set; }
 
-            public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
+            public override Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
             {
-                serviceProvider.GetRequiredService<List<string>>().Add(Text);
+                requestContext.ServiceProvider.GetRequiredService<List<string>>().Add(Text);
+                return Task.CompletedTask;
             }
         }
     }

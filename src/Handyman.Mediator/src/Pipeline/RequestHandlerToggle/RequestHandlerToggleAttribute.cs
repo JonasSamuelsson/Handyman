@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
 {
@@ -30,9 +31,21 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledHandlerTypes { get; set; }
 
-        public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
+        public override async Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
         {
-            builder.AddHandlerSelector(new RequestHandlerToggleHandlerSelector(_metadata.Value));
+            var metadata = _metadata.Value;
+
+            var toggle = requestContext.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
+            var enabled = await toggle.IsEnabled<TRequest, TResponse>(metadata, requestContext).WithGloballyConfiguredAwait();
+
+            if (!enabled)
+            {
+                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleEnabledHandlerTypes.Contains(x.GetType()));
+            }
+            else if (metadata.ToggleDisabledHandlerTypes.Any())
+            {
+                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleDisabledHandlerTypes.Contains(x.GetType()));
+            }
         }
 
         private RequestHandlerToggleMetadata CreateMetadata()

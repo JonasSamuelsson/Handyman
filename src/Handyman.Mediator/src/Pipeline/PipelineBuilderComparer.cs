@@ -4,12 +4,12 @@
     {
         internal static int Compare(object x, object y)
         {
-            return GetSortOrder(x).CompareTo(GetSortOrder(y));
+            return GetOrder(x).CompareTo(GetOrder(y));
         }
 
-        private static int GetSortOrder(object o)
+        private static int GetOrder(object o)
         {
-            return (o as IOrderedPipelineBuilder)?.ExecutionOrder ?? 0;
+            return (o as IOrderedPipelineBuilder)?.ExecutionOrder ?? ExecutionOrder.Default;
         }
     }
 }

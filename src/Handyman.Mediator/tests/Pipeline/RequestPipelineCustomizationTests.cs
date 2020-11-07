@@ -35,30 +35,14 @@ namespace Handyman.Mediator.Tests.Pipeline
 
         private class CustomizeRequestPipelineAttribute : RequestPipelineBuilderAttribute
         {
-            public override void Configure(IRequestPipelineBuilder builder, IServiceProvider serviceProvider)
+            public override Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
             {
-                builder.AddFilterSelector(new RequestFilterSelector());
-                builder.AddHandlerSelector(new RequestHandlerSelector());
-                builder.UseHandlerExecutionStrategy(new RequestHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
-            }
-        }
+                var serviceProvider = requestContext.ServiceProvider;
 
-        private class RequestFilterSelector : IRequestFilterSelector
-        {
-            public Task SelectFilters<TRequest, TResponse>(List<IRequestFilter<TRequest, TResponse>> filters, RequestContext<TRequest> requestContext)
-                where TRequest : IRequest<TResponse>
-            {
-                filters.Add(new RequestFilter<TRequest, TResponse> { Action = requestContext.ServiceProvider.GetRequiredService<Action<string>>() });
-                return Task.CompletedTask;
-            }
-        }
+                pipelineBuilderContext.Filters.Add(new RequestFilter<TRequest, TResponse> { Action = serviceProvider.GetRequiredService<Action<string>>() });
+                pipelineBuilderContext.Handlers.Add(new RequestHandler<TRequest, TResponse> { Action = serviceProvider.GetRequiredService<Action<string>>() });
+                pipelineBuilderContext.HandlerExecutionStrategy = new RequestHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() };
 
-        private class RequestHandlerSelector : IRequestHandlerSelector
-        {
-            public Task SelectHandlers<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestContext<TRequest> requestContext)
-                where TRequest : IRequest<TResponse>
-            {
-                handlers.Add(new RequestHandler<TRequest, TResponse> { Action = requestContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
             }
         }

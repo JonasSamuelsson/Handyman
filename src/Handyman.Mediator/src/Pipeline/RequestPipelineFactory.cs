@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 
 namespace Handyman.Mediator.Pipeline
@@ -33,9 +34,11 @@ namespace Handyman.Mediator.Pipeline
         {
             internal override Func<IServiceProvider, object> CreateFactoryMethod()
             {
-                var attributes = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>().ToListOptimized();
+                var builderAttributes = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>()
+                    .Cast<IRequestPipelineBuilder>()
+                    .ToListOptimized();
 
-                if (attributes.Count == 0)
+                if (builderAttributes.Count == 0)
                 {
                     return _ => DefaultRequestPipeline<TRequest, TResponse>.Instance;
                 }
@@ -44,23 +47,14 @@ namespace Handyman.Mediator.Pipeline
 
                 object CreateCustomizedPipeline(IServiceProvider serviceProvider)
                 {
-                    var builder = new RequestPipelineBuilder();
-
-                    if (attributes.Count != 1)
+                    if (builderAttributes.Count != 1)
                     {
-                        attributes.Sort((x, y) => x.ExecutionOrder.CompareTo(y.ExecutionOrder));
-                    }
-
-                    foreach (var attribute in attributes)
-                    {
-                        attribute.Configure(builder, serviceProvider);
+                        builderAttributes.Sort(PipelineBuilderComparer.Compare);
                     }
 
                     return new CustomizedRequestPipeline<TRequest, TResponse>
                     {
-                        FilterSelectors = builder.FilterSelectors,
-                        HandlerSelectors = builder.HandlerSelectors,
-                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? DefaultRequestHandlerExecutionStrategy.Instance
+                        PipelineBuilders = builderAttributes
                     };
                 }
             }

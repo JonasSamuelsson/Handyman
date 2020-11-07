@@ -7,32 +7,33 @@ namespace Handyman.Mediator.Pipeline
     internal class CustomizedRequestPipeline<TRequest, TResponse> : RequestPipeline<TRequest, TResponse>
        where TRequest : IRequest<TResponse>
     {
-        internal List<IRequestFilterSelector> FilterSelectors { get; set; } = null!;
-        internal List<IRequestHandlerSelector> HandlerSelectors { get; set; } = null!;
-        internal IRequestHandlerExecutionStrategy HandlerExecutionStrategy { get; set; } = null!;
+        internal List<IRequestPipelineBuilder> PipelineBuilders { get; set; } = null!;
 
         internal override async Task<TResponse> Execute(RequestContext<TRequest> requestContext)
         {
-            var filters = requestContext.ServiceProvider.GetServices<IRequestFilter<TRequest, TResponse>>().ToListOptimized();
-            var handlers = requestContext.ServiceProvider.GetServices<IRequestHandler<TRequest, TResponse>>().ToListOptimized();
+            var serviceProvider = requestContext.ServiceProvider;
 
-            foreach (var filterSelector in FilterSelectors)
+            var pipelineBuilderContext = new RequestPipelineBuilderContext<TRequest, TResponse>
             {
-                requestContext.CancellationToken.ThrowIfCancellationRequested();
-                await filterSelector.SelectFilters(filters, requestContext).WithGloballyConfiguredAwait();
+                Filters = serviceProvider.GetServices<IRequestFilter<TRequest, TResponse>>().ToListOptimized(),
+                HandlerExecutionStrategy = null,
+                Handlers = serviceProvider.GetServices<IRequestHandler<TRequest, TResponse>>().ToListOptimized()
+            };
+
+            foreach (var pipelineBuilder in PipelineBuilders)
+            {
+                await pipelineBuilder.Execute(pipelineBuilderContext, requestContext);
             }
 
-            foreach (var handlerSelector in HandlerSelectors)
-            {
-                requestContext.CancellationToken.ThrowIfCancellationRequested();
-                await handlerSelector.SelectHandlers(handlers, requestContext).WithGloballyConfiguredAwait();
-            }
-
-            AssertThereIsSingleHandlerToExecute(requestContext, handlers);
+            AssertThereIsSingleHandlerToExecute(requestContext, pipelineBuilderContext.Handlers);
 
             requestContext.CancellationToken.ThrowIfCancellationRequested();
 
-            return await Execute(filters, handlers[0], HandlerExecutionStrategy, requestContext).WithGloballyConfiguredAwait();
+            var filters = pipelineBuilderContext.Filters;
+            var handler = pipelineBuilderContext.Handlers[0];
+            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? Defaults.RequestHandlerExecutionStrategy;
+
+            return await Execute(filters, handler, handlerExecutionStrategy, requestContext).WithGloballyConfiguredAwait();
         }
 
         private static void AssertThereIsSingleHandlerToExecute(RequestContext<TRequest> requestContext, List<IRequestHandler<TRequest, TResponse>> handlers)
