@@ -8,8 +8,7 @@ namespace Handyman.Mediator.Pipeline
 {
     internal class RequestPipelineFactory
     {
-        private readonly ConcurrentDictionary<Type, IPipelineFactory> _factories = new ConcurrentDictionary<Type, IPipelineFactory>();
-        private readonly ConcurrentDictionary<Type, Func<IServiceProvider, object>> _factoryMethods = new ConcurrentDictionary<Type, Func<IServiceProvider, object>>();
+        private readonly ConcurrentDictionary<Type, PipelineFactory> _factories = new ConcurrentDictionary<Type, PipelineFactory>();
 
         internal RequestPipeline<TResponse> GetPipeline<TResponse>(IRequest<TResponse> request, MediatorOptions options, IServiceProvider serviceProvider)
         {
@@ -19,26 +18,26 @@ namespace Handyman.Mediator.Pipeline
             return (RequestPipeline<TResponse>)factory.CreatePipeline(options, serviceProvider);
         }
 
-        private static IPipelineFactory CreateFactory(Type requestType, Type responseType)
+        private static PipelineFactory CreateFactory(Type requestType, Type responseType)
         {
             var pipelineFactoryType = typeof(PipelineFactory<,>).MakeGenericType(requestType, responseType);
-            return (IPipelineFactory)Activator.CreateInstance(pipelineFactoryType);
+            return (PipelineFactory)Activator.CreateInstance(pipelineFactoryType);
         }
 
-        private interface IPipelineFactory
+        private abstract class PipelineFactory
         {
-            public abstract object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider);
+            internal abstract object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider);
         }
 
-        private class PipelineFactory<TRequest, TResponse> : IPipelineFactory
+        private class PipelineFactory<TRequest, TResponse> : PipelineFactory
             where TRequest : IRequest<TResponse>
         {
-            private readonly List<IRequestPipelineBuilder> AttributePipelineBuilders = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>()
+            private static readonly List<IRequestPipelineBuilder> AttributePipelineBuilders = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>()
                 .Cast<IRequestPipelineBuilder>()
                 .ToListOptimized();
-            private readonly RequestPipeline<TRequest, TResponse> DefaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
+            private static readonly RequestPipeline<TRequest, TResponse> DefaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
 
-            public object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)
+            internal override object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)
             {
                 var noPipelineBuilders = AttributePipelineBuilders.Count == 0 && options.EventPipelineBuilders.Count == 0;
 
@@ -47,7 +46,7 @@ namespace Handyman.Mediator.Pipeline
                     return DefaultPipeline;
                 }
 
-                List<IRequestPipelineBuilder>? pipelineBuilders = null;
+                List<IRequestPipelineBuilder>? pipelineBuilders;
 
                 if (AttributePipelineBuilders.Count == 0)
                 {
