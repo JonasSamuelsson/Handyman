@@ -9,7 +9,7 @@
 
         private static int GetExecutionOrder(object o)
         {
-            return (o as IOrderedFilter)?.Order ?? ExecutionOrder.Default;
+            return (o as IOrderedFilter)?.Order ?? Defaults.Order.Default;
         }
     }
 }

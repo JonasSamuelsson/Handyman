@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Handyman.Mediator.Pipeline;
 using Xunit;
 
 namespace Handyman.Mediator.Tests
@@ -24,7 +25,13 @@ namespace Handyman.Mediator.Tests
         [Fact]
         public void NestedTypesShouldNotBePublic()
         {
+            var exclude = new[]
+            {
+                typeof(MediatorDefaults.Order)
+            };
+
             var errors = typeof(IMediator).Assembly.GetTypes()
+                .Where(x => !exclude.Contains(x))
                 .Where(x => x.IsNestedPublic)
                 .Select(x => x.FullName)
                 .ToList();

@@ -1,7 +1,6 @@
 ﻿using Handyman.Mediator.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -23,8 +22,8 @@ namespace Handyman.Mediator.Tests.Pipeline
             strings.ShouldBe(new[] { "first", "middle", "last" });
         }
 
-        [PipelineBuilder(ExecutionOrder = ExecutionOrder.Last, Text = "last")]
-        [PipelineBuilder(ExecutionOrder = ExecutionOrder.First, Text = "first")]
+        [PipelineBuilder(ExecutionOrder = Defaults.Order.Last, Text = "last")]
+        [PipelineBuilder(ExecutionOrder = Defaults.Order.First, Text = "first")]
         [PipelineBuilder(Text = "middle")]
         private class MyEvent : IEvent { }
 
