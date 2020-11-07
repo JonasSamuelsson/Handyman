@@ -32,29 +32,12 @@ namespace Handyman.Mediator.Tests.Pipeline
 
         private class CustomizeEventPipelineAttribute : EventPipelineBuilderAttribute
         {
-            public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+            public override Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
             {
-                builder.AddFilterSelector(new EventFilterSelector());
-                builder.AddHandlerSelector(new EventHandlerSelector());
-                builder.UseHandlerExecutionStrategy(new EventHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() });
-            }
-        }
+                pipelineBuilderContext.Filters.Add(new EventFilter<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
+                pipelineBuilderContext.Handlers.Add(new EventHandler<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
+                pipelineBuilderContext.HandlerExecutionStrategy = new EventHandlerExecutionStrategy { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() };
 
-        private class EventFilterSelector : IEventFilterSelector
-        {
-            public Task SelectFilters<TEvent>(List<IEventFilter<TEvent>> filters, EventContext<TEvent> eventContext)
-                where TEvent : IEvent
-            {
-                filters.Add(new EventFilter<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
-                return Task.CompletedTask;
-            }
-        }
-
-        private class EventHandlerSelector : IEventHandlerSelector
-        {
-            public Task SelectHandlers<TEvent>(List<IEventHandler<TEvent>> handlers, EventContext<TEvent> eventContext) where TEvent : IEvent
-            {
-                handlers.Add(new EventHandler<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 return Task.CompletedTask;
             }
         }

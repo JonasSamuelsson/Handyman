@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public abstract class EventPipelineBuilderAttribute : Attribute
+    public abstract class EventPipelineBuilderAttribute : Attribute, IEventPipelineBuilder, IOrderedPipelineBuilder
     {
         public int ExecutionOrder { get; set; } = Handyman.Mediator.ExecutionOrder.Default;
 
-        public abstract void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider);
+        public abstract Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext,
+            EventContext<TEvent> eventContext) where TEvent : IEvent;
     }
 }

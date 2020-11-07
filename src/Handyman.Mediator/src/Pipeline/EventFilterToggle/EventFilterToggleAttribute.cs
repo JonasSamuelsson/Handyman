@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.EventFilterToggle
 {
@@ -30,9 +31,21 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledFilterTypes { get; set; }
 
-        public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+        public override async Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
         {
-            builder.AddFilterSelector(new EventFilterToggleFilterSelector(_metadata.Value));
+            var metadata = _metadata.Value;
+
+            var toggle = eventContext.ServiceProvider.GetRequiredService<IEventFilterToggle>();
+            var enabled = await toggle.IsEnabled(metadata, eventContext).WithGloballyConfiguredAwait();
+
+            if (!enabled)
+            {
+                pipelineBuilderContext.Filters.RemoveAll(x => metadata.ToggleEnabledFilterTypes.Contains(x.GetType()));
+            }
+            else if (metadata.ToggleDisabledFilterTypes.Any())
+            {
+                pipelineBuilderContext.Filters.RemoveAll(x => metadata.ToggleDisabledFilterTypes.Contains(x.GetType()));
+            }
         }
 
         private EventFilterToggleMetadata CreateMetadata()

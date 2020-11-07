@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 
 namespace Handyman.Mediator.Pipeline
@@ -30,39 +31,40 @@ namespace Handyman.Mediator.Pipeline
         private class FactoryMethodBuilder<TEvent> : FactoryMethodBuilder
             where TEvent : IEvent
         {
+            private static readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(Defaults.EventHandlerExecutionStrategy);
+
             internal override Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod()
             {
-                var attributes = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>().ToListOptimized();
+                var builderAttributes = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>()
+                    .Cast<IEventPipelineBuilder>()
+                    .ToListOptimized();
 
-                if (attributes.Count == 0)
+                if (builderAttributes.Count == 0)
                 {
                     return (serviceProvider, mediatorOptions) =>
-                        mediatorOptions.EventHandlerExecutionStrategy == WhenAllEventHandlerExecutionStrategy.Instance
-                            ? DefaultEventPipeline<TEvent>.DefaultInstance
-                            : new DefaultEventPipeline<TEvent>(mediatorOptions.EventHandlerExecutionStrategy);
+                    {
+                        if (mediatorOptions.EventHandlerExecutionStrategy == null)
+                        {
+                            return DefaultPipeline;
+                        }
+
+                        return new DefaultEventPipeline<TEvent>(mediatorOptions.EventHandlerExecutionStrategy);
+                    };
                 }
 
                 return CreateCustomizedEventPipeline;
 
                 EventPipeline CreateCustomizedEventPipeline(IServiceProvider serviceProvider, MediatorOptions mediatorOptions)
                 {
-                    var builder = new EventPipelineBuilder();
-
-                    if (attributes.Count != 1)
+                    if (builderAttributes.Count != 1)
                     {
-                        attributes.Sort((x, y) => x.ExecutionOrder.CompareTo(y.ExecutionOrder));
-                    }
-
-                    foreach (var attribute in attributes)
-                    {
-                        attribute.Configure(builder, serviceProvider);
+                        builderAttributes.Sort(PipelineBuilderComparer.Compare);
                     }
 
                     return new CustomizedEventPipeline<TEvent>
                     {
-                        FilterSelectors = builder.FilterSelectors,
-                        HandlerSelectors = builder.HandlerSelectors,
-                        HandlerExecutionStrategy = builder.HandlerExecutionStrategy ?? mediatorOptions.EventHandlerExecutionStrategy
+                        HandlerExecutionStrategy = mediatorOptions.EventHandlerExecutionStrategy,
+                        PipelineBuilders = builderAttributes
                     };
                 }
             }

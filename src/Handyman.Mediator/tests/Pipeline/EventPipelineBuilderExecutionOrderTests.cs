@@ -32,9 +32,10 @@ namespace Handyman.Mediator.Tests.Pipeline
         {
             public string Text { get; set; }
 
-            public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+            public override Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
             {
-                serviceProvider.GetRequiredService<List<string>>().Add(Text);
+                eventContext.ServiceProvider.GetRequiredService<List<string>>().Add(Text);
+                return Task.CompletedTask;
             }
         }
     }

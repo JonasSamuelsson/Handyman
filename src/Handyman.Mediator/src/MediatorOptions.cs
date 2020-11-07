@@ -6,6 +6,6 @@ namespace Handyman.Mediator
     {
         internal static readonly MediatorOptions Default = new MediatorOptions();
 
-        public IEventHandlerExecutionStrategy EventHandlerExecutionStrategy { get; set; } = new WhenAllEventHandlerExecutionStrategy();
+        public IEventHandlerExecutionStrategy? EventHandlerExecutionStrategy { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.EventHandlerToggle
 {
@@ -30,9 +31,21 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledHandlerTypes { get; set; }
 
-        public override void Configure(IEventPipelineBuilder builder, IServiceProvider serviceProvider)
+        public override async Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
         {
-            builder.AddHandlerSelector(new EventHandlerToggleHandlerSelector(_metadata.Value));
+            var metadata = _metadata.Value;
+
+            var toggle = eventContext.ServiceProvider.GetRequiredService<IEventHandlerToggle>();
+            var enabled = await toggle.IsEnabled(metadata, eventContext).WithGloballyConfiguredAwait();
+
+            if (!enabled)
+            {
+                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleEnabledHandlerTypes.Contains(x.GetType()));
+            }
+            else if (metadata.ToggleDisabledHandlerTypes.Any())
+            {
+                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleDisabledHandlerTypes.Contains(x.GetType()));
+            }
         }
 
         private EventHandlerToggleMetadata CreateMetadata()
