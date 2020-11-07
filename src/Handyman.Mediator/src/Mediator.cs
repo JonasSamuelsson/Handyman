@@ -32,7 +32,7 @@ namespace Handyman.Mediator
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
-            var pipeline = RequestPipelineFactory.GetPipeline(request, _serviceProvider);
+            var pipeline = RequestPipelineFactory.GetPipeline(request, _options, _serviceProvider);
             return pipeline.Execute(request, _serviceProvider, cancellationToken);
         }
     }

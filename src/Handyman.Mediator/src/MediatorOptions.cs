@@ -9,5 +9,6 @@ namespace Handyman.Mediator
 
         public IEventHandlerExecutionStrategy? EventHandlerExecutionStrategy { get; set; }
         public List<IEventPipelineBuilder> EventPipelineBuilders { get; } = new List<IEventPipelineBuilder>();
+        public List<IRequestPipelineBuilder> RequestPipelineBuilders { get; } = new List<IRequestPipelineBuilder>();
     }
 }

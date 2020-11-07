@@ -21,11 +21,20 @@ namespace Handyman.Mediator.Tests.Pipeline
             // no filters or handlers are registered, they will be provided by the selectors
             services.AddSingleton<Action<string>>(s => strings.Add(s));
 
-            var mediator = new Mediator(services.BuildServiceProvider());
+            var pipelineBuilder = new RequestPipelineBuilder();
+
+            var options = new MediatorOptions
+            {
+                RequestPipelineBuilders = { pipelineBuilder }
+            };
+
+            var mediator = new Mediator(services.BuildServiceProvider(), options);
 
             await mediator.Send(new Request());
 
             strings.ShouldBe(new[] { "filter", "execution strategy", "handler" });
+
+            pipelineBuilder.Executed.ShouldBeTrue();
         }
 
         [CustomizeRequestPipeline]
@@ -43,6 +52,17 @@ namespace Handyman.Mediator.Tests.Pipeline
                 pipelineBuilderContext.Handlers.Add(new RequestHandler<TRequest, TResponse> { Action = serviceProvider.GetRequiredService<Action<string>>() });
                 pipelineBuilderContext.HandlerExecutionStrategy = new RequestHandlerExecutionStrategy { Action = serviceProvider.GetRequiredService<Action<string>>() };
 
+                return Task.CompletedTask;
+            }
+        }
+
+        private class RequestPipelineBuilder : IRequestPipelineBuilder
+        {
+            public bool Executed { get; set; }
+
+            public Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext) where TRequest : IRequest<TResponse>
+            {
+                Executed = true;
                 return Task.CompletedTask;
             }
         }

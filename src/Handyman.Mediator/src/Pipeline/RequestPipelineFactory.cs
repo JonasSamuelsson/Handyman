@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -7,56 +8,68 @@ namespace Handyman.Mediator.Pipeline
 {
     internal class RequestPipelineFactory
     {
+        private readonly ConcurrentDictionary<Type, IPipelineFactory> _factories = new ConcurrentDictionary<Type, IPipelineFactory>();
         private readonly ConcurrentDictionary<Type, Func<IServiceProvider, object>> _factoryMethods = new ConcurrentDictionary<Type, Func<IServiceProvider, object>>();
 
-        internal RequestPipeline<TResponse> GetPipeline<TResponse>(IRequest<TResponse> request, IServiceProvider serviceProvider)
+        internal RequestPipeline<TResponse> GetPipeline<TResponse>(IRequest<TResponse> request, MediatorOptions options, IServiceProvider serviceProvider)
         {
             var requestType = request.GetType();
             var responseType = typeof(TResponse);
-            var factoryMethod = _factoryMethods.GetOrAdd(requestType, _ => CreateFactoryMethod(requestType, responseType));
-            return (RequestPipeline<TResponse>)factoryMethod.Invoke(serviceProvider);
+            var factory = _factories.GetOrAdd(requestType, _ => CreateFactory(requestType, responseType));
+            return (RequestPipeline<TResponse>)factory.CreatePipeline(options, serviceProvider);
         }
 
-        private static Func<IServiceProvider, object> CreateFactoryMethod(Type requestType, Type responseType)
+        private static IPipelineFactory CreateFactory(Type requestType, Type responseType)
         {
-            var factoryMethodBuilderType = typeof(FactoryMethodBuilder<,>).MakeGenericType(requestType, responseType);
-            var factoryMethodBuilder = (FactoryMethodBuilder)Activator.CreateInstance(factoryMethodBuilderType);
-            return factoryMethodBuilder.CreateFactoryMethod();
+            var pipelineFactoryType = typeof(PipelineFactory<,>).MakeGenericType(requestType, responseType);
+            return (IPipelineFactory)Activator.CreateInstance(pipelineFactoryType);
         }
 
-        private abstract class FactoryMethodBuilder
+        private interface IPipelineFactory
         {
-            internal abstract Func<IServiceProvider, object> CreateFactoryMethod();
+            public abstract object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider);
         }
 
-        private class FactoryMethodBuilder<TRequest, TResponse> : FactoryMethodBuilder
+        private class PipelineFactory<TRequest, TResponse> : IPipelineFactory
             where TRequest : IRequest<TResponse>
         {
-            internal override Func<IServiceProvider, object> CreateFactoryMethod()
+            private readonly List<IRequestPipelineBuilder> AttributePipelineBuilders = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>()
+                .Cast<IRequestPipelineBuilder>()
+                .ToListOptimized();
+            private readonly RequestPipeline<TRequest, TResponse> DefaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
+
+            public object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)
             {
-                var builderAttributes = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>()
-                    .Cast<IRequestPipelineBuilder>()
-                    .ToListOptimized();
+                var noPipelineBuilders = AttributePipelineBuilders.Count == 0 && options.EventPipelineBuilders.Count == 0;
 
-                if (builderAttributes.Count == 0)
+                if (noPipelineBuilders)
                 {
-                    return _ => DefaultRequestPipeline<TRequest, TResponse>.Instance;
+                    return DefaultPipeline;
                 }
 
-                return CreateCustomizedPipeline;
+                List<IRequestPipelineBuilder>? pipelineBuilders = null;
 
-                object CreateCustomizedPipeline(IServiceProvider serviceProvider)
+                if (AttributePipelineBuilders.Count == 0)
                 {
-                    if (builderAttributes.Count != 1)
-                    {
-                        builderAttributes.Sort(PipelineBuilderComparer.Compare);
-                    }
-
-                    return new CustomizedRequestPipeline<TRequest, TResponse>
-                    {
-                        PipelineBuilders = builderAttributes
-                    };
+                    pipelineBuilders = options.RequestPipelineBuilders;
                 }
+                else if (options.RequestPipelineBuilders.Count == 0)
+                {
+                    pipelineBuilders = AttributePipelineBuilders;
+                }
+                else
+                {
+                    pipelineBuilders = new List<IRequestPipelineBuilder>();
+                    pipelineBuilders.AddRange(AttributePipelineBuilders);
+                    pipelineBuilders.AddRange(options.RequestPipelineBuilders);
+                }
+
+                pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
+
+                return new CustomizedRequestPipeline<TRequest, TResponse>()
+                {
+                    PipelineBuilders = pipelineBuilders
+                };
             }
         }
     }
