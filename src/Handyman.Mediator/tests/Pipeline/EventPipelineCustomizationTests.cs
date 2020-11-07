@@ -20,11 +20,15 @@ namespace Handyman.Mediator.Tests.Pipeline
 
             services.AddSingleton<Action<string>>(s => strings.Add(s));
 
-            var mediator = new Mediator(services.BuildServiceProvider());
+            var builder = new EventPipelineBuilder();
+
+            var mediator = new Mediator(services.BuildServiceProvider(), new MediatorOptions { EventPipelineBuilders = { builder } });
 
             await mediator.Publish(new Event());
 
             strings.ShouldBe(new[] { "filter", "execution strategy", "handler" });
+
+            builder.Executed.ShouldBeTrue();
         }
 
         [CustomizeEventPipeline]
@@ -38,6 +42,17 @@ namespace Handyman.Mediator.Tests.Pipeline
                 pipelineBuilderContext.Handlers.Add(new EventHandler<TEvent> { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() });
                 pipelineBuilderContext.HandlerExecutionStrategy = new EventHandlerExecutionStrategy { Action = eventContext.ServiceProvider.GetRequiredService<Action<string>>() };
 
+                return Task.CompletedTask;
+            }
+        }
+
+        private class EventPipelineBuilder : IEventPipelineBuilder
+        {
+            public bool Executed { get; set; }
+
+            public Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext) where TEvent : IEvent
+            {
+                Executed = true;
                 return Task.CompletedTask;
             }
         }

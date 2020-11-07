@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -7,66 +8,71 @@ namespace Handyman.Mediator.Pipeline
 {
     internal class EventPipelineFactory
     {
-        private readonly ConcurrentDictionary<Type, Func<IServiceProvider, MediatorOptions, EventPipeline>> _factoryMethods = new ConcurrentDictionary<Type, Func<IServiceProvider, MediatorOptions, EventPipeline>>();
+        private readonly ConcurrentDictionary<Type, PipelineFactory> _factories = new ConcurrentDictionary<Type, PipelineFactory>();
 
         public EventPipeline GetPipeline(IEvent @event, IServiceProvider serviceProvider, MediatorOptions options)
         {
             var eventType = @event.GetType();
-            var factoryMethod = _factoryMethods.GetOrAdd(eventType, CreateFactoryMethod);
-            return factoryMethod.Invoke(serviceProvider, options);
+            var factory = _factories.GetOrAdd(eventType, CreatePipelineFactory);
+            return factory.CreatePipeline(options, serviceProvider);
         }
 
-        private static Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod(Type eventType)
+        private static PipelineFactory CreatePipelineFactory(Type eventType)
         {
-            var factoryMethodBuilderType = typeof(FactoryMethodBuilder<>).MakeGenericType(eventType);
-            var factoryMethodBuilder = (FactoryMethodBuilder)Activator.CreateInstance(factoryMethodBuilderType);
-            return factoryMethodBuilder.CreateFactoryMethod();
+            var pipelineFactoryType = typeof(PipelineFactory<>).MakeGenericType(eventType);
+            return (PipelineFactory)Activator.CreateInstance(pipelineFactoryType);
         }
 
-        private abstract class FactoryMethodBuilder
+        private abstract class PipelineFactory
         {
-            internal abstract Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod();
+            internal abstract EventPipeline CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider);
         }
 
-        private class FactoryMethodBuilder<TEvent> : FactoryMethodBuilder
-            where TEvent : IEvent
+        private class PipelineFactory<TEvent> : PipelineFactory where TEvent : IEvent
         {
-            private static readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(MediatorDefaults.EventHandlerExecutionStrategy);
+            private readonly List<IEventPipelineBuilder> AttributeBuilders = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>()
+                .Cast<IEventPipelineBuilder>()
+                .ToListOptimized();
+            private readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(MediatorDefaults.EventHandlerExecutionStrategy);
 
-            internal override Func<IServiceProvider, MediatorOptions, EventPipeline> CreateFactoryMethod()
+            internal override EventPipeline CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)
             {
-                var builderAttributes = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>()
-                    .Cast<IEventPipelineBuilder>()
-                    .ToListOptimized();
+                var noPipelineBuilders = AttributeBuilders.Count == 0 && options.EventPipelineBuilders.Count == 0;
 
-                if (builderAttributes.Count == 0)
+                if (noPipelineBuilders)
                 {
-                    return (serviceProvider, mediatorOptions) =>
-                    {
-                        if (mediatorOptions.EventHandlerExecutionStrategy == null)
-                        {
-                            return DefaultPipeline;
-                        }
-
-                        return new DefaultEventPipeline<TEvent>(mediatorOptions.EventHandlerExecutionStrategy);
-                    };
+                    return options.EventHandlerExecutionStrategy != null
+                        ? new DefaultEventPipeline<TEvent>(options.EventHandlerExecutionStrategy)
+                        : DefaultPipeline;
                 }
 
-                return CreateCustomizedEventPipeline;
+                var handlerExecutionStrategy = options.EventHandlerExecutionStrategy ??
+                                               MediatorDefaults.EventHandlerExecutionStrategy;
 
-                EventPipeline CreateCustomizedEventPipeline(IServiceProvider serviceProvider, MediatorOptions mediatorOptions)
+                List<IEventPipelineBuilder>? pipelineBuilders = null;
+
+                if (AttributeBuilders.Count == 0)
                 {
-                    if (builderAttributes.Count != 1)
-                    {
-                        builderAttributes.Sort(PipelineBuilderComparer.Compare);
-                    }
-
-                    return new CustomizedEventPipeline<TEvent>
-                    {
-                        HandlerExecutionStrategy = mediatorOptions.EventHandlerExecutionStrategy,
-                        PipelineBuilders = builderAttributes
-                    };
+                    pipelineBuilders = options.EventPipelineBuilders;
                 }
+                else if (options.EventPipelineBuilders.Count == 0)
+                {
+                    pipelineBuilders = AttributeBuilders;
+                }
+                else
+                {
+                    pipelineBuilders = new List<IEventPipelineBuilder>();
+                    pipelineBuilders.AddRange(AttributeBuilders);
+                    pipelineBuilders.AddRange(options.EventPipelineBuilders);
+                }
+
+                pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
+
+                return new CustomizedEventPipeline<TEvent>
+                {
+                    HandlerExecutionStrategy = handlerExecutionStrategy,
+                    PipelineBuilders = pipelineBuilders
+                };
             }
         }
     }
