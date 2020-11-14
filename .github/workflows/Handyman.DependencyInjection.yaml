@@ -33,7 +33,7 @@ jobs:
     - name: setup .net core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 5.x
     - name: build
       run: dotnet build src/Handyman.DependencyInjection.csproj --configuration release
     - name: test
@@ -48,7 +48,7 @@ jobs:
           write-error "version not found"
         }
         $tag = "Handyman.DependencyInjection_v$version"
-        git config user.email "github-actions@github.com"
+        git config user.email "actions@github.com"
         git config user.name "GitHub"
         git tag -a $tag -m $tag
         git push origin --tags
