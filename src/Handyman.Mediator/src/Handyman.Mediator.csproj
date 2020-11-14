@@ -10,7 +10,7 @@
 
    <PropertyGroup>
       <PackageId>Handyman.Mediator</PackageId>
-      <Version>11.0.0</Version>
+      <Version>11.1.0</Version>
       <Authors>Jonas Samuelsson</Authors>
       <Company />
       <Product>Handyman</Product>
