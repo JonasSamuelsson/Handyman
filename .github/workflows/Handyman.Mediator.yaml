@@ -33,7 +33,7 @@ jobs:
     - name: setup .net core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.x
+        dotnet-version: 5.0.100
     - name: build
       run: dotnet build src/Handyman.Mediator.csproj --configuration release
     - name: test
