@@ -48,7 +48,7 @@ jobs:
           write-error "version not found"
         }
         $tag = "Handyman.Mediator_v$version"
-        git config user.email "github-actions@github.com"
+        git config user.email "actions@github.com"
         git config user.name "GitHub"
         git tag -a $tag -m $tag
         git push origin --tags
