@@ -43,6 +43,9 @@ namespace Handyman.Mediator.DependencyInjection
             services.TryAddTransient<ISender>(sp => sp.GetRequiredService<IMediator>());
             services.TryAddTransient(typeof(ISender<>), typeof(Sender<>));
             services.TryAddTransient(typeof(ISender<,>), typeof(Sender<,>));
+            services.TryAddTransient<IDynamicMediator, DynamicMediator>();
+            services.TryAddTransient<IDynamicPublisher>(sp => sp.GetRequiredService<IDynamicMediator>());
+            services.TryAddTransient<IDynamicSender>(sp => sp.GetRequiredService<IDynamicMediator>());
 
             services.Scan(_ =>
             {
