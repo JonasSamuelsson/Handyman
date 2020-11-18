@@ -1,0 +1,138 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+   <title>mediator-visualizer</title>
+</head>
+
+<body>
+   <script src="https://d3js.org/d3.v5.min.js"></script>
+   <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-graphviz/3.1.0/d3-graphviz.min.js"
+           integrity="sha512-xDh+TOcWBsd00MmoBRuZvRwwiWj1sQonBPxIriVzrP6ea/3dQGSv4AY8h7dJkU1tFeEJrPgsQfvk4iVjFjQVtw=="
+           crossorigin="anonymous"></script>
+
+   <div class="container-fluid" style="margin: 5px;">
+      <div id="config">
+         <div class="form-group row">
+            <label class="col-sm-1 col-form-label" for="path">Project</label>
+            <div class="col-sm-8">
+               <input id="path" type="text" class="form-control"
+                      value="C:\dev\Property\Meps.WorkItems.Api\src\Meps.WorkItems.Api\Meps.WorkItems.Api.csproj" />
+            </div>
+            <button id="analyze" class="btn btn-primary col-sm-1" onclick="analyze();">Analyze</button>
+         </div>
+      </div>
+
+      <div id="lists" style="display: none;">
+         <h2>Entry points</h2>
+         <ul id="entryPoints" class="list-group"></ul>
+      </div>
+
+      <div id="graphContainer" style="display: none;">
+         <input id="entryPoint" hidden />
+         <button class="btn btn-outline-secondary" style="float: left;" onclick="showEntryPoints();"><<</button>
+         <div style="float: right">
+            <span>Layout: </span>
+            <div class="form-check form-check-inline">
+               <input class="form-check-input" type="radio" id="TB" name="layout" value="TB" checked onclick="generateGraph()">
+               <label class="form-check-label" for="TB">TB</label>
+            </div>
+            <div class="form-check form-check-inline">
+               <input class="form-check-input" type="radio" id="LR" name="layout" value="LR" onclick="generateGraph()">
+               <label class="form-check-label" for="LR">LR</label>
+            </div>
+         </div>
+         <div id="graph"></div>
+      </div>
+   </div>
+
+   <script>
+      function showElement(id) {
+         setElementDisplay(id, "block");
+      }
+
+      function hideElement(id) {
+         setElementDisplay(id, "none");
+      }
+
+      function setElementDisplay(id, value) {
+         let element = document.getElementById(id);
+         if (element.style.display !== value) {
+            element.style.display = value;
+         }
+      }
+
+      function analyze() {
+         clearList("entryPoints");
+
+         let path = document.getElementById("path").value;
+         let button = document.getElementById("analyze");
+         button.disabled = true;
+
+         sendRequest(`analyze/${encodeURI(path)}`)
+            .then(response => response.json())
+            .then(data => {
+               button.disabled = false;
+               hideElement("config");
+               showElement("lists");
+               populateList("entryPoints", data.entryPoints);
+            });
+      }
+
+      function clearList(id) {
+         document.getElementById(id).innerHTML = "";
+      }
+
+      function populateList(id, items) {
+         let ul = document.getElementById(id);
+         items.forEach(item => {
+            let span = document.createElement("span");
+            span.innerText = item;
+            span.onclick = () => { document.getElementById("entryPoint").value = item; generateGraph(); };
+            span.style = "cursor: pointer;";
+            let li = document.createElement("li");
+            li.appendChild(span);
+            li.className = "list-group-item py-1";
+            ul.appendChild(li);
+         });
+      }
+
+      function showEntryPoints() {
+         hideElement("graphContainer");
+         showElement("lists");
+      }
+
+      function generateGraph() {
+         let entryPoint = document.getElementById("entryPoint").value;
+         let layout = document.querySelector("input[name=layout]:checked").value;
+         sendRequest(`graph/${encodeURI(entryPoint)}?layout=${layout}`)
+            .then(response => response.text())
+            .then(text => {
+               hideElement("lists");
+               showElement("graphContainer");
+               d3.select("#graph").graphviz().renderDot(text);
+            });
+      }
+
+      function sendRequest(pathAndQuery) {
+         return fetch(`http://localhost:63636/api/${pathAndQuery}`);
+      }
+   </script>
+
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+           integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+           crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+           integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+           crossorigin="anonymous"></script>
+</body>
+
+</html>
