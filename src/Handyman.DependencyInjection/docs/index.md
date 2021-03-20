@@ -66,7 +66,7 @@ public class Foo : IFoo { }
 
 public void ConfigureServices(IServiceCollection services)
 {
-    services.Scan(x => x.EntryAssembly().ConfigurreClassesWithServiceAttribute());
+    services.Scan(x => x.EntryAssembly().ConfigureClassesWithServiceAttribute());
 }
 ```
 
