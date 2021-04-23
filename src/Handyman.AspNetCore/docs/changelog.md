@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 3.2.0
+
+### Added
+
+* Added .net5.0 TFM.
+
 ## 3.1.2
 
 ### Fixed
