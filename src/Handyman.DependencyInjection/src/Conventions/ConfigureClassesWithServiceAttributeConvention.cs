@@ -26,7 +26,7 @@ namespace Handyman.DependencyInjection.Conventions
                 foreach (var attribute in attributes)
                 {
                     var serviceType = attribute.ServiceType;
-                    var lifetime = attribute.ServiceLifetime ?? _options.ServiceLifetime ?? DefaultLifetime;
+                    var lifetime = attribute.ServiceLifetime ?? _options.Lifetime ?? DefaultLifetime;
                     var policy = GetPolicy(attribute, serviceType, type);
 
                     var serviceDescriptor = new ServiceDescriptor(serviceType, type, lifetime);
@@ -44,9 +44,9 @@ namespace Handyman.DependencyInjection.Conventions
                 return attribute.ServiceConfigurationPolicy.Value;
             }
 
-            if (_options.ServiceConfigurationPolicy.HasValue)
+            if (_options.ConfigurationPolicy.HasValue)
             {
-                return _options.ServiceConfigurationPolicy.Value;
+                return _options.ConfigurationPolicy.Value;
             }
 
             if (serviceType == implementationType)

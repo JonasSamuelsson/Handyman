@@ -22,7 +22,7 @@ namespace Handyman.DependencyInjection.Conventions
             var interfaces = types.Where(x => x.IsInterface);
             var classes = types.Where(x => x.IsConcreteClass()).ToList();
 
-            var policy = _options.ServiceConfigurationPolicy ?? DefaultPolicy;
+            var policy = _options.ConfigurationPolicy ?? DefaultPolicy;
 
             foreach (var @interface in interfaces)
             {
@@ -34,7 +34,7 @@ namespace Handyman.DependencyInjection.Conventions
                 if (!@interface.IsAssignableFrom(@class))
                     continue;
 
-                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(@class) ?? _options.ServiceLifetime ?? DefaultLifetime;
+                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(@class) ?? _options.Lifetime ?? DefaultLifetime;
 
                 var serviceDescriptor = new ServiceDescriptor(@interface, @class, lifetime);
 

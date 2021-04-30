@@ -22,14 +22,14 @@ namespace Handyman.DependencyInjection.Conventions
 
         public void Execute(IReadOnlyCollection<Type> types, IServiceCollection services)
         {
-            var policy = _options.ServiceConfigurationPolicy ?? DefaultPolicy;
+            var policy = _options.ConfigurationPolicy ?? DefaultPolicy;
 
             foreach (var type in types)
             {
                 if (!IsConcreteClassOf(type, _type, out var baseTypes))
                     continue;
 
-                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(type) ?? _options.ServiceLifetime ?? DefaultLifetime;
+                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(type) ?? _options.Lifetime ?? DefaultLifetime;
 
                 foreach (var baseType in baseTypes)
                 {

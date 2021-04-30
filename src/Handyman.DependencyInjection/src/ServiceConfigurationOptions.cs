@@ -4,7 +4,7 @@ namespace Handyman.DependencyInjection
 {
     public class ServiceConfigurationOptions
     {
-        public ServiceConfigurationPolicy? ServiceConfigurationPolicy { get; set; }
-        public ServiceLifetime? ServiceLifetime { get; set; }
+        public ServiceConfigurationPolicy? ConfigurationPolicy { get; set; }
+        public ServiceLifetime? Lifetime { get; set; }
     }
 }
