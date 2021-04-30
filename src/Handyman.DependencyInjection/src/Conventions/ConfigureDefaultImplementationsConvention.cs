@@ -7,17 +7,22 @@ namespace Handyman.DependencyInjection.Conventions
 {
     public class ConfigureDefaultImplementationsConvention : IServiceConfigurationConvention
     {
-        private readonly ServiceLifetime _serviceLifetime;
+        private static readonly ServiceConfigurationPolicy DefaultPolicy = ServiceConfigurationPolicy.TryAdd;
+        private static readonly ServiceLifetime DefaultLifetime = ServiceLifetime.Transient;
 
-        public ConfigureDefaultImplementationsConvention(ServiceLifetime? serviceLifetime)
+        private readonly ServiceConfigurationOptions _options;
+
+        public ConfigureDefaultImplementationsConvention(ServiceConfigurationOptions options)
         {
-            _serviceLifetime = serviceLifetime ?? ServiceLifetime.Transient;
+            _options = options;
         }
 
         public void Execute(IReadOnlyCollection<Type> types, IServiceCollection services)
         {
             var interfaces = types.Where(x => x.IsInterface);
             var classes = types.Where(x => x.IsConcreteClass()).ToList();
+
+            var policy = _options.ServiceConfigurationPolicy ?? DefaultPolicy;
 
             foreach (var @interface in interfaces)
             {
@@ -29,9 +34,12 @@ namespace Handyman.DependencyInjection.Conventions
                 if (!@interface.IsAssignableFrom(@class))
                     continue;
 
-                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(@class) ?? _serviceLifetime;
+                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(@class) ?? _options.ServiceLifetime ?? DefaultLifetime;
 
-                services.Add(new ServiceDescriptor(@interface, @class, lifetime));
+                var serviceDescriptor = new ServiceDescriptor(@interface, @class, lifetime);
+
+                ServiceConfigurationUtility
+                    .Configure(services, serviceDescriptor, policy);
             }
         }
     }

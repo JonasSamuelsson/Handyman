@@ -7,29 +7,36 @@ namespace Handyman.DependencyInjection.Conventions
 {
     internal class ConfigureConcreteClassesOfConvention : IServiceConfigurationConvention
     {
+        private static readonly ServiceConfigurationPolicy DefaultPolicy = ServiceConfigurationPolicy.TryAddEnumerable;
+        private static readonly ServiceLifetime DefaultLifetime = ServiceLifetime.Transient;
         private static readonly IEnumerable<Type> EmptyTypes = new Type[] { };
 
         private readonly Type _type;
-        private readonly ServiceLifetime _lifetime;
+        private readonly ServiceConfigurationOptions _options;
 
-        public ConfigureConcreteClassesOfConvention(Type type, ServiceLifetime? lifetime)
+        public ConfigureConcreteClassesOfConvention(Type type, ServiceConfigurationOptions options)
         {
             _type = type;
-            _lifetime = lifetime ?? ServiceLifetime.Transient;
+            _options = options;
         }
 
         public void Execute(IReadOnlyCollection<Type> types, IServiceCollection services)
         {
+            var policy = _options.ServiceConfigurationPolicy ?? DefaultPolicy;
+
             foreach (var type in types)
             {
                 if (!IsConcreteClassOf(type, _type, out var baseTypes))
                     continue;
 
-                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(type) ?? _lifetime;
+                var lifetime = ServiceLifetimeProvider.GetLifetimeOrNullFromAttribute(type) ?? _options.ServiceLifetime ?? DefaultLifetime;
 
                 foreach (var baseType in baseTypes)
                 {
-                    services.Add(new ServiceDescriptor(baseType, type, lifetime));
+                    var serviceDescriptor = new ServiceDescriptor(baseType, type, lifetime);
+
+                    ServiceConfigurationUtility
+                        .Configure(services, serviceDescriptor, policy);
                 }
             }
         }

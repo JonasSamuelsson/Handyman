@@ -7,8 +7,8 @@ namespace Handyman.DependencyInjection
     public class ServiceAttribute : Attribute
     {
         public ServiceAttribute(Type serviceType)
-            : this(serviceType, ServiceLifetime.Transient)
         {
+            ServiceType = serviceType;
         }
 
         public ServiceAttribute(Type serviceType, ServiceLifetime serviceLifetime)
@@ -17,7 +17,21 @@ namespace Handyman.DependencyInjection
             ServiceLifetime = serviceLifetime;
         }
 
+        public ServiceAttribute(Type serviceType, ServiceConfigurationPolicy serviceConfigurationPolicy)
+        {
+            ServiceType = serviceType;
+            ServiceConfigurationPolicy = serviceConfigurationPolicy;
+        }
+
+        public ServiceAttribute(Type serviceType, ServiceLifetime serviceLifetime, ServiceConfigurationPolicy serviceConfigurationPolicy)
+        {
+            ServiceType = serviceType;
+            ServiceLifetime = serviceLifetime;
+            ServiceConfigurationPolicy = serviceConfigurationPolicy;
+        }
+
         public Type ServiceType { get; }
-        public ServiceLifetime ServiceLifetime { get; }
+        public ServiceLifetime? ServiceLifetime { get; }
+        public ServiceConfigurationPolicy? ServiceConfigurationPolicy { get; }
     }
 }

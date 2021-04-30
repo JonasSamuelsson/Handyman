@@ -1,5 +1,4 @@
 ﻿using Handyman.DependencyInjection.Conventions;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 
@@ -34,37 +33,42 @@ namespace Handyman.DependencyInjection
 
         public static IScanner ConfigureClassesWithServiceAttribute(this IScanner scanner)
         {
-            return scanner.Using(new ConfigureClassesWithServiceAttributeConvention());
+            return scanner.ConfigureClassesWithServiceAttribute(new ServiceConfigurationOptions());
+        }
+
+        public static IScanner ConfigureClassesWithServiceAttribute(this IScanner scanner, ServiceConfigurationOptions options)
+        {
+            return scanner.Using(new ConfigureClassesWithServiceAttributeConvention(options));
         }
 
         public static IScanner ConfigureConcreteClassesOf<T>(this IScanner scanner)
         {
-            return scanner.ConfigureConcreteClassesOf<T>(null);
+            return scanner.ConfigureConcreteClassesOf<T>(new ServiceConfigurationOptions());
         }
 
-        public static IScanner ConfigureConcreteClassesOf<T>(this IScanner scanner, ServiceLifetime? serviceLifetime)
+        public static IScanner ConfigureConcreteClassesOf<T>(this IScanner scanner, ServiceConfigurationOptions options)
         {
-            return scanner.Using(new ConfigureConcreteClassesOfConvention(typeof(T), serviceLifetime));
+            return scanner.Using(new ConfigureConcreteClassesOfConvention(typeof(T), options));
         }
 
         public static IScanner ConfigureConcreteClassesOf(this IScanner scanner, Type type)
         {
-            return scanner.ConfigureConcreteClassesOf(type, null);
+            return scanner.ConfigureConcreteClassesOf(type, new ServiceConfigurationOptions());
         }
 
-        public static IScanner ConfigureConcreteClassesOf(this IScanner scanner, Type type, ServiceLifetime? serviceLifetime)
+        public static IScanner ConfigureConcreteClassesOf(this IScanner scanner, Type type, ServiceConfigurationOptions options)
         {
-            return scanner.Using(new ConfigureConcreteClassesOfConvention(type, serviceLifetime));
+            return scanner.Using(new ConfigureConcreteClassesOfConvention(type, options));
         }
 
         public static IScanner ConfigureDefaultImplementations(this IScanner scanner)
         {
-            return scanner.ConfigureDefaultImplementations(null);
+            return scanner.ConfigureDefaultImplementations(new ServiceConfigurationOptions());
         }
 
-        public static IScanner ConfigureDefaultImplementations(this IScanner scanner, ServiceLifetime? serviceLifetime)
+        public static IScanner ConfigureDefaultImplementations(this IScanner scanner, ServiceConfigurationOptions options)
         {
-            return scanner.Using(new ConfigureDefaultImplementationsConvention(serviceLifetime));
+            return scanner.Using(new ConfigureDefaultImplementationsConvention(options));
         }
 
         public static IScanner ExecuteServiceConfigurationStrategies(this IScanner scanner)
