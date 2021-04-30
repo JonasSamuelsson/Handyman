@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Handyman.DependencyInjection.Conventions
+namespace Handyman.DependencyInjection
 {
     public class ServiceConfigurationOptions
     {
