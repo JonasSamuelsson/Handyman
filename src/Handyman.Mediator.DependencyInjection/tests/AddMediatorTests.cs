@@ -27,5 +27,14 @@ namespace Handyman.Mediator.DependencyInjection.Tests
 
             Should.Throw<InvalidOperationException>(() => services.AddMediator(delegate { }));
         }
+
+        [Fact]
+        public void ShouldBePossibleToAddMoreThanOnce()
+        {
+            var services = new ServiceCollection();
+
+            services.AddMediator(delegate { });
+            services.AddMediator(options => options.SkipCoreServices = true);
+        }
     }
 }

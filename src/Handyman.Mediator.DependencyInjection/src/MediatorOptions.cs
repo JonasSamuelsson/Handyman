@@ -12,6 +12,7 @@ namespace Handyman.Mediator.DependencyInjection
 
         public ServiceLifetime MediatorLifetime { get; set; } = ServiceLifetime.Scoped;
         public IEventHandlerExecutionStrategy EventHandlerExecutionStrategy { get; set; } = WhenAllEventHandlerExecutionStrategy.Instance;
+        public bool SkipCoreServices { get; set; }
 
         public void ScanAssembly(Assembly assembly)
         {

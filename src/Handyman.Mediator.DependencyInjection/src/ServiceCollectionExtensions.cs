@@ -22,22 +22,35 @@ namespace Handyman.Mediator.DependencyInjection
 
         public static IServiceCollection AddMediator(this IServiceCollection services, Action<MediatorOptions> configure)
         {
-            if (services.Any(x => x.ServiceType == typeof(IMediator)))
-            {
-                throw new InvalidOperationException("Mediator has already been added.");
-            }
+            services.AddServiceProviderInsights();
 
             var options = new MediatorOptions();
 
             configure(options);
 
-            services.AddServiceProviderInsights();
+            if (options.SkipCoreServices == false)
+            {
+                AddCoreServices(services, options);
+            }
+
+            AddUserServices(services, options);
+
+            return services;
+        }
+
+        private static void AddCoreServices(IServiceCollection services, MediatorOptions options)
+        {
+            if (services.Any(x => x.ServiceType == typeof(IMediator)))
+            {
+                throw new InvalidOperationException("Mediator core services has already been added.");
+            }
 
             var mediatorOptions = new Handyman.Mediator.MediatorOptions
             {
                 EventHandlerExecutionStrategy = options.EventHandlerExecutionStrategy
             };
-            services.Add(new ServiceDescriptor(typeof(IMediator), sp => new Mediator(sp, mediatorOptions), options.MediatorLifetime));
+
+            services.TryAdd(new ServiceDescriptor(typeof(IMediator), sp => new Mediator(sp, mediatorOptions), options.MediatorLifetime));
             services.TryAddTransient<IPublisher>(sp => sp.GetRequiredService<IMediator>());
             services.TryAddTransient(typeof(IPublisher<>), typeof(Publisher<>));
             services.TryAddTransient<ISender>(sp => sp.GetRequiredService<IMediator>());
@@ -46,25 +59,36 @@ namespace Handyman.Mediator.DependencyInjection
             services.TryAddTransient<IDynamicMediator, DynamicMediator>();
             services.TryAddTransient<IDynamicPublisher>(sp => sp.GetRequiredService<IDynamicMediator>());
             services.TryAddTransient<IDynamicSender>(sp => sp.GetRequiredService<IDynamicMediator>());
+        }
+
+        private static void AddUserServices(IServiceCollection services, MediatorOptions options)
+        {
+            var tryAdd = new ServiceConfigurationOptions
+            {
+                ConfigurationPolicy = ServiceConfigurationPolicy.TryAdd
+            };
+
+            var tryAddEnumerable = new ServiceConfigurationOptions
+            {
+                ConfigurationPolicy = ServiceConfigurationPolicy.TryAddEnumerable
+            };
 
             services.Scan(_ =>
             {
                 _.Types(options.TypesToScan);
-                _.ConfigureConcreteClassesOf(typeof(IBackgroundExceptionHandler));
-                _.ConfigureConcreteClassesOf(typeof(IEventFilter<>));
-                _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle));
-                _.ConfigureConcreteClassesOf(typeof(IEventHandler<>));
-                _.ConfigureConcreteClassesOf(typeof(IEventHandlerToggle));
-                _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>));
-                _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle));
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>));
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentObserver));
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle));
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle));
-                _.ConfigureConcreteClassesOf(typeof(IToggle));
+                _.ConfigureConcreteClassesOf(typeof(IBackgroundExceptionHandler), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IEventFilter<>), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IEventFilterToggle), tryAdd);
+                _.ConfigureConcreteClassesOf(typeof(IEventHandler<>), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IEventHandlerToggle), tryAdd);
+                _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle), tryAdd);
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentObserver), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle), tryAdd);
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle), tryAdd);
+                _.ConfigureConcreteClassesOf(typeof(IToggle), tryAdd);
             });
-
-            return services;
         }
     }
 }
