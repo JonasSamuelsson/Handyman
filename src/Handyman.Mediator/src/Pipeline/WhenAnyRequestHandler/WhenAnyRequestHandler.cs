@@ -44,12 +44,7 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
 
                 if (exceptions != null)
                 {
-                    var exceptionHandler = _serviceProvider.GetService<IBackgroundExceptionHandler>();
-
-                    if (exceptionHandler != null)
-                    {
-                        await exceptionHandler.Handle(exceptions, cancellationToken).WithGloballyConfiguredAwait();
-                    }
+                    await HandleExceptions(exceptions, cancellationToken);
                 }
 
                 cts.Cancel();
@@ -57,6 +52,20 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
             }
 
             throw new AggregateException(exceptions);
+        }
+
+        private async Task HandleExceptions(List<Exception> exceptions, CancellationToken cancellationToken)
+        {
+            var exceptionHandlers = _serviceProvider
+                .GetServices<IBackgroundExceptionHandler>()
+                .ToListOptimized();
+
+            if (exceptionHandlers.Count == 0)
+                return;
+
+            var tasks = exceptionHandlers.Select(x => x.Handle(exceptions, cancellationToken));
+
+            await Task.WhenAll(tasks).WithGloballyConfiguredAwait();
         }
     }
 }

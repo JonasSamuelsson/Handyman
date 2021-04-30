@@ -49,11 +49,11 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
 
             var baselineHandler = GetBaselineHandler(handlers, metadata);
             var experimentalHandlers = handlers.Where(x => experimentalHandlerTypes.Contains(x.GetType())).ToList();
-            var observer = serviceProvider.GetRequiredService<IRequestHandlerExperimentObserver>();
+            var observers = serviceProvider.GetServices<IRequestHandlerExperimentObserver>().ToListOptimized();
 
             handlers.Clear();
 
-            handlers.Add(new RequestHandlerExperimentHandler<TRequest, TResponse>(baselineHandler, experimentalHandlers, observer));
+            handlers.Add(new RequestHandlerExperimentHandler<TRequest, TResponse>(baselineHandler, experimentalHandlers, observers));
         }
 
         private IRequestHandler<TRequest, TResponse> GetBaselineHandler<TRequest, TResponse>(List<IRequestHandler<TRequest, TResponse>> handlers, RequestHandlerExperimentMetadata metadata) where TRequest : IRequest<TResponse>

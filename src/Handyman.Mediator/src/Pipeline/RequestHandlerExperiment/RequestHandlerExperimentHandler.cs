@@ -12,13 +12,13 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
     {
         private readonly IRequestHandler<TRequest, TResponse> _baselineHandler;
         private readonly List<IRequestHandler<TRequest, TResponse>> _experimentalHandlers;
-        private readonly IRequestHandlerExperimentObserver _observer;
+        private readonly List<IRequestHandlerExperimentObserver> _observers;
 
-        public RequestHandlerExperimentHandler(IRequestHandler<TRequest, TResponse> baselineHandler, List<IRequestHandler<TRequest, TResponse>> experimentalHandlers, IRequestHandlerExperimentObserver observer)
+        public RequestHandlerExperimentHandler(IRequestHandler<TRequest, TResponse> baselineHandler, List<IRequestHandler<TRequest, TResponse>> experimentalHandlers, List<IRequestHandlerExperimentObserver> observers)
         {
             _baselineHandler = baselineHandler;
             _experimentalHandlers = experimentalHandlers;
-            _observer = observer;
+            _observers = observers;
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
@@ -42,7 +42,12 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
                 Request = request
             };
 
-            await _observer.Observe(experiment).WithGloballyConfiguredAwait();
+            if (_observers.Count != 0)
+            {
+                var observerTasks = _observers.Select(x => x.Observe(experiment));
+
+                await Task.WhenAll(observerTasks).WithGloballyConfiguredAwait();
+            }
 
             return await baselineExecution.Task.WithGloballyConfiguredAwait();
         }
