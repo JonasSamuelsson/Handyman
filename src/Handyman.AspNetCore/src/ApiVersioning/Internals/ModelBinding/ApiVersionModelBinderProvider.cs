@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Handyman.AspNetCore.ApiVersioning.ModelBinding
+namespace Handyman.AspNetCore.ApiVersioning.Internals.ModelBinding
 {
     internal class ApiVersionModelBinderProvider : IModelBinderProvider
     {

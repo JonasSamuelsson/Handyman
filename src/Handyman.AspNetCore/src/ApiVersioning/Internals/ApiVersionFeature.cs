@@ -1,4 +1,4 @@
-﻿namespace Handyman.AspNetCore.ApiVersioning
+﻿namespace Handyman.AspNetCore.ApiVersioning.Internals
 {
     internal class ApiVersionFeature
     {

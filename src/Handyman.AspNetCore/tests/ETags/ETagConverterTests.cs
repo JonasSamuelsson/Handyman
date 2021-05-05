@@ -1,4 +1,4 @@
-﻿using Handyman.AspNetCore.ETags;
+﻿using Handyman.AspNetCore.ETags.Internals;
 using Shouldly;
 using Xunit;
 

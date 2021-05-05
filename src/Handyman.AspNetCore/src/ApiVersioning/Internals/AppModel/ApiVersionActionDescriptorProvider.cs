@@ -2,13 +2,13 @@
 using System;
 using System.Linq;
 
-namespace Handyman.AspNetCore.ApiVersioning.Abstractions
+namespace Handyman.AspNetCore.ApiVersioning.Internals.AppModel
 {
-    internal class ApiVersionDescriptorProvider : IActionDescriptorProvider
+    internal class ApiVersionActionDescriptorProvider : IActionDescriptorProvider
     {
         private readonly IApiVersionParser _apiVersionParser;
 
-        public ApiVersionDescriptorProvider(IApiVersionParser apiVersionParser)
+        public ApiVersionActionDescriptorProvider(IApiVersionParser apiVersionParser)
         {
             _apiVersionParser = apiVersionParser;
         }
@@ -25,12 +25,12 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
                     continue;
 
                 var attribute = (ApiVersionAttribute)filterDescriptor.Filter;
-                var apiVersionDescriptor = GetApiVersionDescriptor(action, attribute);
-                action.EndpointMetadata.Add(apiVersionDescriptor);
+                var apiVersionMetadata = GetApiVersionMetadata(action, attribute);
+                action.EndpointMetadata.Add(apiVersionMetadata);
             }
         }
 
-        private ApiVersionDescriptor GetApiVersionDescriptor(ActionDescriptor action, ApiVersionAttribute apiVersionAttribute)
+        private ApiVersionMetadata GetApiVersionMetadata(ActionDescriptor action, ApiVersionAttribute apiVersionAttribute)
         {
             if (apiVersionAttribute.Versions.Count == 0)
                 throw new InvalidOperationException($"{action.DisplayName} : does not have any supported versions.");
@@ -51,7 +51,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
                 }
             }
 
-            return new ApiVersionDescriptor
+            return new ApiVersionMetadata
             {
                 DefaultVersion = defaultApiVersion,
                 IsOptional = apiVersionAttribute.Optional,
@@ -64,7 +64,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Abstractions
             if (_apiVersionParser.TryParse(version, out var apiVersion))
                 return apiVersion;
 
-            throw new FormatException($"{action.DisplayName} : version '{version}' has an invalid format.");
+            throw new FormatException($"{action.DisplayName} : api version '{version}' has an invalid format.");
         }
 
         public void OnProvidersExecuted(ActionDescriptorProviderContext context)

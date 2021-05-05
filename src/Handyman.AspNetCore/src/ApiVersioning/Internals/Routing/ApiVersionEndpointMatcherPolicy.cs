@@ -1,5 +1,4 @@
-﻿using Handyman.AspNetCore.ApiVersioning.Abstractions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -10,19 +9,19 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Handyman.AspNetCore.ApiVersioning.Routing
+namespace Handyman.AspNetCore.ApiVersioning.Internals.Routing
 {
     internal class ApiVersionEndpointMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
     {
         private static readonly ActionDescriptor EmptyActionDescriptor = new ActionDescriptor();
         private static readonly RouteData EmptyRouteData = new RouteData();
 
-        private readonly IApiVersionReader _apiVersionReader;
+        private readonly IEnumerable<IApiVersionReader> _apiVersionReaders;
         private readonly IApiVersionParser _apiVersionParser;
 
-        public ApiVersionEndpointMatcherPolicy(IApiVersionReader apiVersionReader, IApiVersionParser apiVersionParser)
+        public ApiVersionEndpointMatcherPolicy(IEnumerable<IApiVersionReader> apiVersionReaders, IApiVersionParser apiVersionParser)
         {
-            _apiVersionReader = apiVersionReader;
+            _apiVersionReaders = apiVersionReaders;
             _apiVersionParser = apiVersionParser;
         }
 
@@ -32,7 +31,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
         {
             for (var i = 0; i < endpoints.Count; i++)
             {
-                var descriptor = endpoints[i].Metadata.GetMetadata<ApiVersionDescriptor>();
+                var descriptor = endpoints[i].Metadata.GetMetadata<ApiVersionMetadata>();
 
                 if (descriptor != null)
                 {
@@ -45,15 +44,26 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
 
         public Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
         {
-            IApiVersion requestedApiVersion = null;
+            string requestString = null;
 
-            if (_apiVersionReader.TryRead(httpContext.Request, out var values))
+            foreach (var apiVersionReader in _apiVersionReaders)
             {
-                if (!_apiVersionParser.TryParse(values, out requestedApiVersion))
+                if (!apiVersionReader.TryRead(httpContext.Request, out var value))
+                    continue;
+
+                if (requestString != null)
                 {
                     WriteErrorResponse(httpContext, candidates);
                     return Task.CompletedTask;
                 }
+
+                requestString = value;
+            }
+
+            if (!_apiVersionParser.TryParse(requestString, out var requestApiVersion))
+            {
+                WriteErrorResponse(httpContext, candidates);
+                return Task.CompletedTask;
             }
 
             var endpointFound = false;
@@ -62,23 +72,23 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
             {
                 var candidate = candidates[i];
 
-                var descriptor = candidate.Endpoint.Metadata.GetMetadata<ApiVersionDescriptor>();
+                var apiVersionMetadata = candidate.Endpoint.Metadata.GetMetadata<ApiVersionMetadata>();
 
-                if (requestedApiVersion == null)
+                if (requestApiVersion == null)
                 {
-                    if (descriptor == null)
+                    if (apiVersionMetadata == null)
                     {
                         endpointFound = true;
                         candidates.SetValidity(i, true);
                     }
-                    else if (descriptor.IsOptional)
+                    else if (apiVersionMetadata.IsOptional)
                     {
                         endpointFound = true;
                         candidates.SetValidity(i, true);
 
-                        if (descriptor.DefaultVersion != null)
+                        if (apiVersionMetadata.DefaultVersion != null)
                         {
-                            AddApiVersionFeature(httpContext, descriptor.DefaultVersion.Text);
+                            AddApiVersionFeature(httpContext, apiVersionMetadata.DefaultVersion.Text);
                         }
                     }
                     else
@@ -89,12 +99,12 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
                     continue;
                 }
 
-                if (descriptor == null)
+                if (apiVersionMetadata == null)
                     continue;
 
-                foreach (var version in descriptor.Versions)
+                foreach (var version in apiVersionMetadata.Versions)
                 {
-                    if (!version.IsMatch(requestedApiVersion))
+                    if (!version.IsMatch(requestApiVersion))
                     {
                         candidates.SetValidity(i, false);
                         continue;
@@ -138,7 +148,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
 
             for (var i = 0; i < candidates.Count; i++)
             {
-                var descriptor = candidates[i].Endpoint.Metadata.GetMetadata<ApiVersionDescriptor>();
+                var descriptor = candidates[i].Endpoint.Metadata.GetMetadata<ApiVersionMetadata>();
 
                 if (descriptor == null)
                     continue;

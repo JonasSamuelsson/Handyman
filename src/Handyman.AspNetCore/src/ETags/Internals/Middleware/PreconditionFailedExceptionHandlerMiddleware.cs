@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Handyman.AspNetCore.ETags.Middleware
+namespace Handyman.AspNetCore.ETags.Internals.Middleware
 {
     internal class PreconditionFailedExceptionHandlerMiddleware : IMiddleware
     {

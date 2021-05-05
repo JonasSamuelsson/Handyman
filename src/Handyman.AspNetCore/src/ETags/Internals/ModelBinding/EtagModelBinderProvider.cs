@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Handyman.AspNetCore.ETags.ModelBinding
+namespace Handyman.AspNetCore.ETags.Internals.ModelBinding
 {
     internal class ETagModelBinderProvider : IModelBinderProvider
     {

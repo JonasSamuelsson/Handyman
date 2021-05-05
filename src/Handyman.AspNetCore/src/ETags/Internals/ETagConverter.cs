@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Handyman.AspNetCore.ETags
+namespace Handyman.AspNetCore.ETags.Internals
 {
     internal class ETagConverter : IETagConverter
     {

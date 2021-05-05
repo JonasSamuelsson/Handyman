@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Net.Http.Headers;
 
-namespace Handyman.AspNetCore.ETags
+namespace Handyman.AspNetCore.ETags.Internals.Middleware
 {
     internal class ProblemDetailsResponseWriter
     {

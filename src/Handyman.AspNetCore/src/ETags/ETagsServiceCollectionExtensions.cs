@@ -1,9 +1,11 @@
-﻿using Handyman.AspNetCore.ETags.Middleware;
-using Handyman.AspNetCore.ETags.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Handyman.AspNetCore.ETags.Internals;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Linq;
+using Handyman.AspNetCore.ETags.Internals.AppModel;
+using Handyman.AspNetCore.ETags.Internals.Middleware;
+using Handyman.AspNetCore.ETags.Internals.ModelBinding;
 
 namespace Handyman.AspNetCore.ETags
 {
@@ -11,23 +13,34 @@ namespace Handyman.AspNetCore.ETags
     {
         public static IServiceCollection AddETags(this IServiceCollection services)
         {
-            if (services.Any(x => x.ServiceType == typeof(Sentinel)))
-                throw new InvalidOperationException("ETags has already been added.");
+            services.TryAddSingleton<IETagComparer, ETagComparer>();
+            services.TryAddSingleton<IETagConverter, ETagConverter>();
+            services.TryAddSingleton<IETagValidator, ETagValidator>();
+            services.TryAddSingleton<ETagModelBinder>();
+            services.TryAddSingleton<ETagValidatorMiddleware>();
+            services.TryAddSingleton<PreconditionFailedExceptionHandlerMiddleware>();
+            services.TryAddSingleton<ProblemDetailsResponseWriter>();
 
-            services.AddTransient<Sentinel>();
-            services.AddSingleton<IETagComparer, ETagComparer>();
-            services.AddSingleton<IETagConverter, ETagConverter>();
-            services.AddSingleton<IETagValidator, ETagValidator>();
-            services.AddSingleton<IActionDescriptorProvider, ETagActionDescriptorProvider>();
-            services.AddSingleton<ETagModelBinder>();
-            services.AddSingleton<ETagValidatorMiddleware>();
-            services.AddSingleton<PreconditionFailedExceptionHandlerMiddleware>();
-            services.AddSingleton<ProblemDetailsResponseWriter>();
-            services.AddControllers(options => options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider()));
+            services.AddControllers(options =>
+            {
+                if (options.Conventions.OfType<NoOpConvention>().Any() == false)
+                {
+                    options.Conventions.Add(new NoOpConvention());
+                    options.Conventions.Add(new ETagParameterConvention());
+                }
+
+                if (options.ModelBinderProviders.OfType<ETagModelBinderProvider>().Any() == false)
+                {
+                    options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider());
+                }
+            });
 
             return services;
         }
 
-        private class Sentinel { }
+        public class NoOpConvention : IApplicationModelConvention
+        {
+            public void Apply(ApplicationModel application) { }
+        }
     }
 }

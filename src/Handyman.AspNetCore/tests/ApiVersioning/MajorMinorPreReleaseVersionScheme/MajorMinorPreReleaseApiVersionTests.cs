@@ -1,4 +1,4 @@
-﻿using Handyman.AspNetCore.ApiVersioning.MajorMinorPreReleaseVersionScheme;
+﻿using Handyman.AspNetCore.ApiVersioning.Internals.MajorMinorPreReleaseVersionScheme;
 using Shouldly;
 using System;
 using System.Collections.Generic;

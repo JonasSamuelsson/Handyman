@@ -1,4 +1,5 @@
 using Handyman.AspNetCore.ApiVersioning;
+using Handyman.AspNetCore.ApiVersioning.Internals;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Linq;

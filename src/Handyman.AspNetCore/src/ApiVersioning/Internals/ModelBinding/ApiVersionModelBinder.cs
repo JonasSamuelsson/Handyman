@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Handyman.AspNetCore.ApiVersioning.ModelBinding
+namespace Handyman.AspNetCore.ApiVersioning.Internals.ModelBinding
 {
     internal class ApiVersionModelBinder : IModelBinder
     {

@@ -1,6 +1,6 @@
-﻿namespace Handyman.AspNetCore.ApiVersioning.Abstractions
+﻿namespace Handyman.AspNetCore.ApiVersioning.Internals
 {
-    internal class ApiVersionDescriptor
+    internal class ApiVersionMetadata
     {
         public IApiVersion[] Versions { get; set; }
         public bool IsOptional { get; set; }
