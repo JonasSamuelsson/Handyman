@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 3.3.0 - 2021-05-19
+
+### Added
+
+* Added `IETagUtilities` so only a single dependency is required to use both `IETagComparer` & `IETagConverter`.
+
 ## 3.2.0
 
 ### Added

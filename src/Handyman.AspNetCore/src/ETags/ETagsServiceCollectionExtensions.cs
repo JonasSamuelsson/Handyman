@@ -17,6 +17,7 @@ namespace Handyman.AspNetCore.ETags
             services.AddTransient<Sentinel>();
             services.AddSingleton<IETagComparer, ETagComparer>();
             services.AddSingleton<IETagConverter, ETagConverter>();
+            services.AddSingleton<IETagUtilities, ETagUtilities>();
             services.AddSingleton<IETagValidator, ETagValidator>();
             services.AddSingleton<IActionDescriptorProvider, ETagActionDescriptorProvider>();
             services.AddSingleton<ETagModelBinder>();
