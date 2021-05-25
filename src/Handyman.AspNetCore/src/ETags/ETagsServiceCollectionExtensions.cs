@@ -1,8 +1,9 @@
-﻿using Handyman.AspNetCore.ETags.Middleware;
-using Handyman.AspNetCore.ETags.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Handyman.AspNetCore.ETags.Internals;
+using Handyman.AspNetCore.ETags.Internals.AppModel;
+using Handyman.AspNetCore.ETags.Internals.Middleware;
+using Handyman.AspNetCore.ETags.Internals.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Linq;
 
 namespace Handyman.AspNetCore.ETags
@@ -11,24 +12,35 @@ namespace Handyman.AspNetCore.ETags
     {
         public static IServiceCollection AddETags(this IServiceCollection services)
         {
-            if (services.Any(x => x.ServiceType == typeof(Sentinel)))
-                throw new InvalidOperationException("ETags has already been added.");
-
-            services.AddTransient<Sentinel>();
-            services.AddSingleton<IETagComparer, ETagComparer>();
-            services.AddSingleton<IETagConverter, ETagConverter>();
-            services.AddSingleton<IETagUtilities, ETagUtilities>();
-            services.AddSingleton<IETagValidator, ETagValidator>();
-            services.AddSingleton<IActionDescriptorProvider, ETagActionDescriptorProvider>();
-            services.AddSingleton<ETagModelBinder>();
-            services.AddSingleton<ETagValidatorMiddleware>();
-            services.AddSingleton<PreconditionFailedExceptionHandlerMiddleware>();
-            services.AddSingleton<ProblemDetailsResponseWriter>();
-            services.AddControllers(options => options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider()));
+            if (services.All(x => x.ServiceType != typeof(MarkerService)))
+            {
+                AddETagServices(services);
+            }
 
             return services;
         }
 
-        private class Sentinel { }
+        private static void AddETagServices(IServiceCollection services)
+        {
+            services.AddTransient<MarkerService>();
+
+            services.TryAddSingleton<IETagComparer, ETagComparer>();
+            services.TryAddSingleton<IETagConverter, ETagConverter>();
+            services.TryAddSingleton<IETagUtilities, ETagUtilities>();
+            services.TryAddSingleton<IETagValidator, ETagValidator>();
+
+            services.AddSingleton<ETagModelBinder>();
+            services.AddSingleton<ETagValidatorMiddleware>();
+            services.AddSingleton<PreconditionFailedExceptionHandlerMiddleware>();
+            services.AddSingleton<ProblemDetailsResponseWriter>();
+
+            services.AddControllers(options =>
+            {
+                options.Conventions.Add(new ETagParameterConvention());
+                options.ModelBinderProviders.Insert(0, new ETagModelBinderProvider());
+            });
+        }
+
+        private class MarkerService { }
     }
 }

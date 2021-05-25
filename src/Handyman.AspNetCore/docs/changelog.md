@@ -1,5 +1,15 @@
 # Handyman.AspNetCore changelog
 
+## 3.4.0 - 2021-05-25
+
+### Added
+
+* Added `FromIfMatchHeaderAttribute` & `FromIfNoneMatchHeaderAttribute` making it possible to use custom etag action method parameter names.
+
+### Remove
+
+* Removed `netcoreapp3.0` support.
+
 ## 3.3.0 - 2021-05-19
 
 ### Added

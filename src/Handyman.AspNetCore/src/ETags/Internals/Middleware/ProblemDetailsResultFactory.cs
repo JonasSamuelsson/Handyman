@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Handyman.AspNetCore.ETags
+namespace Handyman.AspNetCore.ETags.Internals.Middleware
 {
     internal static class ProblemDetailsResultFactory
     {

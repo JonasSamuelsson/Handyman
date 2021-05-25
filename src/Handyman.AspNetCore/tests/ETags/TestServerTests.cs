@@ -38,6 +38,11 @@ namespace Handyman.AspNetCore.Tests.ETags
         [InlineData("ifNoneMatchETag", "if-none-match", "W/\"fail\"", "W/\"pass\"", HttpStatusCode.PreconditionFailed)]
         [InlineData("ifNoneMatchETag", "if-none-match", "W/\"pass\"", "W/\"pass\"", HttpStatusCode.OK)]
         [InlineData("ifNoneMatchETag", "if-none-match", "*", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("custom", null, null, null, HttpStatusCode.PreconditionRequired)]
+        [InlineData("custom", "if-match", "fail", "W/\"pass\"", HttpStatusCode.BadRequest)]
+        [InlineData("custom", "if-match", "W/\"fail\"", "W/\"pass\"", HttpStatusCode.PreconditionFailed)]
+        [InlineData("custom", "if-match", "W/\"pass\"", "W/\"pass\"", HttpStatusCode.OK)]
+        [InlineData("custom", "if-match", "*", "W/\"pass\"", HttpStatusCode.OK)]
         public async Task ShouldTest(string path, string headerName, string headerValue, string expectedETag, HttpStatusCode expectedStatusCode)
         {
             var builder = new HostBuilder()
@@ -84,27 +89,33 @@ namespace Handyman.AspNetCore.Tests.ETags
         }
 
         [HttpGet("ifMatch")]
-        public void IfMatch(string ifMatch, string expectedETag, [FromServices]IETagComparer comparer)
+        public void IfMatch(string ifMatch, string expectedETag, [FromServices] IETagComparer comparer)
         {
             Compare(ifMatch, expectedETag, comparer);
         }
 
         [HttpGet("ifMatchETag")]
-        public void IfMatchETag(string ifMatchETag, string expectedETag, [FromServices]IETagComparer comparer)
+        public void IfMatchETag(string ifMatchETag, string expectedETag, [FromServices] IETagComparer comparer)
         {
             Compare(ifMatchETag, expectedETag, comparer);
         }
 
         [HttpGet("ifNoneMatch")]
-        public void IfNoneMatch(string ifNoneMatch, string expectedETag, [FromServices]IETagComparer comparer)
+        public void IfNoneMatch(string ifNoneMatch, string expectedETag, [FromServices] IETagComparer comparer)
         {
             Compare(ifNoneMatch, expectedETag, comparer);
         }
 
         [HttpGet("ifNoneMatchETag")]
-        public void IfNoneMatchETag(string ifNoneMatchETag, string expectedETag, [FromServices]IETagComparer comparer)
+        public void IfNoneMatchETag(string ifNoneMatchETag, string expectedETag, [FromServices] IETagComparer comparer)
         {
             Compare(ifNoneMatchETag, expectedETag, comparer);
+        }
+
+        [HttpGet("custom")]
+        public void Custom([FromIfMatchHeader] string input, string expectedETag, [FromServices] IETagComparer comparer)
+        {
+            Compare(input, expectedETag, comparer);
         }
 
         private static void Compare(string headerETag, string expectedETag, IETagComparer comparer)

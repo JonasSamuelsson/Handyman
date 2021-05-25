@@ -1,4 +1,4 @@
-﻿using Handyman.AspNetCore.ETags.Middleware;
+﻿using Handyman.AspNetCore.ETags.Internals.Middleware;
 using Microsoft.AspNetCore.Builder;
 
 namespace Handyman.AspNetCore.ETags
