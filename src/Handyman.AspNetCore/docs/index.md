@@ -6,7 +6,7 @@ This package provides api versioning & e-tag support for asp.net core 3.x applic
 
 ## Api versioning
 
-Api versioning is enabled by adding the `ApiVersionAttribute` at the controller or action level.   It integrates with the asp.net core routing engine so it's possible to declare multiple endpoint with the same http method & route template as long as they have different api versions. The requested api version is read from a `api-version` query string parameter but can be customized. Multiple versioning schemes are supported, `Major.Minor-PreRelease` and `Literal` are provided out of the box with `Major.Minor-PreRelease` as the default but with the ability to provide a custom implementation if required.  
+Api versioning is enabled by adding the `ApiVersionAttribute` at the action method level.   It integrates with the asp.net core routing engine so it's possible to declare multiple endpoint with the same http method & route template as long as they have different api versions. The requested api version is read from a `api-version` query string parameter but can be customized. Multiple versioning schemes are supported, `Major.Minor-PreRelease` and `Literal` are provided out of the box with `Major.Minor-PreRelease` as the default but with the ability to provide a custom implementation if required.  
 
 ### Usage
 
@@ -182,13 +182,24 @@ public void Configure(IApplicationBuilder app)
 
 :information_source: The e-tags middleware must be added after any exception handling middleware (like [Hellang.Middleware.ProblemDetails](https://www.nuget.org/packages/Hellang.Middleware.ProblemDetails/)) to work.
 
+### Validate http request e-tag header format
+
+Http request headers `If-Match` or `If-None-Match` will automatically be inspected and if it isn't a valid e-tag (wildcards are supported), it will respond with `400 Bad request`.
+
 ### Access request e-tag
 
-Add a `string` parameter named `ifMatch`, `ifMatchETag`, `ifNoneMatch` or `ifNoneMatchETag` to read from the corresponding header.
+Action method `string` parameters named `ifMatch`, `ifMatchETag`, `ifNoneMatch`, `ifNoneMatchETag` or decorated with `FromIfMatchHeaderAttribute` or `FromIfNoneMatchHeaderAttribute` will be populated with the value from the corresponding header.  
+If the request doesn't contain a matching e-tag header the service will respond with a `428 Precondition required`.
 
 ``` csharp
 [HttpPut]
-public void Store(Payload payload, string ifMatch)
+public void Store(Payload payload, string ifMatchETag)
+{
+    ...
+}
+
+[HttpPut]
+public void Store(Payload payload, [FromIfMatchHeader] string eTag)
 {
     ...
 }
@@ -196,41 +207,42 @@ public void Store(Payload payload, string ifMatch)
 
 ### Compare e-tags
 
-Use `IETagComparer` to see if the incoming e-tag is up to date.
+Use `IETagUtilities.Comparer` to see if the incoming e-tag is up to date.  
+The `EnsureEquals` methods will throw a `PreconditionFailedException` if the values don't match. The exception will be caught by the middleware and converted to a `412 Precondition failed` response.
 
 ``` csharp
 public class Repository
 {
     private readonly DbContext _dbContext;
-    private readonly IETagComparer _eTagComparer;
+    private readonly IETagUtilities _eTagUtilities;
 
-    public Repository(DbContext dbContext, IETagComparer eTagComparer)
+    public Repository(DbContext dbContext, IETagUtilities eTagUtilities)
     {
         _dbContext = dbContext;
-        _eTagComparer = eTagComparer;
+        _eTagUtilities = eTagUtilities;
     }
 
-    public async Task SaveItem(int id, Item item, string ifMatchETag)
+    public async Task UpdateItem(Item item, string eTag, CancellationToken cancellationToken)
     {
-        var dbItem = await _dbContext.Items.SingleAsync(x => x.Id == id);
+        var dbItem = await _dbContext.Items.SingleAsync(x => x.Id == item.Id, cancellationToken);
 
-        _eTagComparer.EnsureEquals(ifMatchETag, item.RowVersion);
+        _eTagUtilities.Comparer.EnsureEquals(eTag, item.RowVersion);
 
         // update dbItem from item
 
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
 ```
 
-### Generate e-tag string from byte array (sql server row version).
+### Generate e-tags
 
-Use `IETagConverter` to convert byte arrays to string.
+Use `IETagUtilities.Converter` to convert byte arrays (sql server _row versions_) to string.
 
 ``` csharp
-var converter = serviceProvider.GetRequiredService<IETagConverter>();
+var eTagUtilities = serviceProvider.GetRequiredService<IETagUtilities>();
 byte[] bytes = ...;
-string eTag = converter.FromByteArray(bytes);
+string eTag = eTagUtilities.Converter.FromByteArray(bytes);
 ```
 
 ### Write response e-tag header
