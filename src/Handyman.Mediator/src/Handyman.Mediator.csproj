@@ -10,7 +10,7 @@
 
    <PropertyGroup>
       <PackageId>Handyman.Mediator</PackageId>
-      <Version>11.2.0</Version>
+      <Version>11.2.1-pipeline-concurrency.2108201520</Version>
       <Authors>Jonas Samuelsson</Authors>
       <Company />
       <Product>Handyman</Product>
