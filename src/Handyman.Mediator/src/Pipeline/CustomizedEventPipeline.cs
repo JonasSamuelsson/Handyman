@@ -20,12 +20,13 @@ namespace Handyman.Mediator.Pipeline
 
             foreach (var pipelineBuilder in PipelineBuilders)
             {
-                eventContext.CancellationToken.ThrowIfCancellationRequested();
                 await pipelineBuilder.Execute(pipelineBuilderContext, eventContext).WithGloballyConfiguredAwait();
             }
 
             eventContext.CancellationToken.ThrowIfCancellationRequested();
+
             var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? MediatorDefaults.EventHandlerExecutionStrategy;
+
             await Execute(filters, handlers, handlerExecutionStrategy, eventContext).WithGloballyConfiguredAwait();
         }
     }

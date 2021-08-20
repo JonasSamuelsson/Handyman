@@ -34,12 +34,13 @@ namespace Handyman.Mediator.Pipeline
         {
             private static readonly List<IRequestPipelineBuilder> AttributePipelineBuilders = typeof(TRequest).GetCustomAttributes<RequestPipelineBuilderAttribute>()
                 .Cast<IRequestPipelineBuilder>()
+                .OrderBy(PipelineBuilderComparer.GetOrder)
                 .ToListOptimized();
             private static readonly RequestPipeline<TRequest, TResponse> DefaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
 
             internal override object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)
             {
-                var noPipelineBuilders = AttributePipelineBuilders.Count == 0 && options.EventPipelineBuilders.Count == 0;
+                var noPipelineBuilders = AttributePipelineBuilders.Count == 0 && options.RequestPipelineBuilders.Count == 0;
 
                 if (noPipelineBuilders)
                 {
@@ -48,22 +49,22 @@ namespace Handyman.Mediator.Pipeline
 
                 List<IRequestPipelineBuilder>? pipelineBuilders;
 
-                if (AttributePipelineBuilders.Count == 0)
-                {
-                    pipelineBuilders = options.RequestPipelineBuilders;
-                }
-                else if (options.RequestPipelineBuilders.Count == 0)
+                if (options.RequestPipelineBuilders.Count == 0)
                 {
                     pipelineBuilders = AttributePipelineBuilders;
+                }
+                else if (AttributePipelineBuilders.Count == 0)
+                {
+                    pipelineBuilders = options.RequestPipelineBuilders.ToList();
+                    pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
                 }
                 else
                 {
                     pipelineBuilders = new List<IRequestPipelineBuilder>();
                     pipelineBuilders.AddRange(AttributePipelineBuilders);
                     pipelineBuilders.AddRange(options.RequestPipelineBuilders);
+                    pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
                 }
-
-                pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
 
                 return new CustomizedRequestPipeline<TRequest, TResponse>()
                 {

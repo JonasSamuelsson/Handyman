@@ -7,7 +7,7 @@
             return GetOrder(x).CompareTo(GetOrder(y));
         }
 
-        private static int GetOrder(object o)
+        internal static int GetOrder(object o)
         {
             return (o as IOrderedPipelineBuilder)?.Order ?? MediatorDefaults.Order.Default;
         }

@@ -22,30 +22,30 @@ namespace Handyman.Mediator.Pipeline
 
             foreach (var pipelineBuilder in PipelineBuilders)
             {
-                await pipelineBuilder.Execute(pipelineBuilderContext, requestContext);
+                await pipelineBuilder.Execute(pipelineBuilderContext, requestContext).WithGloballyConfiguredAwait();
             }
 
-            AssertThereIsSingleHandlerToExecute(requestContext, pipelineBuilderContext.Handlers);
+            AssertThereIsSingleHandlerToExecute(pipelineBuilderContext.Handlers);
 
             requestContext.CancellationToken.ThrowIfCancellationRequested();
 
             var filters = pipelineBuilderContext.Filters;
             var handler = pipelineBuilderContext.Handlers[0];
-            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ?? MediatorDefaults.RequestHandlerExecutionStrategy;
-
+            var handlerExecutionStrategy = pipelineBuilderContext.HandlerExecutionStrategy ??
+                                           MediatorDefaults.RequestHandlerExecutionStrategy;
             return await Execute(filters, handler, handlerExecutionStrategy, requestContext).WithGloballyConfiguredAwait();
         }
 
-        private static void AssertThereIsSingleHandlerToExecute(RequestContext<TRequest> requestContext, List<IRequestHandler<TRequest, TResponse>> handlers)
+        private static void AssertThereIsSingleHandlerToExecute(List<IRequestHandler<TRequest, TResponse>> handlers)
         {
             if (handlers.Count == 0)
             {
-                throw new InvalidOperationException($"No handlers for request of type '{requestContext.Request.GetType().FullName}'.");
+                throw new InvalidOperationException($"No handlers for request of type '{typeof(TRequest).FullName}'.");
             }
 
             if (handlers.Count > 1)
             {
-                throw new InvalidOperationException($"Multiple handlers for request of type '{requestContext.Request.GetType().FullName}'.");
+                throw new InvalidOperationException($"Multiple handlers for request of type '{typeof(TRequest).FullName}'.");
             }
         }
     }

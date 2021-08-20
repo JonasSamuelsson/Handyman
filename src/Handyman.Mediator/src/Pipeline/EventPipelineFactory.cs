@@ -32,6 +32,7 @@ namespace Handyman.Mediator.Pipeline
         {
             private static readonly List<IEventPipelineBuilder> AttributePipelineBuilders = typeof(TEvent).GetCustomAttributes<EventPipelineBuilderAttribute>()
                 .Cast<IEventPipelineBuilder>()
+                .OrderBy(PipelineBuilderComparer.GetOrder)
                 .ToListOptimized();
             private static readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(MediatorDefaults.EventHandlerExecutionStrategy);
 
@@ -51,22 +52,22 @@ namespace Handyman.Mediator.Pipeline
 
                 List<IEventPipelineBuilder>? pipelineBuilders;
 
-                if (AttributePipelineBuilders.Count == 0)
-                {
-                    pipelineBuilders = options.EventPipelineBuilders;
-                }
-                else if (options.EventPipelineBuilders.Count == 0)
+                if (options.EventPipelineBuilders.Count == 0)
                 {
                     pipelineBuilders = AttributePipelineBuilders;
+                }
+                else if (AttributePipelineBuilders.Count == 0)
+                {
+                    pipelineBuilders = options.EventPipelineBuilders;
+                    pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
                 }
                 else
                 {
                     pipelineBuilders = new List<IEventPipelineBuilder>();
                     pipelineBuilders.AddRange(AttributePipelineBuilders);
                     pipelineBuilders.AddRange(options.EventPipelineBuilders);
+                    pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
                 }
-
-                pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
 
                 return new CustomizedEventPipeline<TEvent>
                 {
