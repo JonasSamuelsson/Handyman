@@ -58,7 +58,7 @@ namespace Handyman.Mediator.Pipeline
                 }
                 else if (AttributePipelineBuilders.Count == 0)
                 {
-                    pipelineBuilders = options.EventPipelineBuilders;
+                    pipelineBuilders = options.EventPipelineBuilders.ToList();
                     pipelineBuilders.Sort(PipelineBuilderComparer.Compare);
                 }
                 else
