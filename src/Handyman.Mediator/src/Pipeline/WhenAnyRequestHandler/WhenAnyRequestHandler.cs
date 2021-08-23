@@ -44,7 +44,7 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
 
                 if (exceptions != null)
                 {
-                    await HandleExceptions(exceptions, cancellationToken);
+                    await HandleExceptions(exceptions, cancellationToken).WithGloballyConfiguredAwait();
                 }
 
                 cts.Cancel();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Handyman.Mediator.Pipeline;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
@@ -22,11 +23,11 @@ namespace Handyman.Mediator
             return _mediator.Publish((IEvent)@event, cancellationToken);
         }
 
-        public async Task<object?> Send(object request, CancellationToken cancellationToken)
+        public Task<object?> Send(object request, CancellationToken cancellationToken)
         {
             var requestType = request.GetType();
             var dynamicSender = DynamicSenders.GetOrAdd(requestType, GetDynamicSender);
-            return await dynamicSender.Send(request, _mediator, cancellationToken);
+            return dynamicSender.Send(request, _mediator, cancellationToken);
         }
 
         private static DynamicSender GetDynamicSender(Type requestType)
@@ -61,7 +62,7 @@ namespace Handyman.Mediator
         {
             internal override async Task<object?> Send(object request, ISender sender, CancellationToken cancellationToken)
             {
-                return await sender.Send((IRequest<TResponse>)request, cancellationToken);
+                return await sender.Send((IRequest<TResponse>)request, cancellationToken).WithGloballyConfiguredAwait();
             }
         }
     }
