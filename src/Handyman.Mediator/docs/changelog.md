@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 11.2.1 - 2021-08-23
+
+* Fixed `request`/`event` pipeline builder concurrency issue.
+
 ## 10.0.0 - 2020-09-20
 
 ### Added
