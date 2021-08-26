@@ -1,5 +1,9 @@
 # Handyman.AspNetCore changelog
 
+## 3.4.1 - 2021-08-26
+
+* E-tag converter fix.
+
 ## 3.4.0 - 2021-05-25
 
 ### Added

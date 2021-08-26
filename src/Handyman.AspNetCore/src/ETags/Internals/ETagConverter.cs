@@ -10,7 +10,7 @@ namespace Handyman.AspNetCore.ETags.Internals
             if (bytes == null) throw new ArgumentNullException();
             if (bytes.Length == 0) throw new ArgumentException();
 
-            var strings = bytes.Select(x => x.ToString("x2"));
+            var strings = bytes.SkipWhile(x => x == 0).Select(x => x.ToString("x2"));
 
             return $"W/\"{string.Join("", strings)}\"";
         }
