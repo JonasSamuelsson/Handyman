@@ -100,11 +100,13 @@ namespace Handyman.Extensions
             return source as IReadOnlyList<T> ?? source.ToList();
         }
 
+#if NETSTANDARD2_0
         public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> source, int count)
         {
             var list = source.ToReadOnlyList();
             return list.Take(list.Count - count);
         }
+#endif
 
         public static IEnumerable<T> SkipLastWhile<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
@@ -115,11 +117,13 @@ namespace Handyman.Extensions
             return list.SkipLast(i - 1);
         }
 
+#if NETSTANDARD2_0
         public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int count)
         {
             var list = source.ToReadOnlyList();
             return list.Skip(list.Count - count);
         }
+#endif
 
         public static IEnumerable<T> TakeLastWhile<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {

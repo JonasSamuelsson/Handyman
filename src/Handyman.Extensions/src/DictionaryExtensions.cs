@@ -5,17 +5,19 @@ namespace Handyman.Extensions
 {
     public static class DictionaryExtensions
     {
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+#if NETSTANDARD2_0
+        public static TValue GetValueOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
         {
             return dictionary.GetValueOrDefault(key, default(TValue));
         }
 
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue @default)
+        public static TValue GetValueOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue @default)
         {
             return dictionary.GetValueOrDefault(key, () => @default);
         }
+#endif
 
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> factory)
+        public static TValue GetValueOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> factory)
         {
             TValue value;
             return dictionary.TryGetValue(key, out value) ? value : factory();
