@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Handyman.DataContractValidator.Enums
@@ -27,7 +28,7 @@ namespace Handyman.DataContractValidator.Enums
         {
             if (dataContract is Enum @enum)
             {
-                validator = new EnumValidator(@enum.EnumKind, @enum.EnumValues);
+                validator = new EnumValidator(@enum);
                 return true;
             }
 
@@ -42,13 +43,16 @@ namespace Handyman.DataContractValidator.Enums
 
                 if (type.IsEnum)
                 {
+                    var values = System.Enum.GetValues(type).Cast<long>();
+                    var kvps = values.Select(i => new KeyValuePair<long, string>(i, System.Enum.GetName(type, i)));
                     var isFlags = type.GetCustomAttributes(typeof(FlagsAttribute), false).Any();
 
-                    var enumKind = EnumKind.Default
-                                   | (isFlags ? EnumKind.Flags : EnumKind.Default)
-                                   | (isNullable ? EnumKind.Nullable : EnumKind.Default);
-                    var enumValues = System.Enum.GetValues(type).Cast<long>();
-                    validator = new EnumValidator(enumKind, enumValues);
+                    validator = new EnumValidator(new Enum(kvps)
+                    {
+                        Flags = isFlags,
+                        Nullable = isNullable
+                    });
+
                     return true;
                 }
             }

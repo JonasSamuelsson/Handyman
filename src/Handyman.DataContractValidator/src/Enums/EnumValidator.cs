@@ -6,13 +6,11 @@ namespace Handyman.DataContractValidator.Enums
 {
     internal class EnumValidator : IValidator
     {
-        private readonly EnumKind _enumKind;
-        private readonly IEnumerable<string> _expectedValues;
+        private readonly Enum _enum;
 
-        public EnumValidator(EnumKind enumKind, IEnumerable<long> values)
+        public EnumValidator(Enum @enum)
         {
-            _enumKind = enumKind;
-            _expectedValues = values.Select(x => x.ToString()).ToList();
+            _enum = @enum;
         }
 
         public string GetTypeName(ValidationContext context)
@@ -31,14 +29,44 @@ namespace Handyman.DataContractValidator.Enums
                 return;
             }
 
-            var underlyingType = System.Enum.GetUnderlyingType(enumType);
-            var actualValues = System.Enum.GetValues(enumType).Cast<object>().Select(x => Convert.ChangeType(x, underlyingType).ToString()).ToList();
+            var actualValues = System.Enum.GetValues(enumType)
+                .Cast<object>()
+                .ToDictionary(x => (long)Convert.ChangeType(x, typeof(long)), x => System.Enum.GetName(enumType, x));
 
-            if (actualValues.Except(_expectedValues).Concat(_expectedValues.Except(actualValues)).Any())
+            var expectedCount = _enum.Values.Count;
+
+            if (actualValues.Count != expectedCount)
             {
-                var expectedValuesString = string.Join(",", _expectedValues);
-                var actualValuesString = string.Join(",", actualValues);
-                context.AddError($"enum values mismatch, expected [{expectedValuesString}] but found [{actualValuesString}]");
+                AddError(context, actualValues);
+                return;
+            }
+
+            if (!_enum.HasIds)
+            {
+                if (_enum.Names.Intersect(actualValues.Values, StringComparer.OrdinalIgnoreCase).Count() != expectedCount)
+                {
+                    AddError(context, actualValues);
+                }
+
+                return;
+            }
+
+            if (!_enum.HasNames)
+            {
+                if (_enum.Ids.Intersect(actualValues.Keys).Count() != expectedCount)
+                {
+                    AddError(context, actualValues);
+                }
+
+                return;
+            }
+
+            var actual = actualValues.Select(x => $"{x.Key}/{x.Value}");
+            var expected = _enum.Values.Select(x => $"{x.Id}/{x.Name}");
+
+            if (actual.Intersect(expected, StringComparer.OrdinalIgnoreCase).Count() != expectedCount)
+            {
+                AddError(context, actualValues);
             }
         }
 
@@ -68,15 +96,39 @@ namespace Handyman.DataContractValidator.Enums
         {
             var strings = new List<string>();
 
-            if (_enumKind.HasFlag(EnumKind.Nullable))
+            if (_enum.Nullable)
                 strings.Add("nullable");
 
-            if (_enumKind.HasFlag(EnumKind.Flags))
+            if (_enum.Flags)
                 strings.Add("flags");
 
             strings.Add("enum");
 
             return string.Join(" ", strings);
+        }
+
+        private void AddError(ValidationContext context, Dictionary<long, string> actualValues)
+        {
+            var actual = "";
+            var expected = "";
+
+            if (!_enum.HasIds)
+            {
+                actual = string.Join(",", actualValues.Values);
+                expected = string.Join(",", _enum.Names);
+            }
+            else if (!_enum.HasNames)
+            {
+                actual = string.Join(",", actualValues.Keys);
+                expected = string.Join(",", _enum.Ids);
+            }
+            else
+            {
+                actual = string.Join(",", actualValues.Select(x => $"{x.Key}/{x.Value}"));
+                expected = string.Join(",", _enum.Values.Select(x => $"{x.Id}/{x.Name}"));
+            }
+
+            context.Errors.Add($"enum values mismatch, expected [{expected}] but found [{actual}].");
         }
     }
 }
