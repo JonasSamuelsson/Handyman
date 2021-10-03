@@ -1,23 +1,13 @@
-﻿using System;
+﻿using Handyman.DataContractValidator.TypeInfoResolvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using ValidationContext = Handyman.DataContractValidator.Validation.ValidationContext;
 
 namespace Handyman.DataContractValidator
 {
     public class DataContractValidator
     {
-        private readonly Dictionary<string, object> _dataContracts = new Dictionary<string, object>();
-
-        public void AddDataContract(string key, object dataContract)
-        {
-            _dataContracts.Add(key, dataContract);
-        }
-
-        public object GetDataContract(string key)
-        {
-            return new DataContractResolver(() => _dataContracts[key]);
-        }
-
         public void Validate(Type type, object dataContract)
         {
             if (Validate(type, dataContract, out var errors))
@@ -28,11 +18,18 @@ namespace Handyman.DataContractValidator
 
         public bool Validate(Type type, object dataContract, out IEnumerable<string> errors)
         {
-            var context = new ValidationContext();
+            var resolverContext = new TypeInfoResolverContext();
 
-            errors = context.Validate(type, dataContract);
+            var actual = resolverContext.GetTypeInfo(type);
+            var expected = resolverContext.GetTypeInfo(dataContract);
 
-            return !errors.Any();
+            var validationContext = new ValidationContext();
+
+            validationContext.Validate(actual, expected);
+
+            errors = validationContext.Errors;
+
+            return !validationContext.Errors.Any();
         }
     }
 }
