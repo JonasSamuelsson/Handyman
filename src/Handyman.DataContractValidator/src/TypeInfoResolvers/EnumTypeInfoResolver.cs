@@ -35,76 +35,27 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 
                 var isFlags = type.GetCustomAttributes<FlagsAttribute>().Any();
 
-                var ids = System.Enum.GetValues(type)
+                var values = System.Enum.GetValues(type)
                     .Cast<object>()
-                    .Select(x => (long?)Convert.ChangeType(x, typeof(long)))
+                    .Select(x => (long)Convert.ChangeType(x, typeof(long)))
                     .OrderBy(x => x)
-                    .ToList();
+                    .ToDictionary(x => x, x => System.Enum.GetName(type, x));
 
-                var names = ids
-                    .Select(x => System.Enum.GetName(type, x))
-                    .ToList();
-
-                typeInfo = CreateEnumTypeInfo(isFlags, isNullable, ids, names);
+                typeInfo = CreateEnumTypeInfo(isFlags, isNullable, values);
                 return true;
             }
 
             if (o is Enum @enum)
             {
-                var ids = @enum.HasIds ? @enum.Ids.Cast<long?>().ToList() : null;
-                var names = @enum.HasNames ? @enum.Names.ToList() : null;
-                typeInfo = CreateEnumTypeInfo(@enum.Flags, @enum.Nullable, ids, names);
+                typeInfo = CreateEnumTypeInfo(@enum.Flags, @enum.Nullable, @enum.Values);
                 return true;
             }
 
             return false;
         }
 
-        private static EnumTypeInfo CreateEnumTypeInfo(bool isFlags, bool isNullable, IReadOnlyList<long?> ids, IReadOnlyList<string> names)
+        private static EnumTypeInfo CreateEnumTypeInfo(bool isFlags, bool isNullable, Dictionary<long, string> values)
         {
-            if (ids?.Any() != true && names?.Any() != true)
-            {
-                throw new InvalidOperationException("An enum must have ids and/or names specified.");
-            }
-
-            List<EnumTypeInfo.Value> values;
-
-            if (ids?.Any() != true)
-            {
-                values = names
-                    .Select(x => new EnumTypeInfo.Value
-                    {
-                        Id = null,
-                        Name = x
-                    })
-                    .ToList();
-            }
-            else if (names?.Any() != true)
-            {
-                values = ids
-                    .Select(x => new EnumTypeInfo.Value
-                    {
-                        Id = x,
-                        Name = null
-                    })
-                    .ToList();
-            }
-            else
-            {
-                if (ids.Count != names.Count)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                values = ids
-                    .Select((x, i) => new EnumTypeInfo.Value
-                    {
-                        Id = x,
-                        Name = names[i]
-                    })
-                    .ToList();
-            }
-
             return new EnumTypeInfo
             {
                 IsFlags = isFlags,
