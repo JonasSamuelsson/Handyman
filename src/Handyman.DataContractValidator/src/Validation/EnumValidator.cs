@@ -10,24 +10,8 @@ namespace Handyman.DataContractValidator.Validation
             var a = GetCoreTypeInfo(actual);
             var e = GetCoreTypeInfo(expected);
 
-            var hasIds = actual.HasIds && expected.HasIds;
-            var hasNames = actual.HasNames && expected.HasNames;
-
-            if (!hasIds)
-            {
-                a += $" [ {string.Join(", ", actual.Names.OrderBy(x => x))} ]";
-                e += $" [ {string.Join(", ", expected.Names.OrderBy(x => x))} ]";
-            }
-            else if (!hasNames)
-            {
-                a += $" [ {string.Join(", ", actual.Ids.OrderBy(x => x))} ]";
-                e += $" [ {string.Join(", ", expected.Ids.OrderBy(x => x))} ]";
-            }
-            else
-            {
-                a += $" [ {string.Join(", ", actual.Values.OrderBy(x => x.Id).Select(x => $"{x.Id}/{x.Name}"))} ]";
-                e += $" [ {string.Join(", ", expected.Values.OrderBy(x => x.Id).Select(x => $"{x.Id}/{x.Name}"))} ]";
-            }
+            a += $" [ {string.Join(", ", actual.Values.OrderBy(x => x.Key).Select(x => $"{x.Key}/{x.Value}"))} ]";
+            e += $" [ {string.Join(", ", expected.Values.OrderBy(x => x.Key).Select(x => $"{x.Key}/{x.Value}"))} ]";
 
             if (a == e)
             {

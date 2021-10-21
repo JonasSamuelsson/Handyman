@@ -1,10 +1,8 @@
 ﻿using Handyman.DataContractValidator.Model;
 using Handyman.DataContractValidator.TypeInfoResolvers;
-using Handyman.Extensions;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
@@ -12,110 +10,61 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
     public class EnumTypeInfoResolverTests
     {
         [Theory, MemberData(nameof(ShouldResolveEnumTypeInfosParams))]
-        public void ShouldResolveEnumTypeInfos(object o, bool isFlags, bool isNullable, IReadOnlyList<int> ids, IReadOnlyList<string> names)
+        public void ShouldResolveEnumTypeInfos(object o, bool isFlags, bool isNullable, Dictionary<long, string> values)
         {
             var typeInfo = new TypeInfoResolverContext().GetTypeInfo(o).ShouldBeOfType<EnumTypeInfo>();
 
             typeInfo.IsFlags.ShouldBe(isFlags);
             typeInfo.IsNullable.ShouldBe(isNullable);
 
-            typeInfo.HasIds.ShouldBe(ids != null);
-            typeInfo.HasNames.ShouldBe(names != null);
+            typeInfo.Values.Count.ShouldBe(values.Count);
 
-            (typeInfo.HasIds || typeInfo.HasNames).ShouldBeTrue();
-
-            if (!typeInfo.HasIds)
+            foreach (var kvp in values)
             {
-                typeInfo.Names.OrderBy(x => x).ShouldBe(names.OrderBy(x => x));
-            }
-            else if (!typeInfo.HasNames)
-            {
-                typeInfo.Ids.OrderBy(x => x).ShouldBe(ids.Select(x => (long)x).OrderBy(x => x));
-            }
-            else
-            {
-                if (ids.Count() != names.Count())
-                {
-                    throw new InvalidOperationException("Invalid test input, number of ids & names don't match.");
-                }
-
-                ids.ForEach((x, i) =>
-                {
-                    typeInfo.Ids.ElementAt(i).ShouldBe(x);
-                    typeInfo.Names.ElementAt(i).ShouldBe(names[i]);
-                });
+                typeInfo.Values[kvp.Key].ShouldBe(kvp.Value);
             }
         }
 
         public static IEnumerable<object[]> ShouldResolveEnumTypeInfosParams()
         {
-            var flagsIds = new[] { 0, 1, 2, 3 };
-            var flagsNames = new[] { "None", "One", "Two", "Both" };
-            var flagsValues = flagsIds
-                .Select((x, i) => new KeyValuePair<int, string>(x, flagsNames.ElementAt(i)))
-                .ToList();
+            var flagsValues = new Dictionary<long, string>
+            {
+                { 0, "None" },
+                { 1, "One" },
+                { 2, "Two" },
+                { 3, "Both" }
+            };
 
-            var valuesIds = new[] { 0, 1 };
-            var valuesNames = new[] { "Zero", "One" };
-            var valuesValues = valuesIds
-                .Select((x, i) => new KeyValuePair<int, string>(x, valuesNames.ElementAt(i)))
-                .ToList();
+            var regularValues = new Dictionary<long, string>
+            {
+                { 0, "Zero" },
+                { 1, "One" }
+            };
 
-            // object/type, isFlags, isNullable, ids, names
+            // object/type, isFlags, isNullable, values
 
-            yield return new object[] { typeof(Flags), true, false, flagsIds, flagsNames };
-            yield return new object[] { typeof(Flags?), true, true, flagsIds, flagsNames };
-            yield return new object[] { typeof(Values), false, false, valuesIds, valuesNames };
-            yield return new object[] { typeof(Values?), false, true, valuesIds, valuesNames };
+            yield return new object[] { typeof(Flags), true, false, flagsValues };
+            yield return new object[] { typeof(Flags?), true, true, flagsValues };
+
+            yield return new object[] { typeof(Regular), false, false, regularValues };
+            yield return new object[] { typeof(Regular?), false, true, regularValues };
 
             yield return new object[]
             {
-                new Enum(flagsIds) { Flags = true }, true, false, flagsIds, null
+                new Enum { Flags = true, Nullable = false, Values = flagsValues }, true, false, flagsValues
             };
             yield return new object[]
             {
-                new Enum(flagsIds) { Flags = true, Nullable = true}, true, true, flagsIds, null
-            };
-            yield return new object[]
-            {
-                new Enum(flagsNames) { Flags = true }, true, false, null, flagsNames
-            };
-            yield return new object[]
-            {
-                new Enum(flagsNames) { Flags = true, Nullable = true }, true, true, null, flagsNames
-            };
-            yield return new object[]
-            {
-                new Enum(flagsValues) { Flags = true }, true, false, flagsIds, flagsNames
-            };
-            yield return new object[]
-            {
-                new Enum(flagsValues) { Flags = true, Nullable = true }, true, true, flagsIds, flagsNames
+                new Enum { Flags = true, Nullable = true, Values = flagsValues }, true, true, flagsValues
             };
 
             yield return new object[]
             {
-                new Enum(valuesIds), false, false, valuesIds, null
+                new Enum { Flags = false, Nullable = false, Values = regularValues}, false, false, regularValues
             };
             yield return new object[]
             {
-                new Enum(valuesIds) { Nullable = true}, false, true, valuesIds, null
-            };
-            yield return new object[]
-            {
-                new Enum(valuesNames), false, false, null, valuesNames
-            };
-            yield return new object[]
-            {
-                new Enum(valuesNames) { Nullable = true }, false, true, null, valuesNames
-            };
-            yield return new object[]
-            {
-                new Enum(valuesValues), false, false, valuesIds, valuesNames
-            };
-            yield return new object[]
-            {
-                new Enum(valuesValues) { Nullable = true }, false, true, valuesIds, valuesNames
+                new Enum { Flags = false, Nullable = true, Values = regularValues }, false, true, regularValues
             };
         }
 
@@ -128,7 +77,7 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
             Both = One | Two
         }
 
-        private enum Values
+        private enum Regular
         {
             Zero = 0,
             One = 1

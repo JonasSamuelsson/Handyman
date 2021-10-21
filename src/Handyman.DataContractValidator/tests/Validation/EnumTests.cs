@@ -15,52 +15,64 @@ namespace Handyman.DataContractValidator.Tests.Validation
 
         public static IEnumerable<object[]> ShouldPassWhenTypesMatchParams()
         {
-            yield return new object[] { typeof(Flags), new Enum(0, 1, 2) { Flags = true } };
-            yield return new object[] { typeof(Flags), new Enum("Zero", "One", "Two") { Flags = true } };
             yield return new object[]
             {
-                typeof(Flags), new Enum(new Dictionary<int, string>
+                typeof(Flags), new Enum
                 {
-                    { 0, "Zero" },
-                    { 1, "One" },
-                    { 2, "Two" },
-                }) { Flags = true }
+                    Flags = true,
+                    Nullable = false,
+                    Values =
+                    {
+                        { 0, "Zero" },
+                        { 1, "One" },
+                        { 2, "Two" },
+                    }
+                }
             };
 
-            yield return new object[] { typeof(Flags?), new Enum(0, 1, 2) { Flags = true, Nullable = true } };
-            yield return new object[] { typeof(Flags?), new Enum("Zero", "One", "Two") { Flags = true, Nullable = true } };
             yield return new object[]
             {
-                typeof(Flags?), new Enum(new Dictionary<int, string>
+                typeof(Flags?), new Enum
                 {
-                    { 0, "Zero" },
-                    { 1, "One" },
-                    { 2, "Two" },
-                }) { Flags = true, Nullable = true}
+                    Flags = true,
+                    Nullable = true,
+                    Values =
+                    {
+                        { 0, "Zero" },
+                        { 1, "One" },
+                        { 2, "Two" },
+                    }
+                }
             };
 
-            yield return new object[] { typeof(Number), new Enum(0, 1, 2) };
-            yield return new object[] { typeof(Number), new Enum("Zero", "One", "Two") };
             yield return new object[]
             {
-                typeof(Number), new Enum(new Dictionary<int, string>
+                typeof(Number), new Enum
                 {
-                    { 0, "Zero" },
-                    { 1, "One" },
-                    { 2, "Two" },
-                })
+                    Flags = false,
+                    Nullable = false,
+                    Values =
+                    {
+                        { 0, "Zero" },
+                        { 1, "One" },
+                        { 2, "Two" },
+                    }
+                }
             };
 
-            yield return new object[] { typeof(Number?), new Enum(0, 1, 2) { Nullable = true } };
-            yield return new object[] { typeof(Number?), new Enum("Zero", "One", "Two") { Nullable = true } };
             yield return new object[]
             {
-                typeof(Number?), new Enum(new Dictionary<int, string>
+                typeof(Number?), new Enum
                 {
-                    { 0, "Zero" },
-                    { 1, "One" },
-                    { 2, "Two" },
-                }) { Nullable = true}
+                    Flags = false,
+                    Nullable = true,
+                    Values =
+                    {
+                        { 0, "Zero" },
+                        { 1, "One" },
+                        { 2, "Two" },
+                    }
+                }
             };
         }
 
@@ -72,19 +84,26 @@ namespace Handyman.DataContractValidator.Tests.Validation
 
         public static IEnumerable<object[]> ShouldFailWhenTypesDoNotMatchParams()
         {
-            yield return new object[] { typeof(int), new Enum(0) };
+            var values = new Dictionary<long, string>
+            {
+                { 0, "Zero" },
+                { 1, "One" },
+                { 2, "Two" },
+            };
 
-            yield return new object[] { typeof(Flags), new Enum(0, 1, 2) };
-            yield return new object[] { typeof(Flags), new Enum(0, 1, 2) { Flags = true, Nullable = true } };
+            yield return new object[] { typeof(int), new Enum() };
 
-            yield return new object[] { typeof(Flags?), new Enum(0, 1, 2) { Nullable = true } };
-            yield return new object[] { typeof(Flags?), new Enum(0, 1, 2) { Flags = true } };
+            yield return new object[] { typeof(Flags), new Enum { Flags = false, Nullable = false, Values = values } };
+            yield return new object[] { typeof(Flags), new Enum { Flags = true, Nullable = true, Values = values } };
 
-            yield return new object[] { typeof(Number), new Enum(0, 1, 2) { Flags = true } };
-            yield return new object[] { typeof(Number), new Enum(0, 1, 2) { Nullable = true } };
+            yield return new object[] { typeof(Flags?), new Enum { Flags = false, Nullable = true, Values = values } };
+            yield return new object[] { typeof(Flags?), new Enum { Flags = true, Nullable = false, Values = values } };
 
-            yield return new object[] { typeof(Number?), new Enum(0, 1, 2) { Flags = true, Nullable = true } };
-            yield return new object[] { typeof(Number?), new Enum(0, 1, 2) };
+            yield return new object[] { typeof(Number), new Enum { Flags = false, Nullable = true, Values = values } };
+            yield return new object[] { typeof(Number), new Enum { Flags = true, Nullable = false, Values = values } };
+
+            yield return new object[] { typeof(Number?), new Enum { Flags = false, Nullable = false, Values = values } };
+            yield return new object[] { typeof(Number?), new Enum { Flags = true, Nullable = true, Values = values } };
         }
 
         [Theory, MemberData(nameof(ShouldFailWhenValuesDoNotMatchParams))]
@@ -95,31 +114,35 @@ namespace Handyman.DataContractValidator.Tests.Validation
 
         public static IEnumerable<object[]> ShouldFailWhenValuesDoNotMatchParams()
         {
-            yield return new object[] { typeof(Number), new Enum(0, 1) };
-            yield return new object[] { typeof(Number), new Enum(0, 1, 2, 3) };
-
-            yield return new object[] { typeof(Number), new Enum("Zero", "One") };
-            yield return new object[] { typeof(Number), new Enum("Zero", "One", "Two", "three") };
-
-            yield return new object[] { typeof(Number), new Enum(new Dictionary<int,string>
+            yield return new object[]
             {
-                {0, "Zero"},
-                {1, "One"},
-            }) };
-            yield return new object[] { typeof(Number), new Enum(new Dictionary<int,string>
-            {
-                {0, "Two"},
-                {1, "One"},
-                {2, "Zero"},
-            }) };
-            yield return new object[] { typeof(Number), new Enum(new Dictionary<int,string>
-            {
-                {0, "Zero"},
-                {1, "One"},
-                {2, "Two"},
-                {3, "three"},
-            }) };
+                typeof(Number), new Enum
+                {
+                    Flags = false,
+                    Nullable = false,
+                    Values =
+                    {
+                        { 0, "Zero" },
+                        { 1, "One" }
+                    }
+                }
+            };
 
+            yield return new object[]
+            {
+                typeof(Number), new Enum
+                {
+                    Flags = false,
+                    Nullable = false,
+                    Values =
+                    {
+                        { 0, "Zero" },
+                        { 1, "One" },
+                        { 2, "Two" },
+                        { 3, "Three" }
+                    }
+                }
+            };
         }
 
         [Flags]
