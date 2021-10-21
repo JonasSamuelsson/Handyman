@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Handyman.DataContractValidator.Validation;
+using System;
 using System.Collections.Generic;
 
 namespace Handyman.DataContractValidator.Model
@@ -14,6 +15,11 @@ namespace Handyman.DataContractValidator.Model
                 var name = TypeNames.TryGetValue(Value, out var s) ? s : Value.Name;
                 return $"{name}{(IsNullable == true ? "?" : "")}";
             }
+        }
+
+        public override ITypeInfoValidator GetValidator()
+        {
+            return new ValueValidator();
         }
 
         private static readonly Dictionary<Type, string> TypeNames = new Dictionary<Type, string>

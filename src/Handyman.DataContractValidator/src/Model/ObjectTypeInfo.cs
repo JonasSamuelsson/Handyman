@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.DataContractValidator.Validation;
+using System.Collections.Generic;
 
 namespace Handyman.DataContractValidator.Model
 {
@@ -6,5 +7,10 @@ namespace Handyman.DataContractValidator.Model
     {
         public IEnumerable<PropertyInfo> Properties { get; set; }
         public override string TypeName => "object";
+
+        public override ITypeInfoValidator GetValidator()
+        {
+            return new ObjectValidator();
+        }
     }
 }

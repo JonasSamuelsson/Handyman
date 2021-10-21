@@ -1,18 +1,24 @@
 ﻿using Handyman.DataContractValidator.Model;
+using System;
 
 namespace Handyman.DataContractValidator.Validation
 {
     internal abstract class TypeInfoValidator<T> : ITypeInfoValidator where T : TypeInfo
     {
-        public bool TryValidate(TypeInfo actual, TypeInfo expected, ValidationContext context)
+        public void Validate(TypeInfo actual, TypeInfo expected, ValidationContext context)
         {
-            if (expected is T)
+            if (!(expected is T e))
             {
-                Validate((T)actual, (T)expected, context);
-                return true;
+                throw new ArgumentException();
             }
 
-            return false;
+            if (!(actual is T a))
+            {
+                context.AddError($"type mismatch, expected '{e.TypeName}' but found '{actual.TypeName}'.");
+                return;
+            }
+
+            Validate(a, e, context);
         }
 
         internal abstract void Validate(T actual, T expected, ValidationContext context);
