@@ -32,8 +32,8 @@ namespace Handyman.DataContractValidator.Tests.Validation
             return new object[]
             {
                 typeof(Dictionary<int, int>),
-                new Dictionary<int,int>(),
-                new Dictionary<int>(typeof(int)),
+                new Dictionary<int, int>(),
+                new Dictionary<int> { typeof(int) }
             };
         }
 
