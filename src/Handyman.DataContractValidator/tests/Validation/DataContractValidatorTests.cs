@@ -39,7 +39,7 @@ namespace Handyman.DataContractValidator.Tests.Validation
                 Child = new
                 {
                     Collection = new[] { new { Number = typeof(int) } },
-                    Dictionary = new Dictionary<int>(new { Number = typeof(int) }),
+                    Dictionary = new Dictionary<int> { new { Number = typeof(int) } },
                     Number = typeof(int),
                     Text = typeof(string)
                 },

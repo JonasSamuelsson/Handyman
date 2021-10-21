@@ -22,8 +22,8 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
             {
                 new object[] { typeof(IDictionary<int, string>), "int", "string" },
                 new object[] { typeof(Dictionary<int, string>), "int", "string" },
-                new object[] { new Dictionary<int>(typeof(string)), "int", "string" },
-                new object[] { new Dictionary<int>(new { }), "int", "object" }
+                new object[] { new Dictionary<int>{ typeof(string) }, "int", "string" },
+                new object[] { new Dictionary<int>{ new { } }, "int", "object" }
             };
         }
     }
