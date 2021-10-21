@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Handyman.DataContractValidator.Validation;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Handyman.DataContractValidator.Model
@@ -15,6 +16,11 @@ namespace Handyman.DataContractValidator.Model
         public IEnumerable<string> Names => Values.Select(x => x.Name);
 
         public override string TypeName => "enum";
+
+        public override ITypeInfoValidator GetValidator()
+        {
+            return new EnumValidator();
+        }
 
         public struct Value
         {

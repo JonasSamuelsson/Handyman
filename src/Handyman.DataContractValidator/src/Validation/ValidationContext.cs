@@ -11,7 +11,6 @@ namespace Handyman.DataContractValidator.Validation
         private readonly ITypeInfoValidator[] _validators =
         {
             new AnyValidator(),
-            new TypeInfosMatchValidator(),
             new EnumValidator(),
             new ValueValidator(),
             new DictionaryValidator(),
@@ -36,19 +35,13 @@ namespace Handyman.DataContractValidator.Validation
 
         public void Validate(TypeInfo actual, TypeInfo expected)
         {
-            _validators
-                .TakeWhile(x => !x.TryValidate(actual, expected, this))
-                .ToList()
-                .ForEach(delegate { });
+            expected.GetValidator().Validate(actual, expected, this);
         }
 
         public void Validate(string scope, TypeInfo actual, TypeInfo expected)
         {
             _scopes.Push(scope);
-            _validators
-                .TakeWhile(x => !x.TryValidate(actual, expected, this))
-                .ToList()
-                .ForEach(delegate { });
+            Validate(actual, expected);
             _scopes.Pop();
         }
     }
