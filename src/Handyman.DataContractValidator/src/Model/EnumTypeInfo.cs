@@ -1,4 +1,6 @@
-﻿using Handyman.DataContractValidator.Validation;
+﻿using Handyman.DataContractValidator.CodeGen;
+using Handyman.DataContractValidator.CodeGen.DataContracts;
+using Handyman.DataContractValidator.Validation;
 using System.Collections.Generic;
 
 namespace Handyman.DataContractValidator.Model
@@ -15,7 +17,9 @@ namespace Handyman.DataContractValidator.Model
             return new EnumValidator();
         }
 
+        public override ISyntaxNode GetDataContractSyntaxNode()
         {
+            return EnumSyntaxNode.Create(this);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Handyman.DataContractValidator.Validation;
+﻿using Handyman.DataContractValidator.CodeGen;
+using Handyman.DataContractValidator.CodeGen.DataContracts;
+using Handyman.DataContractValidator.Validation;
 
 namespace Handyman.DataContractValidator.Model
 {
@@ -11,6 +13,11 @@ namespace Handyman.DataContractValidator.Model
         public override ITypeInfoValidator GetValidator()
         {
             return new DictionaryValidator();
+        }
+
+        public override ISyntaxNode GetDataContractSyntaxNode()
+        {
+            return DictionarySyntaxNode.Create(this);
         }
     }
 }
