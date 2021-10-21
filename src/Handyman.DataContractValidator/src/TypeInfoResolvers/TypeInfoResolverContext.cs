@@ -18,9 +18,9 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 
         public TypeInfo GetTypeInfo(object o)
         {
-            if (o is DataContractReference dcr)
+            if (o is DataContractReference dataContractReference)
             {
-                o = dcr.Resolve();
+                o = dataContractReference.Resolve();
             }
 
             foreach (var resolver in _resolvers)

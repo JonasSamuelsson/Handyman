@@ -13,11 +13,11 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
         [Theory, MemberData(nameof(ShouldResolveObjectTypeInfoParams))]
         public void ShouldResolveObjectTypeInfo(object o)
         {
-            var parent = new TypeInfoResolverContext().GetTypeInfo(o).As<ObjectTypeInfo>();
+            var parent = new TypeInfoResolverContext().GetTypeInfo(o).ShouldBeOfType<ObjectTypeInfo>();
 
             parent.Properties.Count().ShouldBe(2);
             parent.Properties.Single(x => x.Name == "Number").Type.TypeName.ShouldBe("int");
-            var child = parent.Properties.Single(x => x.Name == "Child").Type.As<ObjectTypeInfo>();
+            var child = parent.Properties.Single(x => x.Name == "Child").Type.ShouldBeOfType<ObjectTypeInfo>();
             child.Properties.Count().ShouldBe(1);
             child.Properties.Single(x => x.Name == "Text").Type.TypeName.ShouldBe("string");
         }
