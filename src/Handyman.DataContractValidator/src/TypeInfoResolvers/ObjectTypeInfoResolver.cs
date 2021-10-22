@@ -1,4 +1,5 @@
 ﻿using Handyman.DataContractValidator.Model;
+using Handyman.DataContractValidator.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 
             var marker = isAnonymousType ? (object)Guid.NewGuid() : type;
 
+            var typeHasNullableAnnotations = NullableReferenceTypes.HasNullableAnnotations(type);
+
             var properties = new List<PropertyInfo>();
 
             foreach (var property in type.GetProperties())
@@ -39,11 +42,18 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                     ? property.GetValue(o, null)
                     : property.PropertyType;
 
+                var childTypeInfo = context.GetTypeInfo(child);
+
+                if (!childTypeInfo.IsNullable.HasValue && typeHasNullableAnnotations)
+                {
+                    childTypeInfo.IsNullable = NullableReferenceTypes.IsNullable(property);
+                }
+
                 properties.Add(new PropertyInfo
                 {
                     IsIgnored = isIgnored,
                     Name = property.Name,
-                    Type = context.GetTypeInfo(child)
+                    Type = childTypeInfo
                 });
 
                 _trace.Remove(marker);
@@ -54,6 +64,16 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                 Properties = properties
             };
             return true;
+        }
+
+        private static bool SupportsNullable(Type type)
+        {
+            return false;
+        }
+
+        private static bool IsNullable(System.Reflection.PropertyInfo property)
+        {
+            return false;
         }
     }
 }

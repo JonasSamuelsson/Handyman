@@ -8,6 +8,7 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
     {
         private readonly IEnumerable<ITypeInfoResolver> _resolvers = new ITypeInfoResolver[]
         {
+            new NullableTypeInfoResolver(),
             new AnyTypeInfoResolver(),
             new EnumTypeInfoResolver(),
             new ValueTypeInfoResolver(),

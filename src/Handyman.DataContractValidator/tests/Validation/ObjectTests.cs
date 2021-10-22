@@ -1,5 +1,6 @@
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Handyman.DataContractValidator.Tests.Validation
@@ -69,5 +70,105 @@ namespace Handyman.DataContractValidator.Tests.Validation
         }
 
         private class AttributeWithIgnoreInTheNameAttribute : Attribute { }
+
+        [Theory, MemberData(nameof(ShouldValidateNullableReferenceTypesParams))]
+        public void ShouldAccountForNullableAnnotations(Type type, object dataContract, string expected)
+        {
+            var validator = new DataContractValidator();
+
+            if (expected == "pass")
+            {
+                validator.Validate(type, dataContract);
+            }
+            else
+            {
+                Should.Throw<ValidationException>(() => validator.Validate(type, dataContract))
+                    .Message.ShouldBe(expected);
+            }
+        }
+
+        public static IEnumerable<object[]> ShouldValidateNullableReferenceTypesParams()
+        {
+            yield return new object[]
+            {
+                typeof(NullableEnabledWithNullable),
+                new
+                {
+                    Text = Nullable.String
+                },
+                "pass"
+            };
+
+            yield return new object[]
+            {
+                typeof(NullableEnabledWithNullable),
+                new
+                {
+                    Text = typeof(string)
+                },
+                "Text : type mismatch, expected 'string' but found 'string?'."
+            };
+
+            yield return new object[]
+            {
+                typeof(NullableEnabledWithoutNullable),
+                new
+                {
+                    Text = typeof(string)
+                },
+                "pass"
+            };
+
+            yield return new object[]
+            {
+                typeof(NullableEnabledWithoutNullable),
+                new
+                {
+                    Text = Nullable.String
+                },
+                "Text : type mismatch, expected 'string?' but found 'string'."
+            };
+
+            yield return new object[]
+            {
+                typeof(NullableDisabled),
+                new
+                {
+                    Text = typeof(string)
+                },
+                "pass"
+            };
+
+            yield return new object[]
+            {
+                typeof(NullableDisabled),
+                new
+                {
+                    Text = Nullable.String
+                },
+                "Text : type mismatch, expected 'string?' but found 'string'."
+            };
+        }
+
+#nullable enable
+
+        private class NullableEnabledWithNullable
+        {
+            public string? Text { get; set; }
+        }
+
+        private class NullableEnabledWithoutNullable
+        {
+            public string Text { get; set; }
+        }
+
+#nullable disable
+
+        private class NullableDisabled
+        {
+            public string Text { get; set; }
+        }
+
+#nullable restore
     }
 }
