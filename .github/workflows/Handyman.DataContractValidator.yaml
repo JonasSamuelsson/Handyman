@@ -30,7 +30,11 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
     - uses: actions/checkout@v2
-    - name: setup .net core
+    - name: setup .net core 3.1.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: setup .net core 5.x
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.x
