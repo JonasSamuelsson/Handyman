@@ -16,7 +16,7 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
             var typeInfo = new TypeInfoResolverContext().GetTypeInfo(type)
                 .ShouldBeOfType<ObjectTypeInfo>();
 
-            typeInfo.Properties.Single(x => x.Name == "Text").Type.IsNullable.ShouldBeNull();
+            typeInfo.Properties.Single(x => x.Name == "Text").Value.IsNullable.ShouldBeNull();
         }
 
         [Fact]
@@ -27,8 +27,8 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
             var typeInfo = new TypeInfoResolverContext().GetTypeInfo(type)
                 .ShouldBeOfType<ObjectTypeInfo>();
 
-            typeInfo.Properties.Single(x => x.Name == "NotNullable").Type.IsNullable.ShouldBe(false);
-            typeInfo.Properties.Single(x => x.Name == "Nullable").Type.IsNullable.ShouldBe(true);
+            typeInfo.Properties.Single(x => x.Name == "NotNullable").Value.IsNullable.ShouldBe(false);
+            typeInfo.Properties.Single(x => x.Name == "Nullable").Value.IsNullable.ShouldBe(true);
         }
 
         [Fact]
@@ -43,8 +43,8 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
             var typeInfo = new TypeInfoResolverContext().GetTypeInfo(dataContract)
                 .ShouldBeOfType<ObjectTypeInfo>();
 
-            typeInfo.Properties.Single(x => x.Name == "NotNullable").Type.IsNullable.ShouldBeNull();
-            typeInfo.Properties.Single(x => x.Name == "Nullable").Type.IsNullable.ShouldBe(true);
+            typeInfo.Properties.Single(x => x.Name == "NotNullable").Value.IsNullable.ShouldBeNull();
+            typeInfo.Properties.Single(x => x.Name == "Nullable").Value.IsNullable.ShouldBe(true);
         }
 
 #nullable enable

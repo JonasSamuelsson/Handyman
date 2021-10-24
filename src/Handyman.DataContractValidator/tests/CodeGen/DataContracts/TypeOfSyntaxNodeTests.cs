@@ -4,20 +4,20 @@ using Xunit;
 
 namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
 {
-    public class ValueSyntaxNodeTests
+    public class TypeOfSyntaxNodeTests
     {
         [Fact]
         public void ShouldBeSingleLine()
         {
-            new ValueSyntaxNode().IsMultiLine.ShouldBeFalse();
+            new TypeOfSyntaxNode().IsMultiLine.ShouldBeFalse();
         }
 
         [Fact]
         public void ShouldGenerateCode()
         {
-            new ValueSyntaxNode { TypeName = "bool?" }
+            new TypeOfSyntaxNode { Value = new ValueSyntaxNode { TypeName = "bool?" } }
                 .GenerateCode()
-                .ShouldBe("bool?");
+                .ShouldBe("typeof(bool?)");
         }
     }
 }

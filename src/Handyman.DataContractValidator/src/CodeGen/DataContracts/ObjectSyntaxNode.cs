@@ -61,10 +61,31 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
             {
                 Properties = typeInfo.Properties
                     .Where(x => !x.IsIgnored)
-                    .Select(x => new PropertyInitializerSyntaxNode
+                    .Select(x =>
                     {
-                        PropertyName = x.Name,
-                        PropertyValue = x.Type.GetDataContractSyntaxNode().WrapWithTypeOfIfValueSyntaxNode()
+                        var value = x.Value.GetDataContractSyntaxNode();
+
+                        if (x.Value.IsPrimitive)
+                        {
+                            value = new TypeOfSyntaxNode
+                            {
+                                Value = value
+                            };
+                        }
+
+                        if (x.Value.IsNullable == true && x.Value.IsReference)
+                        {
+                            value = new NullableSyntaxNode
+                            {
+                                Value = value
+                            };
+                        }
+
+                        return new PropertyInitializerSyntaxNode
+                        {
+                            Name = x.Name,
+                            Value = value
+                        };
                     })
                     .ToList()
             };

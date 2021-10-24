@@ -4,6 +4,6 @@
     {
         public bool IsIgnored { get; set; }
         public string Name { get; set; }
-        public TypeInfo Type { get; set; }
+        public ITypeInfo Value { get; set; }
     }
 }

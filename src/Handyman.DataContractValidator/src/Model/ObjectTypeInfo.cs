@@ -8,6 +8,9 @@ namespace Handyman.DataContractValidator.Model
     internal class ObjectTypeInfo : TypeInfo
     {
         public IEnumerable<PropertyInfo> Properties { get; set; }
+
+        public override bool IsPrimitive => false;
+        public override bool IsReference => true;
         public override string TypeName => "object";
 
         public override ITypeInfoValidator GetValidator()

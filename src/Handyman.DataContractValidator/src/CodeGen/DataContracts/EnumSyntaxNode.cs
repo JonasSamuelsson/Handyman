@@ -12,7 +12,16 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
         public void GenerateCode(CodeBuilder builder)
         {
             builder
-                .Add("new Enum(new Dictionary<int, string>")
+                .Add("new Enum")
+                .AddLineBreak()
+                .Add("{")
+                .AddLineBreak()
+                .IncreaseIndentation()
+                .Add($"{nameof(Enum.Flags)} = {TypeInfo.IsFlags.ToString().ToLowerInvariant()},")
+                .AddLineBreak()
+                .Add($"{nameof(Enum.Nullable)} = {TypeInfo.IsNullable.ToString().ToLowerInvariant()},")
+                .AddLineBreak()
+                .Add($"{nameof(Enum.Values)} =")
                 .AddLineBreak()
                 .Add("{")
                 .AddLineBreak()
@@ -34,14 +43,7 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
 
             builder
                 .DecreaseIndentation()
-                .Add("})")
-                .AddLineBreak()
-                .Add("{")
-                .AddLineBreak()
-                .IncreaseIndentation()
-                .Add($"{nameof(Enum.Flags)} = {TypeInfo.IsFlags.ToString().ToLowerInvariant()},")
-                .AddLineBreak()
-                .Add($"{nameof(Enum.Nullable)} = {TypeInfo.IsNullable.ToString().ToLowerInvariant()}")
+                .Add("}")
                 .AddLineBreak()
                 .DecreaseIndentation()
                 .Add("}");

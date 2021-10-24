@@ -12,7 +12,7 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
             {
                 if (type == typeof(string))
                 {
-                    typeInfo = new ValueTypeInfo { Value = typeof(string) };
+                    typeInfo = new ValueTypeInfo { Type = typeof(string) };
                     return true;
                 }
 
@@ -23,7 +23,7 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                     typeInfo = new ValueTypeInfo
                     {
                         IsNullable = isNullable,
-                        Value = isNullable ? type.GetGenericArguments().Single() : type
+                        Type = isNullable ? type.GetGenericArguments().Single() : type
                     };
                     return true;
                 }

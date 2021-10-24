@@ -6,8 +6,8 @@ namespace Handyman.DataContractValidator.Validation
     {
         internal override void Validate(ValueTypeInfo actual, ValueTypeInfo expected, ValidationContext context)
         {
-            var a = $"{actual.IsNullable ?? false} {actual.Value.FullName}";
-            var e = $"{expected.IsNullable ?? false} {expected.Value.FullName}";
+            var a = $"{actual.IsNullable ?? false} {actual.Type.FullName}";
+            var e = $"{expected.IsNullable ?? false} {expected.Type.FullName}";
 
             if (a == e) return;
 

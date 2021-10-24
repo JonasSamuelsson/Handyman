@@ -8,13 +8,16 @@ namespace Handyman.DataContractValidator.Model
 {
     internal class ValueTypeInfo : TypeInfo
     {
-        public Type Value { get; set; }
+        public Type Type { get; set; }
+
+        public override bool IsPrimitive => true;
+        public override bool IsReference => !Type.IsValueType;
 
         public override string TypeName
         {
             get
             {
-                var name = TypeNames.TryGetValue(Value, out var s) ? s : Value.Name;
+                var name = TypeNames.TryGetValue(Type, out var s) ? s : Type.Name;
                 return $"{name}{(IsNullable == true ? "?" : "")}";
             }
         }

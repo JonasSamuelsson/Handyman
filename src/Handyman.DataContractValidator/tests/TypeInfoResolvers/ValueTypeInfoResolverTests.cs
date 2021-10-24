@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Handyman.DataContractValidator.Model;
+﻿using Handyman.DataContractValidator.Model;
 using Handyman.DataContractValidator.TypeInfoResolvers;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
@@ -19,16 +19,16 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
 
             var valueTypeInfo = typeInfo.ShouldBeOfType<ValueTypeInfo>();
             valueTypeInfo.IsNullable.ShouldBe(expected.IsNullable);
-            valueTypeInfo.Value.ShouldBe(expected.Value);
+            valueTypeInfo.Type.ShouldBe(expected.Type);
         }
 
         public static IEnumerable<object[]> ShouldResolveValueTypeInfoParams()
         {
             return new[]
             {
-                new object[] { typeof(int), new ValueTypeInfo { IsNullable = false, Value = typeof(int) } },
-                new object[] { typeof(int?), new ValueTypeInfo { IsNullable = true, Value = typeof(int) } },
-                new object[] { typeof(string), new ValueTypeInfo { IsNullable = null, Value = typeof(string) } }
+                new object[] { typeof(int), new ValueTypeInfo { IsNullable = false, Type = typeof(int) } },
+                new object[] { typeof(int?), new ValueTypeInfo { IsNullable = true, Type = typeof(int) } },
+                new object[] { typeof(string), new ValueTypeInfo { IsNullable = null, Type = typeof(string) } }
             };
         }
     }

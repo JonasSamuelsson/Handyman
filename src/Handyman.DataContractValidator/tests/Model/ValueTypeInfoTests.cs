@@ -13,7 +13,7 @@ namespace Handyman.DataContractValidator.Tests.Model
         {
             new ValueTypeInfo
             {
-                Value = valueType
+                Type = valueType
             }.TypeName.ShouldBe(expected);
         }
 
@@ -37,7 +37,7 @@ namespace Handyman.DataContractValidator.Tests.Model
             new ValueTypeInfo
             {
                 IsNullable = null,
-                Value = typeof(Guid)
+                Type = typeof(Guid)
             }.TypeName.ShouldBe("Guid");
         }
 
@@ -48,7 +48,7 @@ namespace Handyman.DataContractValidator.Tests.Model
             new ValueTypeInfo
             {
                 IsNullable = isNullable,
-                Value = valueType
+                Type = valueType
             }.TypeName.ShouldBe(expected);
         }
 
@@ -58,10 +58,7 @@ namespace Handyman.DataContractValidator.Tests.Model
             {
                 new object[] { null, typeof(bool), "bool" },
                 new object[] { false, typeof(bool), "bool" },
-                new object[] { true, typeof(bool), "bool?" },
-                new object[] { null, typeof(string), "string" },
-                new object[] { false, typeof(string), "string" },
-                new object[] { true, typeof(string), "string?" }
+                new object[] { true, typeof(bool), "bool?" }
             };
         }
     }

@@ -7,7 +7,7 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
     public class PropertyInitializerSyntaxNodeTests
     {
         [Fact]
-        public void ShouldDelegateIsMultiLineToPropertyValue()
+        public void ShouldDelegateIsMultiLineToValue()
         {
             var values = new[] { false, true };
 
@@ -15,7 +15,7 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
             {
                 new PropertyInitializerSyntaxNode
                 {
-                    PropertyValue = new TestSyntaxNode
+                    Value = new TestSyntaxNode
                     {
                         IsMultiLine = value
                     }
@@ -28,8 +28,8 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
         {
             new PropertyInitializerSyntaxNode
             {
-                PropertyName = "foo",
-                PropertyValue = new TestSyntaxNode
+                Name = "foo",
+                Value = new TestSyntaxNode
                 {
                     Code = "bar"
                 }

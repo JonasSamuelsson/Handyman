@@ -53,7 +53,7 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                 {
                     IsIgnored = isIgnored,
                     Name = property.Name,
-                    Type = childTypeInfo
+                    Value = childTypeInfo
                 });
 
                 _trace.Remove(marker);
@@ -64,16 +64,6 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                 Properties = properties
             };
             return true;
-        }
-
-        private static bool SupportsNullable(Type type)
-        {
-            return false;
-        }
-
-        private static bool IsNullable(System.Reflection.PropertyInfo property)
-        {
-            return false;
         }
     }
 }
