@@ -14,14 +14,15 @@ namespace Handyman.DataContractValidator.Tests
                 .ShouldBe(@"new
 {
    Id = typeof(int),
-   Enum = new Enum(new Dictionary<int, string>
-   {
-      { 0, ""Zero"" },
-      { 1, ""One"" }
-   })
+   Enum = new Enum
    {
       Flags = false,
-      Nullable = true
+      Nullable = true,
+      Values =
+      {
+         { 0, ""Zero"" },
+         { 1, ""One"" }
+      }
    },
    ChildCollection = new []
    {

@@ -8,15 +8,6 @@ namespace Handyman.DataContractValidator.Validation
     {
         private readonly List<string> _errors = new List<string>();
         private readonly Stack<string> _scopes = new Stack<string>();
-        private readonly ITypeInfoValidator[] _validators =
-        {
-            new AnyValidator(),
-            new EnumValidator(),
-            new ValueValidator(),
-            new DictionaryValidator(),
-            new CollectionValidator(),
-            new ObjectValidator()
-        };
 
         public IEnumerable<string> Errors => _errors;
 
@@ -33,12 +24,12 @@ namespace Handyman.DataContractValidator.Validation
             _scopes.Pop();
         }
 
-        public void Validate(TypeInfo actual, TypeInfo expected)
+        public void Validate(ITypeInfo actual, ITypeInfo expected)
         {
             expected.GetValidator().Validate(actual, expected, this);
         }
 
-        public void Validate(string scope, TypeInfo actual, TypeInfo expected)
+        public void Validate(string scope, ITypeInfo actual, ITypeInfo expected)
         {
             _scopes.Push(scope);
             Validate(actual, expected);

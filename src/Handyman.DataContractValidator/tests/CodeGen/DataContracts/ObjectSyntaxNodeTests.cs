@@ -45,8 +45,8 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
                 {
                     new PropertyInitializerSyntaxNode
                     {
-                        PropertyName = "Foo",
-                        PropertyValue = new TestSyntaxNode
+                        Name = "Foo",
+                        Value = new TestSyntaxNode
                         {
                             Code = "value",
                             IsMultiLine = false
@@ -70,8 +70,8 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
                     {
                         new PropertyInitializerSyntaxNode
                         {
-                            PropertyName = "Foo",
-                            PropertyValue = new TestSyntaxNode
+                            Name = "Foo",
+                            Value = new TestSyntaxNode
                             {
                                 Code = "one",
                                 IsMultiLine = false
@@ -79,8 +79,8 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
                         },
                         new PropertyInitializerSyntaxNode
                         {
-                            PropertyName = "Bar",
-                            PropertyValue = new TestSyntaxNode
+                            Name = "Bar",
+                            Value = new TestSyntaxNode
                             {
                                 Code = "two",
                                 IsMultiLine = false

@@ -34,9 +34,19 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
 
         public static ISyntaxNode Create(CollectionTypeInfo typeInfo)
         {
+            var item = typeInfo.Item.GetDataContractSyntaxNode();
+
+            if (typeInfo.Item.IsPrimitive)
+            {
+                item = new TypeOfSyntaxNode
+                {
+                    Value = item
+                };
+            }
+
             return new CollectionSyntaxNode
             {
-                Item = typeInfo.Item.GetDataContractSyntaxNode().WrapWithTypeOfIfValueSyntaxNode()
+                Item = item
             };
         }
     }

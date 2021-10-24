@@ -40,7 +40,7 @@ namespace Handyman.DataContractValidator.Validation
                     continue;
                 }
 
-                context.Validate(name, actualProperty.Type, expectedProperty.Type);
+                context.Validate(name, actualProperty.Value, expectedProperty.Value);
             }
         }
     }

@@ -6,7 +6,10 @@ namespace Handyman.DataContractValidator.Model
 {
     internal class CollectionTypeInfo : TypeInfo
     {
-        public TypeInfo Item { get; set; }
+        public ITypeInfo Item { get; set; }
+
+        public override bool IsPrimitive => false;
+        public override bool IsReference => true;
         public override string TypeName => "enumerable";
 
         public override ITypeInfoValidator GetValidator()

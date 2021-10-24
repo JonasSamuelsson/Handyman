@@ -6,8 +6,11 @@ namespace Handyman.DataContractValidator.Model
 {
     internal class DictionaryTypeInfo : TypeInfo
     {
-        public TypeInfo Key { get; set; }
-        public TypeInfo Value { get; set; }
+        public ITypeInfo Key { get; set; }
+        public ITypeInfo Value { get; set; }
+
+        public override bool IsPrimitive => false;
+        public override bool IsReference => true;
         public override string TypeName => "dictionary";
 
         public override ITypeInfoValidator GetValidator()

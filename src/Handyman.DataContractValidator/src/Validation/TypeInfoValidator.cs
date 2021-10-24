@@ -5,7 +5,7 @@ namespace Handyman.DataContractValidator.Validation
 {
     internal abstract class TypeInfoValidator<T> : ITypeInfoValidator where T : TypeInfo
     {
-        public void Validate(TypeInfo actual, TypeInfo expected, ValidationContext context)
+        public void Validate(ITypeInfo actual, ITypeInfo expected, ValidationContext context)
         {
             if (!(expected is T e))
             {

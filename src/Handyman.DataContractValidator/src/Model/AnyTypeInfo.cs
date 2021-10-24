@@ -6,6 +6,8 @@ namespace Handyman.DataContractValidator.Model
 {
     internal class AnyTypeInfo : TypeInfo
     {
+        public override bool IsPrimitive => false;
+        public override bool IsReference => true;
         public override string TypeName => "any";
 
         public override ITypeInfoValidator GetValidator()

@@ -1,4 +1,5 @@
 ﻿using Handyman.DataContractValidator.Model;
+using System;
 
 namespace Handyman.DataContractValidator.CodeGen.DataContracts
 {
@@ -49,10 +50,25 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
 
         public static ISyntaxNode Create(DictionaryTypeInfo typeInfo)
         {
+            if (!typeInfo.Key.IsPrimitive)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var value = typeInfo.Value.GetDataContractSyntaxNode();
+
+            if (typeInfo.Value.IsPrimitive)
+            {
+                value = new TypeOfSyntaxNode
+                {
+                    Value = value
+                };
+            }
+
             return new DictionarySyntaxNode
             {
                 Key = typeInfo.Key.GetDataContractSyntaxNode(),
-                Value = typeInfo.Value.GetDataContractSyntaxNode().WrapWithTypeOfIfValueSyntaxNode()
+                Value = value
             };
         }
     }
