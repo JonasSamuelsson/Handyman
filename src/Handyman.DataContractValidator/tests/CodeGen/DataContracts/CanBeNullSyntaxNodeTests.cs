@@ -20,7 +20,7 @@ namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
                 }
             }
                 .GenerateCode()
-                .ShouldBe("new Nullable(foo)");
+                .ShouldBe("new CanBeNull(foo)");
         }
     }
 }
