@@ -56,7 +56,7 @@ namespace Handyman.DataContractValidator.Tests.Model
         {
             return new[]
             {
-                new object[] { null, typeof(bool), "bool" },
+                new object[] { null!, typeof(bool), "bool" },
                 new object[] { false, typeof(bool), "bool" },
                 new object[] { true, typeof(bool), "bool?" }
             };

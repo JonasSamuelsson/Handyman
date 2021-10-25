@@ -40,12 +40,12 @@ namespace Handyman.DataContractValidator.Tests.Validation
 
         private class Root
         {
-            public Child Child { get; set; }
+            public Child Child { get; set; } = null!;
         }
 
         private class Child
         {
-            public string Text { get; set; }
+            public string Text { get; set; } = null!;
         }
     }
 }

@@ -49,16 +49,16 @@ namespace Handyman.DataContractValidator.Tests
         {
             public int Id { get; set; }
             public MyEnum? Enum { get; set; }
-            public IEnumerable<Child> ChildCollection { get; set; }
-            public IDictionary<int, Child> ChildDictionary { get; set; }
-            public IEnumerable<string> StringCollection { get; set; }
-            public IDictionary<int, string> StringDictionary { get; set; }
+            public IEnumerable<Child> ChildCollection { get; set; } = null!;
+            public IDictionary<int, Child> ChildDictionary { get; set; } = null!;
+            public IEnumerable<string> StringCollection { get; set; } = null!;
+            public IDictionary<int, string> StringDictionary { get; set; } = null!;
         }
 
         private class Child
         {
             public decimal? Number { get; set; }
-            public string Text { get; set; }
+            public string Text { get; set; } = null!;
         }
 
         private enum MyEnum

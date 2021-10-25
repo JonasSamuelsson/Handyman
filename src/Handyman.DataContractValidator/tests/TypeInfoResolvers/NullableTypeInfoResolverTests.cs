@@ -51,7 +51,7 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
 
         public class NullableEnabled
         {
-            public string NotNullable { get; set; }
+            public string NotNullable { get; set; } = null!;
             public string? Nullable { get; set; }
         }
 
