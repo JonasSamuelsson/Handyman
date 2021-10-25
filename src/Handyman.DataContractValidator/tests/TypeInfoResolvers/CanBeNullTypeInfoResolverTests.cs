@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
 {
-    public class NullableTypeInfoResolverTests
+    public class CanBeNullTypeInfoResolverTests
     {
         [Fact]
         public void ShouldResolveTypeWithNullabilityDisabled()
@@ -37,7 +37,7 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
             var dataContract = new
             {
                 NotNullable = typeof(string),
-                Nullable = Nullable.String
+                Nullable = CanBeNull.String
             };
 
             var typeInfo = new TypeInfoResolverContext().GetTypeInfo(dataContract)

@@ -2,13 +2,13 @@
 
 namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
-    internal class NullableTypeInfoResolver : ITypeInfoResolver
+    internal class CanBeNullTypeInfoResolver : ITypeInfoResolver
     {
         public bool TryResolveTypeInfo(object o, TypeInfoResolverContext context, out TypeInfo typeInfo)
         {
-            if (o is Nullable nullable)
+            if (o is CanBeNull canBeNull)
             {
-                typeInfo = context.GetTypeInfo(nullable.Item);
+                typeInfo = context.GetTypeInfo(canBeNull.Item);
                 typeInfo.IsNullable = true;
                 return true;
             }

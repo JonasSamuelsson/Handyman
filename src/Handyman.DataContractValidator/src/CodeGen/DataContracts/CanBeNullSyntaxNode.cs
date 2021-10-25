@@ -1,6 +1,6 @@
 ﻿namespace Handyman.DataContractValidator.CodeGen.DataContracts
 {
-    internal class NullableSyntaxNode : ISyntaxNode
+    internal class CanBeNullSyntaxNode : ISyntaxNode
     {
         public bool IsMultiLine => Value.IsMultiLine;
         public ISyntaxNode Value { get; set; }

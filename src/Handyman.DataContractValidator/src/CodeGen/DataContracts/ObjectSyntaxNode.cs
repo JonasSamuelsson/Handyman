@@ -75,7 +75,7 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
 
                         if (x.Value.IsNullable == true && x.Value.IsReference)
                         {
-                            value = new NullableSyntaxNode
+                            value = new CanBeNullSyntaxNode
                             {
                                 Value = value
                             };

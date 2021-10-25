@@ -94,7 +94,7 @@ namespace Handyman.DataContractValidator.Tests.Validation
                 typeof(NullableEnabledWithNullable),
                 new
                 {
-                    Text = Nullable.String
+                    Text = CanBeNull.String
                 },
                 "pass"
             };
@@ -124,7 +124,7 @@ namespace Handyman.DataContractValidator.Tests.Validation
                 typeof(NullableEnabledWithoutNullable),
                 new
                 {
-                    Text = Nullable.String
+                    Text = CanBeNull.String
                 },
                 "Text : type mismatch, expected 'string?' but found 'string'."
             };
@@ -144,7 +144,7 @@ namespace Handyman.DataContractValidator.Tests.Validation
                 typeof(NullableDisabled),
                 new
                 {
-                    Text = Nullable.String
+                    Text = CanBeNull.String
                 },
                 "Text : type mismatch, expected 'string?' but found 'string'."
             };

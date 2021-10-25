@@ -58,7 +58,7 @@ namespace Handyman.DataContractValidator.Tests.Model
                     }
             }.GetDataContractSyntaxNode()
                 .ShouldBeOfType<ObjectSyntaxNode>()
-                .Properties.Single().Value.ShouldBeOfType<NullableSyntaxNode>()
+                .Properties.Single().Value.ShouldBeOfType<CanBeNullSyntaxNode>()
                 .Value.ShouldBe(valueSyntaxNode);
         }
 

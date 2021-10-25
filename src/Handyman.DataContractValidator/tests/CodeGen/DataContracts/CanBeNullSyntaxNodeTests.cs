@@ -4,14 +4,14 @@ using Xunit;
 
 namespace Handyman.DataContractValidator.Tests.CodeGen.DataContracts
 {
-    public class NullableSyntaxNodeTests
+    public class CanBeNullSyntaxNodeTests
     {
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
         public void ShouldGenerateCode(bool valueIsMultiLine)
         {
-            new NullableSyntaxNode
+            new CanBeNullSyntaxNode
             {
                 Value = new TestSyntaxNode
                 {
