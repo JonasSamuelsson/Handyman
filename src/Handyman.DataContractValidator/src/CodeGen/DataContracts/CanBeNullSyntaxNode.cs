@@ -8,7 +8,7 @@
         public void GenerateCode(CodeBuilder builder)
         {
             builder
-                .Add("new Nullable(")
+                .Add($"new {nameof(CanBeNull)}(")
                 .Add(Value)
                 .Add(")");
         }
