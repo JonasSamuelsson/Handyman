@@ -41,13 +41,13 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
 
         public class Parent
         {
-            public Child Child { get; set; }
+            public Child Child { get; set; } = null!;
             public int Number { get; set; }
         }
 
         public class Child
         {
-            public string Text { get; set; }
+            public string Text { get; set; } = null!;
         }
 
         [Fact]

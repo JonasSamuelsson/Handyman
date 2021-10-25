@@ -64,15 +64,15 @@ namespace Handyman.DataContractValidator.Tests.Validation
         {
             internal class Root
             {
-                public Child Child { get; set; }
+                public Child Child { get; set; } = null!;
                 public long Number { get; set; }
             }
 
             internal class Child
             {
                 public bool Boolean { get; set; }
-                public IEnumerable<Thing> Collection { get; set; }
-                public Dictionary<long, Thing> Dictionary { get; set; }
+                public IEnumerable<Thing> Collection { get; set; } = null!;
+                public Dictionary<long, Thing> Dictionary { get; set; } = null!;
                 public long Number { get; set; }
             }
 
@@ -86,16 +86,16 @@ namespace Handyman.DataContractValidator.Tests.Validation
         {
             internal class Root
             {
-                public Child Child { get; set; }
+                public Child Child { get; set; } = null!;
                 public int Number { get; set; }
             }
 
             internal class Child
             {
-                public IEnumerable<Thing> Collection { get; set; }
-                public Dictionary<int, Thing> Dictionary { get; set; }
+                public IEnumerable<Thing> Collection { get; set; } = null!;
+                public Dictionary<int, Thing> Dictionary { get; set; } = null!;
                 public int Number { get; set; }
-                public string Text { get; set; }
+                public string Text { get; set; } = null!;
             }
 
             internal class Thing

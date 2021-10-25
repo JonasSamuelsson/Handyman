@@ -159,7 +159,7 @@ namespace Handyman.DataContractValidator.Tests.Validation
 
         private class NullableEnabledWithoutNullable
         {
-            public string Text { get; set; }
+            public string Text { get; set; } = null!;
         }
 
 #nullable disable
