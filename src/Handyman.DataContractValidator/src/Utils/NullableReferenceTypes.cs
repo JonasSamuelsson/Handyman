@@ -26,13 +26,17 @@ namespace Handyman.DataContractValidator.Utils
                 return true;
             }
 
-            return type.GetCustomAttributes(true)
+            var attributes = type.GetCustomAttributes(true);
+
+            return attributes
                 .Any(x => x.GetType().FullName == NullableAttributeName);
         }
 
         public static bool IsNullable(PropertyInfo property)
         {
-            var attribute = property.GetCustomAttributes(true)
+            var attributes = property.GetCustomAttributes(true);
+
+            var attribute = attributes
                 .SingleOrDefault(x => x.GetType().FullName == NullableAttributeName);
 
             if (attribute == null)

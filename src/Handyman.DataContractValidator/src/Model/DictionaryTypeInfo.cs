@@ -11,7 +11,11 @@ namespace Handyman.DataContractValidator.Model
 
         public override bool IsPrimitive => false;
         public override bool IsReference => true;
-        public override string TypeName => "dictionary";
+
+        protected override string GetName()
+        {
+            return "dictionary";
+        }
 
         public override ITypeInfoValidator GetValidator()
         {

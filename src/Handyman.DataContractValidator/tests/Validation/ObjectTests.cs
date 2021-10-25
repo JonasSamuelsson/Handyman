@@ -170,5 +170,124 @@ namespace Handyman.DataContractValidator.Tests.Validation
         }
 
 #nullable restore
+
+        [Theory, MemberData(nameof(ShouldValidateReferenceTypeNullabilityParams))]
+        public void ShouldValidateReferenceTypeNullability(Type type, object dataContract, bool shouldThrow)
+        {
+            var validator = new DataContractValidator();
+
+            if (shouldThrow)
+            {
+                Should.Throw<ValidationException>(() => validator.Validate(type, dataContract));
+            }
+            else
+            {
+                validator.Validate(type, dataContract);
+            }
+        }
+
+        public static IEnumerable<object[]> ShouldValidateReferenceTypeNullabilityParams()
+        {
+            return new[]
+            {
+                // only not null
+                new object[]
+                {
+                    typeof(OnlyNotNull),
+                    new
+                    {
+                        NotNull = new { }
+                    },
+                    false
+                },
+                new object[]
+                {
+                    typeof(OnlyNotNull),
+                    new
+                    {
+                        NotNull = new CanBeNull(new { })
+                    },
+                    true
+                },
+
+                // only null
+                new object[]
+                {
+                    typeof(OnlyNull),
+                    new
+                    {
+                        Null = new { }
+                    },
+                    true
+                },
+                new object[]
+                {
+                    typeof(OnlyNull),
+                    new
+                    {
+                        Null = new CanBeNull(new { })
+                    },
+                    false
+                },
+
+                // not null & null
+                new object[]
+                {
+                    typeof(NullAndNotNull),
+                    new
+                    {
+                        NotNull = new { },
+                        Null = new { }
+                    },
+                    true
+                },
+                new object[]
+                {
+                    typeof(NullAndNotNull),
+                    new
+                    {
+                        NotNull = new { },
+                        Null = new CanBeNull(new { })
+                    },
+                    false
+                },
+                new object[]
+                {
+                    typeof(NullAndNotNull),
+                    new
+                    {
+                        NotNull = new CanBeNull(new { }),
+                        Null = new { }
+                    },
+                    true
+                },
+                new object[]
+                {
+                    typeof(NullAndNotNull),
+                    new
+                    {
+                        NotNull = new CanBeNull(new { }),
+                        Null = new CanBeNull(new { })
+                    },
+                    true
+                }
+            };
+        }
+
+        private class OnlyNotNull
+        {
+            public object NotNull { get; set; }
+        }
+
+        private class OnlyNull
+        {
+            public object? Null { get; set; }
+        }
+
+        private class NullAndNotNull
+        {
+            public object NotNull { get; set; }
+            public object? Null { get; set; }
+        }
     }
 }

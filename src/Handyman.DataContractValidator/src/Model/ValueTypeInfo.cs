@@ -12,14 +12,8 @@ namespace Handyman.DataContractValidator.Model
 
         public override bool IsPrimitive => true;
         public override bool IsReference => !Type.IsValueType;
-        public override string TypeName => GetTypeNameWithNullableIndicator();
 
-        private string GetTypeNameWithNullableIndicator()
-        {
-            return $"{GetTypeNameBase()}{(IsNullable == true ? "?" : "")}";
-        }
-
-        private string GetTypeNameBase()
+        protected override string GetName()
         {
             return TypeNames.TryGetValue(Type, out var s) ? s : Type.Name;
         }
@@ -39,9 +33,7 @@ namespace Handyman.DataContractValidator.Model
 
         private string GetSyntaxNodeTypeName()
         {
-            return IsReference
-                ? GetTypeNameBase()
-                : GetTypeNameWithNullableIndicator();
+            return IsReference ? GetName() : Name;
         }
 
         private static readonly Dictionary<Type, string> TypeNames = new Dictionary<Type, string>

@@ -1,5 +1,6 @@
 ﻿using Handyman.DataContractValidator.Model;
 using System;
+using System.Linq;
 
 namespace Handyman.DataContractValidator.Validation
 {
@@ -14,7 +15,13 @@ namespace Handyman.DataContractValidator.Validation
 
             if (!(actual is T a))
             {
-                context.AddError($"type mismatch, expected '{e.TypeName}' but found '{actual.TypeName}'.");
+                context.AddError($"type mismatch, expected '{e.Name}' but found '{actual.Name}'.");
+                return;
+            }
+
+            if (new[] { a, e }.Count(x => x.IsNullable == true) == 1)
+            {
+                context.AddError($"type mismatch, expected '{e.Name}' but found '{actual.Name}'.");
                 return;
             }
 

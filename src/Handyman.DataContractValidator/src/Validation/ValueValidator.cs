@@ -11,7 +11,7 @@ namespace Handyman.DataContractValidator.Validation
 
             if (a == e) return;
 
-            context.AddError($"type mismatch, expected '{expected.TypeName}' but found '{actual.TypeName}'.");
+            context.AddError($"type mismatch, expected '{expected.Name}' but found '{actual.Name}'.");
         }
     }
 }

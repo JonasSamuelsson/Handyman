@@ -8,7 +8,7 @@ namespace Handyman.DataContractValidator.Model
         bool? IsNullable { get; set; }
         bool IsPrimitive { get; }
         bool IsReference { get; }
-        string TypeName { get; }
+        string Name { get; }
         ITypeInfoValidator GetValidator();
         ISyntaxNode GetDataContractSyntaxNode();
     }

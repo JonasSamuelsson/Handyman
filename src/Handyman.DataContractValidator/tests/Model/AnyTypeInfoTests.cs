@@ -22,7 +22,7 @@ namespace Handyman.DataContractValidator.Tests.Model
         [Fact]
         public void ShouldProvideTypeName()
         {
-            new AnyTypeInfo().TypeName.ShouldBe("any");
+            new AnyTypeInfo().Name.ShouldBe("any");
         }
 
         [Fact]

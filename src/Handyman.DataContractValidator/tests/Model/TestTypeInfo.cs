@@ -10,7 +10,7 @@ namespace Handyman.DataContractValidator.Tests.Model
         public bool? IsNullable { get; set; }
         public bool IsPrimitive { get; set; }
         public bool IsReference { get; set; }
-        public string? TypeName { get; set; }
+        public string? Name { get; set; }
         public ISyntaxNode? DataContractSyntaxNode { get; set; }
         public ITypeInfoValidator? Validator { get; set; }
 

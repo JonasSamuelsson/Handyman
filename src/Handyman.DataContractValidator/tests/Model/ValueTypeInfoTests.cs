@@ -14,7 +14,7 @@ namespace Handyman.DataContractValidator.Tests.Model
             new ValueTypeInfo
             {
                 Type = valueType
-            }.TypeName.ShouldBe(expected);
+            }.Name.ShouldBe(expected);
         }
 
         public static IEnumerable<object[]> ShouldProvideTypeNameForTypesWithTypeKeywordParams()
@@ -38,7 +38,7 @@ namespace Handyman.DataContractValidator.Tests.Model
             {
                 IsNullable = null,
                 Type = typeof(Guid)
-            }.TypeName.ShouldBe("Guid");
+            }.Name.ShouldBe("Guid");
         }
 
         [Theory, MemberData(nameof(ShouldProvideCorrectTypeNameWithRegardsToNullabilityParams))]
@@ -49,7 +49,7 @@ namespace Handyman.DataContractValidator.Tests.Model
             {
                 IsNullable = isNullable,
                 Type = valueType
-            }.TypeName.ShouldBe(expected);
+            }.Name.ShouldBe(expected);
         }
 
         public static IEnumerable<object[]> ShouldProvideCorrectTypeNameWithRegardsToNullabilityParams()

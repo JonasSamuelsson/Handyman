@@ -12,7 +12,10 @@ namespace Handyman.DataContractValidator.Model
         public override bool IsReference => false;
         public Dictionary<long, string> Values { get; set; }
 
-        public override string TypeName => "enum";
+        protected override string GetName()
+        {
+            return "enum";
+        }
 
         public override ITypeInfoValidator GetValidator()
         {

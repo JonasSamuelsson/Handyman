@@ -12,8 +12,8 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
         public void ShouldResolveDictionaryTypeInfos(object o, string keyTypeName, string valueTypeName)
         {
             var typeInfo = new TypeInfoResolverContext().GetTypeInfo(o).ShouldBeOfType<DictionaryTypeInfo>();
-            typeInfo.Key.TypeName.ShouldBe(keyTypeName);
-            typeInfo.Value.TypeName.ShouldBe(valueTypeName);
+            typeInfo.Key.Name.ShouldBe(keyTypeName);
+            typeInfo.Value.Name.ShouldBe(valueTypeName);
         }
 
         public static IEnumerable<object[]> ShouldResolveEnumTypeInfosParams()

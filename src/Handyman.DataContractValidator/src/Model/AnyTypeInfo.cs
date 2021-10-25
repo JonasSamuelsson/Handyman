@@ -8,7 +8,11 @@ namespace Handyman.DataContractValidator.Model
     {
         public override bool IsPrimitive => false;
         public override bool IsReference => true;
-        public override string TypeName => "any";
+
+        protected override string GetName()
+        {
+            return "any";
+        }
 
         public override ITypeInfoValidator GetValidator()
         {
