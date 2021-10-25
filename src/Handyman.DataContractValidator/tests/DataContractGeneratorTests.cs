@@ -29,7 +29,7 @@ namespace Handyman.DataContractValidator.Tests
       new
       {
          Number = typeof(decimal?),
-         Text = typeof(string)
+         Text = new CanBeNull(typeof(string))
       }
    },
    ChildDictionary = new Dictionary<int>
@@ -37,7 +37,7 @@ namespace Handyman.DataContractValidator.Tests
       new
       {
          Number = typeof(decimal?),
-         Text = typeof(string)
+         Text = new CanBeNull(typeof(string))
       }
    },
    StringCollection = new [] { typeof(string) },
@@ -58,7 +58,7 @@ namespace Handyman.DataContractValidator.Tests
         private class Child
         {
             public decimal? Number { get; set; }
-            public string Text { get; set; } = null!;
+            public string? Text { get; set; } = null!;
         }
 
         private enum MyEnum
