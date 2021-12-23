@@ -1,7 +1,3 @@
-using System;
-using Shouldly;
-using Xunit;
-
 namespace Handyman.Extensions.Tests
 {
     public class NullableExtensionsTests

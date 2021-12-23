@@ -1,8 +1,4 @@
-﻿using Shouldly;
-using System.Collections.Generic;
-using Xunit;
-
-namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests
 {
     public class DictionaryExtensionsTests
     {

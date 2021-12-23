@@ -1,16 +1,11 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using Shouldly;
-using Xunit;
-
-namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests
 {
     public class ConcurrentDictionaryTests
     {
         [Fact]
         public void AddOrUpdate()
         {
-            var dictionary = new ConcurrentDictionary<int,string>();
+            var dictionary = new ConcurrentDictionary<int, string>();
 
             dictionary.AddOrUpdate(1, "one");
 

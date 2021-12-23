@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-using Shouldly;
-using Xunit;
+﻿using System.Globalization;
 
 namespace Handyman.Extensions.Tests
 {

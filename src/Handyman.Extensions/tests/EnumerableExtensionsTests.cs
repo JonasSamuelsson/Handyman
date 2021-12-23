@@ -1,11 +1,5 @@
-﻿using Shouldly;
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace Handyman.Extensions.Tests
 {
@@ -89,7 +83,9 @@ namespace Handyman.Extensions.Tests
         {
             private List<int> _ints;
 
-            public Ints() : this(new int[0]) { }
+            public Ints() : this(new int[0])
+            {
+            }
 
             public Ints(params int[] ints)
             {
