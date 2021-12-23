@@ -6,5 +6,6 @@ namespace Handyman.Mediator.Pipeline
     {
         string? Name { get; }
         IEnumerable<string>? Tags { get; }
+        ToggleFailureMode? FailureMode { get; set; }
     }
 }

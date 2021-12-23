@@ -9,5 +9,6 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
         public IEnumerable<string>? Tags { get; internal set; }
         public IEnumerable<Type> ToggleDisabledHandlerTypes { get; internal set; } = null!;
         public IEnumerable<Type> ToggleEnabledHandlerTypes { get; internal set; } = null!;
+        public ToggleFailureMode? FailureMode { get; set; }
     }
 }

@@ -30,6 +30,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
         public string? Name { get; set; }
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledHandlerTypes { get; set; }
+        public ToggleFailureMode? FailureMode { get; set; }
 
         public override async Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
         {
@@ -55,7 +56,8 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
                 Name = Name,
                 Tags = Tags,
                 ToggleDisabledHandlerTypes = ToggleDisabledHandlerTypes ?? Type.EmptyTypes,
-                ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes
+                ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes,
+                FailureMode = FailureMode
             };
         }
     }

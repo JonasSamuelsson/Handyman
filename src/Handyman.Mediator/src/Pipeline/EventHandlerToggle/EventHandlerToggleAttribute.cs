@@ -30,6 +30,7 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
         public string? Name { get; set; }
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledHandlerTypes { get; set; }
+        public ToggleFailureMode? FailureMode { get; set; }
 
         public override async Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
         {
@@ -55,7 +56,8 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
                 Name = Name,
                 Tags = Tags,
                 ToggleDisabledHandlerTypes = ToggleDisabledHandlerTypes ?? Type.EmptyTypes,
-                ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes
+                ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes,
+                FailureMode = FailureMode
             };
         }
     }

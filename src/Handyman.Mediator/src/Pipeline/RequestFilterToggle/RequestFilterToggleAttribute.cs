@@ -30,6 +30,7 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
         public string? Name { get; set; }
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledFilterTypes { get; set; }
+        public ToggleFailureMode? FailureMode { get; set; }
 
         public override async Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
         {
@@ -55,7 +56,8 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
                 Name = Name,
                 Tags = Tags,
                 ToggleDisabledFilterTypes = ToggleDisabledFilterTypes ?? Type.EmptyTypes,
-                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes
+                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes,
+                FailureMode = FailureMode
             };
         }
     }

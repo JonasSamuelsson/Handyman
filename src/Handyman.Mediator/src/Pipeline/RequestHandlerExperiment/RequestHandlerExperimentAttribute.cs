@@ -18,6 +18,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
         public Type[]? ExperimentalHandlerTypes { get; set; }
         public string? Name { get; set; }
         public string[]? Tags { get; set; }
+        public ToggleFailureMode? FailureMode { get; set; }
 
         public override async Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
         {
@@ -25,6 +26,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             {
                 BaselineHandlerType = _baselineHandlerType,
                 ExperimentalHandlerTypes = ExperimentalHandlerTypes ?? Type.EmptyTypes,
+                FailureMode = FailureMode,
                 Name = Name,
                 Tags = Tags
             };

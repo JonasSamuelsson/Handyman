@@ -9,5 +9,6 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
         public IEnumerable<string>? Tags { get; internal set; }
         public IEnumerable<Type> ToggleDisabledFilterTypes { get; internal set; } = null!;
         public IEnumerable<Type> ToggleEnabledFilterTypes { get; internal set; } = null!;
+        public ToggleFailureMode? FailureMode { get; set; }
     }
 }

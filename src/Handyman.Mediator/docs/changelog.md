@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 11.3.0 - 2021-12-23
+
+* Added support for specifying toggle failure mode (`disabled`/`enabled`/`throw`).
+
 ## 11.2.1 - 2021-08-23
 
 * Fixed `request`/`event` pipeline builder concurrency issue.

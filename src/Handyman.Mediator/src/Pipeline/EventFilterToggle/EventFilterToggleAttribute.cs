@@ -30,6 +30,7 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
         public string? Name { get; set; }
         public string[]? Tags { get; set; }
         public Type[]? ToggleDisabledFilterTypes { get; set; }
+        public ToggleFailureMode? FailureMode { get; set; }
 
         public override async Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
         {
@@ -55,7 +56,8 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
                 Name = Name,
                 Tags = Tags,
                 ToggleDisabledFilterTypes = ToggleDisabledFilterTypes ?? Type.EmptyTypes,
-                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes
+                ToggleEnabledFilterTypes = _toggleEnabledFilterTypes,
+                FailureMode = FailureMode
             };
         }
     }

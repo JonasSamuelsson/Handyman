@@ -9,5 +9,6 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
         public Type[] ExperimentalHandlerTypes { get; internal set; } = null!;
         public string? Name { get; internal set; }
         public IEnumerable<string>? Tags { get; internal set; }
+        public ToggleFailureMode? FailureMode { get; set; }
     }
 }
