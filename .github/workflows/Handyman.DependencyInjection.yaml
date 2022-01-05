@@ -24,16 +24,24 @@ defaults:
 
 jobs:
   build-test-publish:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
     - uses: actions/checkout@v2
-    - name: setup .net core
+    - name: setup .net 3.1.x
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: '3.1.x'
+    - name: setup .net 5.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.x'
+    - name: setup .net 6.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.x'
     - name: build
       run: dotnet build src/Handyman.DependencyInjection.csproj --configuration release
     - name: test
@@ -47,7 +55,7 @@ jobs:
         if (!$version) {
           write-error "version not found"
         }
-        $tag = "Handyman.DependencyInjection_v$version"
+        $tag = "Handyman.DependencyInjection_$version"
         git config user.email "actions@github.com"
         git config user.name "GitHub"
         git tag -a $tag -m $tag
