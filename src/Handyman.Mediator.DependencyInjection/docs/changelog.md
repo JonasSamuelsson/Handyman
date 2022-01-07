@@ -1,11 +1,17 @@
 # Handyman.Mediator.DependencyInjection changelog
 
+## 5.3.0 - 2022-01-07
+
+* `Handyman.DependencyInjection` upgraded to `2.4.0`.
+* `Handyman.Mediator` upgraded to `11.3.0`.
+* `Microsoft.SourceLink.GitHub` upgraded to `1.1.1`.
+
 ## 5.2.1 - 2021-08-24
 
-* Updated `Handyman.Mediator` dependency to version `11.2.1`.
+* `Handyman.Mediator` upgraded to `11.2.1`.
 
 ## 3.0.0 - 2020-06-22
 
 ### Changed
 
-* Updated `Handyman.Mediator` dependency to version `9.0.0`.
+* `Handyman.Mediator` upgraded to `9.0.0`.
