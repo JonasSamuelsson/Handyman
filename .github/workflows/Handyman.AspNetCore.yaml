@@ -22,7 +22,7 @@ defaults:
 
 jobs:
   build-test-publish:
-    uses: JonasSamuelsson/Handyman/.github/workflows/build-test-publish-v1.yml
+    uses: JonasSamuelsson/Handyman/.github/workflows/build-test-publish-v1.yml@master
     with:
       mainProjectPath: src/Handyman.AspNetCore/src/Handyman.AspNetCore.csproj
       testProjectPath: src/Handyman.AspNetCore/tests/Handyman.AspNetCore.Tests.csproj
