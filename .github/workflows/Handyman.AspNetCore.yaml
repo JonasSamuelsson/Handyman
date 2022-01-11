@@ -16,10 +16,6 @@ on:
         required: false
         default: 'false'
 
-defaults:
-  run:
-    working-directory: src/Handyman.AspNetCore
-
 jobs:
   build-test-publish:
     uses: JonasSamuelsson/Handyman/.github/workflows/build-test-publish-v1.yml@master
