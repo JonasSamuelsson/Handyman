@@ -3,18 +3,19 @@ name: Handyman.AspNetCore
 on:
   push:
     paths:
-      - "src/Handyman.AspNetCore/src/**"
-      - "src/Handyman.AspNetCore/tests/**"
+      - src/Handyman.AspNetCore/src/**
+      - src/Handyman.AspNetCore/tests/**
   pull_request:
     paths:
-      - "src/Handyman.AspNetCore/src/**"
-      - "src/Handyman.AspNetCore/tests/**"
+      - src/Handyman.AspNetCore/src/**
+      - src/Handyman.AspNetCore/tests/**
   workflow_dispatch:
     inputs:
       publish:
-        description: "Publish to nuget (true/false)"
+        description: Publish to nuget
         required: false
-        default: "false"
+        type: boolean
+        default: false
 
 jobs:
   build-test-publish:

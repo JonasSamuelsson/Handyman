@@ -8,8 +8,8 @@ on:
         required: true
         type: string
       publish:
-        required: true
-        type: boolean
+        required: false
+        type: string
     secrets:
       nuget:
         required: true
