@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 3.5.0 - 2022-01-14
+
+* Added ability to specify status code in case of invalid api version.
+* Added `net6.0` TFM.
+* Removed `net5.0` TFM.
+
 ## 3.4.1 - 2021-08-26
 
 * E-tag converter fix.

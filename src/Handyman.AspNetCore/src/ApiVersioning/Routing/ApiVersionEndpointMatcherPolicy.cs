@@ -19,20 +19,22 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
 
         private readonly IApiVersionReader _apiVersionReader;
         private readonly IApiVersionParser _apiVersionParser;
+        private readonly ApiVersionOptions _apiVersionOptions;
 
-        public ApiVersionEndpointMatcherPolicy(IApiVersionReader apiVersionReader, IApiVersionParser apiVersionParser)
+        public ApiVersionEndpointMatcherPolicy(IApiVersionReader apiVersionReader, IApiVersionParser apiVersionParser, ApiVersionOptions apiVersionOptions)
         {
             _apiVersionReader = apiVersionReader;
             _apiVersionParser = apiVersionParser;
+            _apiVersionOptions = apiVersionOptions;
         }
 
         public override int Order { get; } = 0;
 
         public bool AppliesToEndpoints(IReadOnlyList<Endpoint> endpoints)
         {
-            for (var i = 0; i < endpoints.Count; i++)
+            foreach (var endpoint in endpoints)
             {
-                var descriptor = endpoints[i].Metadata.GetMetadata<ApiVersionDescriptor>();
+                var descriptor = endpoint.Metadata.GetMetadata<ApiVersionDescriptor>();
 
                 if (descriptor != null)
                 {
@@ -51,7 +53,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
             {
                 if (!_apiVersionParser.TryParse(values, out requestedApiVersion))
                 {
-                    WriteErrorResponse(httpContext, candidates);
+                    WriteErrorResponse(httpContext, candidates, _apiVersionOptions.InvalidApiVersionStatusCode);
                     return Task.CompletedTask;
                 }
             }
@@ -109,21 +111,21 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
 
             if (!endpointFound)
             {
-                WriteErrorResponse(httpContext, candidates);
+                WriteErrorResponse(httpContext, candidates, _apiVersionOptions.InvalidApiVersionStatusCode);
             }
 
             return Task.CompletedTask;
         }
 
-        private static void WriteErrorResponse(HttpContext httpContext, CandidateSet candidates)
+        private static void WriteErrorResponse(HttpContext httpContext, CandidateSet candidates, int statusCode)
         {
             var actionResultExecutor = httpContext.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
 
             var routeData = httpContext.GetRouteData() ?? EmptyRouteData;
             var actionContext = new ActionContext(httpContext, routeData, EmptyActionDescriptor);
 
-            var problemDetails = GetProblemDetails(candidates);
-            var result = new ObjectResult(problemDetails) { StatusCode = 400 };
+            var problemDetails = GetProblemDetails(candidates, statusCode);
+            var result = new ObjectResult(problemDetails) { StatusCode = statusCode };
 
             var requestDelegate = new RequestDelegate(ctx => actionResultExecutor.ExecuteAsync(actionContext, result));
 
@@ -132,7 +134,7 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
             httpContext.SetEndpoint(endpoint);
         }
 
-        private static ProblemDetails GetProblemDetails(CandidateSet candidates)
+        private static ProblemDetails GetProblemDetails(CandidateSet candidates, int statusCode)
         {
             var versions = new List<string>();
 
@@ -158,9 +160,9 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
             return new ProblemDetails
             {
                 Detail = detail,
-                Status = 400,
-                Title = ReasonPhrases.GetReasonPhrase(400),
-                Type = "https://httpstatuses.com/400"
+                Status = statusCode,
+                Title = ReasonPhrases.GetReasonPhrase(statusCode),
+                Type = $"https://httpstatuses.com/{statusCode}"
             };
         }
 
