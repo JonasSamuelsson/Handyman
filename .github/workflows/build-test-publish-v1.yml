@@ -59,7 +59,7 @@ jobs:
           if (!$version) {
             write-error "version not found"
           }
-          $tag = $app + "-" + $version
+          $tag = $app + "_" + $version
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
           git tag -a $tag -m $tag
