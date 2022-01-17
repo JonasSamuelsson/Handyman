@@ -23,7 +23,7 @@ namespace Handyman.AspNetCore.ApiVersioning
         {
             var options = new ApiVersionOptions
             {
-                InvalidApiVersionStatusCode = StatusCodes.Status400BadRequest
+                InvalidApiVersionStatusCode = StatusCodes.Status404NotFound
             };
 
             configure(options);

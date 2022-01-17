@@ -19,45 +19,55 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
     public class TestServerTests : ControllerBase
     {
         [Theory]
-        [InlineData("", "Get0:0.0")]
-        [InlineData("api-version=1.0", "Get1:1.0")]
-        [InlineData("api-version=2.0", "Get2:2.0")]
-        [InlineData("api-version=3.0", null)]
-        public async Task ShouldInvokeCorrectEndpoint(string query, string content)
+        [InlineData("single-endpoint", "1.0", "Get1:1.0")]
+        [InlineData("multiple-endpoints", "2.0", "Get2_0")]
+        [InlineData("multiple-endpoints", "2.1", "Get2_1")]
+        [InlineData("multiple-versions", "3.0", "Get3:3.0")]
+        [InlineData("multiple-versions", "3.1", "Get3:3.1")]
+        public async Task ShouldInvokeCorrectEndpoint(string path, string apiVersion, string responseContent)
         {
             var client = await CreateTestClient();
 
-            var response = await client.GetAsync($"api-versioning?{query}");
+            var response = await client.GetAsync($"api-versioning/{path}?api-version={apiVersion}");
 
-            if (response.IsSuccessStatusCode)
-            {
-                (await response.Content.ReadAsStringAsync()).ShouldBe(content);
-                return;
-            }
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            (await response.Content.ReadAsStringAsync()).ShouldBe(responseContent);
+        }
 
+        [Theory]
+        [InlineData("single-endpoint", "Get1:1.0")]
+        [InlineData("multiple-endpoints", "Get2_0")]
+        public async Task ShouldSupportDefaultVersion(string path, string responseContent)
+        {
+            var client = await CreateTestClient();
+
+            var response = await client.GetAsync($"api-versioning/{path}");
+
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            (await response.Content.ReadAsStringAsync()).ShouldBe(responseContent);
+        }
+
+        [Theory]
+        [InlineData("single-endpoint", "api-version=x", "Supported api version is 1.0.")]
+        [InlineData("multiple-endpoints", "api-version=x", "Supported api versions are 2.0, 2.1.")]
+        [InlineData("multiple-versions", "", "Supported api versions are 3.0, 3.1.")]
+        [InlineData("multiple-versions", "api-version=x", "Supported api versions are 3.0, 3.1.")]
+        public async Task ShouldHandleUnsupportedApiVersion(string path, string query, string errorDetails)
+        {
+            var client = await CreateTestClient();
+
+            var response = await client.GetAsync($"api-versioning/{path}?{query}");
+
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
             response.Content.Headers.ContentType.CharSet.ShouldBe("utf-8");
             response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var json = await response.Content.ReadAsStringAsync();
             var details = JsonConvert.DeserializeObject<ProblemDetails>(json);
 
-            details.Detail.ShouldBe("Invalid api version, supported versions are 0.0, 1.0, 2.0");
-            details.Status.ShouldBe(StatusCodes.Status400BadRequest);
-            details.Title.ShouldBe("Bad Request");
-            details.Type.ShouldBe("https://httpstatuses.com/400");
-        }
-
-        [Theory]
-        [InlineData("1")]
-        [InlineData("2")]
-        public async Task ShouldSupportMultipleVersions(string apiVersion)
-        {
-            var client = await CreateTestClient();
-
-            var response = await client.GetAsync($"api-versioning/multiple-versions?api-version={apiVersion}");
-
-            response.IsSuccessStatusCode.ShouldBeTrue();
+            details.Detail.ShouldBe(errorDetails);
+            details.Status.ShouldBe(StatusCodes.Status404NotFound);
+            details.Type.ShouldBe("https://httpstatuses.com/404");
         }
 
         private static async Task<HttpClient> CreateTestClient()
@@ -90,28 +100,28 @@ namespace Handyman.AspNetCore.Tests.ApiVersioning
             }
         }
 
-        [HttpGet, ApiVersion("0.0", Optional = true, DefaultVersion = "0.0")]
-        public string Get0(string apiVersion)
-        {
-            return $"Get0:{apiVersion}";
-        }
-
-        [HttpGet, ApiVersion("1.0")]
+        [HttpGet("single-endpoint"), ApiVersion("1.0", DefaultVersion = "1.0", Optional = true)]
         public string Get1(string apiVersion)
         {
             return $"Get1:{apiVersion}";
         }
 
-        [HttpGet, ApiVersion("2.0")]
-        public string Get2(string apiVersion)
+        [HttpGet("multiple-endpoints"), ApiVersion("2.0", DefaultVersion = "2.0", Optional = true)]
+        public string Get2_0()
         {
-            return $"Get2:{apiVersion}";
+            return "Get2_0";
         }
 
-        [HttpGet("multiple-versions"), ApiVersion(new[] { "1", "2" })]
-        public string MultipleVersions(string apiVersion)
+        [HttpGet("multiple-endpoints"), ApiVersion("2.1")]
+        public string Get2_1()
         {
-            return apiVersion;
+            return "Get2_1";
+        }
+
+        [HttpGet("multiple-versions"), ApiVersion(new[] { "3.0", "3.1" })]
+        public string Get3(string apiVersion)
+        {
+            return $"Get3:{apiVersion}";
         }
     }
 }

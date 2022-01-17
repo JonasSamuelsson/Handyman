@@ -154,8 +154,8 @@ namespace Handyman.AspNetCore.ApiVersioning.Routing
             var detail = versions.Count == 0
                 ? "Invalid api version" // this should never happen but just in case...
                 : versions.Count == 1
-                    ? $"Invalid api version, supported version is {versions[0]}"
-                    : $"Invalid api version, supported versions are {string.Join(", ", versions)}";
+                    ? $"Supported api version is {versions[0]}."
+                    : $"Supported api versions are {string.Join(", ", versions)}.";
 
             return new ProblemDetails
             {
