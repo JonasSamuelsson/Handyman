@@ -5,5 +5,6 @@ namespace Handyman.DependencyInjection.Diagnostics
     public interface IServiceProviderInsights
     {
         IEnumerable<ServiceDescription> GetServiceDescriptions();
+        string ListServiceDescriptions();
     }
 }
