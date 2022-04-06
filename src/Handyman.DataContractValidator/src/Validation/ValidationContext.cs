@@ -10,6 +10,7 @@ namespace Handyman.DataContractValidator.Validation
         private readonly Stack<string> _scopes = new Stack<string>();
 
         public IEnumerable<string> Errors => _errors;
+        public ValidationOptions Options { get; set; }
 
         public void AddError(string error)
         {

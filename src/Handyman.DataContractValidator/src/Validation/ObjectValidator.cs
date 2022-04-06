@@ -26,7 +26,7 @@ namespace Handyman.DataContractValidator.Validation
 
                 if (expectedProperty == null)
                 {
-                    if (!actualProperty.IsIgnored)
+                    if (!actualProperty.IsIgnored && !context.Options.AllowPropertiesNotFoundInDataContract)
                     {
                         context.AddError(name, "unexpected property.");
                     }

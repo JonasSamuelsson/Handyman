@@ -1,5 +1,9 @@
 # Handyman.DataContractValidator changelog
 
+## 3.1.0 - 2022-04-06
+
+* Added ability to allow properties not found in data contract during validation.
+
 ## 3.0.0 - 2022-03-05
 
 * Added nullable reference type avareness.

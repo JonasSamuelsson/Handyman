@@ -58,6 +58,19 @@ namespace Handyman.DataContractValidator.Tests.Validation
             errors.ShouldBe(new[] { "Number : expected property found but it is decorated with ignore attribute." });
         }
 
+        [Fact]
+        public void ShouldOptInToAllowPropertiesNotFoundInDataContract()
+        {
+            var type = typeof(ClassWithIntNumberProperty);
+            var dataContract = new { };
+            var options = new ValidationOptions
+            {
+                AllowPropertiesNotFoundInDataContract = true
+            };
+
+            new DataContractValidator().Validate(type, dataContract, options, out _).ShouldBeTrue();
+        }
+
         private class ClassWithIntNumberProperty
         {
             public int Number { get; set; }
@@ -65,11 +78,12 @@ namespace Handyman.DataContractValidator.Tests.Validation
 
         private class TypeWithIgnoredProperty
         {
-            [AttributeWithIgnoreInTheName]
-            public int Number { get; set; }
+            [AttributeWithIgnoreInTheName] public int Number { get; set; }
         }
 
-        private class AttributeWithIgnoreInTheNameAttribute : Attribute { }
+        private class AttributeWithIgnoreInTheNameAttribute : Attribute
+        {
+        }
 
         [Theory, MemberData(nameof(ShouldValidateNullableReferenceTypesParams))]
         public void ShouldAccountForNullableAnnotations(Type type, object dataContract, string expected)
