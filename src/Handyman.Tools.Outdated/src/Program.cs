@@ -18,6 +18,7 @@ namespace Handyman.Tools.Outdated
         {
             var services = new ServiceCollection()
                 .AddSingleton<IFileSystem, FileSystem>()
+                .AddSingleton<IFileWriter, JsonFileWriter>()
                 .AddSingleton<IFileWriter, MarkdownFileWriter>()
                 .AddSingleton<IProcessRunner, ProcessRunner>()
                 .AddSingleton<ConfigReader>()

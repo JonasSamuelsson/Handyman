@@ -27,7 +27,7 @@ namespace Handyman.Tools.Outdated.Analyze
         [Argument(0, "path", Description = "Path to folder or project")]
         public string Path { get; set; }
 
-        [Option(ShortName = "", Description = "Output file(s), supported format is .md")]
+        [Option(ShortName = "", Description = "Output file(s), supported formats are json/md")]
         public string[] OutputFile { get; set; } = { };
 
         [Option(ShortName = "", Description = "Tags filter, start with ! to exclude")]
@@ -36,8 +36,7 @@ namespace Handyman.Tools.Outdated.Analyze
         [Option(CommandOptionType.NoValue, ShortName = "", Description = "Skip dotnet restore")]
         public bool NoRestore { get; set; }
 
-        [Option]
-        public Verbosity Verbosity { get; set; }
+        [Option] public Verbosity Verbosity { get; set; }
 
         public async Task<int> OnExecute()
         {
