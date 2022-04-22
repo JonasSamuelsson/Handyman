@@ -7,21 +7,18 @@ using System.Text;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
-    public class MarkdownFileWriter : IFileWriter
+    public class MarkdownFileWriter : FileWriter
     {
-        private readonly IFileSystem _fileSystem;
-
-        public MarkdownFileWriter(IFileSystem fileSystem)
+        public MarkdownFileWriter(IFileSystem fileSystem) : base(fileSystem)
         {
-            _fileSystem = fileSystem;
         }
 
-        public bool CanHandle(string extension)
+        public override bool CanHandle(string extension)
         {
             return extension == ".md";
         }
 
-        public void Write(string path, IEnumerable<Project> projects)
+        public override void Write(string path, IEnumerable<Project> projects)
         {
             var builder = new StringBuilder();
 
@@ -160,11 +157,7 @@ namespace Handyman.Tools.Outdated.Analyze
             builder.AppendLine("***");
             builder.AppendLine($"_{AppInfo.AppName} {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm UTC}_");
 
-            var directory = _fileSystem.Path.GetDirectoryName(path);
-            if (!_fileSystem.Directory.Exists(directory))
-                _fileSystem.Directory.CreateDirectory(directory);
-
-            _fileSystem.File.WriteAllText(path, builder.ToString(), Encoding.UTF8);
+            WriteToDisk(path, builder.ToString(), Encoding.UTF8);
         }
 
         private static void AppendProjectInfo(StringBuilder builder, Project project)
