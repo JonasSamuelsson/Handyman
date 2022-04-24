@@ -83,7 +83,7 @@ namespace Handyman.Tools.Outdated.Analyze
                         {
                             builder.AppendLine($"### {framework.Name}");
                             builder.AppendLine("| Package | Current | Major | Minor | Patch | Info |");
-                            builder.AppendLine("| - | - | - | - | - | - | - |");
+                            builder.AppendLine("| - | - | - | - | - | - |");
 
                             foreach (var package in framework.Packages)
                             {
