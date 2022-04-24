@@ -9,7 +9,7 @@
       <PackageId>handyman-outdated</PackageId>
       <PackAsTool>true</PackAsTool>
       <ToolCommandName>handyman-outdated</ToolCommandName>
-      <Version>2.2.2</Version>
+      <Version>2.3.0</Version>
    </PropertyGroup>
 
    <ItemGroup>

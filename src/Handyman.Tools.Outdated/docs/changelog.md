@@ -1,5 +1,10 @@
 # handyman-outdated changelog
 
+## 2.3.0 - 2022-04-24
+
+* Added `report` command.
+* Fixed markdown output bug.
+
 ## 2.1.7
 
 ### Changed
