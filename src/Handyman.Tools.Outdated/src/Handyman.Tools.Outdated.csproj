@@ -13,11 +13,11 @@
    </PropertyGroup>
 
    <ItemGroup>
-      <PackageReference Include="Handyman.Extensions" Version="2.3.0" />
-      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.5.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-      <PackageReference Include="System.IO.Abstractions" Version="7.1.10" />
+      <PackageReference Include="Handyman.Extensions" Version="2.6.0" />
+      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.6.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.24" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="System.IO.Abstractions" Version="16.1.25" />
    </ItemGroup>
 
 </Project>
