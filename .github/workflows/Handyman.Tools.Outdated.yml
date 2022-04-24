@@ -1,0 +1,28 @@
+name: Handyman.Tools.Outdated
+
+on:
+  push:
+    paths:
+      - src/Handyman.Tools.Outdated/src/**
+      - src/Handyman.Tools.Outdated/tests/**
+  pull_request:
+    paths:
+      - src/Handyman.Tools.Outdated/src/**
+      - src/Handyman.Tools.Outdated/tests/**
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to nuget
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-test-publish:
+    uses: JonasSamuelsson/Handyman/.github/workflows/build-test-publish-v1.yml@master
+    with:
+      mainProjectPath: src/Handyman.Tools.Outdated/src/Handyman.Tools.Outdated.csproj
+      testProjectPath: src/Handyman.Tools.Outdated/tests/Handyman.Tools.Outdated.Tests.csproj
+      publish: ${{ github.event.inputs.publish }}
+    secrets:
+      nuget: ${{ secrets.NUGET }}
