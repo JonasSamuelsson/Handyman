@@ -1,6 +1,7 @@
 ﻿using Handyman.Tools.Outdated.Analyze;
 using Handyman.Tools.Outdated.GenerateConfig;
 using Handyman.Tools.Outdated.IO;
+using Handyman.Tools.Outdated.Report;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,6 +13,7 @@ namespace Handyman.Tools.Outdated
     [Command(AppInfo.AppName)]
     [Subcommand(typeof(AnalyzeCommand))]
     [Subcommand(typeof(GenerateConfigCommand))]
+    [Subcommand(typeof(ReportCommand))]
     public class Program
     {
         public static async Task<int> Main(string[] args)

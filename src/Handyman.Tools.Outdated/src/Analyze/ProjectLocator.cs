@@ -1,5 +1,6 @@
 ﻿using Handyman.Extensions;
 using Handyman.Tools.Outdated.Model;
+using Handyman.Tools.Outdated.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +25,7 @@ namespace Handyman.Tools.Outdated.Analyze
             return FindProjects(path)
                 .Visit(ApplyConfig)
                 .Where(x => x.Config.Skip == false)
-                .Where(x => IsMatch(x, tags))
+                .Where(x => TagsFilter.IsMatch(x, tags))
                 .ToList();
         }
 
@@ -76,31 +77,6 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             var directory = _fileSystem.Path.GetDirectoryName(project.FullPath);
             project.Config = _configReader.GetConfig(directory);
-        }
-
-        private static bool IsMatch(Project project, IReadOnlyCollection<string> tags)
-        {
-            if (!tags.Any())
-                return true;
-
-            var includes = tags
-                .Where(x => !x.StartsWith("!"))
-                .Select(x => x.ToLowerInvariant())
-                .ToList();
-
-            var excludes = tags
-                .Where(x => x.StartsWith("!"))
-                .Select(x => x.Substring(1))
-                .Select(x => x.ToLowerInvariant())
-                .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-
-            if (includes.Any() && !includes.All(x => project.Config.Tags.Any(y => x.Equals(y, StringComparison.InvariantCultureIgnoreCase))))
-                return false;
-
-            if (project.Config.Tags.Any(x => excludes.Contains(x)))
-                return false;
-
-            return true;
         }
     }
 }

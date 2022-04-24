@@ -9,6 +9,8 @@ namespace Handyman.Tools.Outdated.Analyze
 {
     public class JsonFileWriter : FileWriter
     {
+        public static readonly string SchemaConstant = "handyman-outdated/1.0";
+
         public JsonFileWriter(IFileSystem fileSystem) : base(fileSystem)
         {
         }
@@ -22,7 +24,7 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             var data = new
             {
-                Schema = "handyman-outdated/1.0",
+                Schema = SchemaConstant,
                 Projects = projects
             };
 
