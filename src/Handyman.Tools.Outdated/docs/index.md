@@ -8,6 +8,16 @@ Install using `dotnet tool install -g handyman-outdated`.
 
 ## Usage
 
+`handyman-outdated` supports three different commands
+
+* `analyze`
+* `generate-config`
+* `report`
+
+### `analyze`
+
+Analyzes one or multiple projects for outdated packages and outputs the result to disk.
+
 ```
 Usage: handyman-outdated analyze [options] <path>
 
@@ -15,7 +25,7 @@ Arguments:
   path                         Path to folder or project
 
 Options:
-  --output-file <OUTPUT_FILE>  Output file(s), supported format is .md
+  --output-file <OUTPUT_FILE>  Output file(s), supported formats are json/md
   --tags <TAGS>                Tags filter, start with ! to exclude
   --no-restore                 Skip dotnet restore
   -v|--verbosity <VERBOSITY>   Verbosity
@@ -43,4 +53,34 @@ How projects are analyzed can be controled by placing a `.handyman-outdated.json
         }
     ]
 }
+```
+
+### `generate-config`
+
+Generates empty config file template.
+
+```
+Usage: handyman-outdated generate-config [options] <Output file>
+
+Arguments:
+  Output file
+
+Options:
+  -?|-h|--help  Show help information
+```
+
+### `report`
+
+Converts json result file to markdown.
+
+```
+Usage: handyman-outdated report [options] <path>
+
+Arguments:
+  path                         Path to json result file
+
+Options:
+  --output-file <OUTPUT_FILE>  Output file(s), supported formats are json/md
+  --tags <TAGS>                Tags filter, start with ! to exclude
+  -?|-h|--help                 Show help information
 ```
