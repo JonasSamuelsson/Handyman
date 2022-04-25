@@ -9,17 +9,20 @@ namespace Handyman.Tools.Outdated.Analyze.DotnetListPackage
 
         public void Read(OutputEnumerator outputEnumerator, List<TargetFramework> targetFrameworks)
         {
-            var current = outputEnumerator.Current;
+            while (!outputEnumerator.Finished)
+            {
+                var current = outputEnumerator.Current;
 
-            if ((current.StartsWith('[') && current.EndsWith("]:")) == false)
-                return;
+                if ((current.StartsWith('[') && current.EndsWith("]:")) == false)
+                    return;
 
-            var frameworkName = current.Substring(1, current.Length - 3);
-            var framework = targetFrameworks.GetOrAdd(x => x.Name == frameworkName, () => new TargetFramework { Name = frameworkName });
+                var frameworkName = current.Substring(1, current.Length - 3);
+                var framework = targetFrameworks.GetOrAdd(x => x.Name == frameworkName, () => new TargetFramework { Name = frameworkName });
 
-            outputEnumerator.MoveNext();
+                outputEnumerator.MoveNext();
 
-            PackageReader.Read(outputEnumerator, framework);
+                PackageReader.Read(outputEnumerator, framework);
+            }
         }
     }
 }
