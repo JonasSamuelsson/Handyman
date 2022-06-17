@@ -39,7 +39,8 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                     .Cast<object>()
                     .Select(x => (long)Convert.ChangeType(x, typeof(long)))
                     .OrderBy(x => x)
-                    .ToDictionary(x => x, x => System.Enum.GetName(type, x));
+                    .GroupBy(x => x, x => System.Enum.GetName(type, x))
+                    .ToDictionary(x => x.Key, x => x.OrderBy(s => s).First());
 
                 typeInfo = CreateEnumTypeInfo(isFlags, isNullable, values);
                 return true;

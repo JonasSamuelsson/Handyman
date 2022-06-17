@@ -60,7 +60,7 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
 
             yield return new object[]
             {
-                new Enum { Flags = false, Nullable = false, Values = regularValues}, false, false, regularValues
+                new Enum { Flags = false, Nullable = false, Values = regularValues }, false, false, regularValues
             };
             yield return new object[]
             {
@@ -81,6 +81,22 @@ namespace Handyman.DataContractValidator.Tests.TypeInfoResolvers
         {
             Zero = 0,
             One = 1
+        }
+
+        [Fact]
+        public void ShouldHandleEnumWithMultipleValuesUsingSameUnderlyingValue()
+        {
+            var typeInfo = new TypeInfoResolverContext().GetTypeInfo(typeof(EnumWithDuplicates)).ShouldBeOfType<EnumTypeInfo>();
+
+            typeInfo.Values.Count.ShouldBe(1);
+            typeInfo.Values[0].ShouldBe("One"); // alphabetical order
+        }
+
+        private enum EnumWithDuplicates
+        {
+            Zero = 0,
+            One = 0,
+            Two = 0
         }
     }
 }

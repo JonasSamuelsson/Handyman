@@ -1,5 +1,9 @@
 # Handyman.DataContractValidator changelog
 
+## 3.1.1 - 2022-06-17
+
+* Handle enums where same underlying value is used multiple times.
+
 ## 3.1.0 - 2022-04-06
 
 * Added ability to allow properties not found in data contract during validation.
