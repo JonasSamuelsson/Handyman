@@ -14,6 +14,7 @@ namespace Handyman.DataContractValidator.Tests.Model
         public ISyntaxNode? DataContractSyntaxNode { get; set; }
         public ITypeInfoValidator? Validator { get; set; }
 
+        public ITypeInfo GetValidatableTypeInfo() => this;
         public ITypeInfoValidator GetValidator() => Validator ?? throw new InvalidOperationException();
         public ISyntaxNode GetDataContractSyntaxNode() => DataContractSyntaxNode ?? throw new InvalidOperationException();
     }

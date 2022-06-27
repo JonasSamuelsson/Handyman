@@ -1,5 +1,10 @@
 # Handyman.DataContractValidator changelog
 
+## 3.2.0 - 2022-06-28
+
+* Validate recursive types.
+* Expose `DataContractStore` directly on `DataContractValidator` for better discoverability.
+
 ## 3.1.1 - 2022-06-17
 
 * Handle enums where same underlying value is used multiple times.

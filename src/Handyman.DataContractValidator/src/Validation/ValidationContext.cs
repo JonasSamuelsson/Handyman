@@ -8,6 +8,7 @@ namespace Handyman.DataContractValidator.Validation
     {
         private readonly List<string> _errors = new List<string>();
         private readonly Stack<string> _scopes = new Stack<string>();
+        private readonly List<Validation> _validations = new List<Validation>();
 
         public IEnumerable<string> Errors => _errors;
         public ValidationOptions Options { get; set; }
@@ -27,6 +28,20 @@ namespace Handyman.DataContractValidator.Validation
 
         public void Validate(ITypeInfo actual, ITypeInfo expected)
         {
+            actual = actual.GetValidatableTypeInfo();
+            expected = expected.GetValidatableTypeInfo();
+
+            if (_validations.Any(x => x.Actual == actual && x.Expected == expected))
+            {
+                return;
+            }
+
+            _validations.Add(new Validation
+            {
+                Actual = actual,
+                Expected = expected
+            });
+
             expected.GetValidator().Validate(actual, expected, this);
         }
 
@@ -35,6 +50,12 @@ namespace Handyman.DataContractValidator.Validation
             _scopes.Push(scope);
             Validate(actual, expected);
             _scopes.Pop();
+        }
+
+        private class Validation
+        {
+            public ITypeInfo Actual { get; set; }
+            public ITypeInfo Expected { get; set; }
         }
     }
 }

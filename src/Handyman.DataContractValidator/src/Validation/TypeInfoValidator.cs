@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Handyman.DataContractValidator.Validation
 {
-    internal abstract class TypeInfoValidator<T> : ITypeInfoValidator where T : TypeInfo
+    internal abstract class TypeInfoValidator<T> : ITypeInfoValidator where T : ITypeInfo
     {
         public void Validate(ITypeInfo actual, ITypeInfo expected, ValidationContext context)
         {

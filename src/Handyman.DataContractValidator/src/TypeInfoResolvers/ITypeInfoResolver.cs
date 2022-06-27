@@ -1,9 +1,10 @@
 ﻿using Handyman.DataContractValidator.Model;
+using System;
 
 namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
     internal interface ITypeInfoResolver
     {
-        bool TryResolveTypeInfo(object o, TypeInfoResolverContext context, out TypeInfo typeInfo);
+        ITypeInfo ResolveTypeInfo(object o, TypeInfoResolverContext context, Func<object, ITypeInfo> next);
     }
 }

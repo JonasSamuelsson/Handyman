@@ -11,6 +11,7 @@ namespace Handyman.DataContractValidator.Model
         public virtual string Name => $"{GetName()}{(IsNullable == true ? "?" : "")}";
 
         protected abstract string GetName();
+        public virtual ITypeInfo GetValidatableTypeInfo() => this;
         public abstract ITypeInfoValidator GetValidator();
         public abstract ISyntaxNode GetDataContractSyntaxNode();
     }

@@ -9,9 +9,7 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
     internal class ObjectTypeInfoResolver : ITypeInfoResolver
     {
-        private readonly ISet<object> _trace = new HashSet<object>();
-
-        public bool TryResolveTypeInfo(object o, TypeInfoResolverContext context, out TypeInfo typeInfo)
+        public ITypeInfo ResolveTypeInfo(object o, TypeInfoResolverContext context, Func<object, ITypeInfo> next)
         {
             var isType = o is Type;
             var type = o as Type ?? o.GetType();
@@ -30,11 +28,6 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 
             foreach (var property in type.GetProperties())
             {
-                if (!_trace.Add(marker))
-                {
-                    throw new InvalidOperationException($"Circular dependency, type: {type.FullName}.");
-                }
-
                 var isIgnored = property.GetCustomAttributes(true)
                     .Any(x => Regex.IsMatch(x.GetType().Name, "Ignore"));
 
@@ -55,15 +48,12 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                     Name = property.Name,
                     Value = childTypeInfo
                 });
-
-                _trace.Remove(marker);
             }
 
-            typeInfo = new ObjectTypeInfo
+            return new ObjectTypeInfo
             {
                 Properties = properties
             };
-            return true;
         }
     }
 }

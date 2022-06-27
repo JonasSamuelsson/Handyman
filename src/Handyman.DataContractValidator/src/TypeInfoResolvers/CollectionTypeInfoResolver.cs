@@ -9,15 +9,14 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
     internal class CollectionTypeInfoResolver : ITypeInfoResolver
     {
-        public bool TryResolveTypeInfo(object o, TypeInfoResolverContext context, out TypeInfo typeInfo)
+        public ITypeInfo ResolveTypeInfo(object o, TypeInfoResolverContext context, Func<object, ITypeInfo> next)
         {
             var isType = o is Type;
             var type = isType ? (Type)o : o.GetType();
 
             if (!type.TryGetInterfaceClosing(typeof(IEnumerable<>), out var @interface))
             {
-                typeInfo = null;
-                return false;
+                return next(o);
             }
 
             object item = @interface.GetGenericArguments().Single();
@@ -27,11 +26,10 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                 item = ((IEnumerable)o).OfType<object>().Single();
             }
 
-            typeInfo = new CollectionTypeInfo
+            return new CollectionTypeInfo
             {
                 Item = context.GetTypeInfo(item)
             };
-            return true;
         }
     }
 }

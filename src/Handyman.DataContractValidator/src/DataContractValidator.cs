@@ -8,6 +8,8 @@ namespace Handyman.DataContractValidator
 {
     public class DataContractValidator
     {
+        public DataContractStore DataContracts { get; } = new DataContractStore();
+
         public void Validate(Type type, object dataContract)
         {
             Validate(type, dataContract, new ValidationOptions());

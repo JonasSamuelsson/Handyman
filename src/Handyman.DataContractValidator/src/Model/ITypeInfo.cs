@@ -9,6 +9,8 @@ namespace Handyman.DataContractValidator.Model
         bool IsPrimitive { get; }
         bool IsReference { get; }
         string Name { get; }
+
+        ITypeInfo GetValidatableTypeInfo();
         ITypeInfoValidator GetValidator();
         ISyntaxNode GetDataContractSyntaxNode();
     }

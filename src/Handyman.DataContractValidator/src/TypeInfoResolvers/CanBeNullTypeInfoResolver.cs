@@ -1,20 +1,20 @@
 ﻿using Handyman.DataContractValidator.Model;
+using System;
 
 namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
     internal class CanBeNullTypeInfoResolver : ITypeInfoResolver
     {
-        public bool TryResolveTypeInfo(object o, TypeInfoResolverContext context, out TypeInfo typeInfo)
+        public ITypeInfo ResolveTypeInfo(object o, TypeInfoResolverContext context, Func<object, ITypeInfo> next)
         {
             if (o is CanBeNull canBeNull)
             {
-                typeInfo = context.GetTypeInfo(canBeNull.Item);
+                var typeInfo = next(canBeNull.Item);
                 typeInfo.IsNullable = true;
-                return true;
+                return typeInfo;
             }
 
-            typeInfo = null;
-            return false;
+            return next(o);
         }
     }
 }

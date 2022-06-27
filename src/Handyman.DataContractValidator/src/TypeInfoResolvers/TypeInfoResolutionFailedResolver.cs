@@ -3,13 +3,11 @@ using System;
 
 namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
-    internal class AnyTypeInfoResolver : ITypeInfoResolver
+    internal class TypeInfoResolutionFailedResolver : ITypeInfoResolver
     {
         public ITypeInfo ResolveTypeInfo(object o, TypeInfoResolverContext context, Func<object, ITypeInfo> next)
         {
-            return (o as Type ?? o.GetType()) == typeof(Any)
-                ? new AnyTypeInfo()
-                : next(o);
+            throw new InvalidOperationException("Could not resolve type info.");
         }
     }
 }

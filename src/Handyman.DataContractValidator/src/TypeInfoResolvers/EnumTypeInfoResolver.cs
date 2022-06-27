@@ -3,21 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TypeInfo = Handyman.DataContractValidator.Model.TypeInfo;
 
 namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
     internal class EnumTypeInfoResolver : ITypeInfoResolver
     {
-        public bool TryResolveTypeInfo(object o, TypeInfoResolverContext context, out TypeInfo typeInfo)
+        public ITypeInfo ResolveTypeInfo(object o, TypeInfoResolverContext context, Func<object, ITypeInfo> next)
         {
-            typeInfo = null;
-
             if (o is Type type)
             {
                 if (!type.IsValueType)
                 {
-                    return false;
+                    return next(o);
                 }
 
                 var isNullable = false;
@@ -30,7 +27,7 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
 
                 if (!type.IsEnum)
                 {
-                    return false;
+                    return next(o);
                 }
 
                 var isFlags = type.GetCustomAttributes<FlagsAttribute>().Any();
@@ -42,17 +39,15 @@ namespace Handyman.DataContractValidator.TypeInfoResolvers
                     .GroupBy(x => x, x => System.Enum.GetName(type, x))
                     .ToDictionary(x => x.Key, x => x.OrderBy(s => s).First());
 
-                typeInfo = CreateEnumTypeInfo(isFlags, isNullable, values);
-                return true;
+                return CreateEnumTypeInfo(isFlags, isNullable, values);
             }
 
             if (o is Enum @enum)
             {
-                typeInfo = CreateEnumTypeInfo(@enum.Flags, @enum.Nullable, @enum.Values);
-                return true;
+                return CreateEnumTypeInfo(@enum.Flags, @enum.Nullable, @enum.Values);
             }
 
-            return false;
+            return next(o);
         }
 
         private static EnumTypeInfo CreateEnumTypeInfo(bool isFlags, bool isNullable, Dictionary<long, string> values)

@@ -1,38 +1,36 @@
 ﻿using Handyman.DataContractValidator.Model;
-using System;
 using System.Collections.Generic;
 
 namespace Handyman.DataContractValidator.TypeInfoResolvers
 {
     internal class TypeInfoResolverContext
     {
-        private readonly IEnumerable<ITypeInfoResolver> _resolvers = new ITypeInfoResolver[]
-        {
-            new CanBeNullTypeInfoResolver(),
-            new AnyTypeInfoResolver(),
-            new EnumTypeInfoResolver(),
-            new ValueTypeInfoResolver(),
-            new DictionaryTypeInfoResolver(),
-            new CollectionTypeInfoResolver(),
-            new ObjectTypeInfoResolver()
-        };
+        private readonly IReadOnlyList<ITypeInfoResolver> _typeInfoResolvers = CreateTypeInfoResolvers();
 
-        public TypeInfo GetTypeInfo(object o)
+        public ITypeInfo GetTypeInfo(object o)
         {
             if (o is DataContractReference dataContractReference)
             {
                 o = dataContractReference.Resolve();
             }
 
-            foreach (var resolver in _resolvers)
+            return new TypeInfoResolverPipeline(_typeInfoResolvers, this).Next(o);
+        }
+
+        private static IReadOnlyList<ITypeInfoResolver> CreateTypeInfoResolvers()
+        {
+            return new ITypeInfoResolver[]
             {
-                if (!resolver.TryResolveTypeInfo(o, this, out var typeInfo))
-                    continue;
-
-                return typeInfo;
-            }
-
-            throw new InvalidOperationException("Unable to resolve type info.");
+                new RecursiveTypeInfoResolver(),
+                new CanBeNullTypeInfoResolver(),
+                new AnyTypeInfoResolver(),
+                new EnumTypeInfoResolver(),
+                new ValueTypeInfoResolver(),
+                new DictionaryTypeInfoResolver(),
+                new CollectionTypeInfoResolver(),
+                new ObjectTypeInfoResolver(),
+                new TypeInfoResolutionFailedResolver()
+            };
         }
     }
 }
