@@ -14,62 +14,61 @@ See below for how to validate different types.
 
 Data contract validator can handle the following types and also handles nullable reference type annotations. 
 
-* Objects
 * Value types (bool, int, string, etc)
+* Objects
 * Collections
 * Dictionaries
 * Enums (regular & flags)
 * Anything
+* Recursion
+
+### Value types
+
+``` csharp
+public void Validate()
+{
+    var type = typeof(int);
+
+    var dataContract = typeof(int);
+
+    new DataContractValidator().Validate(type, dataContract);
+}
+```
 
 ### Objects
 
 Properties decorated with an attribute with `Ignore` in the name will be ignored.
 
 ``` csharp
-// type definition
-class MyClass
+class MyParentClass
 {
+    public MyChildClass Child { get; set; }
     public bool Flag { get; set; }
     public int Number { get; set; }
+}
+
+class MyChildClass
+{
     public string Text { get; set; }
 }
 
-// validation
-new DataContractValidator().Validate(typeof(MyClass), new
+[Fact]
+public void Validate()
 {
-    Flag = typeof(bool),
-    Number = typeof(int),
-    Text = typeof(string)
-})
-```
+    var type = typeof(MyParentClass);
 
-#### Nullable reference types
+    var dataContract = new
+    {
+        Child = new
+        {
+            Text = typeof(string)
+        },
+        Flag = typeof(bool),
+        Number = typeof(int)
+    };
 
-``` csharp
-// type definition
-class MyClass
-{
-    public string? Text {get; set; }
+    new DataContractValidator().Validate(type, dataContract);
 }
-
-// validation
-new DataContractValidator().Validate(typeof(MyClass), new
-{
-    Text = new CanBeNull(typeof(string))
-})
-```
-
-### Value types
-
-``` csharp
-// type definition
-class Item
-{
-    public int Value { get; set; }
-}
-
-// validation
-new DataContractValidator().Validate(typeof(Item), typeof(int));
 ```
 
 ### Collections
@@ -78,25 +77,39 @@ If validated against a type it must implement `IEnumerable<T>`, `typeof(T)` will
 If validated against an instance the instance type must implement `IEnumerable<T>`, the single item in the collection will be used as item data contract.
 
 ``` csharp
-// type declaration
 class MyClass
 {
-    public IEnumerable<int> Numbers { get; set; }
+    public IEnumerable<int> SimpleCollection1 { get; set; }
+    public IEnumerable<int> SimpleCollection2 { get; set; }
+    public IEnumerable<Child> ComplexCollection { get; set; }
 }
 
-// valiation
-new DataContractValidator().Validate(typeof(MyClass),
-    new
-    {
-        Numbers = typeof(Ienumerable<int>)
-    });
+class Child
+{
+    public string Text { get; set; }
+}
 
-// or
-new DataContractValidator().Validate(typeof(MyClass),
-    new
+[Fact]
+public void Validate()
+{
+    var type = typeof(MyClass);
+
+    var dataContract = new
     {
-        Numbers = new [] { typeof(int) }
-    });
+        // there are multiple ways to declare collections of simple types
+        SimpleCollection1 = typeof(IEnumerable<int>),
+        SimpleCollection2 = new[] { typeof(int) },
+        ComplexCollection = new[]
+        {
+            new
+            {
+                Text = typeof(string)
+            }
+        }
+    };
+
+    new DataContractValidator().Validate(type, dataContract);
+}
 ```
 
 ### Dictionaries
@@ -105,155 +118,171 @@ If validated against a type it must implement `IDictionary<TKey, TValue>`.
 If validated against an instance use the helper type `Dictionary<TKey>`.
 
 ``` csharp
-// dictionary with only value types
 class MyClass
 {
-    public Dictionary<int, string> Lookup { get; set; }
+    public Dictionary<int, string> DictionaryWithSimpleValue1 { get; set; }
+    public Dictionary<int, string> DictionaryWithSimpleValue2 { get; set; }
+    public Dictionary<int, ComplexClass> DictionaryWithComplexValue { get; set; }
 }
 
-new DataContractValidator().Validate(typeof(MyClass),
-    new
-    {
-        Lookup = typeof(Dictionary<int, string>)
-    })
-
-// dictionary with complex value
-class MyClass
-{
-    public Dictionary<int, Item> Lookup { get; set; }
-}
-
-class Item
+class ComplexClass
 {
     public string Text { get; set; }
 }
 
-new DataContractValidator().Validate(typeof(MyClass),
-    new
+[Fact]
+public void Validate()
+{
+    var type = typeof(MyClass);
+
+    var dataContract = new
     {
-        Lookup = new Dictionary<int>(new
+        // there are multiple ways to declare dictionaries with values of simple types
+        DictionaryWithSimpleValue1 = typeof(Dictionary<int, string>),
+        DictionaryWithSimpleValue2 = new Dictionary<int>
         {
-            Text = typeof(string)
-        })
-    })
+            typeof(string)
+        },
+        DictionaryWithComplexValue = new Dictionary<int>
+        {
+            new
+            {
+                Text = typeof(string)
+            }
+        }
+    };
+
+    new DataContractValidator().Validate(type, dataContract);
+}
+```
+
+### Nullable reference types
+
+``` csharp
+class MyClass
+{
+    public string? Text { get; set; }
+}
+
+[Fact]
+public void Validate()
+{
+    var type = typeof(MyClass);
+
+    var dataContract = new
+    {
+        Text = new CanBeNull(typeof(string))
+    };
+
+    new DataContractValidator().Validate(type, dataContract);
+}
 ```
 
 ### Enums
 
 ``` csharp
-// type definition
-enum Number
+[Flags]
+enum Options
 {
-    Zero = 0,
-    One = 1,
-    Two = 2
+    None = 0,
+    First = 1,
+    Second = 2,
+    Both = First | Second
 }
 
-// validation
-new DataContractValidator().Validate(
-    typeof(Number), 
-    new Enum
+[Fact]
+public void Validate()
+{
+    var type = typeof(Options?);
+
+    var dataContract = new Enum
     {
-        Flags = false, // default is false, can be omitted in this case
-        Nullable = true, // default is false, can be omitted in this case
-        Values = 
+        Flags = true,
+        Nullable = true,
+        Values =
         {
-            { 0, "Zero" },
-            { 1, "One" },
-            { 2, "Two" }
+            { 0, "None" },
+            { 1, "First" },
+            { 2, "Second" },
+            { 3, "Both" }
         }
-    })
+    };
+
+    new DataContractValidator().Validate(type, dataContract);
+}
+}
 ```
 
 ### Anything
 
 ``` csharp
-// type definition
-class Item
+class MyParent
 {
-    public int Value { get; set; }
-}
-
-// validation
-new DataContractValidator().Validate(typeof(Item), new { Value = typeof(Any) })
-```
-
-### Data contract validation sample
-
-This sample demonstrates how to do inline validation of the following object graph.
-
-``` csharp
-public class Root
-{
-    public int Id { get; set; }
     public string Name { get; set; }
-    public IEnumerable<Item> Items { get; set; }
-    public IDictionary<Guid, Resource> Resources { get; set; }
+    public MyChild Child { get; set; }
 }
 
-public class Item
+class MyChild
 {
     public string Text { get; set; }
-    public DateTimeOffset Timestamp { get; set; }
 }
 
-public class Resource
+[Fact]
+public void Validate()
 {
-    public bool Enabled { get; set; }
-    public string Info { get; set; }
-    public ResourceType Type { get; set; }
+    var type = typeof(MyParent);
+
+    var dataContract = typeof(Any);
+
+    new DataContractValidator().Validate(type, dataContract);
+}
+```
+
+### Recursion
+
+``` csharp
+class Directory
+{
+    public string Name { get; set; }
+    public IEnumerable<Directory> Directories { get; set; }
+    public IEnumerable<File> Files { get; set; }
 }
 
-public enum ResourceType
+class File
 {
-    Undefined = 0,
-    Foo = 1,
-    Bar = 2
+    public string Name { get; set; }
 }
 
-public class Test
+[Fact]
+public void Validate()
 {
-    [Fact]
-    public void TypesShouldMatchDataContract()
+    var type = typeof(Directory);
+
+    var dataContractStore = new DataContractStore();
+
+    var dataContract = new
     {
-        var type = typeof(Root);
-
-        var dataContract = new
+        Name = typeof(string),
+        Directories = new[] { dataContractStore.Get("dir") },
+        Files = new[]
         {
-            Id = typeof(int),
-            Name = typeof(string),
-            Items = new []
+            new
             {
-                new
-                {
-                    Text = typeof(string),
-                    Timestamp = typeof(DateTimeOffset)
-                }
-            },
-            Resources = new Dictionary<Guid>(new
-            {
-                Enabled = typeof(bool),
-                Info = typeof(string),
-                Type = new Enum
-                {
-                    Values = 
-                    {
-                        { 0, "Undefined" },
-                        { 1, "Foo" },
-                        { 2, "Bar" }
-                    }
-                }
-            })
-        };
+                Name = typeof(string)
+            }
+        }
+    };
 
-        new DataContractValidator().Validate(type, dataContract);
-    }
+    dataContractStore.Add("dir", dataContract);
+
+    new DataContractValidator().Validate(type, dataContract);
 }
 ```
 
 ## Data contract generation
 
-It is possible to generate data contract code from existing types.
+It is possible to generate data contract code from existing types.  
+Code generation does not support recursive types.
 
 ``` csharp
 string code = new DataContractGenerator().GenerateFor<MyClass>();
