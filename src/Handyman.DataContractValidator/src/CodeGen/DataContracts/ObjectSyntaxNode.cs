@@ -36,9 +36,16 @@ namespace Handyman.DataContractValidator.CodeGen.DataContracts
                 .AddLineBreak()
                 .IncreaseIndentation();
 
-            var last = Properties.Last();
+            var properties = Properties.ToList();
 
-            foreach (var property in Properties)
+            if (builder.Options.SortPropertiesAlphabetically)
+            {
+                properties = properties.OrderBy(x => x.Name).ToList();
+            }
+
+            var last = properties.Last();
+
+            foreach (var property in properties)
             {
                 builder.Add(property);
 

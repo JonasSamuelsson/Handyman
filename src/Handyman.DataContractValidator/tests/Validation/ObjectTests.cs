@@ -63,12 +63,14 @@ namespace Handyman.DataContractValidator.Tests.Validation
         {
             var type = typeof(ClassWithIntNumberProperty);
             var dataContract = new { };
-            var options = new ValidationOptions
-            {
-                AllowPropertiesNotFoundInDataContract = true
-            };
 
-            new DataContractValidator().Validate(type, dataContract, options, out _).ShouldBeTrue();
+            new DataContractValidator
+            {
+                Options =
+                {
+                    AllowPropertiesNotFoundInDataContract = true
+                }
+            }.Validate(type, dataContract, out _).ShouldBeTrue();
         }
 
         private class ClassWithIntNumberProperty

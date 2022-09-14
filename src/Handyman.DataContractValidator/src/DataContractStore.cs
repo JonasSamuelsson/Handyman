@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Handyman.DataContractValidator.Model;
+﻿using Handyman.DataContractValidator.Model;
+using System;
+using System.Collections.Generic;
 
 namespace Handyman.DataContractValidator
 {
@@ -14,7 +15,7 @@ namespace Handyman.DataContractValidator
 
         public object Get(object key)
         {
-            return new DataContractReference { Resolve = () => _dataContracts[key] };
+            return new DataContractReference { Resolve = () => _dataContracts.TryGetValue(key, out var result) ? result : throw new InvalidOperationException($"{nameof(DataContractStore)} doesn't contain data contract with key '{key}'.") };
         }
     }
 }

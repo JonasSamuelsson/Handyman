@@ -5,7 +5,7 @@ namespace Handyman.DataContractValidator.Validation
 {
     internal class EnumValidator : TypeInfoValidator<EnumTypeInfo>
     {
-        internal override void Validate(EnumTypeInfo actual, EnumTypeInfo expected, ValidationContext context)
+        internal override void Validate(EnumTypeInfo actual, EnumTypeInfo expected, DataContractValidatorContext context)
         {
             var a = GetCoreTypeInfo(actual);
             var e = GetCoreTypeInfo(expected);
@@ -13,7 +13,7 @@ namespace Handyman.DataContractValidator.Validation
             a += $" [ {string.Join(", ", actual.Values.OrderBy(x => x.Key).Select(x => $"{x.Key}/{x.Value}"))} ]";
             e += $" [ {string.Join(", ", expected.Values.OrderBy(x => x.Key).Select(x => $"{x.Key}/{x.Value}"))} ]";
 
-            if (a == e)
+            if (a.Equals(e, context.Options.EnumValueNameComparison))
             {
                 return;
             }
@@ -26,7 +26,7 @@ namespace Handyman.DataContractValidator.Validation
             var segments = new[]
             {
                 typeInfo.IsNullable == true ? "nullable" : "",
-                typeInfo.IsFlags ? "flags":"",
+                typeInfo.IsFlags ? "flags" : "",
                 "enum"
             };
 

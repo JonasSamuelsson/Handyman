@@ -6,6 +6,10 @@ namespace Handyman.DataContractValidator
 {
     public class DataContractGenerator
     {
+        public static DataContractGeneratorOptions DefaultOptions { get; set; } = new DataContractGeneratorOptions();
+
+        public DataContractGeneratorOptions Options { get; set; } = DefaultOptions.Clone();
+
         public string GenerateFor<T>()
         {
             return GenerateFor(typeof(T));
@@ -13,7 +17,7 @@ namespace Handyman.DataContractValidator
 
         public string GenerateFor(Type type)
         {
-            var builder = new CodeBuilder();
+            var builder = new CodeBuilder(Options);
 
             new TypeInfoResolverContext()
                 .GetTypeInfo(type)

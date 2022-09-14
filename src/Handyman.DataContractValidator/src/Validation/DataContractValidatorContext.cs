@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Handyman.DataContractValidator.Validation
 {
-    internal class ValidationContext
+    internal class DataContractValidatorContext
     {
         private readonly List<string> _errors = new List<string>();
         private readonly Stack<string> _scopes = new Stack<string>();
         private readonly List<Validation> _validations = new List<Validation>();
 
         public IEnumerable<string> Errors => _errors;
-        public ValidationOptions Options { get; set; }
+        public DataContractValidatorOptions Options { get; set; }
 
         public void AddError(string error)
         {

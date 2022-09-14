@@ -8,14 +8,14 @@ namespace Handyman.DataContractValidator.Tests.Validation
         [Fact]
         public void ShouldValidateRecursiveTypes()
         {
-            var dataContractValidator = new DataContractValidator();
+            var dataContractStore = new DataContractStore();
 
-            dataContractValidator.DataContracts.Add("item", new
+            dataContractStore.Add("item", new
             {
-                Items = new[] { dataContractValidator.DataContracts.Get("item") }
+                Items = new[] { dataContractStore.Get("item") }
             });
 
-            dataContractValidator.Validate(typeof(Item), dataContractValidator.DataContracts.Get("item"));
+            new DataContractValidator().Validate(typeof(Item), dataContractStore.Get("item"));
         }
 
         private class Item

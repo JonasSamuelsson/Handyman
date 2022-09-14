@@ -39,12 +39,18 @@ namespace Handyman.DataContractValidator.Model
         private static readonly Dictionary<Type, string> TypeNames = new Dictionary<Type, string>
         {
             { typeof(bool), "bool" },
+            { typeof(byte), "byte" },
+            { typeof(char), "char" },
             { typeof(decimal), "decimal" },
             { typeof(double), "double" },
             { typeof(float), "float" },
             { typeof(int), "int" },
             { typeof(long), "long" },
-            { typeof(string), "string" }
+            { typeof(short), "short" },
+            { typeof(string), "string" },
+            { typeof(uint), "uint" },
+            { typeof(ulong), "ulong" },
+            { typeof(ushort), "ushort" },
         };
     }
 }

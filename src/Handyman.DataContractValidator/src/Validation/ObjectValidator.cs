@@ -5,7 +5,7 @@ namespace Handyman.DataContractValidator.Validation
 {
     internal class ObjectValidator : TypeInfoValidator<ObjectTypeInfo>
     {
-        internal override void Validate(ObjectTypeInfo actual, ObjectTypeInfo expected, ValidationContext context)
+        internal override void Validate(ObjectTypeInfo actual, ObjectTypeInfo expected, DataContractValidatorContext context)
         {
             var names = new[] { actual, expected }
                 .SelectMany(x => x.Properties)
@@ -15,8 +15,8 @@ namespace Handyman.DataContractValidator.Validation
 
             foreach (var name in names)
             {
-                var actualProperty = actual.Properties.FirstOrDefault(x => x.Name == name);
-                var expectedProperty = expected.Properties.FirstOrDefault(x => x.Name == name);
+                var actualProperty = actual.Properties.FirstOrDefault(x => x.Name.Equals(name, context.Options.PropertyNameComparison));
+                var expectedProperty = expected.Properties.FirstOrDefault(x => x.Name.Equals(name, context.Options.PropertyNameComparison));
 
                 if (actualProperty == null)
                 {

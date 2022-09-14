@@ -5,19 +5,20 @@ namespace Handyman.DataContractValidator.CodeGen
 {
     internal class CodeBuilder
     {
-        private readonly CodeBuilderOptions _options;
         private readonly StringBuilder _builder = new StringBuilder();
         private int _indentationLevel;
         private bool _isNewLine = true;
 
-        public CodeBuilder() : this(new CodeBuilderOptions())
+        public CodeBuilder() : this(new DataContractGeneratorOptions())
         {
         }
 
-        public CodeBuilder(CodeBuilderOptions options)
+        public CodeBuilder(DataContractGeneratorOptions options)
         {
-            _options = options;
+            Options = options;
         }
+
+        public DataContractGeneratorOptions Options { get; }
 
         public CodeBuilder Add(ISyntaxNode node)
         {
@@ -29,7 +30,7 @@ namespace Handyman.DataContractValidator.CodeGen
         {
             if (_isNewLine)
             {
-                _builder.Append(string.Join("", Enumerable.Repeat(_options.Indentation, _indentationLevel)));
+                _builder.Append(string.Join("", Enumerable.Repeat(Options.Indentation, _indentationLevel)));
                 _isNewLine = false;
             }
 

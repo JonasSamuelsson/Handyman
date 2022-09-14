@@ -7,6 +7,12 @@ namespace Handyman.DataContractValidator.Tests
     public class DataContractGeneratorTests
     {
         [Fact]
+        public void GeneratorsShouldNotShareOptions()
+        {
+            new DataContractGenerator().Options.ShouldNotBe(new DataContractGenerator().Options);
+        }
+
+        [Fact]
         public void ShouldGenerateDataContract()
         {
             new DataContractGenerator()

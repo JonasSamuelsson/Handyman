@@ -4,7 +4,7 @@ namespace Handyman.DataContractValidator.Validation
 {
     internal class ValueValidator : TypeInfoValidator<ValueTypeInfo>
     {
-        internal override void Validate(ValueTypeInfo actual, ValueTypeInfo expected, ValidationContext context)
+        internal override void Validate(ValueTypeInfo actual, ValueTypeInfo expected, DataContractValidatorContext context)
         {
             var a = $"{actual.IsNullable ?? false} {actual.Type.FullName}";
             var e = $"{expected.IsNullable ?? false} {expected.Type.FullName}";

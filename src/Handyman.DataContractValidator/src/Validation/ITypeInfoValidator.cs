@@ -4,6 +4,6 @@ namespace Handyman.DataContractValidator.Validation
 {
     internal interface ITypeInfoValidator
     {
-        void Validate(ITypeInfo actual, ITypeInfo expected, ValidationContext context);
+        void Validate(ITypeInfo actual, ITypeInfo expected, DataContractValidatorContext context);
     }
 }

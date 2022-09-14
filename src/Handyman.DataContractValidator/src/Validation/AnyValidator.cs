@@ -5,7 +5,7 @@ namespace Handyman.DataContractValidator.Validation
 {
     internal class AnyValidator : ITypeInfoValidator
     {
-        public void Validate(ITypeInfo actual, ITypeInfo expected, ValidationContext context)
+        public void Validate(ITypeInfo actual, ITypeInfo expected, DataContractValidatorContext context)
         {
             Debug.Assert(expected is AnyTypeInfo);
         }

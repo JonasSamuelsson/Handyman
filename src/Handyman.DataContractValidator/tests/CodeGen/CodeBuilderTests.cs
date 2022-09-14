@@ -34,13 +34,13 @@ namespace Handyman.DataContractValidator.Tests.CodeGen
         [Fact]
         public void ShouldUseIndentationFromOptions()
         {
-            new CodeBuilder(new CodeBuilderOptions { Indentation = " " })
+            new CodeBuilder(new DataContractGeneratorOptions { Indentation = " " })
                 .IncreaseIndentation()
                 .Add("x")
                 .Build()
                 .ShouldBe(" x");
 
-            new CodeBuilder(new CodeBuilderOptions { Indentation = "  " })
+            new CodeBuilder(new DataContractGeneratorOptions { Indentation = "  " })
                 .IncreaseIndentation()
                 .Add("x")
                 .Build()
@@ -50,7 +50,7 @@ namespace Handyman.DataContractValidator.Tests.CodeGen
         [Fact]
         public void LinesShouldBePrefixedWithCurrentIndentationLevel()
         {
-            new CodeBuilder(new CodeBuilderOptions { Indentation = " " })
+            new CodeBuilder(new DataContractGeneratorOptions { Indentation = " " })
                 .Add("one")
                 .AddLineBreak()
                 .IncreaseIndentation()
@@ -68,7 +68,7 @@ namespace Handyman.DataContractValidator.Tests.CodeGen
         [Fact]
         public void EmptyLinesShouldNotBeIndented()
         {
-            new CodeBuilder(new CodeBuilderOptions { Indentation = " " })
+            new CodeBuilder(new DataContractGeneratorOptions { Indentation = " " })
                 .IncreaseIndentation()
                 .Add("one")
                 .AddLineBreak()
@@ -81,14 +81,14 @@ namespace Handyman.DataContractValidator.Tests.CodeGen
         [Fact]
         public void TheOrderOfChangingIndentationAndAddingLineBreaksShouldNotMatter()
         {
-            new CodeBuilder(new CodeBuilderOptions { Indentation = " " })
+            new CodeBuilder(new DataContractGeneratorOptions { Indentation = " " })
                 .IncreaseIndentation()
                 .AddLineBreak()
                 .Add("one")
                 .Build()
                 .ShouldBe($"{NewLine} one");
 
-            new CodeBuilder(new CodeBuilderOptions { Indentation = " " })
+            new CodeBuilder(new DataContractGeneratorOptions { Indentation = " " })
                 .AddLineBreak()
                 .IncreaseIndentation()
                 .Add("one")
