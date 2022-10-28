@@ -1,8 +1,12 @@
 # Handyman.DependencyInjection changelog
 
+## 2.4.2 - 2022-10-28
+
+* Fixed `IServiceConfigurationStrategy` visibility.
+
 ## 2.4.1 - 2022-03-01
 
-* Service provider insights bug fix
+* Service provider insights bug fix.
 
 ## 2.4.0 - 2022-01-05
 

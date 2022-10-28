@@ -2,7 +2,7 @@
 
 namespace Handyman.DependencyInjection
 {
-    internal interface IServiceConfigurationStrategy
+    public interface IServiceConfigurationStrategy
     {
         void Execute(IServiceCollection services);
     }
