@@ -1,5 +1,10 @@
 # Handyman.DependencyInjection changelog
 
+## 2.4.2 - 2022-11-15
+
+* Added `net7.0` TFM.
+* Removed `netcoreapp3.1` & `net5.0` TFMs.
+
 ## 2.4.2 - 2022-10-28
 
 * Fixed `IServiceConfigurationStrategy` visibility.

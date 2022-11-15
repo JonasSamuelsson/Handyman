@@ -7,6 +7,10 @@ on:
       testProjectPath:
         required: true
         type: string
+      runsOn:
+        required: false
+        default: ubuntu-22.04
+        type: string
       publish:
         required: false
         type: string

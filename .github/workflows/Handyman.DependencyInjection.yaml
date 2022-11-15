@@ -24,5 +24,6 @@ jobs:
       mainProjectPath: src/Handyman.DependencyInjection/src/Handyman.DependencyInjection.csproj
       testProjectPath: src/Handyman.DependencyInjection/tests/Handyman.DependencyInjection.Tests.csproj
       publish: ${{ github.event.inputs.publish }}
+      runsOn: windows-2022
     secrets:
       nuget: ${{ secrets.NUGET }}
