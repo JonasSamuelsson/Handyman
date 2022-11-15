@@ -20,7 +20,7 @@ on:
 
 jobs:
   build-test-publish:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ inputs.runsOn }}
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
