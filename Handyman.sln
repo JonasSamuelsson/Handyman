@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{773C41E8-1426-4BDE-AEEB-9EFDE432A231}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,10 +28,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator", "src\Handyman.Mediator\src\Handyman.Mediator.csproj", "{39FE1F64-F3CF-4437-BB18-B9D427F078EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Mediator.Tests", "src\Handyman.Mediator\tests\Handyman.Mediator.Tests.csproj", "{772938ED-A107-47EE-9C59-3E1585CC2559}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf", "src\Handyman.Wpf\src\Handyman.Wpf.csproj", "{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handyman.Wpf.Tests", "src\Handyman.Wpf\tests\Handyman.Wpf.Tests.csproj", "{151DC113-C6C5-4641-9F81-C2A7C7AB6263}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handyman.Azure.Cosmos.Table", "src\Handyman.Azure.Cosmos.Table\src\Handyman.Azure.Cosmos.Table.csproj", "{076558AE-B38F-430C-AE76-92F53CD15A34}"
 EndProject
@@ -105,14 +101,6 @@ Global
 		{772938ED-A107-47EE-9C59-3E1585CC2559}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{772938ED-A107-47EE-9C59-3E1585CC2559}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{772938ED-A107-47EE-9C59-3E1585CC2559}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EEF1FC9-0186-440B-AFDA-E09CEB3685F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{151DC113-C6C5-4641-9F81-C2A7C7AB6263}.Release|Any CPU.Build.0 = Release|Any CPU
 		{076558AE-B38F-430C-AE76-92F53CD15A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{076558AE-B38F-430C-AE76-92F53CD15A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{076558AE-B38F-430C-AE76-92F53CD15A34}.Release|Any CPU.ActiveCfg = Release|Any CPU

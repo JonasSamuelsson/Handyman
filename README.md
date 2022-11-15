@@ -11,7 +11,6 @@
 | Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | ![Handyman.Extensions][h.e-gha] |
 | [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | ![Handyman.Mediator][h.m-gha] |
 | [Handyman.Mediator.DependencyInjection][h.m.di-docs] | [![h.m.di-nuget-version] ![h.m.di-nuget-downloads]][h.m.di-nuget] | ![Handyman.Mediator.DependencyInjection][h.m.di-gha] |
-| Handyman.Wpf | [![h.wpf-nuget-version] ![h.wpf-nuget-downloads]][h.wpf-nuget] | |
 
 ## Tools
 
@@ -86,7 +85,3 @@
 [h.t.o-nuget-downloads]: https://img.shields.io/nuget/dt/handyman-outdated.svg
 [h.t.o-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=23
 [h.t.o-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/handyman-outdated?branchName=master
-
-[h.wpf-nuget]: https://www.nuget.org/packages/Handyman.Wpf/
-[h.wpf-nuget-version]: https://img.shields.io/nuget/v/Handyman.Wpf.svg
-[h.wpf-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Wpf.svg
