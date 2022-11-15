@@ -1,5 +1,10 @@
 # Handyman.AspNetCore changelog
 
+## 3.6.0 - 2022-11-15
+
+* Added `net7.0` TFM.
+* Removed `netcoreapp3.1` TFM.
+
 ## 3.5.0 - 2022-01-14
 
 * Added ability to specify status code in case of invalid api version.
