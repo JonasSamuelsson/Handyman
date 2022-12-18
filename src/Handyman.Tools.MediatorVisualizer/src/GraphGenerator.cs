@@ -17,29 +17,29 @@ namespace Handyman.Tools.MediatorVisualizer
             builder.AppendLine($"  rankdir = {layout};");
 
             var boxes = model.DispatcherPublishes.Keys
-               .Concat(model.DispatcherSends.Keys)
-               .Concat(model.MessageHandledBy.SelectMany(x => x.Value))
-               .Distinct();
+                .Concat(model.DispatcherSends.Keys)
+                .Concat(model.MessageHandledBy.SelectMany(x => x.Value))
+                .Distinct();
 
             foreach (var box in boxes)
             {
-                builder.AppendLine($"  \"{box}\" [shape=box]");
+                builder.AppendLine($"  \"{box}\" [shape=\"box\"]");
             }
 
             var events = model.DispatcherPublishes.SelectMany(x => x.Value)
-               .Distinct();
+                .Distinct();
 
             foreach (var @event in events)
             {
-                builder.AppendLine($"  \"{@event}\" [shape=oval]");
+                builder.AppendLine($"  \"{@event}\" [shape=\"oval\"]");
             }
 
             var requests = model.DispatcherSends.SelectMany(x => x.Value)
-               .Distinct();
+                .Distinct();
 
             foreach (var request in requests)
             {
-                builder.AppendLine($"  \"{request}\" [shape=hexagon]");
+                builder.AppendLine($"  \"{request}\" [shape=\"box\",style=\"rounded\"]");
             }
 
             foreach (var kvp in model.MessageHandledBy)
@@ -54,7 +54,7 @@ namespace Handyman.Tools.MediatorVisualizer
             {
                 foreach (var @event in kvp.Value)
                 {
-                    builder.AppendLine($"  \"{kvp.Key}\" -> \"{@event}\" [label=publish]");
+                    builder.AppendLine($"  \"{kvp.Key}\" -> \"{@event}\" [label=\"publish event\"]");
                 }
             }
 
@@ -62,7 +62,7 @@ namespace Handyman.Tools.MediatorVisualizer
             {
                 foreach (var @event in kvp.Value)
                 {
-                    builder.AppendLine($"  \"{kvp.Key}\" -> \"{@event}\" [label=send]");
+                    builder.AppendLine($"  \"{kvp.Key}\" -> \"{@event}\" [label=\"send request\"]");
                 }
             }
 

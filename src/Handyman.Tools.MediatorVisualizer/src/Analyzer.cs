@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Broslyn;
+﻿using Broslyn;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Handyman.Tools.MediatorVisualizer
 {
@@ -47,17 +47,17 @@ namespace Handyman.Tools.MediatorVisualizer
 
                     var configs = new[]
                     {
-                  new
-                  {
-                     HandlerInterface = compilation.GetTypeByMetadataName("Handyman.Mediator.IEventHandler`1"),
-                     MessageHandledBy = result.EventHandledBy
-                  },
-                  new
-                  {
-                     HandlerInterface = compilation.GetTypeByMetadataName("Handyman.Mediator.IRequestHandler`2"),
-                     MessageHandledBy = result.RequestHandledBy
-                  }
-               };
+                        new
+                        {
+                            HandlerInterface = compilation.GetTypeByMetadataName("Handyman.Mediator.IEventHandler`1"),
+                            MessageHandledBy = result.EventHandledBy
+                        },
+                        new
+                        {
+                            HandlerInterface = compilation.GetTypeByMetadataName("Handyman.Mediator.IRequestHandler`2"),
+                            MessageHandledBy = result.RequestHandledBy
+                        }
+                    };
 
                     var genericInterfaces = namedTypeSymbol.AllInterfaces.Where(x => x.IsGenericType).ToList();
 
@@ -97,19 +97,19 @@ namespace Handyman.Tools.MediatorVisualizer
 
             var configs = new[]
             {
-            new
-            {
-               DispatcherTypeNames = new[] {"IPublisher", "IPublisher`1"},
-               Method = "Publish",
-               HandlerDispatches = result.DispatcherPublishes
-            },
-            new
-            {
-               DispatcherTypeNames = new[] {"ISender", "ISender`1", "Sender`2"},
-               Method = "Send",
-               HandlerDispatches = result.DispatcherSends
-            }
-         };
+                new
+                {
+                    DispatcherTypeNames = new[] { "IPublisher", "IPublisher`1" },
+                    Method = "Publish",
+                    HandlerDispatches = result.DispatcherPublishes
+                },
+                new
+                {
+                    DispatcherTypeNames = new[] { "ISender", "ISender`1", "Sender`2" },
+                    Method = "Send",
+                    HandlerDispatches = result.DispatcherSends
+                }
+            };
 
             foreach (var config in configs)
             {
@@ -232,16 +232,16 @@ namespace Handyman.Tools.MediatorVisualizer
                 var pattern = s.Substring(0, s.IndexOf('.') + 1);
 
                 var isMatch = result.DispatcherPublishes.Keys
-                   .Concat(result.DispatcherPublishes.SelectMany(x => x.Value))
-                   .Concat(result.DispatcherSends.Keys)
-                   .Concat(result.DispatcherSends.SelectMany(x => x.Value))
-                   .Concat(result.EntryPoints)
-                   .Concat(result.EventHandledBy.Keys)
-                   .Concat(result.EventHandledBy.SelectMany(x => x.Value))
-                   .Concat(result.Handlers)
-                   .Concat(result.RequestHandledBy.Keys)
-                   .Concat(result.RequestHandledBy.SelectMany(x => x.Value))
-                   .All(x => x.StartsWith(pattern));
+                    .Concat(result.DispatcherPublishes.SelectMany(x => x.Value))
+                    .Concat(result.DispatcherSends.Keys)
+                    .Concat(result.DispatcherSends.SelectMany(x => x.Value))
+                    .Concat(result.EntryPoints)
+                    .Concat(result.EventHandledBy.Keys)
+                    .Concat(result.EventHandledBy.SelectMany(x => x.Value))
+                    .Concat(result.Handlers)
+                    .Concat(result.RequestHandledBy.Keys)
+                    .Concat(result.RequestHandledBy.SelectMany(x => x.Value))
+                    .All(x => x.StartsWith(pattern));
 
                 if (isMatch == false)
                     return;
