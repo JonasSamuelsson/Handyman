@@ -24,8 +24,7 @@ namespace Handyman.Tools.Docs.ImportCode
             _sourceElementSerializer = sourceElementSerializer;
         }
 
-        [Argument(0)]
-        public string Target { get; set; }
+        [Argument(0)] public string Target { get; set; }
 
         public void OnExecute()
         {
@@ -131,6 +130,7 @@ namespace Handyman.Tools.Docs.ImportCode
                     .Where(x => x.Length != 0)
                     .Select(x => x[0])
                     .Distinct()
+                    .Take(2)
                     .ToArray();
 
                 if (firstCharacters.Length != 1)

@@ -28,9 +28,9 @@ namespace Handyman.Tools.Docs.Tests
             fileSystem.File.WriteAllLines("c:/file.txt", new[] { "success" });
 
             new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
-            {
-                Target = "c:/"
-            }
+                {
+                    Target = "c:/"
+                }
                 .OnExecute();
 
             fileSystem.File.ReadAllLines("c:/file.md")
@@ -69,9 +69,9 @@ namespace Handyman.Tools.Docs.Tests
                 });
 
             new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
-            {
-                Target = "c:/"
-            }
+                {
+                    Target = "c:/"
+                }
                 .OnExecute();
 
             fileSystem.File.ReadAllLines("c:/file.md")
@@ -112,9 +112,9 @@ namespace Handyman.Tools.Docs.Tests
                 });
 
             new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
-            {
-                Target = "c:/"
-            }
+                {
+                    Target = "c:/"
+                }
                 .OnExecute();
 
             fileSystem.File.ReadAllLines("c:/file.md")
@@ -150,9 +150,9 @@ namespace Handyman.Tools.Docs.Tests
             fileSystem.File.WriteAllLines("c:/file2.txt", new[] { "two" });
 
             new CodeBlocksCommand(logger, fileSystem, CodeBlockSerializer, CodeBlockSourceSerializer)
-            {
-                Target = "c:/"
-            }
+                {
+                    Target = "c:/"
+                }
                 .OnExecute();
 
             fileSystem.File.ReadAllLines("c:/file.md")
