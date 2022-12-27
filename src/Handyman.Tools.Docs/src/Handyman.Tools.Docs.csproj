@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
    <PropertyGroup>
       <OutputType>Exe</OutputType>
@@ -6,21 +6,17 @@
    </PropertyGroup>
 
    <PropertyGroup>
-      <PackageId>handyman-ado</PackageId>
+      <PackageId>handyman-docs</PackageId>
       <PackAsTool>true</PackAsTool>
-      <ToolCommandName>handyman-ado</ToolCommandName>
-      <Version>1.0.0</Version>
-      <AssemblyName>handyman-docs</AssemblyName>
+      <ToolCommandName>handyman-docs</ToolCommandName>
+      <Version>0.1.0</Version>
    </PropertyGroup>
 
    <ItemGroup>
-      <PackageReference Include="Handyman.DependencyInjection" Version="2.1.0" />
+      <PackageReference Include="Handyman.DependencyInjection" Version="2.5.0" />
       <PackageReference Include="Markdig" Version="0.30.4" />
-      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
-      <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="3.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
       <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
-      <PackageReference Include="System.IO.Abstractions" Version="12.1.10" />
+      <PackageReference Include="System.IO.Abstractions" Version="19.1.5" />
    </ItemGroup>
 
 </Project>

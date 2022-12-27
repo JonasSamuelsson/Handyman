@@ -1,46 +1,54 @@
 ﻿using Handyman.DependencyInjection;
-using Handyman.Tools.Docs.ImportCode;
-using Handyman.Tools.Docs.TableOfContent;
-using Handyman.Tools.Docs.Utils;
-using McMaster.Extensions.CommandLineUtils;
+using Handyman.Tools.Docs.BuildTablesOfContents;
+using Handyman.Tools.Docs.ImportCodeBlocks;
+using Handyman.Tools.Docs.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Spectre.Console;
+using Spectre.Console.Cli;
 using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 
 namespace Handyman.Tools.Docs
 {
-    [Subcommand(typeof(TableOfContentCommand))]
-    [Subcommand(typeof(CodeBlocksCommand))]
     public class Program
     {
-        public static Task<int> Main(string[] args)
-            => CreateHostBuilder()
-                .RunCommandLineApplicationAsync<Program>(args);
-
-        public static Task<int> Run(Action<IServiceCollection> configureServices, string[] args)
-            => CreateHostBuilder()
-                .ConfigureServices(configureServices)
-                .RunCommandLineApplicationAsync<Program>(args);
-
-        private static IHostBuilder CreateHostBuilder()
-            => new HostBuilder()
-                .ConfigureServices(ConfigureServices);
-
-        private static void ConfigureServices(IServiceCollection services)
+        public static int Main(string[] args)
         {
-            services.AddTransient<IFileSystem, FileSystem>();
-            services.AddSingleton<ILogger, Logger>();
-
-            services.Scan(x =>
-            {
-                x.AssemblyContaining<Program>();
-                x.ConfigureConcreteClassesOf(typeof(IElementSerializer<>));
-                x.ConfigureConcreteClassesOf(typeof(IDataSerializer<>));
-            });
+            return Run(args, delegate { });
         }
 
-        public void OnExecute(CommandLineApplication app) => app.ShowHelp();
+        public static int Run(string[] args, Action<IServiceCollection> action)
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IFileSystem, FileSystem>();
+
+            services.Scan(s =>
+            {
+                s.AssemblyContaining<Program>();
+                s.ConfigureConcreteClassesOf<IValueConverter>();
+                s.ConfigureDefaultImplementations();
+            });
+
+            action.Invoke(services);
+
+            var app = new CommandApp(new TypeRegistrar(services));
+
+            app.Configure(root =>
+            {
+                root.AddCommand<BuildTablesOfContentsCommand>("build-tables-of-contents");
+                root.AddCommand<ImportCodeBlocksCommand>("import-code-blocks");
+            });
+
+            try
+            {
+                return app.Run(args);
+            }
+            catch (Exception exception)
+            {
+                AnsiConsole.WriteException(exception);
+                throw;
+            }
+        }
     }
 }
