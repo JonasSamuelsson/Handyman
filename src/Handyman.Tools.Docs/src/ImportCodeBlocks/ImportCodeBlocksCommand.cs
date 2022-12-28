@@ -152,11 +152,5 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
             var extension = _fileSystem.Path.GetExtension(path);
             return SyntaxHighlightingLanguageLookup.GetSyntaxHighlightingLanguage(extension);
         }
-
-        public static void AddCodeBlockIndicators(List<string> lines, string syntaxHighlightingLanguage)
-        {
-            lines.Insert(0, $"```{syntaxHighlightingLanguage}");
-            lines.Add("```");
-        }
     }
 }
