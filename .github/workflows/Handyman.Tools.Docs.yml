@@ -21,6 +21,7 @@ jobs:
   build-test-publish:
     uses: JonasSamuelsson/Handyman/.github/workflows/build-test-publish-v1.yml@master
     with:
+      runsOn: windows-2022
       mainProjectPath: src/Handyman.Tools.Docs/src/Handyman.Tools.Docs.csproj
       testProjectPath: src/Handyman.Tools.Docs/tests/Handyman.Tools.Docs.Tests.csproj
       publish: ${{ github.event.inputs.publish }}
