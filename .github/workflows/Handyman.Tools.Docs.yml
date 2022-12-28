@@ -1,0 +1,28 @@
+name: Handyman.Tools.Docs
+
+on:
+  push:
+    paths:
+      - src/Handyman.Tools.Docs/src/**
+      - src/Handyman.Tools.Docs/tests/**
+  pull_request:
+    paths:
+      - src/Handyman.Tools.Docs/src/**
+      - src/Handyman.Tools.Docs/tests/**
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to nuget
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-test-publish:
+    uses: JonasSamuelsson/Handyman/.github/workflows/build-test-publish-v1.yml@master
+    with:
+      mainProjectPath: src/Handyman.Tools.Docs/src/Handyman.Tools.Docs.csproj
+      testProjectPath: src/Handyman.Tools.Docs/tests/Handyman.Tools.Docs.Tests.csproj
+      publish: ${{ github.event.inputs.publish }}
+    secrets:
+      nuget: ${{ secrets.NUGET }}
