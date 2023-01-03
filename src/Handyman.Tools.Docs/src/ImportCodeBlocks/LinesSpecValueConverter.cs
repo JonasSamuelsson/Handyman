@@ -4,27 +4,34 @@ using System.Linq;
 
 namespace Handyman.Tools.Docs.ImportCodeBlocks;
 
-public class LinesValueConverter : IValueConverter
+public class LinesSpecValueConverter : IValueConverter
 {
     public bool TryConvert(string s, Type targetType, out object value)
     {
-        value = null;
+        if (targetType != typeof(LinesSpec))
+        {
+            value = null;
+            return false;
+        }
 
+        value = new LinesSpec
+        {
+            Sections = s.Split(',').Select(ParseSection).ToList()
+        };
+
+        return true;
+    }
+
+    private static LinesSpec.Section ParseSection(string s)
+    {
         if (int.TryParse(s, out var from))
         {
             if (from < 1)
             {
                 throw new Exception($"Invalid format '{s}', value can't be less than 1.");
-                return false;
             }
 
-            value = new Lines
-            {
-                Count = 1,
-                FromNumber = from
-            };
-
-            return true;
+            return CreateSection(from, from);
         }
 
         if (TryParse(s, '-', out from, out var to))
@@ -34,43 +41,24 @@ public class LinesValueConverter : IValueConverter
                 throw new Exception($"Invalid format '{s}', from can't be less than 1.");
             }
 
-            if (to < @from)
+            if (to < from)
             {
                 throw new Exception($"Invalid format '{s}', from can't greater than to.");
             }
 
-            value = new Lines
-            {
-                Count = (to - from) + 1,
-                FromNumber = from
-            };
-
-            return true;
-        }
-
-        if (TryParse(s, '+', out from, out var count))
-        {
-            if (from < 1)
-            {
-                throw new Exception($"Invalid format '{s}', from can't be less than 1.");
-                return false;
-            }
-
-            if (count < 1)
-            {
-                throw new Exception($"Invalid format '{s}', count can't be less than 1.");
-                return false;
-            }
-
-            value = new Lines
-            {
-                Count = count + 1,
-                FromNumber = from
-            };
-            return true;
+            return CreateSection(from, to);
         }
 
         throw new Exception($"Invalid format '{s}'.");
+    }
+
+    private static LinesSpec.Section CreateSection(int from, int to)
+    {
+        return new LinesSpec.Section
+        {
+            FromNumber = from,
+            Count = to - from + 1
+        };
     }
 
     private static bool TryParse(string s, char separator, out int first, out int second)

@@ -71,7 +71,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 });
 
             var elementReader = new ElementReader();
-            var attributesConverter = new AttributesConverter(new[] { new LinesValueConverter() });
+            var attributesConverter = new AttributesConverter(new[] { new LinesSpecValueConverter() });
 
             new ImportCodeBlocksCommand(fileSystem, elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input

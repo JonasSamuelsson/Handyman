@@ -96,47 +96,40 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
                     if (sourceAttributes.Id != attributes.Id)
                         continue;
 
-                    if (sourceAttributes.Lines != null)
+                    if (sourceAttributes.LinesSpec != null)
                     {
-                        return GenerateCodeBlock(sourceLines, sourceAttributes.Lines, sourceFilePath);
+                        return GenerateCodeBlock(sourceLines, sourceAttributes.LinesSpec, sourceFilePath);
                     }
 
                     return GenerateCodeBlock(sourceLines,
-                        new Lines
-                        {
-                            Count = element.LineCount - 2,
-                            FromNumber = element.LineIndex + 2
-                        },
+                        LinesSpec.CreateForSection(element.ContentLineNumber, element.ContentLineCount),
                         sourceFilePath);
                 }
 
                 throw new Exception("todo");
             }
 
-            if (attributes.Lines != null)
+            if (attributes.LinesSpec != null)
             {
-                return GenerateCodeBlock(sourceLines, attributes.Lines, sourceFilePath);
+                return GenerateCodeBlock(sourceLines, attributes.LinesSpec, sourceFilePath);
             }
 
             return GenerateCodeBlock(sourceLines,
-                new Lines
-                {
-                    Count = sourceLines.Count,
-                    FromNumber = 1
-                },
+                LinesSpec.CreateForAllOf(sourceLines),
                 sourceFilePath);
         }
 
-        private IReadOnlyList<string> GenerateCodeBlock(IReadOnlyList<string> sourceLines, Lines lines, string sourceFilePath)
+        private IReadOnlyList<string> GenerateCodeBlock(IReadOnlyList<string> sourceLines, LinesSpec linesSpec, string sourceFilePath)
         {
-            if (sourceLines.Count < (lines.FromIndex + lines.Count))
+            if (sourceLines.Count < linesSpec.Sections.Max(x => x.ToNumber))
             {
                 throw new Exception("todo - lines out of range");
             }
 
-            var result = sourceLines
-                .Skip(lines.FromIndex)
-                .Take(lines.Count)
+            var result = linesSpec.Sections
+                .SelectMany(section => sourceLines
+                    .Skip(section.FromIndex)
+                    .Take(section.Count))
                 .ToList();
 
             result.UnIndentLines();

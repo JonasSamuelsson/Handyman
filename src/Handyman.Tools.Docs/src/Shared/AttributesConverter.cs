@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Handyman.Tools.Docs.Shared;
 
@@ -21,10 +22,19 @@ public class AttributesConverter : IAttributesConverter
 
         foreach (var property in tAttributes.GetType().GetProperties())
         {
-            if (!attributes.TryGet(property.Name, out var stringValue))
+            var name = property.Name;
+
+            var nameAttribute = property.GetCustomAttribute<AttributeNameAttribute>();
+
+            if (nameAttribute != null)
+            {
+                name = nameAttribute.Name;
+            }
+
+            if (!attributes.TryGet(name, out var stringValue))
                 continue;
 
-            set.Remove(property.Name);
+            set.Remove(name);
 
             if (property.PropertyType == typeof(string))
             {

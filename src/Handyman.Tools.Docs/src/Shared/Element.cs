@@ -11,5 +11,8 @@ namespace Handyman.Tools.Docs.Shared
         public string Prefix { get; set; }
         public Attributes Attributes { get; set; }
         public string Postfix { get; set; }
+
+        public int ContentLineCount => LineCount - 2;
+        public int ContentLineNumber => LineIndex + 2;
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace Handyman.Tools.Docs.ImportCodeBlocks;
+﻿using Handyman.Tools.Docs.Shared;
+
+namespace Handyman.Tools.Docs.ImportCodeBlocks;
 
 public class CodeBlockSourceAttributes
 {
     public string Id { get; set; }
-    public Lines Lines { get; set; }
+    [AttributeName("Lines")] public LinesSpec? LinesSpec { get; set; }
 }
