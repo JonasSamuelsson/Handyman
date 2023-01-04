@@ -30,7 +30,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
 
-            new ImportCodeBlocksCommand(fileSystem, elementReader, attributesConverter)
+            new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
                     TargetPath = "c:/"
@@ -73,7 +73,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(new[] { new LinesSpecValueConverter() });
 
-            new ImportCodeBlocksCommand(fileSystem, elementReader, attributesConverter)
+            new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
                     TargetPath = "c:/"
@@ -118,7 +118,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
 
-            new ImportCodeBlocksCommand(fileSystem, elementReader, attributesConverter)
+            new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
                     TargetPath = "c:/"
@@ -158,7 +158,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
 
-            new ImportCodeBlocksCommand(fileSystem, elementReader, attributesConverter)
+            new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
                     TargetPath = "c:/"

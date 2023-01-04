@@ -15,12 +15,14 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
         }
 
         private readonly IFileSystem _fileSystem;
+        private readonly ILogger _logger;
         private readonly IElementReader _elementReader;
         private readonly IAttributesConverter _attributesConverter;
 
-        public ImportCodeBlocksCommand(IFileSystem fileSystem, IElementReader elementReader, IAttributesConverter attributesConverter)
+        public ImportCodeBlocksCommand(IFileSystem fileSystem, ILogger logger, IElementReader elementReader, IAttributesConverter attributesConverter)
         {
             _fileSystem = fileSystem;
+            _logger = logger;
             _elementReader = elementReader;
             _attributesConverter = attributesConverter;
         }
@@ -45,6 +47,8 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
 
         private void ProcessMarkdownFile(string markdownFilePath)
         {
+            using var scope = _logger.Scope(markdownFilePath);
+
             var lines = _fileSystem.File.ReadAllLines(markdownFilePath);
 
             var patches = _elementReader.ReadElements("code-block", lines)

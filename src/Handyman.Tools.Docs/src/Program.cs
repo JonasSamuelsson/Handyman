@@ -21,6 +21,7 @@ namespace Handyman.Tools.Docs
         {
             var services = new ServiceCollection();
 
+            services.AddSingleton(AnsiConsole.Console);
             services.AddSingleton<IFileSystem, FileSystem>();
 
             services.Scan(s =>
