@@ -17,11 +17,11 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md".FixOsNeutralPaths(),
+            fileSystem.File.WriteAllLines("c:/file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" /> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" /> -->",
                     "after"
                 });
 
@@ -33,14 +33,14 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/".FixOsNeutralPaths()
+                    TargetPath = "c:/"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md".FixOsNeutralPaths())
+            fileSystem.File.ReadAllLines("c:/file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\"> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\"> -->",
                     "```txt",
                     "success",
                     "```",
@@ -54,15 +54,15 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md".FixOsNeutralPaths(),
+            fileSystem.File.WriteAllLines("c:/file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" lines=\"2\" /> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" lines=\"2\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file.txt".FixOsNeutralPaths(),
+            fileSystem.File.WriteAllLines("c:/file.txt",
                 new[]
                 {
                     "first",
@@ -83,7 +83,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" lines=\"2\"> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" lines=\"2\"> -->",
                     "```txt",
                     "second",
                     "```",
@@ -97,15 +97,15 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md".FixOsNeutralPaths(),
+            fileSystem.File.WriteAllLines("c:/file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" id=\"foo\" /> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" id=\"foo\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file.txt".FixOsNeutralPaths(),
+            fileSystem.File.WriteAllLines("c:/file.txt",
                 new[]
                 {
                     "first",
@@ -121,14 +121,14 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/".FixOsNeutralPaths()
+                    TargetPath = "c:/"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md".FixOsNeutralPaths())
+            fileSystem.File.ReadAllLines("c:/file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" id=\"foo\"> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" id=\"foo\"> -->",
                     "```txt",
                     "second",
                     "```",
@@ -146,14 +146,14 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file1.txt\" /> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file1.txt\" /> -->",
                     "between",
-                    "<!-- <handyman-docs:code-block source=\"c:/file2.txt\" /> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file2.txt\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file1.txt".FixOsNeutralPaths(), new[] { "one" });
-            fileSystem.File.WriteAllLines("c:/file2.txt".FixOsNeutralPaths(), new[] { "two" });
+            fileSystem.File.WriteAllLines("c:/file1.txt", new[] { "one" });
+            fileSystem.File.WriteAllLines("c:/file2.txt", new[] { "two" });
 
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
@@ -161,20 +161,20 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/".FixOsNeutralPaths()
+                    TargetPath = "c:/"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md".FixOsNeutralPaths())
+            fileSystem.File.ReadAllLines("c:/file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file1.txt\"> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file1.txt\"> -->",
                     "```txt",
                     "one",
                     "```",
                     "<!-- </handyman-docs:code-block> -->",
                     "between",
-                    "<!-- <handyman-docs:code-block source=\"c:/file2.txt\"> -->".FixOsNeutralPaths(),
+                    "<!-- <handyman-docs:code-block source=\"c:/file2.txt\"> -->",
                     "```txt",
                     "two",
                     "```",
@@ -200,17 +200,17 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 "<!-- </handyman-docs:code-block> -->",
                 "5"
             });
-            fileSystem.AddFile("c:/dir/a.cs".FixOsNeutralPaths(), new[]
+            fileSystem.AddFile("c:/dir/a.cs", new[]
             {
                 "public class A { }"
             });
-            fileSystem.AddFile("c:/dir/b.txt".FixOsNeutralPaths(), new[]
+            fileSystem.AddFile("c:/dir/b.txt", new[]
             {
                 "first",
                 "second",
                 "third"
             });
-            fileSystem.AddFile("c:/dir/c.ps1".FixOsNeutralPaths(), new[]
+            fileSystem.AddFile("c:/dir/c.ps1", new[]
             {
                 "write-host 1",
                 "write-host 2",
@@ -219,7 +219,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 "write-host 5"
             });
 
-            var exitCode = Program.Run(new[] { "import-code-blocks", "c:/dir".FixOsNeutralPaths() }, services =>
+            var exitCode = Program.Run(new[] { "import-code-blocks", "c:/dir" }, services =>
             {
                 services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem));
                 services.Replace(new ServiceDescriptor(typeof(ILogger), typeof(TestLogger), ServiceLifetime.Singleton));
@@ -227,7 +227,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
 
             exitCode.ShouldBe(0);
 
-            fileSystem.File.ReadAllLines("c:/dir/readme.md".FixOsNeutralPaths()).ShouldBe(new[]
+            fileSystem.File.ReadAllLines("c:/dir/readme.md").ShouldBe(new[]
             {
                 "1",
                 "<!-- <handyman-docs:code-block source=\"a.cs\"> -->",
