@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 
 namespace Handyman.Tools.Docs.Tests
@@ -16,11 +15,6 @@ namespace Handyman.Tools.Docs.Tests
             }
 
             fileSystem.File.WriteAllLines(path, lines);
-        }
-
-        public static IEnumerable<string> GetLines(this MockFileData file)
-        {
-            return MockFileData.DefaultEncoding.GetString(file.Contents).Split(Environment.NewLine);
         }
     }
 }
