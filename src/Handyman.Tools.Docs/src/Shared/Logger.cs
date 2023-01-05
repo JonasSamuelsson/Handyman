@@ -9,6 +9,8 @@ public abstract class Logger : ILogger
     private readonly List<string> _allScopes = new();
     private readonly List<string> _scopesToPrint = new();
 
+    public Verbosity Verbosity { get; set; } = Verbosity.Normal;
+
     public IDisposable Scope(string scope)
     {
         scope = GetIndentation() + scope;
@@ -26,6 +28,9 @@ public abstract class Logger : ILogger
 
     public virtual void Write(LogLevel logLevel, string message)
     {
+        if (!ShouldWrite(logLevel))
+            return;
+
         foreach (var scope in _scopesToPrint)
         {
             Write(scope);
@@ -34,6 +39,17 @@ public abstract class Logger : ILogger
         _scopesToPrint.Clear();
 
         Write(GetIndentation() + Format(message, logLevel));
+    }
+
+    private bool ShouldWrite(LogLevel logLevel)
+    {
+        if (Verbosity == Verbosity.Quiet)
+            return false;
+
+        if (Verbosity == Verbosity.Diagnostics)
+            return true;
+
+        return logLevel == LogLevel.Error || logLevel == LogLevel.Info;
     }
 
     protected abstract string Format(string message, LogLevel logLevel);
@@ -66,4 +82,11 @@ public abstract class Logger : ILogger
             return true;
         }
     }
+}
+
+public enum Verbosity
+{
+    Quiet = 0,
+    Normal = 1,
+    Diagnostics = 2
 }
