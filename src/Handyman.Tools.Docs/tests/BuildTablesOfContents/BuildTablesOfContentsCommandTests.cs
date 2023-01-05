@@ -189,7 +189,7 @@ public class BuildTablesOfContentsCommandTests
     {
         var fileSystem = new MockFileSystem();
 
-        fileSystem.File.WriteAllLines("c:/main.md", new[]
+        fileSystem.File.WriteAllLines(@"C:\main.md", new[]
         {
             "<!--<handyman-docs:table-of-content />-->",
             "# one",
@@ -197,16 +197,16 @@ public class BuildTablesOfContentsCommandTests
             "<!--<handyman-docs:table-of-content SourcePath=\"extra.md\" ListType=\"ordered\" />-->",
         });
 
-        fileSystem.File.WriteAllLines("c:/extra.md", new[]
+        fileSystem.File.WriteAllLines(@"C:\extra.md", new[]
         {
             "# xyz",
         });
 
-        var exitCode = Program.Run(new[] { "build-tables-of-contents", "c:/main.md" }, services => services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem)));
+        var exitCode = Program.Run(new[] { "build-tables-of-contents", @"C:\main.md" }, services => services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem)));
 
         exitCode.ShouldBe(0);
 
-        fileSystem.File.ReadAllLines("c:/main.md").ShouldBe(new[]
+        fileSystem.File.ReadAllLines(@"C:\main.md").ShouldBe(new[]
         {
             "<!--<handyman-docs:table-of-content>-->",
             "- [one](#one)",

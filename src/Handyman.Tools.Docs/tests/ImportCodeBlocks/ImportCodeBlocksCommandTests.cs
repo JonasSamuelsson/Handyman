@@ -17,15 +17,15 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md",
+            fileSystem.File.WriteAllLines(@"C:\file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" /> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file.txt\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file.txt", new[] { "success" });
+            fileSystem.File.WriteAllLines(@"C:\file.txt", new[] { "success" });
 
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
@@ -33,14 +33,14 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/"
+                    TargetPath = @"C:\"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md")
+            fileSystem.File.ReadAllLines(@"C:\file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\"> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file.txt\"> -->",
                     "```txt",
                     "success",
                     "```",
@@ -54,15 +54,15 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md",
+            fileSystem.File.WriteAllLines(@"C:\file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" lines=\"2\" /> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file.txt\" lines=\"2\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file.txt",
+            fileSystem.File.WriteAllLines(@"C:\file.txt",
                 new[]
                 {
                     "first",
@@ -76,14 +76,14 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/"
+                    TargetPath = @"C:\"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md")
+            fileSystem.File.ReadAllLines(@"C:\file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" lines=\"2\"> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file.txt\" lines=\"2\"> -->",
                     "```txt",
                     "second",
                     "```",
@@ -97,15 +97,15 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md",
+            fileSystem.File.WriteAllLines(@"C:\file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" id=\"foo\" /> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file.txt\" id=\"foo\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file.txt",
+            fileSystem.File.WriteAllLines(@"C:\file.txt",
                 new[]
                 {
                     "first",
@@ -121,14 +121,14 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/"
+                    TargetPath = @"C:\"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md")
+            fileSystem.File.ReadAllLines(@"C:\file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file.txt\" id=\"foo\"> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file.txt\" id=\"foo\"> -->",
                     "```txt",
                     "second",
                     "```",
@@ -142,18 +142,18 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.File.WriteAllLines("c:/file.md",
+            fileSystem.File.WriteAllLines(@"C:\file.md",
                 new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file1.txt\" /> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file1.txt\" /> -->",
                     "between",
-                    "<!-- <handyman-docs:code-block source=\"c:/file2.txt\" /> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file2.txt\" /> -->",
                     "after"
                 });
 
-            fileSystem.File.WriteAllLines("c:/file1.txt", new[] { "one" });
-            fileSystem.File.WriteAllLines("c:/file2.txt", new[] { "two" });
+            fileSystem.File.WriteAllLines(@"C:\file1.txt", new[] { "one" });
+            fileSystem.File.WriteAllLines(@"C:\file2.txt", new[] { "two" });
 
             var elementReader = new ElementReader();
             var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
@@ -161,20 +161,20 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
                 {
-                    TargetPath = "c:/"
+                    TargetPath = @"C:\"
                 });
 
-            fileSystem.File.ReadAllLines("c:/file.md")
+            fileSystem.File.ReadAllLines(@"C:\file.md")
                 .ShouldBe(new[]
                 {
                     "before",
-                    "<!-- <handyman-docs:code-block source=\"c:/file1.txt\"> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file1.txt\"> -->",
                     "```txt",
                     "one",
                     "```",
                     "<!-- </handyman-docs:code-block> -->",
                     "between",
-                    "<!-- <handyman-docs:code-block source=\"c:/file2.txt\"> -->",
+                    "<!-- <handyman-docs:code-block source=\"C:\\file2.txt\"> -->",
                     "```txt",
                     "two",
                     "```",
@@ -188,7 +188,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         {
             var fileSystem = new MockFileSystem();
 
-            fileSystem.AddFile(@"x:\dir\readme.md", new[]
+            fileSystem.AddFile(@"C:\dir\readme.md", new[]
             {
                 "1",
                 "<!-- <handyman-docs:code-block source=\"a.cs\" /> -->",
@@ -200,17 +200,17 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 "<!-- </handyman-docs:code-block> -->",
                 "5"
             });
-            fileSystem.AddFile(@"x:\dir\a.cs", new[]
+            fileSystem.AddFile(@"C:\dir\a.cs", new[]
             {
                 "public class A { }"
             });
-            fileSystem.AddFile(@"x:\dir\b.txt", new[]
+            fileSystem.AddFile(@"C:\dir\b.txt", new[]
             {
                 "first",
                 "second",
                 "third"
             });
-            fileSystem.AddFile(@"x:\dir\c.ps1", new[]
+            fileSystem.AddFile(@"C:\dir\c.ps1", new[]
             {
                 "write-host 1",
                 "write-host 2",
@@ -219,7 +219,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 "write-host 5"
             });
 
-            var exitCode = Program.Run(new[] { "import-code-blocks", @"x:\dir" }, services =>
+            var exitCode = Program.Run(new[] { "import-code-blocks", @"C:\dir" }, services =>
             {
                 services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem));
                 services.Replace(new ServiceDescriptor(typeof(ILogger), typeof(TestLogger), ServiceLifetime.Singleton));
@@ -227,7 +227,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
 
             exitCode.ShouldBe(0);
 
-            fileSystem.File.ReadAllLines(@"x:\dir\readme.md").ShouldBe(new[]
+            fileSystem.File.ReadAllLines(@"C:\dir\readme.md").ShouldBe(new[]
             {
                 "1",
                 "<!-- <handyman-docs:code-block source=\"a.cs\"> -->",
