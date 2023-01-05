@@ -6,10 +6,17 @@
    </PropertyGroup>
 
    <PropertyGroup>
-      <PackageId>handyman-docs</PackageId>
-      <PackAsTool>true</PackAsTool>
-      <ToolCommandName>handyman-docs</ToolCommandName>
       <Version>0.1.2</Version>
+      <PackageId>handyman-docs</PackageId>
+      <ToolCommandName>handyman-docs</ToolCommandName>
+      <PackAsTool>true</PackAsTool>
+      <Authors>Jonas Samuelsson</Authors>
+      <Company />
+      <Product>handyman-docs</Product>
+      <Description></Description>
+      <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
+      <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
    </PropertyGroup>
 
    <ItemGroup>
