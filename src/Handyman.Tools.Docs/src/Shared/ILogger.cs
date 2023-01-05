@@ -6,20 +6,20 @@ public interface ILogger
 {
     IDisposable Scope(string scope);
 
-    void WriteLine(LogLevel logLevel, string message);
+    void Write(LogLevel logLevel, string message);
 
-    void WriteDebugLine(string message)
+    void WriteDebug(string message)
     {
-        WriteLine(LogLevel.Debug, message);
+        Write(LogLevel.Debug, message);
     }
 
-    void WriteInfoLine(string message)
+    void WriteInfo(string message)
     {
-        WriteLine(LogLevel.Info, message);
+        Write(LogLevel.Info, message);
     }
 
-    void WriteErrorLine(string message)
+    void WriteError(string message)
     {
-        WriteLine(LogLevel.Error, message);
+        Write(LogLevel.Error, message);
     }
 }

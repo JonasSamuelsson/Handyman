@@ -1,59 +1,69 @@
-﻿using Spectre.Console;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Handyman.Tools.Docs.Shared;
 
-public abstract class LoggerBase : ILogger
+public abstract class Logger : ILogger
 {
-    private string _indentation = string.Empty;
+    private readonly List<string> _allScopes = new();
+    private readonly List<string> _scopesToPrint = new();
 
     public IDisposable Scope(string scope)
     {
-        var s = _indentation;
-        _indentation += " ";
-        return new Disposable(() => _indentation = s);
-    }
+        scope = GetIndentation() + scope;
 
-    public virtual void WriteLine(LogLevel logLevel, string message)
-    {
-        WriteLine(message);
-    }
+        _allScopes.Add(scope);
+        _scopesToPrint.Add(scope);
 
-    protected abstract void WriteLine(string message);
-}
-
-public class Logger : LoggerBase
-{
-    private readonly IAnsiConsole _console;
-
-    public Logger(IAnsiConsole console)
-    {
-        _console = console;
-    }
-
-    public override void WriteLine(LogLevel logLevel, string message)
-    {
-        var format = GetFormat(logLevel);
-
-        var prefix = format.Length == 0 ? string.Empty : $"[{format}]";
-        var postfix = format.Length == 0 ? string.Empty : "[/]";
-
-        base.WriteLine(logLevel, $"{prefix}{message}{postfix}");
-    }
-
-    private static string GetFormat(LogLevel logLevel)
-    {
-        return logLevel switch
+        return new Disposable(() =>
         {
-            LogLevel.Debug => "purple",
-            LogLevel.Info => "",
-            LogLevel.Error => "red",
-            _ => throw new Exception($"Unhandled log level '{logLevel}'.")
-        };
+            _allScopes.RemoveAt(_allScopes.Count - 1);
+            if (_scopesToPrint.Count == 0) return;
+            _scopesToPrint.RemoveAt(_scopesToPrint.Count - 1);
+        });
     }
 
-    protected override void WriteLine(string message)
+    public virtual void Write(LogLevel logLevel, string message)
     {
-        _console.WriteLine(message);
+        foreach (var scope in _scopesToPrint)
+        {
+            Write(scope);
+        }
+
+        _scopesToPrint.Clear();
+
+        Write(GetIndentation() + Format(message, logLevel));
+    }
+
+    protected abstract string Format(string message, LogLevel logLevel);
+
+    protected abstract void Write(string line);
+
+    private string GetIndentation()
+    {
+        return new string(' ', _allScopes.Count * 2);
+    }
+
+    private class Scopes
+    {
+        public List<string> Items { get; } = new();
+
+        public void Push(string scope)
+        {
+            Items.Add(scope);
+        }
+
+        public bool Pop(string scope)
+        {
+            if (Items.Count == 0)
+                return false;
+
+            if (Items.Last() != scope)
+                return false;
+
+            Items.RemoveAt(Items.Count - 1);
+            return true;
+        }
     }
 }
