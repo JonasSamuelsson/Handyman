@@ -219,7 +219,11 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 "write-host 5"
             });
 
-            var exitCode = Program.Run(new[] { "import-code-blocks", @"x:\dir" }, services => services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem)));
+            var exitCode = Program.Run(new[] { "import-code-blocks", @"x:\dir" }, services =>
+            {
+                services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem));
+                services.Replace(new ServiceDescriptor(typeof(ILogger), typeof(TestLogger), ServiceLifetime.Singleton));
+            });
 
             exitCode.ShouldBe(0);
 

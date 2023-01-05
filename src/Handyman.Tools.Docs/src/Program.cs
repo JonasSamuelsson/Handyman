@@ -23,6 +23,7 @@ namespace Handyman.Tools.Docs
 
             services.AddSingleton(AnsiConsole.Console);
             services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<ILogger, ConsoleLogger>();
 
             services.Scan(s =>
             {
