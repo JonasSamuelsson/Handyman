@@ -26,22 +26,32 @@ public abstract class Logger : ILogger
         });
     }
 
-    public virtual void Write(LogLevel logLevel, string message)
+    public void WriteDebug(string message)
     {
-        if (!ShouldWrite(logLevel))
+        Write(LogLineType.Debug, message);
+    }
+
+    public void WriteError(string message)
+    {
+        Write(LogLineType.Error, message);
+    }
+
+    public virtual void Write(LogLineType logLineType, string message)
+    {
+        if (!ShouldWrite(logLineType))
             return;
 
         foreach (var scope in _scopesToPrint)
         {
-            Write(scope);
+            WriteLine(LogLineType.Scope, scope);
         }
 
         _scopesToPrint.Clear();
 
-        Write(GetIndentation() + Format(message, logLevel));
+        WriteLine(LogLineType.Scope, GetIndentation() + message);
     }
 
-    private bool ShouldWrite(LogLevel logLevel)
+    private bool ShouldWrite(LogLineType logLineType)
     {
         if (Verbosity == Verbosity.Quiet)
             return false;
@@ -49,12 +59,10 @@ public abstract class Logger : ILogger
         if (Verbosity == Verbosity.Diagnostics)
             return true;
 
-        return logLevel == LogLevel.Error || logLevel == LogLevel.Info;
+        return logLineType == LogLineType.Error;
     }
 
-    protected abstract string Format(string message, LogLevel logLevel);
-
-    protected abstract void Write(string line);
+    protected abstract void WriteLine(LogLineType logLineType, string line);
 
     private string GetIndentation()
     {
