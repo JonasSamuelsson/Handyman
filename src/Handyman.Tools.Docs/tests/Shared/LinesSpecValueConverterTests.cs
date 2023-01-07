@@ -1,9 +1,9 @@
-﻿using Handyman.Tools.Docs.ImportCodeBlocks;
+﻿using Handyman.Tools.Docs.Shared;
 using Shouldly;
 using System.Linq;
 using Xunit;
 
-namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks;
+namespace Handyman.Tools.Docs.Tests.Shared;
 
 public class LinesSpecValueConverterTests
 {

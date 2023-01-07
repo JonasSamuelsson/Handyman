@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Handyman.Tools.Docs.ImportCodeBlocks;
+namespace Handyman.Tools.Docs.Shared;
 
 public class LinesSpec
 {

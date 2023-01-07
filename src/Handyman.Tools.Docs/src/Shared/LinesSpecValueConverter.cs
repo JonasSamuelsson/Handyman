@@ -1,8 +1,7 @@
-﻿using Handyman.Tools.Docs.Shared;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace Handyman.Tools.Docs.ImportCodeBlocks;
+namespace Handyman.Tools.Docs.Shared;
 
 public class LinesSpecValueConverter : IValueConverter
 {
