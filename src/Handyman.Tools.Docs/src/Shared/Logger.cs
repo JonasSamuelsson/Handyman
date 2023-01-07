@@ -91,10 +91,3 @@ public abstract class Logger : ILogger
         }
     }
 }
-
-public enum Verbosity
-{
-    Quiet = 0,
-    Normal = 1,
-    Diagnostics = 2
-}
