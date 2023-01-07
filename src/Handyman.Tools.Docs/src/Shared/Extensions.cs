@@ -35,9 +35,13 @@ namespace Handyman.Tools.Docs.Shared
         public static MarkdownDocument ToMarkdownDocument(this IEnumerable<string> lines)
         {
             var markdown = string.Join(Environment.NewLine, lines);
-            var markdownPipelineBuilder = new MarkdownPipelineBuilder();
-            markdownPipelineBuilder.Extensions.Add(new AutoIdentifierExtension(AutoIdentifierOptions.Default));
-            var markdownPipeline = markdownPipelineBuilder.Build();
+
+            var builder = new MarkdownPipelineBuilder();
+            builder.Extensions.Add(new AutoIdentifierExtension(AutoIdentifierOptions.Default));
+            builder.PreciseSourceLocation = true;
+
+            var markdownPipeline = builder.Build();
+
             return Markdown.Parse(markdown, markdownPipeline);
         }
 

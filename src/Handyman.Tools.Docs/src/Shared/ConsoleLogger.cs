@@ -12,29 +12,29 @@ public class ConsoleLogger : Logger
         _console = console;
     }
 
-    protected override string Format(string message, LogLevel logLevel)
+    protected override void WriteLine(LogLineType logLineType, string line)
     {
-        var format = GetFormat(logLevel);
+        var format = GetFormat(logLineType);
 
-        var prefix = format.Length == 0 ? string.Empty : $"[{format}]";
-        var postfix = format.Length == 0 ? string.Empty : "[/]";
-
-        return $"{prefix}{message}{postfix}";
-    }
-
-    private static string GetFormat(LogLevel logLevel)
-    {
-        return logLevel switch
+        if (string.IsNullOrWhiteSpace(format))
         {
-            LogLevel.Debug => "purple",
-            LogLevel.Info => "",
-            LogLevel.Error => "red",
-            _ => throw new Exception($"Unhandled log level '{logLevel}'.")
-        };
+            _console.WriteLine(line);
+            return;
+        }
+
+        _console.Markup(format);
+        _console.Write(line);
+        _console.MarkupLine("[/]");
     }
 
-    protected override void Write(string line)
+    private static string GetFormat(LogLineType logLineType)
     {
-        _console.WriteLine(line);
+        return logLineType switch
+        {
+            LogLineType.Debug => "[purple]",
+            LogLineType.Error => "[red]",
+            LogLineType.Scope => "",
+            _ => throw new Exception($"Unhandled log level '{logLineType}'.")
+        };
     }
 }
