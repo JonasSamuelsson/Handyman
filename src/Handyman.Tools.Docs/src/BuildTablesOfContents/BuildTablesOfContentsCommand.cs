@@ -1,14 +1,11 @@
 ﻿using Handyman.Tools.Docs.Shared;
 using Markdig.Renderers.Html;
-using Markdig.Renderers.Normalize;
 using Markdig.Syntax;
 using Spectre.Console.Cli;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 
 namespace Handyman.Tools.Docs.BuildTablesOfContents
 {
@@ -111,7 +108,7 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
                     ListType.Unordered => "-",
                     _ => throw new Exception("todo")
                 };
-                var text = GetText(heading.Inline);
+                var text = heading.Inline.ToMarkdownString();
                 var link = heading.TryGetAttributes()!.Id;
 
                 result.Add($"{indentation}{type} [{text}](#{link})");
@@ -120,13 +117,6 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
             result.UnIndentLines();
 
             return result;
-        }
-
-        private static string GetText(MarkdownObject markdownObject)
-        {
-            var stringBuilder = new StringBuilder();
-            new NormalizeRenderer(new StringWriter(stringBuilder)).Render(markdownObject);
-            return stringBuilder.ToString();
         }
     }
 }

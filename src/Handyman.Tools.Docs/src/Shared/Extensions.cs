@@ -1,11 +1,13 @@
 ﻿using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
+using Markdig.Renderers.Normalize;
 using Markdig.Syntax;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text;
 
 namespace Handyman.Tools.Docs.Shared
 {
@@ -37,6 +39,13 @@ namespace Handyman.Tools.Docs.Shared
             markdownPipelineBuilder.Extensions.Add(new AutoIdentifierExtension(AutoIdentifierOptions.Default));
             var markdownPipeline = markdownPipelineBuilder.Build();
             return Markdown.Parse(markdown, markdownPipeline);
+        }
+
+        public static string ToMarkdownString(this MarkdownObject markdownObject)
+        {
+            var stringBuilder = new StringBuilder();
+            new NormalizeRenderer(new StringWriter(stringBuilder)).Render(markdownObject);
+            return stringBuilder.ToString();
         }
 
         public static void UnIndentLines(this IList<string> lines)
