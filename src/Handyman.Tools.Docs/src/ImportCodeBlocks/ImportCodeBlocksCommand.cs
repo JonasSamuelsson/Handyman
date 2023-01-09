@@ -54,7 +54,7 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
             var patches = _elementReader.ReadElements("code-block", lines)
                 .Select(element => new PatchEngine.Patch
                 {
-                    Content = GenerateCodeBlock(element, lines, markdownFilePath),
+                    Content = GenerateCodeBlock(element, markdownFilePath),
                     Element = element
                 })
                 .ToList();
@@ -64,7 +64,7 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
             _fileSystem.File.WriteAllLines(markdownFilePath, newLines);
         }
 
-        private IReadOnlyList<string> GenerateCodeBlock(Element element, IReadOnlyList<string> lines, string fileFullPath)
+        private IReadOnlyList<string> GenerateCodeBlock(Element element, string fileFullPath)
         {
             var attributes = _attributesConverter.ConvertTo<CodeBlockAttributes>(element.Attributes);
 
@@ -81,14 +81,17 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
                 sourceFullPath = _fileSystem.Path.GetFullPath(combinedPaths);
             }
 
+            var sourceExtension = _fileSystem.Path.GetExtension(sourceFullPath);
             var sourceLines = _fileSystem.File.ReadAllLines(sourceFullPath);
 
-            return GenerateCodeBlock(sourceLines, attributes, sourceFullPath);
+            return GenerateCodeBlock(sourceLines, attributes, sourceExtension);
         }
 
         /// <remarks>public for testability</remarks>
-        public IReadOnlyList<string> GenerateCodeBlock(IReadOnlyList<string> sourceLines, CodeBlockAttributes attributes, string sourceFilePath)
+        public IReadOnlyList<string> GenerateCodeBlock(IReadOnlyList<string> sourceLines, CodeBlockAttributes attributes, string sourceExtension)
         {
+            var syntaxHighlightingLanguage = attributes.Language ?? SyntaxHighlightingLanguageLookup.GetSyntaxHighlightingLanguage(sourceExtension);
+
             if (attributes.Id != null)
             {
                 var elements = _elementReader.ReadElements("code-block-source", sourceLines);
@@ -102,12 +105,12 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
 
                     if (sourceAttributes.LinesSpec != null)
                     {
-                        return GenerateCodeBlock(sourceLines, sourceAttributes.LinesSpec, sourceFilePath);
+                        return GenerateCodeBlock(sourceLines, sourceAttributes.LinesSpec, syntaxHighlightingLanguage);
                     }
 
                     return GenerateCodeBlock(sourceLines,
                         LinesSpec.CreateForSection(element.ContentLineNumber, element.ContentLineCount),
-                        sourceFilePath);
+                        syntaxHighlightingLanguage);
                 }
 
                 throw new Exception("todo");
@@ -115,15 +118,15 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
 
             if (attributes.LinesSpec != null)
             {
-                return GenerateCodeBlock(sourceLines, attributes.LinesSpec, sourceFilePath);
+                return GenerateCodeBlock(sourceLines, attributes.LinesSpec, syntaxHighlightingLanguage);
             }
 
             return GenerateCodeBlock(sourceLines,
                 LinesSpec.CreateForAllOf(sourceLines),
-                sourceFilePath);
+                syntaxHighlightingLanguage);
         }
 
-        private IReadOnlyList<string> GenerateCodeBlock(IReadOnlyList<string> sourceLines, LinesSpec linesSpec, string sourceFilePath)
+        private IReadOnlyList<string> GenerateCodeBlock(IReadOnlyList<string> sourceLines, LinesSpec linesSpec, string language)
         {
             if (sourceLines.Count < linesSpec.Sections.Max(x => x.ToNumber))
             {
@@ -138,16 +141,10 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
 
             result.UnIndentLines();
 
-            result.Insert(0, $"```{GetSyntaxHighlightingLanguage(sourceFilePath)}");
+            result.Insert(0, $"```{language}");
             result.Add("```");
 
             return result;
-        }
-
-        private string GetSyntaxHighlightingLanguage(string path)
-        {
-            var extension = _fileSystem.Path.GetExtension(path);
-            return SyntaxHighlightingLanguageLookup.GetSyntaxHighlightingLanguage(extension);
         }
     }
 }
