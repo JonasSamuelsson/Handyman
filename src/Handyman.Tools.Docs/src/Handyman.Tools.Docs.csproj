@@ -6,7 +6,7 @@
    </PropertyGroup>
 
    <PropertyGroup>
-      <Version>0.2.0</Version>
+      <Version>0.2.1</Version>
       <PackageId>handyman-docs</PackageId>
       <ToolCommandName>handyman-docs</ToolCommandName>
       <PackAsTool>true</PackAsTool>

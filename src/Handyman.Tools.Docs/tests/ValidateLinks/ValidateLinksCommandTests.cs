@@ -74,4 +74,43 @@ public class ValidateLinksCommandTests
 
         (await command.Execute(input)).ShouldBe(exitCode);
     }
+
+    [Theory]
+    [InlineData("#", 0)]
+    [InlineData("#parent", 0)]
+    [InlineData("#child", 1)]
+    [InlineData("file.md#", 0)]
+    [InlineData("file.md#parent", 0)]
+    [InlineData("file.md#child", 1)]
+    [InlineData("temp/file.md#", 0)]
+    [InlineData("temp/file.md#parent", 1)]
+    [InlineData("temp/file.md#child", 0)]
+    public async Task ShouldHandleMarkdownAnchorLinks(string link, int exitCode)
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.File.WriteAllLines("c:/file.md", new[]
+        {
+            $"[text]({link})",
+            "# Parent",
+            "text"
+        });
+
+        fileSystem.File.WriteAllLines("c:/temp/file.md", new[]
+        {
+            "# Child",
+            "text"
+        });
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = "c:/"
+        };
+
+        (await command.Execute(input)).ShouldBe(exitCode);
+    }
 }

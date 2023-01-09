@@ -1,4 +1,5 @@
 ﻿using Handyman.Tools.Docs.Shared;
+using Markdig.Renderers.Html;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 using Spectre.Console.Cli;
@@ -110,6 +111,25 @@ public class ValidateLinksCommand : AsyncCommand<ValidateLinksCommand.Input>
                 continue;
             }
 
+            var anchor = "";
+            var linkHasAnchor = url.Contains('#');
+
+            if (linkHasAnchor)
+            {
+                var index = url.IndexOf('#');
+
+                if (index + 1 == url.Length)
+                {
+                    linkHasAnchor = false;
+                }
+                else
+                {
+                    anchor = url.Substring(index + 1);
+                }
+
+                url = index == 0 ? markdownFilePath : url.Substring(0, index);
+            }
+
             if (!_fileSystem.Path.IsPathFullyQualified(url))
             {
                 var relativeUrl = url;
@@ -124,7 +144,33 @@ public class ValidateLinksCommand : AsyncCommand<ValidateLinksCommand.Input>
 
             if (_fileSystem.File.Exists(url))
             {
-                _logger.WriteDebug("Ok");
+                if (linkHasAnchor && url.EndsWith(".md"))
+                {
+                    var targetDocument = _fileSystem.File.ReadAllLines(url).ToMarkdownDocument();
+                    var anchorFound = false;
+
+                    foreach (var heading in targetDocument.Descendants<HeadingBlock>())
+                    {
+                        var id = heading.TryGetAttributes()?.Id;
+                        if (id != anchor) continue;
+                        anchorFound = true;
+                        break;
+                    }
+
+                    if (anchorFound)
+                    {
+                        _logger.WriteDebug("Ok");
+                    }
+                    else
+                    {
+                        result = false;
+                        _logger.WriteError("Anchor not found");
+                    }
+                }
+                else
+                {
+                    _logger.WriteDebug("Ok");
+                }
             }
             else
             {
