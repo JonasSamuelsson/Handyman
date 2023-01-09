@@ -1,6 +1,7 @@
 ﻿using Handyman.DependencyInjection;
 using Handyman.Tools.Docs.BuildTablesOfContents;
 using Handyman.Tools.Docs.ImportCodeBlocks;
+using Handyman.Tools.Docs.ImportContent;
 using Handyman.Tools.Docs.Shared;
 using Handyman.Tools.Docs.ValidateLinks;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +42,7 @@ public class Program
         {
             root.AddCommand<BuildTablesOfContentsCommand>("build-tables-of-contents");
             root.AddCommand<ImportCodeBlocksCommand>("import-code-blocks");
+            root.AddCommand<ImportContentCommand>("import-content");
             root.AddCommand<ValidateLinksCommand>("validate-links");
         });
 
