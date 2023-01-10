@@ -10,20 +10,25 @@ namespace Handyman.Tools.Docs.Tests.ValidateLinks;
 public class ValidateLinksCommandTests
 {
     [Theory]
-    [InlineData("../found.md", 0)]
-    [InlineData("../not-found.md", 1)]
-    [InlineData("c:/found.md", 0)]
-    [InlineData("c:/not-found.md", 1)]
-    public async Task ShouldValidateLocalLinks(string link, int exitCode)
+    [InlineData(@"C:\a\file.md", @"found.md", 0)]
+    [InlineData(@"C:\a\file.md", @".\found.md", 0)]
+    [InlineData(@"C:\a\file.md", @"..\not-found.md", 1)]
+    [InlineData(@"C:\a\file.md", @"C:\a\found.md", 0)]
+    [InlineData(@"C:\a\file.md", @"C:\a\not-found.md", 1)]
+    [InlineData(@"C:\a\b\file.md", @"\found.md", 0)]
+    public async Task ShouldValidateLocalLinks(string filePath, string link, int exitCode)
     {
         var fileSystem = new MockFileSystem();
 
-        fileSystem.File.WriteAllLines("c:/temp/file.md", new[]
+        fileSystem.Directory.CreateDirectory(@"C:\a");
+        fileSystem.Directory.CreateDirectory(@"C:\a\.git");
+
+        fileSystem.AddFile(@"C:\a\found.md", new string[] { });
+
+        fileSystem.AddFile(filePath, new[]
         {
             $"[text]({link})"
         });
-
-        fileSystem.File.WriteAllLines("c:/found.md", new string[] { });
 
         var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
 
@@ -31,7 +36,7 @@ public class ValidateLinksCommandTests
         {
             ExitCode = true,
             LinkType = LinkType.Local,
-            TargetPath = "c:/"
+            TargetPath = @"C:\"
         };
 
         (await command.Execute(input)).ShouldBe(exitCode);
