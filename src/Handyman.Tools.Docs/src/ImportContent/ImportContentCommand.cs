@@ -76,9 +76,7 @@ public class ImportContentCommand : Command<ImportContentCommand.Input>
         }
         else
         {
-            var parentDirectoryPath = _fileSystem.Path.GetDirectoryName(fileFullPath);
-            var combinedPaths = _fileSystem.Path.Combine(parentDirectoryPath, attributes.Source);
-            sourceFullPath = _fileSystem.Path.GetFullPath(combinedPaths);
+            sourceFullPath = _fileSystem.ConstructPathRelativeToFile(fileFullPath, attributes.Source);
         }
 
         var sourceLines = _fileSystem.File.ReadAllLines(sourceFullPath);
