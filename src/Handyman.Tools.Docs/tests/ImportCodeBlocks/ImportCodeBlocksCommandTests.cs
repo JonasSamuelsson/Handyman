@@ -13,7 +13,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
     public class ImportCodeBlocksCommandTests
     {
         [Fact]
-        public void ShouldUpdateSingleCodeBlockFromWholeFile()
+        public void ShouldUpdateSingleCodeBlockFromSource()
         {
             var fileSystem = new MockFileSystem();
 
@@ -50,7 +50,47 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         }
 
         [Fact]
-        public void ShouldUpdateSingleCodeBlockWithSourceLines()
+        public void ShouldUpdateSingleCodeBlockFromGitRepoRelativeSource()
+        {
+            var fileSystem = new MockFileSystem();
+
+            fileSystem.Directory.CreateDirectory(@"C:\a");
+            fileSystem.Directory.CreateDirectory(@"C:\a\.git");
+
+            fileSystem.AddFile(@"C:\a\b\file.md",
+                new[]
+                {
+                    "before",
+                    "<!-- <handyman-docs:code-block source=\"\\file.txt\" /> -->",
+                    "after"
+                });
+
+            fileSystem.File.WriteAllLines(@"C:\a\file.txt", new[] { "success" });
+
+            var elementReader = new ElementReader();
+            var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
+
+            new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
+                .Execute(new ImportCodeBlocksCommand.Input
+                {
+                    TargetPath = @"C:\"
+                });
+
+            fileSystem.File.ReadAllLines(@"C:\a\b\file.md")
+                .ShouldBe(new[]
+                {
+                    "before",
+                    "<!-- <handyman-docs:code-block source=\"\\file.txt\"> -->",
+                    "```txt",
+                    "success",
+                    "```",
+                    "<!-- </handyman-docs:code-block> -->",
+                    "after"
+                });
+        }
+
+        [Fact]
+        public void ShouldUpdateSingleCodeBlockFromSourceLines()
         {
             var fileSystem = new MockFileSystem();
 
@@ -93,7 +133,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
         }
 
         [Fact]
-        public void ShouldUpdateSingleCodeBlockWithSourceId()
+        public void ShouldUpdateSingleCodeBlockFromSourceId()
         {
             var fileSystem = new MockFileSystem();
 

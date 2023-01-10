@@ -70,15 +70,13 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
 
             string sourceFullPath;
 
-            if (_fileSystem.Path.IsPathRooted(attributes.Source))
+            if (_fileSystem.Path.IsPathFullyQualified(attributes.Source))
             {
                 sourceFullPath = attributes.Source;
             }
             else
             {
-                var parentDirectoryPath = _fileSystem.Path.GetDirectoryName(fileFullPath);
-                var combinedPaths = _fileSystem.Path.Combine(parentDirectoryPath, attributes.Source);
-                sourceFullPath = _fileSystem.Path.GetFullPath(combinedPaths);
+                sourceFullPath = _fileSystem.ConstructPathRelativeToFile(fileFullPath, attributes.Source);
             }
 
             var sourceExtension = _fileSystem.Path.GetExtension(sourceFullPath);
