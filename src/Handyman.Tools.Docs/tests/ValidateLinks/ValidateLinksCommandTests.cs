@@ -118,4 +118,189 @@ public class ValidateLinksCommandTests
 
         (await command.Execute(input)).ShouldBe(exitCode);
     }
+
+    [Fact]
+    public async Task ShouldValidateRegularMarkdownLinks()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "[text](file.md)"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ShouldValidateMarkdownLinksWithTitle()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "[text](file.md \"this is a title\")"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ShouldValidateFormattedMarkdownLinks()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "**[text](file.md)**"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ShouldValidateMarkdownLinksWithFormatting()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "[`text`](file.md)"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ShouldValidateReferenceStyleMarkdownLinks()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "[text][1]",
+            "[1]: file.md"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), new TestHttpClient());
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ShouldValidateHtmlLinks()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "<a href=\"http://github.com/success\">title</a>"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var httpClient = new TestHttpClient
+        {
+            Handler = url => new Response
+            {
+                StatusCode = url == "http://github.com/success" ? 200 : 404
+            }
+        };
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), httpClient);
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ShouldValidateShorthandHtmlLinks()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.AddFile(@"C:\readme.md", new[]
+        {
+            "<http://github.com/success>"
+        });
+
+        fileSystem.AddFile(@"C:\file.md", new string[] { });
+
+        var httpClient = new TestHttpClient
+        {
+            Handler = url => new Response
+            {
+                StatusCode = url == "http://github.com/success" ? 200 : 404
+            }
+        };
+
+        var command = new ValidateLinksCommand(fileSystem, new TestLogger(), httpClient);
+
+        var input = new ValidateLinksCommand.Input
+        {
+            ExitCode = true,
+            LinkType = LinkType.Local,
+            TargetPath = @"C:\"
+        };
+
+        (await command.Execute(input)).ShouldBe(0);
+    }
 }
