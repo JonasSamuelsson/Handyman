@@ -148,3 +148,4 @@ Classes can also be decorated with the `ServiceLifetimeAttribute` where service 
 [ServiceLifetime(ServiceLifetime.Scoped)]
 public class Foo : IFoo { }
 ```
+If lifetime is provided both via parameter & `ServiceLifetimeAttribute`, then the attribute lifetime is used.
