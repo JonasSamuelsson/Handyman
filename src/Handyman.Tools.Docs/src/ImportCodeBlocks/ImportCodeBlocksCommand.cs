@@ -111,7 +111,7 @@ namespace Handyman.Tools.Docs.ImportCodeBlocks
                         syntaxHighlightingLanguage);
                 }
 
-                throw new Exception("todo");
+                throw new TodoException();
             }
 
             if (attributes.LinesSpec != null)

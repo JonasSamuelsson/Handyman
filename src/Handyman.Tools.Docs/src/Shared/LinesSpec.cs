@@ -16,12 +16,12 @@ public class LinesSpec
         {
             if (section.FromIndex < 0)
             {
-                throw new Exception("todo");
+                throw new TodoException();
             }
 
             if (section.FromIndex + section.Count > lines.Count)
             {
-                throw new Exception("todo");
+                throw new TodoException();
             }
 
             result.AddRange(lines.Skip(section.FromIndex).Take(section.Count));

@@ -106,7 +106,7 @@ public class ImportContentCommand : Command<ImportContentCommand.Input>
                 return GenerateContent(sourceLines, LinesSpec.CreateForSection(element.ContentLineNumber, element.ContentLineCount));
             }
 
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         if (attributes.LinesSpec != null)

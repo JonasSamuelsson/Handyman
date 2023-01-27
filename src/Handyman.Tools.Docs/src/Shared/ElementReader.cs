@@ -69,7 +69,7 @@ public class ElementReader : IElementReader
             {
                 if (tag.Attributes.Contains(keyValuePair.Key))
                 {
-                    throw new Exception("todo");
+                    throw new TodoException();
                 }
 
                 tag.Attributes.Add(keyValuePair.Key, keyValuePair.Value);

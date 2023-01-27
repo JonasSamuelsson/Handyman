@@ -33,7 +33,7 @@ public class LevelsValueConverter : IValueConverter
             {
                 if (additionalLevels < 1 || 6 < additionalLevels)
                 {
-                    throw new Exception("todo");
+                    throw new TodoException();
                 }
 
                 value = new TableOfContentLevels
@@ -46,14 +46,14 @@ public class LevelsValueConverter : IValueConverter
                 return true;
             }
 
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         var levels = Parse(s);
 
         if (!levels.Any())
         {
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         var min = levels.Min();
@@ -61,17 +61,17 @@ public class LevelsValueConverter : IValueConverter
 
         if (levels.Count != 1 && min >= max)
         {
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         if (min < 1)
         {
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         if (6 < max)
         {
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         value = new TableOfContentLevels
@@ -88,7 +88,7 @@ public class LevelsValueConverter : IValueConverter
     {
         if (string.IsNullOrWhiteSpace(s))
         {
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         if (int.TryParse(s, out var level))
@@ -100,7 +100,7 @@ public class LevelsValueConverter : IValueConverter
 
         if (strings.Length != 2)
         {
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         if (int.TryParse(strings[0], out var from) && int.TryParse(strings[1], out var to))
@@ -111,6 +111,6 @@ public class LevelsValueConverter : IValueConverter
                 .ToList();
         }
 
-        throw new Exception("todo");
+        throw new TodoException();
     }
 }

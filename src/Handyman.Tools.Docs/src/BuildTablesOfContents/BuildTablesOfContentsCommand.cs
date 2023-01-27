@@ -142,7 +142,7 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
                 {
                     ListType.Ordered => "0.",
                     ListType.Unordered => "-",
-                    _ => throw new Exception("todo")
+                    _ => throw new TodoException()
                 };
                 var text = heading.Inline.ToMarkdownString();
                 var link = heading.TryGetAttributes()!.Id;

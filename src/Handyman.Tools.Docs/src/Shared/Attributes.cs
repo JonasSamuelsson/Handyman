@@ -20,7 +20,7 @@ public class Attributes : IEnumerable<KeyValuePair<string, string>>
 
     public string Get(string name)
     {
-        return TryGet(name, out var value) ? value : throw new Exception("todo");
+        return TryGet(name, out var value) ? value : throw new TodoException();
     }
 
     public bool TryGet(string name, out string value)

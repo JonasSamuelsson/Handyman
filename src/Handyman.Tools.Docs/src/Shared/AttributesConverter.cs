@@ -49,7 +49,7 @@ public class AttributesConverter : IAttributesConverter
                 continue;
             }
 
-            throw new Exception("todo");
+            throw new TodoException();
         }
 
         if (set.Any())
