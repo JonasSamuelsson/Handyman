@@ -68,7 +68,9 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
 
             if (attributes.SourcePath == null)
             {
-                return GenerateTableOfContent(lines, attributes);
+                return attributes.Levels.Current
+                    ? GenerateTableOfContentForCurrentLevel(lines, element, attributes)
+                    : GenerateTableOfContentForExplicitLevels(lines, attributes);
             }
 
             string sourceFullPath;
@@ -86,23 +88,57 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
 
             var sourceLines = _fileSystem.File.ReadAllLines(sourceFullPath);
 
-            return GenerateTableOfContent(sourceLines, attributes);
+            return attributes.Levels.Current
+                ? GenerateTableOfContentForCurrentLevel(sourceLines, element, attributes)
+                : GenerateTableOfContentForExplicitLevels(sourceLines, attributes);
+        }
+
+        private static IReadOnlyList<string> GenerateTableOfContentForCurrentLevel(IReadOnlyList<string> lines, Element element, TableOfContentsAttributes attributes)
+        {
+            var headings = lines.ToMarkdownDocument()
+                .Descendants<HeadingBlock>()
+                .ToList();
+
+            var candidates = headings
+                .SkipWhile(x => x.Line < element.LineIndex)
+                .ToList();
+
+            if (!candidates.Any())
+            {
+                return ArraySegment<string>.Empty;
+            }
+
+            var currentLevel = candidates[0].Level;
+            var levels = Enumerable.Range(currentLevel, attributes.Levels.CurrentAdditionalLevels + 1)
+                .ToList();
+
+            var inPlay = candidates
+                .TakeWhile(x => x.Level >= currentLevel)
+                .Where(x => levels.Contains(x.Level))
+                .ToList();
+
+            return GenerateTableOfContent(inPlay, attributes.ListType);
         }
 
         /// <remarks>public for testability</remarks>
-        public static IReadOnlyList<string> GenerateTableOfContent(IReadOnlyList<string> lines, TableOfContentsAttributes attributes)
+        public static IReadOnlyList<string> GenerateTableOfContentForExplicitLevels(IReadOnlyList<string> lines, TableOfContentsAttributes attributes)
         {
-            var headings = lines.ToMarkdownDocument().Descendants<HeadingBlock>().ToList();
+            var headings = lines.ToMarkdownDocument()
+                .Descendants<HeadingBlock>()
+                .Where(x => attributes.Levels.ExplicitLevels.Contains(x.Level))
+                .ToList();
 
+            return GenerateTableOfContent(headings, attributes.ListType);
+        }
+
+        private static IReadOnlyList<string> GenerateTableOfContent(IEnumerable<HeadingBlock> headings, ListType listType)
+        {
             var result = new List<string>();
 
             foreach (var heading in headings)
             {
-                if (!attributes.Levels.Contains(heading.Level))
-                    continue;
-
                 var indentation = new string(' ', (heading.Level - 1) * 2);
-                var type = attributes.ListType switch
+                var type = listType switch
                 {
                     ListType.Ordered => "0.",
                     ListType.Unordered => "-",

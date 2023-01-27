@@ -18,7 +18,7 @@ public class BuildTablesOfContentsCommandTests
             "# foo"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -35,7 +35,7 @@ public class BuildTablesOfContentsCommandTests
             "# foo"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -52,7 +52,7 @@ public class BuildTablesOfContentsCommandTests
             "# foo & bar"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -68,7 +68,7 @@ public class BuildTablesOfContentsCommandTests
             "# `foo` *bar*"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -87,7 +87,7 @@ public class BuildTablesOfContentsCommandTests
             "# foobar"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -107,7 +107,7 @@ public class BuildTablesOfContentsCommandTests
             "### bar"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -126,7 +126,7 @@ public class BuildTablesOfContentsCommandTests
             "### foobar"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes());
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes());
 
         tableOfContent.ShouldBe(new[]
         {
@@ -147,9 +147,13 @@ public class BuildTablesOfContentsCommandTests
             "# foobar"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes
         {
-            Levels = new[] { 2, 3 }
+            Levels = new TableOfContentLevels
+            {
+                Current = false,
+                ExplicitLevels = new[] { 2, 3 }
+            }
         });
 
         tableOfContent.ShouldBe(new[]
@@ -170,7 +174,7 @@ public class BuildTablesOfContentsCommandTests
             "# foobar"
         };
 
-        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContent(lines, new TableOfContentsAttributes
+        var tableOfContent = BuildTablesOfContentsCommand.GenerateTableOfContentForExplicitLevels(lines, new TableOfContentsAttributes
         {
             ListType = ListType.Ordered
         });
@@ -182,6 +186,83 @@ public class BuildTablesOfContentsCommandTests
             "    0. [foo bar](#foo-bar)",
             "0. [foobar](#foobar)"
         });
+    }
+
+    [Fact]
+    public void ShouldHandleCurrentLevel()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.File.WriteAllLines("c:/main.md", new[]
+        {
+            "# one",
+            "<!--<handyman-docs:table-of-content Levels=\"current\" />-->",
+            "## two a",
+            "### three",
+            "## two b",
+            "# foo",
+            "## bar",
+            "### bazz"
+        });
+
+        var exitCode = Program.Run(new[] { "build-tables-of-contents", "c:/main.md" }, services => services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem)));
+
+        fileSystem.File.ReadAllLines("c:/main.md").ShouldBe(new[]
+        {
+            "# one",
+            "<!--<handyman-docs:table-of-content Levels=\"current\">-->",
+            "- [two a](#two-a)",
+            "- [two b](#two-b)",
+            "<!--</handyman-docs:table-of-content>-->",
+            "## two a",
+            "### three",
+            "## two b",
+            "# foo",
+            "## bar",
+            "### bazz"
+        });
+
+        exitCode.ShouldBe(0);
+    }
+
+    [Fact]
+    public void ShouldHandleCurrentAndAdditionalLevels()
+    {
+        var fileSystem = new MockFileSystem();
+
+        fileSystem.File.WriteAllLines("c:/main.md", new[]
+        {
+            "# one",
+            "<!--<handyman-docs:table-of-content Levels=\"current+1\" />-->",
+            "## two a",
+            "### three",
+            "#### four",
+            "## two b",
+            "# foo",
+            "## bar",
+            "### bazz"
+        });
+
+        var exitCode = Program.Run(new[] { "build-tables-of-contents", "c:/main.md" }, services => services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem)));
+
+        fileSystem.File.ReadAllLines("c:/main.md").ShouldBe(new[]
+        {
+            "# one",
+            "<!--<handyman-docs:table-of-content Levels=\"current+1\">-->",
+            "- [two a](#two-a)",
+            "  - [three](#three)",
+            "- [two b](#two-b)",
+            "<!--</handyman-docs:table-of-content>-->",
+            "## two a",
+            "### three",
+            "#### four",
+            "## two b",
+            "# foo",
+            "## bar",
+            "### bazz"
+        });
+
+        exitCode.ShouldBe(0);
     }
 
     [Fact]
@@ -204,8 +285,6 @@ public class BuildTablesOfContentsCommandTests
 
         var exitCode = Program.Run(new[] { "build-tables-of-contents", "c:/main.md" }, services => services.Replace(new ServiceDescriptor(typeof(IFileSystem), fileSystem)));
 
-        exitCode.ShouldBe(0);
-
         fileSystem.File.ReadAllLines("c:/main.md").ShouldBe(new[]
         {
             "<!--<handyman-docs:table-of-content>-->",
@@ -218,5 +297,7 @@ public class BuildTablesOfContentsCommandTests
             "0. [xyz](#xyz)",
             "<!--</handyman-docs:table-of-content>-->"
         });
+
+        exitCode.ShouldBe(0);
     }
 }
