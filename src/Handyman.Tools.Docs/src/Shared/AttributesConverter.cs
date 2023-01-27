@@ -57,7 +57,10 @@ public class AttributesConverter : IAttributesConverter
             throw new Exception($"todo - unhandled attributes; {string.Join(", ", set)}");
         }
 
-        // todo - validate
+        if (tAttributes is IValidatable validatable)
+        {
+            validatable.Validate();
+        }
 
         return tAttributes;
     }
