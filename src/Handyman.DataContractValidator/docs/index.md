@@ -10,17 +10,22 @@ Use `new DataContractValidator.Validate(type, dataContract)` to validate.
 The `type` parameter takes a `System.Type` and the dataContract parameter takes a `System.Object`.  
 See below for how to validate different types.
 
+<!-- <handyman-docs:table-of-content levels="2-3"> -->
+- [Data contract validation](#data-contract-validation)
+  - [Value types](#value-types)
+  - [Objects](#objects)
+  - [Collections](#collections)
+  - [Dictionaries](#dictionaries)
+  - [Nullable reference types](#nullable-reference-types)
+  - [Enums](#enums)
+  - [Anything](#anything)
+  - [Recursion](#recursion)
+- [Data contract generation](#data-contract-generation)
+<!-- </handyman-docs:table-of-content> -->
+
 ## Data contract validation
 
 Data contract validator can handle the following types and also handles nullable reference type annotations. 
-
-* Value types (bool, int, string, etc)
-* Objects
-* Collections
-* Dictionaries
-* Enums (regular & flags)
-* Anything
-* Recursion
 
 ### Value types
 
