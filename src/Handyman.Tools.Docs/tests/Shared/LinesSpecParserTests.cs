@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Handyman.Tools.Docs.Tests.Shared;
 
-public class LinesSpecValueConverterTests
+public class LinesSpecParserTests
 {
     [Fact]
     public void ShouldParseSingleLineSectionFromValue()
     {
-        new LinesSpecValueConverter()
-            .TryConvert("3", typeof(LinesSpec), out object value)
+        new LinesSpecParser()
+            .TryParse("3", typeof(LinesSpec), out object value)
             .ShouldBeTrue();
 
         var linesSpec = value.ShouldBeAssignableTo<LinesSpec>();
@@ -23,8 +23,8 @@ public class LinesSpecValueConverterTests
     [Fact]
     public void ShouldParseSingleLineSectionFromRange()
     {
-        new LinesSpecValueConverter()
-            .TryConvert("3-3", typeof(LinesSpec), out object value)
+        new LinesSpecParser()
+            .TryParse("3-3", typeof(LinesSpec), out object value)
             .ShouldBeTrue();
 
         var linesSpec = value.ShouldBeAssignableTo<LinesSpec>();
@@ -36,8 +36,8 @@ public class LinesSpecValueConverterTests
     [Fact]
     public void ShouldParseSectionFromRange()
     {
-        new LinesSpecValueConverter()
-            .TryConvert("3-5", typeof(LinesSpec), out object value)
+        new LinesSpecParser()
+            .TryParse("3-5", typeof(LinesSpec), out object value)
             .ShouldBeTrue();
 
         var linesSpec = value.ShouldBeAssignableTo<LinesSpec>();
@@ -49,8 +49,8 @@ public class LinesSpecValueConverterTests
     [Fact]
     public void ShouldParseSections()
     {
-        new LinesSpecValueConverter()
-            .TryConvert("3-5,7", typeof(LinesSpec), out object value)
+        new LinesSpecParser()
+            .TryParse("3-5,7", typeof(LinesSpec), out object value)
             .ShouldBeTrue();
 
         var linesSpec = value.ShouldBeAssignableTo<LinesSpec>();

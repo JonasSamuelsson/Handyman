@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Handyman.Tools.Docs.BuildTablesOfContents;
 
-public class LevelsValueConverter : IValueConverter
+public class LevelsParser : IValueParser
 {
-    public bool TryConvert(string s, Type targetType, out object value)
+    public bool TryParse(string s, Type targetType, out object value)
     {
         if (targetType != typeof(TableOfContentLevels))
         {

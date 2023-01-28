@@ -2,9 +2,9 @@
 
 namespace Handyman.Tools.Docs.Shared;
 
-public class EnumValueConverter : IValueConverter
+public class EnumParser : IValueParser
 {
-    public bool TryConvert(string s, Type targetType, out object value)
+    public bool TryParse(string s, Type targetType, out object value)
     {
         if (!targetType.IsEnum)
         {

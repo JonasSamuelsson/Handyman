@@ -7,11 +7,11 @@ namespace Handyman.Tools.Docs.Shared;
 
 public class AttributesConverter : IAttributesConverter
 {
-    private readonly IEnumerable<IValueConverter> _valueConverters;
+    private readonly IEnumerable<IValueParser> _valueParsers;
 
-    public AttributesConverter(IEnumerable<IValueConverter> valueConverters)
+    public AttributesConverter(IEnumerable<IValueParser> valueParsers)
     {
-        _valueConverters = valueConverters;
+        _valueParsers = valueParsers;
     }
 
     public TAttributes ConvertTo<TAttributes>(Attributes attributes) where TAttributes : new()
@@ -43,7 +43,7 @@ public class AttributesConverter : IAttributesConverter
             }
 
             object value = null;
-            if (_valueConverters.Any(x => x.TryConvert(stringValue, property.PropertyType, out value)))
+            if (_valueParsers.Any(x => x.TryParse(stringValue, property.PropertyType, out value)))
             {
                 property.SetValue(tAttributes, value);
                 continue;

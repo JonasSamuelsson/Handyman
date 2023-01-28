@@ -28,7 +28,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             fileSystem.File.WriteAllLines("c:/file.txt", new[] { "success" });
 
             var elementReader = new ElementReader();
-            var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
+            var attributesConverter = new AttributesConverter(ArraySegment<IValueParser>.Empty);
 
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
@@ -68,7 +68,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             fileSystem.File.WriteAllLines(@"C:\a\file.txt", new[] { "success" });
 
             var elementReader = new ElementReader();
-            var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
+            var attributesConverter = new AttributesConverter(ArraySegment<IValueParser>.Empty);
 
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
@@ -111,7 +111,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 });
 
             var elementReader = new ElementReader();
-            var attributesConverter = new AttributesConverter(new[] { new LinesSpecValueConverter() });
+            var attributesConverter = new AttributesConverter(new[] { new LinesSpecParser() });
 
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
@@ -156,7 +156,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
                 });
 
             var elementReader = new ElementReader();
-            var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
+            var attributesConverter = new AttributesConverter(ArraySegment<IValueParser>.Empty);
 
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input
@@ -196,7 +196,7 @@ namespace Handyman.Tools.Docs.Tests.ImportCodeBlocks
             fileSystem.File.WriteAllLines("c:/file2.txt", new[] { "two" });
 
             var elementReader = new ElementReader();
-            var attributesConverter = new AttributesConverter(ArraySegment<IValueConverter>.Empty);
+            var attributesConverter = new AttributesConverter(ArraySegment<IValueParser>.Empty);
 
             new ImportCodeBlocksCommand(fileSystem, new TestLogger(), elementReader, attributesConverter)
                 .Execute(new ImportCodeBlocksCommand.Input

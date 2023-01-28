@@ -30,7 +30,7 @@ public class Program
         services.Scan(s =>
         {
             s.AssemblyContaining<Program>();
-            s.ConfigureConcreteClassesOf<IValueConverter>();
+            s.ConfigureConcreteClassesOf<IValueParser>();
             s.ConfigureDefaultImplementations();
         });
 
