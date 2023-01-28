@@ -69,7 +69,7 @@ public class ElementReader : IElementReader
             {
                 if (tag.Attributes.Contains(keyValuePair.Key))
                 {
-                    throw new TodoException();
+                    throw new AppException($"Tag {tag.Name} on line {tag.LineNumber} has duplicate {keyValuePair.Key} attribute.");
                 }
 
                 tag.Attributes.Add(keyValuePair.Key, keyValuePair.Value);
@@ -95,14 +95,14 @@ public class ElementReader : IElementReader
             {
                 if (isLastTag)
                 {
-                    throw new Exception($"{tag.Name} tag on line {tag.LineNumber} does not have a matching close tag.");
+                    throw new AppException($"{tag.Name} tag on line {tag.LineNumber} does not have a matching closing tag.");
                 }
 
                 var nextTag = tags[i + 1];
 
                 if (tag.Name != nextTag.Name || !nextTag.IsClosing)
                 {
-                    throw new Exception($"{tag.Name} tag on line {tag.LineNumber} does not have a matching close tag.");
+                    throw new AppException($"{tag.Name} tag on line {tag.LineNumber} does not have a matching closing tag.");
                 }
 
                 closingLineIndex = nextTag.LineIndex;
@@ -110,7 +110,7 @@ public class ElementReader : IElementReader
             }
             else
             {
-                throw new Exception($"found Unexpected {tag.Name} close tag on line {tag.LineNumber}.");
+                throw new AppException($"Found unexpected {tag.Name} closing tag on line {tag.LineNumber}.");
             }
 
             var elementLineCount = Math.Max(0, closingLineIndex - tag.LineIndex) + 1;

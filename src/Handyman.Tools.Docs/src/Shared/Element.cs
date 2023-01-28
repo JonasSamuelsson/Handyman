@@ -14,5 +14,6 @@ namespace Handyman.Tools.Docs.Shared
 
         public int ContentLineCount => LineCount - 2;
         public int ContentLineNumber => LineIndex + 2;
+        public int LineNumber => LineIndex + 1;
     }
 }

@@ -49,7 +49,7 @@ public class AttributesConverter : IAttributesConverter
                 continue;
             }
 
-            throw new TodoException();
+            throw new InvalidOperationException($"Unable to convert attributes to {typeof(TAttributes).Name}.");
         }
 
         if (set.Any())
