@@ -16,12 +16,14 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
             [CommandArgument(0, "<target-path>")] public string TargetPath { get; set; }
         }
 
+        private readonly ILogger _logger;
         private readonly IFileSystem _fileSystem;
         private readonly IElementReader _elementReader;
         private readonly IAttributesConverter _attributesConverter;
 
-        public BuildTablesOfContentsCommand(IFileSystem fileSystem, IElementReader elementReader, IAttributesConverter attributesConverter)
+        public BuildTablesOfContentsCommand(ILogger logger, IFileSystem fileSystem, IElementReader elementReader, IAttributesConverter attributesConverter)
         {
+            _logger = logger;
             _fileSystem = fileSystem;
             _elementReader = elementReader;
             _attributesConverter = attributesConverter;
@@ -47,19 +49,29 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
 
         private void ProcessMarkdownFile(string markdownFilePath)
         {
-            var lines = _fileSystem.File.ReadAllLines(markdownFilePath);
-
-            var patches = _elementReader.ReadElements("table-of-content", lines)
-                .Select(element => new PatchEngine.Patch
+            _logger.Scope(markdownFilePath, () =>
+            {
+                if (!_fileSystem.File.Exists(markdownFilePath))
                 {
-                    Content = GenerateTableOfContent(element, lines, markdownFilePath),
-                    Element = element
-                })
-                .ToList();
+                    _logger.WriteError("File not found.");
+                    return;
+                }
 
-            var newLines = PatchEngine.ApplyPatches(lines, patches);
+                var lines = _fileSystem.File.ReadAllLines(markdownFilePath);
 
-            _fileSystem.File.WriteAllLines(markdownFilePath, newLines);
+                var patches = _elementReader.ReadElements("table-of-content", lines)
+                    .Select(element => _logger.Scope($"line {element.LineNumber}", () => new PatchEngine.Patch
+                        {
+                            Content = GenerateTableOfContent(element, lines, markdownFilePath),
+                            Element = element
+                        }
+                    ))
+                    .ToList();
+
+                var newLines = PatchEngine.ApplyPatches(lines, patches);
+
+                _fileSystem.File.WriteAllLines(markdownFilePath, newLines);
+            });
         }
 
         private IReadOnlyList<string> GenerateTableOfContent(Element element, IReadOnlyList<string> lines, string fileFullPath)
@@ -142,7 +154,7 @@ namespace Handyman.Tools.Docs.BuildTablesOfContents
                 {
                     ListType.Ordered => "0.",
                     ListType.Unordered => "-",
-                    _ => throw new TodoException()
+                    _ => throw new ArgumentException($"Unexpected list type '{listType}'.")
                 };
                 var text = heading.Inline.ToMarkdownString();
                 var link = heading.TryGetAttributes()!.Id;
