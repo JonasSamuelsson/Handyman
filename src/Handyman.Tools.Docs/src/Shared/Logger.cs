@@ -11,6 +11,40 @@ public abstract class Logger : ILogger
 
     public Verbosity Verbosity { get; set; } = Verbosity.Normal;
 
+    public void Scope(string scope, Action action)
+    {
+        Scope(scope, () =>
+        {
+            action();
+            return 0;
+        });
+    }
+
+    public T Scope<T>(string scope, Func<T> action)
+    {
+        using var _ = Scope(scope);
+
+        try
+        {
+            return action();
+        }
+        catch (AppException exception)
+        {
+            if (!exception.IsHandled)
+            {
+                WriteError(exception.Message);
+                exception.IsHandled = true;
+            }
+
+            throw;
+        }
+        catch (Exception exception)
+        {
+            WriteError($"{exception.GetType().Name}: {exception.Message}");
+            throw new AppException(exception);
+        }
+    }
+
     public IDisposable Scope(string scope)
     {
         scope = GetIndentation() + scope;
