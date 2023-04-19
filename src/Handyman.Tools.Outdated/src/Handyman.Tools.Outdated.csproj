@@ -2,7 +2,7 @@
 
    <PropertyGroup>
       <OutputType>Exe</OutputType>
-      <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+      <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
    </PropertyGroup>
 
    <PropertyGroup>
@@ -14,17 +14,17 @@
 
    <ItemGroup>
       <PackageReference Include="Handyman.Extensions" Version="2.6.0" />
-      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.6.0" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-      <PackageReference Include="System.IO.Abstractions" Version="16.1.25" />
-   </ItemGroup>
-
-   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.24" />
+      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="System.IO.Abstractions" Version="19.2.16" />
    </ItemGroup>
 
    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+   </ItemGroup>
+
+   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
    </ItemGroup>
 
 </Project>
