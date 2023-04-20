@@ -16,6 +16,7 @@ namespace Handyman.Tools.Outdated.Analyze
                 .WithArguments(new[] { "restore", project.FullPath })
                 .WithStandardErrorPipe(PipeTarget.ToDelegate(s => errors.Add(s)))
                 .WithStandardOutputPipe(PipeTarget.Null)
+                .WithValidation(CommandResultValidation.None)
                 .ExecuteAsync();
 
             errors.RemoveAll(string.IsNullOrWhiteSpace);

@@ -39,6 +39,7 @@ namespace Handyman.Tools.Outdated.Analyze
                     .WithArguments(arguments)
                     .WithStandardErrorPipe(PipeTarget.ToDelegate(s => errors.Add(s)))
                     .WithStandardOutputPipe(PipeTarget.ToDelegate(s => output.Add(s)))
+                    .WithValidation(CommandResultValidation.None)
                     .ExecuteAsync();
 
                 errors.RemoveAll(string.IsNullOrWhiteSpace);
