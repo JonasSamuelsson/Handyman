@@ -1,8 +1,7 @@
-﻿using CliWrap;
-using Handyman.Tools.Outdated.Analyze.DotnetListPackage;
+﻿using Handyman.Tools.Outdated.Analyze.DotnetListPackage;
+using Handyman.Tools.Outdated.IO;
 using Handyman.Tools.Outdated.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,13 +9,20 @@ namespace Handyman.Tools.Outdated.Analyze
 {
     public class ProjectAnalyzer
     {
-        public async Task Analyze(Project project)
+        private readonly IProcessRunner _processRunner;
+
+        public ProjectAnalyzer(IProcessRunner processRunner)
         {
-            await InvokeExternalAnalyzer(project);
+            _processRunner = processRunner;
+        }
+
+        public async Task Analyze(Project project, Verbosity verbosity)
+        {
+            await InvokeExternalAnalyzer(project, verbosity);
             ApplyConfiguration(project);
         }
 
-        private async Task InvokeExternalAnalyzer(Project project)
+        private async Task InvokeExternalAnalyzer(Project project, Verbosity verbosity)
         {
             var includeTransitive = project.Config.IncludeTransitive ? "--include-transitive" : "";
 
@@ -32,31 +38,20 @@ namespace Handyman.Tools.Outdated.Analyze
             {
                 var arguments = new[] { "list", project.FullPath, "package" }.Concat(argumentsSuffixCollection.Where(x => x.Length != 0));
 
-                var errors = new List<string>();
-                var output = new List<string>();
+                var result = await _processRunner.Execute("dotnet", arguments, verbosity);
 
-                await Cli.Wrap("dotnet")
-                    .WithArguments(arguments)
-                    .WithStandardErrorPipe(PipeTarget.ToDelegate(s => errors.Add(s)))
-                    .WithStandardOutputPipe(PipeTarget.ToDelegate(s => output.Add(s)))
-                    .WithValidation(CommandResultValidation.None)
-                    .ExecuteAsync();
-
-                errors.RemoveAll(string.IsNullOrWhiteSpace);
-                output.RemoveAll(string.IsNullOrWhiteSpace);
-
-                if (errors.Any())
+                if (result.StandardError.Any())
                 {
                     project.Errors.Add(new Error
                     {
-                        Message = string.Join(Environment.NewLine, errors),
+                        Message = string.Join(Environment.NewLine, result.StandardError),
                         Stage = "analyze"
                     });
 
                     break;
                 }
 
-                new ResultReader().Read(output, project.TargetFrameworks);
+                new ResultReader().Read(result.StandardOutput, project.TargetFrameworks);
             }
         }
 

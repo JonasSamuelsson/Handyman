@@ -56,9 +56,9 @@ namespace Handyman.Tools.Outdated.Analyze
                     _console.WriteLine($"Analyzing {project.RelativePath} ({counter++} of {projects.Count})");
 
                 if (NoRestore == false)
-                    await _projectUtil.Restore(project);
+                    await _projectUtil.Restore(project, Verbosity);
 
-                await _projectAnalyzer.Analyze(project);
+                await _projectAnalyzer.Analyze(project, Verbosity);
             }
 
             new ResultConsoleWriter(_console, Verbosity).WriteResult(projects);

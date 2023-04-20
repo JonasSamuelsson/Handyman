@@ -1,5 +1,9 @@
 # handyman-outdated changelog
 
+## 3.0.2 - 2023-04-20
+
+* Add debug output
+
 ## 3.0.0 - 2023-04-20
 
 * Target `net6.0` & `net7.0`.

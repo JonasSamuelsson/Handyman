@@ -1,5 +1,6 @@
 ﻿using Handyman.Tools.Outdated.Analyze;
 using Handyman.Tools.Outdated.GenerateConfig;
+using Handyman.Tools.Outdated.IO;
 using Handyman.Tools.Outdated.Report;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ namespace Handyman.Tools.Outdated
                 .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IFileWriter, JsonFileWriter>()
                 .AddSingleton<IFileWriter, MarkdownFileWriter>()
+                .AddSingleton<IProcessRunner, ProcessRunner>()
                 .AddSingleton<ConfigReader>()
                 .AddSingleton<ProjectAnalyzer>()
                 .AddSingleton<ProjectLocator>()

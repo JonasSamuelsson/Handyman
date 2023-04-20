@@ -4,6 +4,7 @@
     {
         Quiet = -2,
         Minimal = -1,
-        Normal = 0
+        Normal = 0,
+        Debug = 2
     }
 }
