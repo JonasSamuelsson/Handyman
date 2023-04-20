@@ -1,5 +1,10 @@
 # handyman-outdated changelog
 
+## 3.0.0 - 2023-04-20
+
+* Target `net6.0` & `net7.0`.
+* Add cross platform support.
+
 ## 2.3.1 - 2022-04-25
 
 * Fixed dotnet outdated output parsing bug.
