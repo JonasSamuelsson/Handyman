@@ -13,6 +13,7 @@
    </PropertyGroup>
 
    <ItemGroup>
+      <PackageReference Include="CliWrap" Version="3.6.0" />
       <PackageReference Include="Handyman.Extensions" Version="2.6.0" />
       <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

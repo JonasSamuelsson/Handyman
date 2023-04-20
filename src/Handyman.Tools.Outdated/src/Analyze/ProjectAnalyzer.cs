@@ -1,24 +1,15 @@
-﻿using Handyman.Tools.Outdated.Analyze.DotnetListPackage;
-using Handyman.Tools.Outdated.IO;
+﻿using CliWrap;
+using Handyman.Tools.Outdated.Analyze.DotnetListPackage;
 using Handyman.Tools.Outdated.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using ProcessStartInfo = Handyman.Tools.Outdated.IO.ProcessStartInfo;
 
 namespace Handyman.Tools.Outdated.Analyze
 {
     public class ProjectAnalyzer
     {
-        private readonly IProcessRunner _processRunner;
-
-        public ProjectAnalyzer(IProcessRunner processRunner)
-        {
-            _processRunner = processRunner;
-        }
-
         public async Task Analyze(Project project)
         {
             await InvokeExternalAnalyzer(project);
@@ -29,30 +20,26 @@ namespace Handyman.Tools.Outdated.Analyze
         {
             var includeTransitive = project.Config.IncludeTransitive ? "--include-transitive" : "";
 
-            var argumentsSuffixes = new[]
+            var argumentsSuffixCollections = new[]
             {
-                $"--outdated {includeTransitive}",
-                $"--outdated --highest-minor {includeTransitive}",
-                $"--outdated --highest-patch {includeTransitive}",
-                $"--deprecated {includeTransitive}"
+                new[] { "--outdated", includeTransitive },
+                new[] { "--outdated", "--highest-minor", includeTransitive },
+                new[] { "--outdated", "--highest-patch", includeTransitive },
+                new[] { "--deprecated", includeTransitive }
             };
 
-            foreach (var argumentsSuffix in argumentsSuffixes)
+            foreach (var argumentsSuffixCollection in argumentsSuffixCollections)
             {
-                var arguments = $"list {project.FullPath} package {argumentsSuffix}";
+                var arguments = new[] { "list", project.FullPath, "package" }.Concat(argumentsSuffixCollection.Where(x => x.Length != 0));
 
                 var errors = new List<string>();
                 var output = new List<string>();
 
-                var info = new ProcessStartInfo
-                {
-                    Arguments = arguments,
-                    FileName = "dotnet",
-                    StandardErrorHandler = s => errors.Add(s),
-                    StandardOutputHandler = s => output.Add(s)
-                };
-
-                await _processRunner.Start(info).Task;
+                await Cli.Wrap("dotnet")
+                    .WithArguments(arguments)
+                    .WithStandardErrorPipe(PipeTarget.ToDelegate(s => errors.Add(s)))
+                    .WithStandardOutputPipe(PipeTarget.ToDelegate(s => output.Add(s)))
+                    .ExecuteAsync();
 
                 errors.RemoveAll(string.IsNullOrWhiteSpace);
                 output.RemoveAll(string.IsNullOrWhiteSpace);
