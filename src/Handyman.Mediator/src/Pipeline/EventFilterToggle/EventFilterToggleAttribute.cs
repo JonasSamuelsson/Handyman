@@ -35,18 +35,10 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
         public override async Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
         {
             var metadata = _metadata.Value;
-
             var toggle = eventContext.ServiceProvider.GetRequiredService<IEventFilterToggle>();
-            var enabled = await toggle.IsEnabled(metadata, eventContext).WithGloballyConfiguredAwait();
+            var toggleState = await toggle.IsEnabled(metadata, eventContext).WithGloballyConfiguredAwait();
 
-            if (!enabled)
-            {
-                pipelineBuilderContext.Filters.RemoveAll(x => metadata.ToggleEnabledFilterTypes.Contains(x.GetType()));
-            }
-            else if (metadata.ToggleDisabledFilterTypes.Any())
-            {
-                pipelineBuilderContext.Filters.RemoveAll(x => metadata.ToggleDisabledFilterTypes.Contains(x.GetType()));
-            }
+            PipelineBuilderUtilities.ApplyToggle(pipelineBuilderContext.Filters, _toggleEnabledFilterTypes, ToggleDisabledFilterTypes, toggleState);
         }
 
         private EventFilterToggleMetadata CreateMetadata()

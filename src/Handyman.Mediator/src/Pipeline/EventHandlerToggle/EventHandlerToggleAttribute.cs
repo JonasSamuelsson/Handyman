@@ -35,18 +35,10 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
         public override async Task Execute<TEvent>(EventPipelineBuilderContext<TEvent> pipelineBuilderContext, EventContext<TEvent> eventContext)
         {
             var metadata = _metadata.Value;
-
             var toggle = eventContext.ServiceProvider.GetRequiredService<IEventHandlerToggle>();
-            var enabled = await toggle.IsEnabled(metadata, eventContext).WithGloballyConfiguredAwait();
+            var toggleState = await toggle.IsEnabled(metadata, eventContext).WithGloballyConfiguredAwait();
 
-            if (!enabled)
-            {
-                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleEnabledHandlerTypes.Contains(x.GetType()));
-            }
-            else if (metadata.ToggleDisabledHandlerTypes.Any())
-            {
-                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleDisabledHandlerTypes.Contains(x.GetType()));
-            }
+            PipelineBuilderUtilities.ApplyToggle(pipelineBuilderContext.Handlers, _toggleEnabledHandlerTypes, ToggleDisabledHandlerTypes, toggleState);
         }
 
         private EventHandlerToggleMetadata CreateMetadata()

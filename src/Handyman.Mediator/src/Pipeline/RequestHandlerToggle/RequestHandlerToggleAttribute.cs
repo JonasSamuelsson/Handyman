@@ -35,18 +35,10 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
         public override async Task Execute<TRequest, TResponse>(RequestPipelineBuilderContext<TRequest, TResponse> pipelineBuilderContext, RequestContext<TRequest> requestContext)
         {
             var metadata = _metadata.Value;
-
             var toggle = requestContext.ServiceProvider.GetRequiredService<IRequestHandlerToggle>();
-            var enabled = await toggle.IsEnabled<TRequest, TResponse>(metadata, requestContext).WithGloballyConfiguredAwait();
+            var toggleState = await toggle.IsEnabled<TRequest, TResponse>(metadata, requestContext).WithGloballyConfiguredAwait();
 
-            if (!enabled)
-            {
-                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleEnabledHandlerTypes.Contains(x.GetType()));
-            }
-            else if (metadata.ToggleDisabledHandlerTypes.Any())
-            {
-                pipelineBuilderContext.Handlers.RemoveAll(x => metadata.ToggleDisabledHandlerTypes.Contains(x.GetType()));
-            }
+            PipelineBuilderUtilities.ApplyToggle(pipelineBuilderContext.Handlers, _toggleEnabledHandlerTypes, ToggleDisabledHandlerTypes, toggleState);
         }
 
         private RequestHandlerToggleMetadata CreateMetadata()
