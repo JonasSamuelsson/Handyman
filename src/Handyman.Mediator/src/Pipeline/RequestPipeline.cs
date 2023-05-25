@@ -30,25 +30,35 @@ namespace Handyman.Mediator.Pipeline
 
         protected Task<TResponse> Execute(List<IRequestFilter<TRequest, TResponse>> filters, IRequestHandler<TRequest, TResponse> handler, IRequestHandlerExecutionStrategy executionStrategy, RequestContext<TRequest> requestContext)
         {
-            if (filters.Count == 0)
+            var filterCount = filters.Count;
+
+            if (filterCount == 0)
             {
                 requestContext.CancellationToken.ThrowIfCancellationRequested();
                 return executionStrategy.Execute(handler, requestContext);
             }
 
+            // this method call is a no-op if there is only one filter
             filters.Sort(FilterComparer.CompareFilters);
 
-            var index = 0;
-            var filterCount = filters.Count;
+            var filterIndex = 0;
 
-            return Execute();
+            return ExecuteNextPipelineItem();
 
-            Task<TResponse> Execute()
+            Task<TResponse> ExecuteNextPipelineItem()
             {
-                if (index < filterCount)
+                if (filterIndex < filterCount)
                 {
                     requestContext.CancellationToken.ThrowIfCancellationRequested();
-                    return filters[index++].Execute(requestContext, Execute);
+
+                    try
+                    {
+                        return filters[filterIndex++].Execute(requestContext, ExecuteNextPipelineItem);
+                    }
+                    finally
+                    {
+                        filterIndex--;
+                    }
                 }
 
                 requestContext.CancellationToken.ThrowIfCancellationRequested();
