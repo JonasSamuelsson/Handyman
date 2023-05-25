@@ -40,18 +40,27 @@ namespace Handyman.Mediator.Pipeline
                 return executionStrategy.Execute(handlers, eventContext);
             }
 
+            // this method call is a no-op if there is only one filter
             filters.Sort(FilterComparer.CompareFilters);
 
-            var index = 0;
+            var filterIndex = 0;
 
-            return Execute();
+            return ExecuteNextPipelineItem();
 
-            Task Execute()
+            Task ExecuteNextPipelineItem()
             {
-                if (index < filterCount)
+                if (filterIndex < filterCount)
                 {
                     eventContext.CancellationToken.ThrowIfCancellationRequested();
-                    return filters[index++].Execute(eventContext, Execute);
+
+                    try
+                    {
+                        return filters[filterIndex++].Execute(eventContext, ExecuteNextPipelineItem);
+                    }
+                    finally
+                    {
+                        filterIndex--;
+                    }
                 }
 
                 eventContext.CancellationToken.ThrowIfCancellationRequested();
