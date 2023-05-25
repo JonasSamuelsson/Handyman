@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 11.3.1 - 2023-05-25
+
+* Rerun event/request pipeline fix.
+
 ## 11.3.0 - 2021-12-23
 
 * Added support for specifying toggle failure mode (`disabled`/`enabled`/`throw`).
