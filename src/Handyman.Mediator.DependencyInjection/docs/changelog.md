@@ -1,5 +1,9 @@
 # Handyman.Mediator.DependencyInjection changelog
 
+## 5.4.1 - 2023-05-26
+
+* `Handyman.Mediator` upgraded to `11.3.1`.
+
 ## 5.4.0 - 2022-11-15
 
 * `Handyman.DependencyInjection` upgraded to `2.5.0`.
