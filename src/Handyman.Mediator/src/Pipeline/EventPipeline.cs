@@ -47,7 +47,7 @@ namespace Handyman.Mediator.Pipeline
 
             return ExecuteNextPipelineItem();
 
-            Task ExecuteNextPipelineItem()
+            async Task ExecuteNextPipelineItem()
             {
                 if (filterIndex < filterCount)
                 {
@@ -55,16 +55,18 @@ namespace Handyman.Mediator.Pipeline
 
                     try
                     {
-                        return filters[filterIndex++].Execute(eventContext, ExecuteNextPipelineItem);
+                        await filters[filterIndex++].Execute(eventContext, ExecuteNextPipelineItem);
                     }
                     finally
                     {
                         filterIndex--;
                     }
+
+                    return;
                 }
 
                 eventContext.CancellationToken.ThrowIfCancellationRequested();
-                return executionStrategy.Execute(handlers, eventContext);
+                await executionStrategy.Execute(handlers, eventContext);
             }
         }
     }

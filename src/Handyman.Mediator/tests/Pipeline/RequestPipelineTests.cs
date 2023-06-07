@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -9,53 +10,72 @@ namespace Handyman.Mediator.Tests.Pipeline
     public class RequestPipelineTests
     {
         [Fact]
-        public async Task ShouldBePossibleToReRunPartsOfThePipeline()
+        public async Task ShouldBePossibleToRetryPartsOfThePipeline()
         {
-            var filter = new Filter();
+            var executionCounterFilter1 = new ExecutionCounterFilter { Order = 0 };
+            var executionCounterFilter2 = new ExecutionCounterFilter { Order = 2 };
 
             var serviceProviders = new ServiceCollection()
-                .AddTransient<IRequestFilter<Request, Void>, ReRunFilter>()
-                .AddSingleton<IRequestFilter<Request, Void>>(filter)
-                .AddTransient<IRequestHandler<Request, Void>, Handler>()
+                .AddSingleton<IRequestFilter<Request, int>>(executionCounterFilter1)
+                .AddSingleton<IRequestFilter<Request, int>>(executionCounterFilter2)
+                .AddTransient<IRequestFilter<Request, int>, RetryFilter>()
+                .AddTransient<IRequestHandler<Request, int>, FailThenSucceedHandler>()
                 .BuildServiceProvider();
 
-            await new Mediator(serviceProviders).Send(new Request(), CancellationToken.None);
+            var result = await new Mediator(serviceProviders).Send(new Request(), CancellationToken.None);
 
-            filter.Executions.ShouldBe(2);
+            executionCounterFilter1.Executions.ShouldBe(1);
+            executionCounterFilter2.Executions.ShouldBe(2);
+            result.ShouldBe(2);
         }
 
-        public class Request : IRequest
+        public class Request : IRequest<int>
         {
         }
 
-        public class ReRunFilter : IRequestFilter<Request, Void>, IOrderedFilter
-        {
-            public int Order => 0;
-
-            public async Task<Void> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<Void> next)
-            {
-                await next();
-                return await next();
-            }
-        }
-
-        public class Filter : IRequestFilter<Request, Void>, IOrderedFilter
+        public class ExecutionCounterFilter : IRequestFilter<Request, int>, IOrderedFilter
         {
             public int Executions { get; set; }
-            public int Order => 1;
+            public int Order { get; set; }
 
-            public Task<Void> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<Void> next)
+            public Task<int> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<int> next)
             {
                 Executions++;
                 return next();
             }
         }
 
-        public class Handler : IRequestHandler<Request, Void>
+        public class RetryFilter : IRequestFilter<Request, int>, IOrderedFilter
         {
-            public Task<Void> Handle(Request request, CancellationToken cancellationToken)
+            public int Order => 1;
+
+            public async Task<int> Execute(RequestContext<Request> requestContext, RequestFilterExecutionDelegate<int> next)
             {
-                return Task.FromResult(Void.Instance);
+                try
+                {
+                    return await next();
+                }
+                catch
+                {
+                    return await next();
+                }
+            }
+        }
+
+        public class FailThenSucceedHandler : IRequestHandler<Request, int>
+        {
+            private int _counter;
+
+            public async Task<int> Handle(Request request, CancellationToken cancellationToken)
+            {
+                await Task.Yield();
+
+                if (_counter++ == 0)
+                {
+                    throw new Exception();
+                }
+
+                return _counter;
             }
         }
     }

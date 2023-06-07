@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 11.3.2 - 2023-06-07
+
+* Event/request pipeline fix.
+
 ## 11.3.1 - 2023-05-25
 
 * Rerun event/request pipeline fix.
