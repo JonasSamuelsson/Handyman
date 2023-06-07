@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
    <PropertyGroup>
-      <Version>5.4.1</Version>
+      <Version>5.4.2</Version>
       <TargetFramework>netstandard2.0</TargetFramework>
 
       <!-- Builds symbol package (.snupkg) to distribute the PDB containing Source Link -->
@@ -11,7 +11,7 @@
 
    <ItemGroup>
       <PackageReference Include="Handyman.DependencyInjection" Version="2.5.0" />
-      <PackageReference Include="Handyman.Mediator" Version="11.3.1" />
+      <PackageReference Include="Handyman.Mediator" Version="11.3.2" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
    </ItemGroup>
 
