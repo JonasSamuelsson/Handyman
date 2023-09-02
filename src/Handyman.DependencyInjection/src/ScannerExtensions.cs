@@ -1,5 +1,6 @@
 ﻿using Handyman.DependencyInjection.Conventions;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Handyman.DependencyInjection
@@ -9,6 +10,16 @@ namespace Handyman.DependencyInjection
         public static IScanner Assembly(this IScanner scanner, Assembly assembly)
         {
             return scanner.Types(assembly.GetTypes());
+        }
+
+        public static IScanner Assemblies(this IScanner scanner, IEnumerable<Assembly> assemblies)
+        {
+            foreach (var assembly in assemblies)
+            {
+                scanner.Assembly(assembly);
+            }
+
+            return scanner;
         }
 
         public static IScanner AssemblyContaining(this IScanner scanner, Type type)

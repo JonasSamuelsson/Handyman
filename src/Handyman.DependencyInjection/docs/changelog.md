@@ -1,5 +1,8 @@
 # Handyman.DependencyInjection changelog
 
+## 2.6.0 - 2022-09-02
+
+* Add `IScanner.Assemblies(IEnumerable<Assembly>)` method.
 ## 2.4.2 - 2022-11-15
 
 * Added `net7.0` TFM.
