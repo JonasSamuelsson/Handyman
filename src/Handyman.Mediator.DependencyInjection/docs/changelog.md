@@ -1,5 +1,10 @@
 # Handyman.Mediator.DependencyInjection changelog
 
+## 5.3.0 - 2023-09-03
+
+* Add `MediatorOptions.ScanAssemblies` method.
+* `Handyman.DependencyInjection` upgraded to `2.6.0`.
+
 ## 5.4.2 - 2023-06-07
 
 * `Handyman.Mediator` upgraded to `11.3.2`.

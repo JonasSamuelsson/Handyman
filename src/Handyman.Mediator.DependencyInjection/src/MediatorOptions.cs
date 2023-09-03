@@ -19,6 +19,14 @@ namespace Handyman.Mediator.DependencyInjection
             ScanTypes(assembly.GetTypes());
         }
 
+        public void ScanAssemblies(IEnumerable<Assembly> assemblies)
+        {
+            foreach (var assembly in assemblies)
+            {
+                ScanAssembly(assembly);
+            }
+        }
+
         public void ScanAssemblyContaining(Type type)
         {
             ScanAssembly(type.Assembly);
