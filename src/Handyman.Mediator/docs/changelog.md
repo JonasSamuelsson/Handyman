@@ -1,5 +1,21 @@
 # Handyman.Mediator changelog
 
+## 11.4.0 - 2023-11-16
+
+* Added `EventFilterToggleAttribute` constructor overloads.
+* Added `EventFilterToggleAttribute<TToggleEnabledFilter>`.
+* Added `EventFilterToggleAttribute<TToggleEnabledFilter, TToggleDisableFilter>`.
+* Added `EventHandlerToggleAttribute` constructor overloads.
+* Added `EventHandlerToggleAttribute<TToggleEnabledHandler>`.
+* Added `EventHandlerToggleAttribute<TToggleEnabledHandler, TToggleDisabledHandler>`.
+* Added `RequestFilterToggleAttribute` constructor overloads.
+* Added `RequestFilterToggleAttribute<TToggleEnabledFilter>`.
+* Added `RequestFilterToggleAttribute<TToggleEnabledFilter, TToggleDisableFilter>`.
+* Added `RequestHandlerExperimentAttribute<TBaselineHandler>`.
+* Added `RequestHandlerToggleAttribute` constructor overloads.
+* Added `RequestHandlerToggleAttribute<TToggleEnabledHandler>`.
+* Added `RequestHandlerToggleAttribute<TToggleEnabledHandler, TToggleDisabledHandler>`.
+
 ## 11.3.2 - 2023-06-07
 
 * Event/request pipeline fix.
