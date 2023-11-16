@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.EventHandlerToggle
@@ -11,20 +10,35 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
         private readonly Type[] _toggleEnabledHandlerTypes;
 
         public EventHandlerToggleAttribute(Type toggleEnabledHandlerType)
-            : this(new[] { toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType)) })
+            : this(new[] { toggleEnabledHandlerType })
+        {
+        }
+
+        public EventHandlerToggleAttribute(Type toggleEnabledHandlerType, Type toggleDisabledHandlerType)
+            : this(new[] { toggleEnabledHandlerType }, new[] { toggleDisabledHandlerType })
+        {
+        }
+
+        public EventHandlerToggleAttribute(Type toggleEnabledHandlerType, Type[] toggleDisabledHandlerTypes)
+            : this(new[] { toggleEnabledHandlerType }, toggleDisabledHandlerTypes)
         {
         }
 
         public EventHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes)
         {
-            if (toggleEnabledHandlerTypes == null)
-                throw new ArgumentNullException(nameof(toggleEnabledHandlerTypes));
-
-            if (!toggleEnabledHandlerTypes.Any())
-                throw new ArgumentException();
-
             _metadata = new Lazy<EventHandlerToggleMetadata>(CreateMetadata);
             _toggleEnabledHandlerTypes = toggleEnabledHandlerTypes;
+        }
+
+        public EventHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes, Type toggleDisabledHandlerType)
+            : this(toggleEnabledHandlerTypes, new[] { toggleDisabledHandlerType })
+        {
+        }
+
+        public EventHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes, Type[] toggleDisabledHandlerTypes)
+            : this(toggleEnabledHandlerTypes)
+        {
+            ToggleDisabledHandlerTypes = toggleDisabledHandlerTypes;
         }
 
         public string? Name { get; set; }
@@ -51,6 +65,22 @@ namespace Handyman.Mediator.Pipeline.EventHandlerToggle
                 ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes,
                 FailureMode = FailureMode
             };
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class EventHandlerToggleAttribute<TToggleEnabledHandler> : EventHandlerToggleAttribute
+    {
+        public EventHandlerToggleAttribute() : base(typeof(TToggleEnabledHandler))
+        {
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class EventHandlerToggleAttribute<TToggleEnabledHandler, TToggleDisabledHandler> : EventHandlerToggleAttribute
+    {
+        public EventHandlerToggleAttribute() : base(typeof(TToggleEnabledHandler), typeof(TToggleDisabledHandler))
+        {
         }
     }
 }
