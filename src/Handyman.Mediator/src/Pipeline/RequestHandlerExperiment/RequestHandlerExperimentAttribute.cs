@@ -73,4 +73,12 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
                 .ToArray();
         }
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class RequestHandlerExperimentAttribute<TBaselineHandler> : RequestHandlerExperimentAttribute
+    {
+        public RequestHandlerExperimentAttribute() : base(typeof(TBaselineHandler))
+        {
+        }
+    }
 }
