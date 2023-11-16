@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.RequestFilterToggle
@@ -11,20 +10,35 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
         private readonly Type[] _toggleEnabledFilterTypes;
 
         public RequestFilterToggleAttribute(Type toggleEnabledFilterType)
-            : this(new[] { toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType)) })
+            : this(new[] { toggleEnabledFilterType })
+        {
+        }
+
+        public RequestFilterToggleAttribute(Type toggleEnabledFilterType, Type toggleDisabledFilterType)
+            : this(new[] { toggleEnabledFilterType }, new[] { toggleDisabledFilterType })
+        {
+        }
+
+        public RequestFilterToggleAttribute(Type toggleEnabledFilterType, Type[] toggleDisabledFilterTypes)
+            : this(new[] { toggleEnabledFilterType }, toggleDisabledFilterTypes)
         {
         }
 
         public RequestFilterToggleAttribute(Type[] toggleEnabledFilterTypes)
         {
-            if (toggleEnabledFilterTypes == null)
-                throw new ArgumentNullException(nameof(toggleEnabledFilterTypes));
-
-            if (!toggleEnabledFilterTypes.Any())
-                throw new ArgumentException();
-
             _metadata = new Lazy<RequestFilterToggleMetadata>(CreateMetadata);
             _toggleEnabledFilterTypes = toggleEnabledFilterTypes;
+        }
+
+        public RequestFilterToggleAttribute(Type[] toggleEnabledFilterTypes, Type toggleDisabledFilterType)
+            : this(toggleEnabledFilterTypes, new[] { toggleDisabledFilterType })
+        {
+        }
+
+        public RequestFilterToggleAttribute(Type[] toggleEnabledFilterTypes, Type[] toggleDisabledFilterTypes)
+            : this(toggleEnabledFilterTypes)
+        {
+            ToggleDisabledFilterTypes = toggleDisabledFilterTypes;
         }
 
         public string? Name { get; set; }
@@ -51,6 +65,22 @@ namespace Handyman.Mediator.Pipeline.RequestFilterToggle
                 ToggleEnabledFilterTypes = _toggleEnabledFilterTypes,
                 FailureMode = FailureMode
             };
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class RequestFilterToggleAttribute<TToggleEnabledFilter> : RequestFilterToggleAttribute
+    {
+        public RequestFilterToggleAttribute() : base(typeof(TToggleEnabledFilter))
+        {
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class RequestFilterToggleAttribute<TToggleEnabledFilter, TToggleDisabledFilter> : RequestFilterToggleAttribute
+    {
+        public RequestFilterToggleAttribute() : base(typeof(TToggleEnabledFilter), typeof(TToggleDisabledFilter))
+        {
         }
     }
 }
