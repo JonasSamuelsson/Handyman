@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
@@ -11,20 +10,35 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
         private readonly Type[] _toggleEnabledHandlerTypes;
 
         public RequestHandlerToggleAttribute(Type toggleEnabledHandlerType)
-            : this(new[] { toggleEnabledHandlerType ?? throw new ArgumentNullException(nameof(toggleEnabledHandlerType)) })
+            : this(new[] { toggleEnabledHandlerType })
+        {
+        }
+
+        public RequestHandlerToggleAttribute(Type toggleEnabledHandlerType, Type toggleDisabledHandlerType)
+            : this(new[] { toggleEnabledHandlerType }, new[] { toggleDisabledHandlerType })
+        {
+        }
+
+        public RequestHandlerToggleAttribute(Type toggleEnabledHandlerType, Type[] toggleDisabledHandlerTypes)
+            : this(new[] { toggleEnabledHandlerType }, toggleDisabledHandlerTypes)
         {
         }
 
         public RequestHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes)
         {
-            if (toggleEnabledHandlerTypes == null)
-                throw new ArgumentNullException(nameof(toggleEnabledHandlerTypes));
-
-            if (!toggleEnabledHandlerTypes.Any())
-                throw new ArgumentException();
-
             _metadata = new Lazy<RequestHandlerToggleMetadata>(CreateMetadata);
             _toggleEnabledHandlerTypes = toggleEnabledHandlerTypes;
+        }
+
+        public RequestHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes, Type toggleDisabledHandlerType)
+            : this(toggleEnabledHandlerTypes, new[] { toggleDisabledHandlerType })
+        {
+        }
+
+        public RequestHandlerToggleAttribute(Type[] toggleEnabledHandlerTypes, Type[] toggleDisabledHandlerTypes)
+            : this(toggleEnabledHandlerTypes)
+        {
+            ToggleDisabledHandlerTypes = toggleDisabledHandlerTypes;
         }
 
         public string? Name { get; set; }
@@ -51,6 +65,22 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerToggle
                 ToggleEnabledHandlerTypes = _toggleEnabledHandlerTypes,
                 FailureMode = FailureMode
             };
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class RequestHandlerToggleAttribute<TToggleEnabledHandler> : RequestHandlerToggleAttribute
+    {
+        public RequestHandlerToggleAttribute() : base(typeof(TToggleEnabledHandler))
+        {
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class RequestHandlerToggleAttribute<TToggleEnabledHandler, TToggleDisabledHandler> : RequestHandlerToggleAttribute
+    {
+        public RequestHandlerToggleAttribute() : base(typeof(TToggleEnabledHandler), typeof(TToggleDisabledHandler))
+        {
         }
     }
 }
