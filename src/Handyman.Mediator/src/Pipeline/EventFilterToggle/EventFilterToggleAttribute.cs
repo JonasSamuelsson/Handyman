@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Handyman.Mediator.Pipeline.EventFilterToggle
@@ -11,20 +10,35 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
         private readonly Type[] _toggleEnabledFilterTypes;
 
         public EventFilterToggleAttribute(Type toggleEnabledFilterType)
-            : this(new[] { toggleEnabledFilterType ?? throw new ArgumentNullException(nameof(toggleEnabledFilterType)) })
+            : this(new[] { toggleEnabledFilterType })
+        {
+        }
+
+        public EventFilterToggleAttribute(Type toggleEnabledFilterType, Type toggleDisabledFilterType)
+            : this(new[] { toggleEnabledFilterType }, new[] { toggleDisabledFilterType })
+        {
+        }
+
+        public EventFilterToggleAttribute(Type toggleEnabledFilterType, Type[] toggleDisabledFilterTypes)
+            : this(new[] { toggleEnabledFilterType }, toggleDisabledFilterTypes)
         {
         }
 
         public EventFilterToggleAttribute(Type[] toggleEnabledFilterTypes)
         {
-            if (toggleEnabledFilterTypes == null)
-                throw new ArgumentNullException(nameof(toggleEnabledFilterTypes));
-
-            if (!toggleEnabledFilterTypes.Any())
-                throw new ArgumentException();
-
             _metadata = new Lazy<EventFilterToggleMetadata>(CreateMetadata);
             _toggleEnabledFilterTypes = toggleEnabledFilterTypes;
+        }
+
+        public EventFilterToggleAttribute(Type[] toggleEnabledFilterTypes, Type toggleDisabledFilterType)
+            : this(toggleEnabledFilterTypes, new[] { toggleDisabledFilterType })
+        {
+        }
+
+        public EventFilterToggleAttribute(Type[] toggleEnabledFilterTypes, Type[] toggleDisabledFilterTypes)
+            : this(toggleEnabledFilterTypes)
+        {
+            ToggleDisabledFilterTypes = toggleDisabledFilterTypes;
         }
 
         public string? Name { get; set; }
@@ -51,6 +65,22 @@ namespace Handyman.Mediator.Pipeline.EventFilterToggle
                 ToggleEnabledFilterTypes = _toggleEnabledFilterTypes,
                 FailureMode = FailureMode
             };
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class EventFilterToggleAttribute<TToggleEnabledFilter> : EventFilterToggleAttribute
+    {
+        public EventFilterToggleAttribute() : base(typeof(TToggleEnabledFilter))
+        {
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class EventFilterToggleAttribute<TToggleEnabledFilter, TToggleDisabledFilter> : EventFilterToggleAttribute
+    {
+        public EventFilterToggleAttribute() : base(typeof(TToggleEnabledFilter), typeof(TToggleDisabledFilter))
+        {
         }
     }
 }
