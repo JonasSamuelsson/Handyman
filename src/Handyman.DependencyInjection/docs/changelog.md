@@ -1,9 +1,16 @@
 # Handyman.DependencyInjection changelog
 
+## 2.7.0 - 2023-11-23
+
+* Add `.net8.0` TFM.
+* Package upgrades
+  * Microsoft.SourceLink.GitHub 8.0.0
+
 ## 2.6.0 - 2022-09-02
 
 * Add `IScanner.Assemblies(IEnumerable<Assembly>)` method.
-## 2.4.2 - 2022-11-15
+
+## 2.5.0 - 2022-11-15
 
 * Added `net7.0` TFM.
 * Removed `netcoreapp3.1` & `net5.0` TFMs.
