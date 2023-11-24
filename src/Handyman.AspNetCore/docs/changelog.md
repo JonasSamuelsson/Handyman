@@ -1,5 +1,9 @@
 # Handyman.AspNetCore changelog
 
+## 3.7.0 - 2023-11-24
+
+* Add `net8.0` TFM.
+
 ## 3.6.0 - 2022-11-15
 
 * Added `net7.0` TFM.
