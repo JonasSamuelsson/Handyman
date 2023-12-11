@@ -1,10 +1,14 @@
 # Handyman.Mediator.DependencyInjection changelog
 
+## 5.7.0 - 2023-12-11
+
+* Package upgrades
+  * [Handyman.Mediator 11.4.0](../../Handyman.Mediator/docs/changelog.md#1140---2023-11-16)
+
 ## 5.6.0 - 2023-11-24
 
 * Package upgrades
   * [Handyman.DependencyInjection 2.7.0](../../Handyman.DependencyInjection/docs/changelog.md#270---2023-11-23)
-  * [Handyman.Mediator 11.4.0](../../Handyman.Mediator/docs/changelog.md#1140---2023-11-16)
 
 ## 5.5.0 - 2023-09-03
 
