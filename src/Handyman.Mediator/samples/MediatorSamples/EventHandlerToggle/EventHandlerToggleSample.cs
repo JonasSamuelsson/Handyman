@@ -1,6 +1,5 @@
 ﻿using Handyman.Mediator;
 using Handyman.Mediator.Pipeline.EventHandlerToggle;
-using Handyman.Mediator.Pipeline.RequestHandlerToggle;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MediatorSamples.EventHandlerToggle;
@@ -15,7 +14,7 @@ public class EventHandlerToggleSample : Sample
     }
 }
 
-[RequestHandlerToggle<Handler1, Handler2>]
+[EventHandlerToggle<Handler1, Handler2>]
 public class Event : IEvent
 {
 }
