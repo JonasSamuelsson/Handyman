@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -32,24 +31,10 @@ namespace Handyman.Azure.Cosmos.Table.Internals
             {
                 var node = _nodes[i];
                 var filter = node.Build();
-                result = TableQuery.CombineFilters(result, _operator, filter);
+                result = FilterConditionGenerator.CombineFilters(result, _operator, filter);
             }
 
             return result;
-        }
-    }
-
-    internal class AndTableQueryFilterNode : CompositionTableQueryFilterNode
-    {
-        public AndTableQueryFilterNode() : base(TableOperators.And)
-        {
-        }
-    }
-
-    internal class OrTableQueryFilterNode : CompositionTableQueryFilterNode
-    {
-        public OrTableQueryFilterNode() : base(TableOperators.Or)
-        {
         }
     }
 }

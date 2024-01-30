@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
 
 namespace Handyman.Azure.Cosmos.Table.Internals
 {
@@ -258,61 +257,61 @@ namespace Handyman.Azure.Cosmos.Table.Internals
         {
             var andNode = new AndTableQueryFilterNode();
 
-            andNode.Add(GenerateConditionNode(QueryComparisons.GreaterThanOrEqual, value, TableQuery.GenerateFilterCondition));
+            andNode.Add(GenerateConditionNode(QueryComparisons.GreaterThanOrEqual, value, FilterConditionGenerator.GenerateFilterConditionForString));
 
             var length = value.Length - 1;
             var value2 = $"{value.Substring(0, length)}{(char)(value[length] + 1)}";
-            andNode.Add(GenerateConditionNode(QueryComparisons.LessThan, value2, TableQuery.GenerateFilterCondition));
+            andNode.Add(GenerateConditionNode(QueryComparisons.LessThan, value2, FilterConditionGenerator.GenerateFilterConditionForString));
 
             _node.Add(andNode);
         }
 
         private void AddFilterCondition(string operation, bool value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForBool);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForBool);
         }
 
         private void AddFilterCondition(string operation, byte[] value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForBinary);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForBinary);
         }
 
         private void AddFilterCondition(string operation, DateTimeOffset value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForDate);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForDate);
         }
 
         private void AddFilterCondition(string operation, double value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForDouble);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForDouble);
         }
 
         private void AddFilterCondition(string operation, Guid value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForGuid);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForGuid);
         }
 
         private void AddFilterCondition(string operation, int value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForInt);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForInt);
         }
 
         private void AddFilterCondition(string operation, long value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterConditionForLong);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForLong);
         }
 
         private void AddFilterCondition(string operation, string value)
         {
-            AddFilterCondition(operation, value, TableQuery.GenerateFilterCondition);
+            AddFilterCondition(operation, value, FilterConditionGenerator.GenerateFilterConditionForString);
         }
 
-        private void AddFilterCondition<TValue>(string operation, TValue value, FilterConditionGenerator<TValue> generator)
+        private void AddFilterCondition<TValue>(string operation, TValue value, FilterConditionGeneratorDelegate<TValue> generator)
         {
             _node.Add(GenerateConditionNode(operation, value, generator));
         }
 
-        private ConditionTableQueryFilterNode GenerateConditionNode<TValue>(string operation, TValue value, FilterConditionGenerator<TValue> generator)
+        private ConditionTableQueryFilterNode GenerateConditionNode<TValue>(string operation, TValue value, FilterConditionGeneratorDelegate<TValue> generator)
         {
             return new ConditionTableQueryFilterNode(generator.Invoke(_propertyName, operation, value));
         }
@@ -321,10 +320,10 @@ namespace Handyman.Azure.Cosmos.Table.Internals
     internal class TableQueryFilterConditionBuilder<TValue> : ITableQueryFilterConditionBuilder<TValue>
     {
         private readonly string _propertyName;
-        private readonly FilterConditionGenerator<TValue> _generator;
+        private readonly FilterConditionGeneratorDelegate<TValue> _generator;
         private readonly ITableQueryFilterNode _node;
 
-        public TableQueryFilterConditionBuilder(string propertyName, FilterConditionGenerator<TValue> generator, ITableQueryFilterNode node)
+        public TableQueryFilterConditionBuilder(string propertyName, FilterConditionGeneratorDelegate<TValue> generator, ITableQueryFilterNode node)
         {
             _propertyName = propertyName;
             _generator = generator;

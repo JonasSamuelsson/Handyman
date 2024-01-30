@@ -1,9 +1,8 @@
-﻿using Handyman.Azure.Cosmos.Table.Internals;
-using Microsoft.Azure.Cosmos.Table;
+﻿using Azure.Data.Tables;
 using System;
 using System.Linq.Expressions;
 
-namespace Handyman.Azure.Cosmos.Table
+namespace Handyman.Azure.Cosmos.Table.Internals
 {
     public class TableQueryFilterBuilder<TEntity> : ITableQueryFilterBuilder<TEntity>
         where TEntity : ITableEntity
@@ -20,10 +19,10 @@ namespace Handyman.Azure.Cosmos.Table
             _node = node;
         }
 
-        public ITableQueryFilterStringConditionBuilder ETag => Property(e => e.ETag);
+        public ITableQueryFilterStringConditionBuilder ETag => Property(e => e.ETag.ToString());
         public ITableQueryFilterStringConditionBuilder PartitionKey => Property(e => e.PartitionKey);
         public ITableQueryFilterStringConditionBuilder RowKey => Property(e => e.RowKey);
-        public ITableQueryFilterConditionBuilder<DateTimeOffset> Timestamp => Property(e => e.Timestamp);
+        public ITableQueryFilterConditionBuilder<DateTimeOffset> Timestamp => Property(e => e.Timestamp.Value);
 
         public void And(Action<ITableQueryFilterBuilder<TEntity>> actions)
         {
@@ -55,48 +54,48 @@ namespace Handyman.Azure.Cosmos.Table
             return new TableQueryFilterConditionBuilder(name, _node);
         }
 
-        public ITableQueryFilterConditionBuilder<bool> Property(Expression<Func<TEntity, bool>> property)
-        {
-            return Property(property, TableQuery.GenerateFilterConditionForBool);
-        }
-
         public ITableQueryFilterConditionBuilder<byte[]> Property(Expression<Func<TEntity, byte[]>> property)
         {
-            return Property(property, TableQuery.GenerateFilterConditionForBinary);
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForBinary);
+        }
+
+        public ITableQueryFilterConditionBuilder<bool> Property(Expression<Func<TEntity, bool>> property)
+        {
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForBool);
         }
 
         public ITableQueryFilterConditionBuilder<DateTimeOffset> Property(Expression<Func<TEntity, DateTimeOffset>> property)
         {
-            return Property(property, TableQuery.GenerateFilterConditionForDate);
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForDate);
         }
 
         public ITableQueryFilterConditionBuilder<double> Property(Expression<Func<TEntity, double>> property)
         {
-            return Property(property, TableQuery.GenerateFilterConditionForDouble);
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForDouble);
         }
 
         public ITableQueryFilterConditionBuilder<Guid> Property(Expression<Func<TEntity, Guid>> property)
         {
-            return Property(property, TableQuery.GenerateFilterConditionForGuid);
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForGuid);
         }
 
         public ITableQueryFilterConditionBuilder<int> Property(Expression<Func<TEntity, int>> property)
         {
-            return Property(property, TableQuery.GenerateFilterConditionForInt);
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForInt);
         }
 
         public ITableQueryFilterConditionBuilder<long> Property(Expression<Func<TEntity, long>> property)
         {
-            return Property(property, TableQuery.GenerateFilterConditionForLong);
+            return Property(property, FilterConditionGenerator.GenerateFilterConditionForLong);
         }
 
         public ITableQueryFilterStringConditionBuilder Property(Expression<Func<TEntity, string>> property)
         {
             var propertyName = GetPropertyName(property);
-            return new TableQueryFilterStringConditionBuilder(propertyName, TableQuery.GenerateFilterCondition, _node);
+            return new TableQueryFilterStringConditionBuilder(propertyName, FilterConditionGenerator.GenerateFilterConditionForString, _node);
         }
 
-        private ITableQueryFilterConditionBuilder<TValue> Property<TValue>(Expression<Func<TEntity, TValue>> property, FilterConditionGenerator<TValue> generator)
+        private ITableQueryFilterConditionBuilder<TValue> Property<TValue>(Expression<Func<TEntity, TValue>> property, FilterConditionGeneratorDelegate<TValue> generator)
         {
             var propertyName = GetPropertyName(property);
             return new TableQueryFilterConditionBuilder<TValue>(propertyName, generator, _node);

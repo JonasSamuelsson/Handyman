@@ -1,23 +1,18 @@
-﻿using Handyman.Azure.Cosmos.Table.Internals;
-using Microsoft.Azure.Cosmos.Table;
+﻿using Azure.Data.Tables;
+using Handyman.Azure.Cosmos.Table.Internals;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Handyman.Azure.Cosmos.Table
 {
-    public class TableQueryBuilder : TableQueryBuilder<DynamicTableEntity> { }
+    public class TableQueryBuilder : TableQueryBuilder<TableEntity>
+    {
+    }
 
     public class TableQueryBuilder<TEntity>
         where TEntity : ITableEntity
     {
         private readonly TableQuery<TEntity> _query = new TableQuery<TEntity>();
-
-        public TableQueryBuilder<TEntity> Where(string filter)
-        {
-            _query.Where(filter);
-            return this;
-        }
 
         public TableQueryBuilder<TEntity> Where(Action<ITableQueryFilterBuilder<TEntity>> action)
         {
@@ -26,35 +21,14 @@ namespace Handyman.Azure.Cosmos.Table
             return Where(builder.Build());
         }
 
-        public TableQueryBuilder<TEntity> OrderBy(string propertyName)
+        public TableQueryBuilder<TEntity> Where(string filter)
         {
-            _query.OrderBy(propertyName);
-            return this;
-        }
+            if (_query.Filter != null)
+            {
+                throw new InvalidOperationException("Can't call Where more than once.");
+            }
 
-        public TableQueryBuilder<TEntity> OrderBy(Action<IPropertyNameResolver<TEntity>> action)
-        {
-            var resolver = new PropertyNameResolver<TEntity>();
-            action.Invoke(resolver);
-            return OrderBy(resolver.Properties.Single());
-        }
-
-        public TableQueryBuilder<TEntity> OrderByDesc(string propertyName)
-        {
-            _query.OrderByDesc(propertyName);
-            return this;
-        }
-
-        public TableQueryBuilder<TEntity> OrderByDesc(Action<IPropertyNameResolver<TEntity>> action)
-        {
-            var resolver = new PropertyNameResolver<TEntity>();
-            action.Invoke(resolver);
-            return OrderByDesc(resolver.Properties.Single());
-        }
-
-        public TableQueryBuilder<TEntity> Select(IEnumerable<string> columns)
-        {
-            _query.Select(columns.ToList());
+            _query.Filter = filter;
             return this;
         }
 
@@ -70,9 +44,14 @@ namespace Handyman.Azure.Cosmos.Table
             return this;
         }
 
-        public TableQueryBuilder<TEntity> Take(int? count)
+        public TableQueryBuilder<TEntity> Select(IEnumerable<string> properties)
         {
-            _query.Take(count);
+            if (_query.Select != null)
+            {
+                throw new InvalidOperationException("Can't call Select more than once.");
+            }
+
+            _query.Select = properties;
             return this;
         }
 

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Azure.Data.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Microsoft.Azure.Cosmos.Table;
 
 namespace Handyman.Azure.Cosmos.Table.Internals
 {

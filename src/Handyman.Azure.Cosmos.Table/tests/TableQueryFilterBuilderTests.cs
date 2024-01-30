@@ -1,4 +1,4 @@
-using Microsoft.Azure.Cosmos.Table;
+using Handyman.Azure.Cosmos.Table.Internals;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -395,7 +395,7 @@ namespace Handyman.Azure.Cosmos.Table.Tests
             builder.Build().ShouldBe("(RowKey ge 'abc') and (RowKey lt 'abd')");
         }
 
-        private class TestEntity : TableEntity
+        private class TestEntity : TableEntityBase
         {
             public bool Bool { get; set; }
             public byte[] Bytes { get; set; }

@@ -1,10 +1,8 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-
-namespace Handyman.Azure.Cosmos.Table.Internals
+﻿namespace Handyman.Azure.Cosmos.Table.Internals
 {
     internal class TableQueryFilterStringConditionBuilder : TableQueryFilterConditionBuilder<string>, ITableQueryFilterStringConditionBuilder
     {
-        public TableQueryFilterStringConditionBuilder(string propertyName, FilterConditionGenerator<string> generator, ITableQueryFilterNode node)
+        public TableQueryFilterStringConditionBuilder(string propertyName, FilterConditionGeneratorDelegate<string> generator, ITableQueryFilterNode node)
             : base(propertyName, generator, node)
         {
         }
