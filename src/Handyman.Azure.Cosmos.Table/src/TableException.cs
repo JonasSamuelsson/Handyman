@@ -4,11 +4,16 @@ namespace Handyman.Azure.Cosmos.Table
 {
     public class TableException : Exception
     {
-        public TableException(int httpStatusCode)
+        public TableException(int statusCode)
         {
-            HttpStatusCode = httpStatusCode;
+            StatusCode = statusCode;
         }
 
-        public int HttpStatusCode { get; }
+        public TableException(int statusCode, Exception exception) : base(null, exception)
+        {
+            StatusCode = statusCode;
+        }
+
+        public int StatusCode { get; }
     }
 }

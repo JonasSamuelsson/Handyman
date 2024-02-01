@@ -3,7 +3,7 @@
    <PropertyGroup>
       <TargetFramework>netstandard2.0</TargetFramework>
       <LangVersion>latest</LangVersion>
-      <Version>3.0.0-preview.1</Version>
+      <Version>3.0.0-preview.2</Version>
       <Authors>Jonas Samuelsson</Authors>
       <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
       <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
