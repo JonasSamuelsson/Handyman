@@ -25,4 +25,12 @@
       <None Include="..\..\handyman.snk" Link="handyman.snk" />
    </ItemGroup>
 
+   <ItemGroup>
+     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <Using Include="JetBrains.Annotations" />
+   </ItemGroup>
+
 </Project>
