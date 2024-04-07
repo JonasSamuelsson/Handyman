@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using Shouldly;
-using Xunit;
-
-namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests
 {
     public class MemberInfoExtensionsTests
     {
@@ -24,8 +19,16 @@ namespace Handyman.Extensions.Tests
         }
 
         [Test]
-        private class SuperType { }
-        private class SubType : SuperType { }
-        private class TestAttribute : Attribute { }
+        private class SuperType
+        {
+        }
+
+        private class SubType : SuperType
+        {
+        }
+
+        private class TestAttribute : Attribute
+        {
+        }
     }
 }

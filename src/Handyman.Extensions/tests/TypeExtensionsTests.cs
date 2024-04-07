@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Shouldly;
-using Xunit;
-
-namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests
 {
     public class TypeExtensionsTests
     {
@@ -191,15 +185,15 @@ namespace Handyman.Extensions.Tests
         {
             var expextedTypes = new[]
             {
-                typeof (object),
-                typeof (IInterface),
-                typeof (IInterface<>),
-                typeof (IInterface<object>),
-                typeof (Abstract),
-                typeof (Abstract<>),
-                typeof (Abstract<object>),
-                typeof (Concrete<>),
-                typeof (Concrete<object>),
+                typeof(object),
+                typeof(IInterface),
+                typeof(IInterface<>),
+                typeof(IInterface<object>),
+                typeof(Abstract),
+                typeof(Abstract<>),
+                typeof(Abstract<object>),
+                typeof(Concrete<>),
+                typeof(Concrete<object>),
             }.OrderBy(x => x.FullName, StringComparer.Ordinal);
             typeof(ConcreteOfObject).GetSuperTypes().OrderBy(x => x.FullName, StringComparer.Ordinal).ShouldBe(expextedTypes);
         }
@@ -214,13 +208,36 @@ namespace Handyman.Extensions.Tests
             typeof(Concrete).IsConcreteSubClassOf<IInterface>().ShouldBe(true);
         }
 
-        private interface IInterface { }
-        private interface IInterface<T> : IInterface { }
-        private abstract class Abstract : IInterface { }
-        private abstract class Abstract<T> : Abstract, IInterface<T> { }
-        private class Concrete : Abstract { }
-        private class Concrete<T> : Abstract<T> { }
-        private class ConcreteOfObject : Concrete<object> { }
-        private class ClassOfIntAndString : IInterface<int>, IInterface<string> { }
+        private interface IInterface
+        {
+        }
+
+        private interface IInterface<T> : IInterface
+        {
+        }
+
+        private abstract class Abstract : IInterface
+        {
+        }
+
+        private abstract class Abstract<T> : Abstract, IInterface<T>
+        {
+        }
+
+        private class Concrete : Abstract
+        {
+        }
+
+        private class Concrete<T> : Abstract<T>
+        {
+        }
+
+        private class ConcreteOfObject : Concrete<object>
+        {
+        }
+
+        private class ClassOfIntAndString : IInterface<int>, IInterface<string>
+        {
+        }
     }
 }

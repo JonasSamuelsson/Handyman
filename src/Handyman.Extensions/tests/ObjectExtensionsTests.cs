@@ -1,7 +1,4 @@
-﻿using Shouldly;
-using Xunit;
-
-namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests
 {
     public class ObjectExtensionsTests
     {
