@@ -394,4 +394,14 @@ public static class EnumerableExtensions
 
         return found;
     }
+
+    public static IReadOnlyCollection<T> AsReadOnlyCollection<T>(this IEnumerable<T> source)
+    {
+        return source as IReadOnlyCollection<T> ?? source.ToList();
+    }
+
+    public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T> source)
+    {
+        return source as IReadOnlyList<T> ?? source.ToList();
+    }
 }
