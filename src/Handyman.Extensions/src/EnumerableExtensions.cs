@@ -82,6 +82,7 @@ namespace Handyman.Extensions
                 list[j] = list[i - 1];
                 list[i - 1] = temp;
             }
+
             return list;
         }
 
@@ -100,7 +101,7 @@ namespace Handyman.Extensions
             return source as IReadOnlyList<T> ?? source.ToList();
         }
 
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
         public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> source, int count)
         {
             var list = source.ToReadOnlyList();
@@ -113,11 +114,12 @@ namespace Handyman.Extensions
             var list = source.ToReadOnlyList();
             var i = 1;
             for (; i <= list.Count; i++)
-                if (!predicate(list[list.Count - i])) break;
+                if (!predicate(list[list.Count - i]))
+                    break;
             return list.SkipLast(i - 1);
         }
 
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
         public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int count)
         {
             var list = source.ToReadOnlyList();
@@ -130,7 +132,8 @@ namespace Handyman.Extensions
             var list = source.ToReadOnlyList();
             var i = 1;
             for (; i <= list.Count; i++)
-                if (!predicate(list[list.Count - i])) break;
+                if (!predicate(list[list.Count - i]))
+                    break;
             return list.TakeLast(i - 1);
         }
 
@@ -144,6 +147,7 @@ namespace Handyman.Extensions
                 yield return buffer;
                 buffer = new List<T>(chunkSize);
             }
+
             if (buffer.Count != 0) yield return buffer;
         }
 
@@ -216,6 +220,7 @@ namespace Handyman.Extensions
                 if (dictionary.TryAdd(key, value)) continue;
                 throw new InvalidOperationException();
             }
+
             return dictionary;
         }
 
@@ -291,7 +296,7 @@ namespace Handyman.Extensions
 
         public static IEnumerable<T> Visit<T>(this IEnumerable<T> source, Func<T, bool> predicate, Action<T> action)
         {
-            return source.Visit((index, item) => predicate(item), (index, item) => action(item));
+            return source.Visit((_, item) => predicate(item), (_, item) => action(item));
         }
 
         public static IEnumerable<T> Visit<T>(this IEnumerable<T> source, Func<int, T, bool> predicate, Action<int, T> action)
