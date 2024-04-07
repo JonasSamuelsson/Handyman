@@ -1,8 +1,7 @@
-namespace Handyman.Extensions
+namespace Handyman.Extensions;
+
+public enum IgnoreCase
 {
-    public enum IgnoreCase
-    {
-        No,
-        Yes
-    }
+    No,
+    Yes
 }

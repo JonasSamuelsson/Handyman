@@ -1,31 +1,30 @@
-﻿namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests;
+
+public class ConcurrentDictionaryTests
 {
-    public class ConcurrentDictionaryTests
+    [Fact]
+    public void AddOrUpdate()
     {
-        [Fact]
-        public void AddOrUpdate()
-        {
-            var dictionary = new ConcurrentDictionary<int, string>();
+        var dictionary = new ConcurrentDictionary<int, string>();
 
-            dictionary.AddOrUpdate(1, "one");
+        dictionary.AddOrUpdate(1, "one");
 
-            dictionary.GetOrThrow(1).ShouldBe("one");
+        dictionary.GetOrThrow(1).ShouldBe("one");
 
-            dictionary.AddOrUpdate(1, "ONE");
+        dictionary.AddOrUpdate(1, "ONE");
 
-            dictionary.GetOrThrow(1).ShouldBe("ONE");
-        }
+        dictionary.GetOrThrow(1).ShouldBe("ONE");
+    }
 
-        [Fact]
-        public void GetOrThrow()
-        {
-            var dictionary = new ConcurrentDictionary<int, string>();
+    [Fact]
+    public void GetOrThrow()
+    {
+        var dictionary = new ConcurrentDictionary<int, string>();
 
-            Should.Throw<KeyNotFoundException>(() => dictionary.GetOrThrow(1));
+        Should.Throw<KeyNotFoundException>(() => dictionary.GetOrThrow(1));
 
-            dictionary.AddOrUpdate(1, "one");
+        dictionary.AddOrUpdate(1, "one");
 
-            dictionary.GetOrThrow(1).ShouldBe("one");
-        }
+        dictionary.GetOrThrow(1).ShouldBe("one");
     }
 }

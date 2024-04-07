@@ -1,14 +1,13 @@
-﻿namespace Handyman.Extensions.Tests
+﻿namespace Handyman.Extensions.Tests;
+
+public class TempTests
 {
-    public class TempTests
+    [Fact]
+    public void ShouldModifyAndRestore()
     {
-        [Fact]
-        public void ShouldModifyAndRestore()
-        {
-            var number = 0;
-            using (new Temp(() => number++, () => number--))
-                number.ShouldBe(1);
-            number.ShouldBe(0);
-        }
+        var number = 0;
+        using (new Temp(() => number++, () => number--))
+            number.ShouldBe(1);
+        number.ShouldBe(0);
     }
 }

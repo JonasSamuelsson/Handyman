@@ -1,37 +1,36 @@
 ﻿using System;
 
-namespace Handyman.Extensions
+namespace Handyman.Extensions;
+
+public static class DoubleExtensions
 {
-    public static class DoubleExtensions
+    public static TimeSpan Milliseconds(this double milliseconds)
     {
-        public static TimeSpan Milliseconds(this double milliseconds)
-        {
-            return TimeSpan.FromMilliseconds(milliseconds);
-        }
+        return TimeSpan.FromMilliseconds(milliseconds);
+    }
 
-        public static TimeSpan Seconds(this double seconds)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
+    public static TimeSpan Seconds(this double seconds)
+    {
+        return TimeSpan.FromSeconds(seconds);
+    }
 
-        public static TimeSpan Minutes(this double minutes)
-        {
-            return TimeSpan.FromMinutes(minutes);
-        }
+    public static TimeSpan Minutes(this double minutes)
+    {
+        return TimeSpan.FromMinutes(minutes);
+    }
 
-        public static TimeSpan Hours(this double hours)
-        {
-            return TimeSpan.FromHours(hours);
-        }
+    public static TimeSpan Hours(this double hours)
+    {
+        return TimeSpan.FromHours(hours);
+    }
 
-        public static TimeSpan Days(this double days)
-        {
-            return TimeSpan.FromDays(days);
-        }
+    public static TimeSpan Days(this double days)
+    {
+        return TimeSpan.FromDays(days);
+    }
 
-        public static TimeSpan Weeks(this double weeks)
-        {
-            return TimeSpan.FromDays(weeks * 7);
-        }
+    public static TimeSpan Weeks(this double weeks)
+    {
+        return TimeSpan.FromDays(weeks * 7);
     }
 }

@@ -18,6 +18,7 @@
       <SignAssembly>True</SignAssembly>
       <DelaySign>False</DelaySign>
       <AssemblyOriginatorKeyFile>..\..\handyman.snk</AssemblyOriginatorKeyFile>
+      <LangVersion>12.0</LangVersion>
    </PropertyGroup>
 
    <ItemGroup>
