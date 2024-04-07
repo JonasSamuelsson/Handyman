@@ -8,7 +8,7 @@
 | [Handyman.DependencyInjection][h.di-docs] | [![h.di-nuget-version] ![h.di-nuget-downloads]][h.di-nuget] | ![Handyman.DependencyInjection][h.di-gha] |
 | Handyman.DuckTyping | [![h.dt-nuget-version] ![h.dt-nuget-downloads]][h.dt-nuget] | ![Handyman.DuckTyping][h.dt-gha] |
 | Handyman.Dynamics | [![h.d-nuget-version] ![h.d-nuget-downloads]][h.d-nuget] | [![h.d-ado-status]][h.d-ado] |
-| Handyman.Extensions | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | ![Handyman.Extensions][h.e-gha] |
+| [Handyman.Extensions][h.e-docs] | [![h.e-nuget-version] ![h.e-nuget-downloads]][h.e-nuget] | ![Handyman.Extensions][h.e-gha] |
 | [Handyman.Mediator][h.m-docs] | [![h.m-nuget-version] ![h.m-nuget-downloads]][h.m-nuget] | ![Handyman.Mediator][h.m-gha] |
 | [Handyman.Mediator.DependencyInjection][h.m.di-docs] | [![h.m.di-nuget-version] ![h.m.di-nuget-downloads]][h.m.di-nuget] | ![Handyman.Mediator.DependencyInjection][h.m.di-gha] |
 
@@ -55,6 +55,7 @@
 [h.d-ado]: https://dev.azure.com/jonassamuelsson/Handyman/_build?definitionId=7
 [h.d-ado-status]: https://dev.azure.com/jonassamuelsson/Handyman/_apis/build/status/Handyman.Dynamics?branchName=master
 
+[h.e-docs]: src/Handyman.Extensions/docs/index.md
 [h.e-nuget]: https://www.nuget.org/packages/Handyman.Extensions/
 [h.e-nuget-version]: https://img.shields.io/nuget/v/Handyman.Extensions.svg
 [h.e-nuget-downloads]: https://img.shields.io/nuget/dt/Handyman.Extensions.svg
