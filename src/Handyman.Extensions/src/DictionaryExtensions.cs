@@ -5,6 +5,7 @@ namespace Handyman.Extensions;
 
 public static class DictionaryExtensions
 {
+#if NETFRAMEWORK
     public static TValue GetValueOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
     {
         return dictionary.GetValueOrDefault(key, default(TValue));
@@ -14,6 +15,7 @@ public static class DictionaryExtensions
     {
         return dictionary.GetValueOrDefault(key, () => @default);
     }
+#endif
 
     public static TValue GetValueOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> factory)
     {

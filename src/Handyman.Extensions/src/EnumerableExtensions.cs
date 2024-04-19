@@ -137,6 +137,7 @@ public static class EnumerableExtensions
         return list.TakeLast(i - 1);
     }
 
+#if NETFRAMEWORK
     public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunkSize)
     {
         var buffer = new List<T>(chunkSize);
@@ -150,6 +151,7 @@ public static class EnumerableExtensions
 
         if (buffer.Count != 0) yield return buffer;
     }
+#endif
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
     {
