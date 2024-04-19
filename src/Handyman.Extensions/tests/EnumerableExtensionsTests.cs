@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Handyman.Extensions.Tests;
+namespace HandymanExtensionsTests;
 
 public class EnumerableExtensionsTests
 {

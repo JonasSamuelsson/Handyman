@@ -1,4 +1,4 @@
-﻿namespace Handyman.Extensions.Tests;
+﻿namespace HandymanExtensionsTests;
 
 public class Int32ExtensionsTests
 {

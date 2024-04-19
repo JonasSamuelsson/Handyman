@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Handyman.Extensions.Tests;
+namespace HandymanExtensionsTests;
 
 public class ConfigurationTests
 {

@@ -3,6 +3,7 @@
    <PropertyGroup>
       <TargetFrameworks>net472;net48;net6.0;net7.0;net8.0</TargetFrameworks>
       <LangVersion>12.0</LangVersion>
+      <RootNamespace>HandymanExtensionsTests</RootNamespace>
    </PropertyGroup>
 
    <ItemGroup>
