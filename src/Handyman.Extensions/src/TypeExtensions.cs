@@ -43,7 +43,7 @@ public static class TypeExtensions
             .Where(x => x.GetTypeInfo().IsGenericType)
             .Where(x => !x.GetTypeInfo().IsGenericTypeDefinition)
             .Where(x => x.GetGenericTypeDefinition() == genericTypeDefinition)
-            .ToList();
+            .ToArray();
 
         if (genericTypes.Count == 0)
         {

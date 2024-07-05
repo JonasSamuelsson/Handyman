@@ -74,16 +74,18 @@ public static class EnumerableExtensions
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
     {
         var random = new Random();
-        var list = source.ToList();
-        for (var i = list.Count; i > 1; i--)
+
+        var array = source.ToArray();
+
+        for (var i = array.Length; i > 1; i--)
         {
             var j = random.Next(i);
-            var temp = list[j];
-            list[j] = list[i - 1];
-            list[i - 1] = temp;
+            var temp = array[j];
+            array[j] = array[i - 1];
+            array[i - 1] = temp;
         }
 
-        return list;
+        return array;
     }
 
     public static ISet<T> ToSet<T>(this IEnumerable<T> source)
@@ -98,7 +100,7 @@ public static class EnumerableExtensions
 
     public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
     {
-        return source as IReadOnlyList<T> ?? source.ToList();
+        return source as IReadOnlyList<T> ?? source.ToArray();
     }
 
 #if NETFRAMEWORK
@@ -189,7 +191,7 @@ public static class EnumerableExtensions
 
     public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
     {
-        return source as IReadOnlyCollection<T> ?? source.ToList();
+        return source as IReadOnlyCollection<T> ?? source.ToArray();
     }
 
     public static Queue<T> ToQueue<T>(this IEnumerable<T> source)
@@ -399,11 +401,11 @@ public static class EnumerableExtensions
 
     public static IReadOnlyCollection<T> AsReadOnlyCollection<T>(this IEnumerable<T> source)
     {
-        return source as IReadOnlyCollection<T> ?? source.ToList();
+        return source as IReadOnlyCollection<T> ?? source.ToArray();
     }
 
     public static IReadOnlyList<T> AsReadOnlyList<T>(this IEnumerable<T> source)
     {
-        return source as IReadOnlyList<T> ?? source.ToList();
+        return source as IReadOnlyList<T> ?? source.ToArray();
     }
 }
