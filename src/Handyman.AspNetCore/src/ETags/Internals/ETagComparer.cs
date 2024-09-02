@@ -1,50 +1,39 @@
-﻿namespace Handyman.AspNetCore.ETags.Internals
+﻿using System;
+
+namespace Handyman.AspNetCore.ETags.Internals
 {
     internal class ETagComparer : IETagComparer
     {
-        private readonly IETagConverter _converter;
-
-        public ETagComparer(IETagConverter converter)
-        {
-            _converter = converter;
-        }
-
         public void EnsureEquals(string eTag, byte[] bytes)
         {
-            if (Equals(eTag, bytes))
-                return;
+            ArgumentNullException.ThrowIfNull(eTag);
+            ArgumentNullException.ThrowIfNull(bytes);
 
-            throw new PreconditionFailedException();
+            ETagUtility.EnsureEquals(eTag, bytes);
         }
 
         public void EnsureEquals(string eTag1, string eTag2)
         {
-            if (Equals(eTag1, eTag2))
-                return;
+            ArgumentNullException.ThrowIfNull(eTag1);
+            ArgumentNullException.ThrowIfNull(eTag2);
 
-            throw new PreconditionFailedException();
+            ETagUtility.EnsureEquals(eTag1, eTag2);
         }
 
         public bool Equals(string eTag, byte[] bytes)
         {
-            if (eTag == "*")
-                return true;
+            ArgumentNullException.ThrowIfNull(eTag);
+            ArgumentNullException.ThrowIfNull(bytes);
 
-            if (string.IsNullOrWhiteSpace(eTag))
-                return false;
-
-            return eTag == _converter.FromByteArray(bytes);
+            return ETagUtility.Equals(eTag, bytes);
         }
 
         public bool Equals(string eTag1, string eTag2)
         {
-            if (eTag1 == "*" || eTag2 == "*")
-                return true;
+            ArgumentNullException.ThrowIfNull(eTag1);
+            ArgumentNullException.ThrowIfNull(eTag2);
 
-            if (string.IsNullOrWhiteSpace(eTag1) || string.IsNullOrWhiteSpace(eTag2))
-                return false;
-
-            return eTag1 == eTag2;
+            return ETagUtility.Equals(eTag1, eTag2);
         }
     }
 }

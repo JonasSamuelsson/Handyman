@@ -159,32 +159,18 @@ public IEnumerable<string> GetValues(string apiVersion)
 
 ## ETags
 
-This feature simplifies accessing the `e-tag` from `If-Match` and `If-None-Match` headers.  
-It will also make sure that the e-tag conforms to the e-tag format.
+This feature simplifies working with `e-tags` by
+* Reading the `e-tag` from `If-Match` and `If-None-Match` headers.
+* Simplify converting between `e-tag` and SQL Server row version and comparing the two.
+* Add `e-tag` header to outgoing http response.
 
 ### Setup
 
-Add required services and middleware.
-
-``` csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddETags();
-}
-
-public void Configure(IApplicationBuilder app)
-{
-    app.UseRouting();
-    app.UseETags();
-    app.UseEndpoints(endpoints => endpoints.MapControllers());
-}
-```
-
-:information_source: The e-tags middleware must be added after any exception handling middleware (like [Hellang.Middleware.ProblemDetails](https://www.nuget.org/packages/Hellang.Middleware.ProblemDetails/)) to work.
+Add required services and middleware by calling `IServiceCollection.AddETags()` & `IApplicationBuilder.UseETags()` extension methods.
 
 ### Validate http request e-tag header format
 
-Http request headers `If-Match` or `If-None-Match` will automatically be inspected and if it isn't a valid e-tag (wildcards are supported), it will respond with `400 Bad request`.
+Http request headers `If-Match` or `If-None-Match` will automatically be inspected and if it isn't a valid e-tag (wildcards are supported), it will respond with a `400 Bad request`.
 
 ### Access request e-tag
 
@@ -207,42 +193,38 @@ public void Store(Payload payload, [FromIfMatchHeader] string eTag)
 
 ### Compare e-tags
 
-Use `IETagUtilities.Comparer` to see if the incoming e-tag is up to date.  
+Use `ETagUtility.EnsureEquals(...)` to see if the incoming e-tag is up to date.  
 The `EnsureEquals` methods will throw a `PreconditionFailedException` if the values don't match. The exception will be caught by the middleware and converted to a `412 Precondition failed` response.
 
 ``` csharp
-public class Repository
+public async Task UpdateItem(Item item, string eTag, CancellationToken cancellationToken)
 {
-    private readonly DbContext _dbContext;
-    private readonly IETagUtilities _eTagUtilities;
+   var dbItem = await _dbContext.Items.SingleAsync(x => x.Id == item.Id, cancellationToken);
 
-    public Repository(DbContext dbContext, IETagUtilities eTagUtilities)
-    {
-        _dbContext = dbContext;
-        _eTagUtilities = eTagUtilities;
-    }
+   ETagUtility.EnsureEquals(eTag, item.RowVersion);
 
-    public async Task UpdateItem(Item item, string eTag, CancellationToken cancellationToken)
-    {
-        var dbItem = await _dbContext.Items.SingleAsync(x => x.Id == item.Id, cancellationToken);
+   dbItem.Name = item.Name;
 
-        _eTagUtilities.Comparer.EnsureEquals(eTag, item.RowVersion);
-
-        // update dbItem from item
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
+   await _dbContext.SaveChangesAsync(cancellationToken);
 }
 ```
 
 ### Generate e-tags
 
-Use `IETagUtilities.Converter` to convert byte arrays (sql server _row versions_) to string.
+Use `ETagUtility.ToETagValue(...)` to convert byte arrays (sql server _row versions_) to string.
 
 ``` csharp
-var eTagUtilities = serviceProvider.GetRequiredService<IETagUtilities>();
-byte[] bytes = ...;
-string eTag = eTagUtilities.Converter.FromByteArray(bytes);
+public async Task<Item> GetItem(int itemId, CancellationToken cancellationToken)
+{
+   var dbItem = await _dbContext.Items.SingleAsync(x => x.Id == itemId, cancellationToken);
+
+   return new Item
+   {
+       Id = dbItem.Id,
+       Name = dbItem.Name,
+       ETag = ETagUtility.ToETagValue(dbItem.RowVersion)
+   };
+}
 ```
 
 ### Write response e-tag header
@@ -250,10 +232,16 @@ string eTag = eTagUtilities.Converter.FromByteArray(bytes);
 Use the `SetETagHeader` extension method on `HttpResponse` to set the e-tag header.
 
 ``` csharp
-[HttpGet]
-public void Get()
+[HttpGet("{id:int}")]
+public async Task<Item> GetItem(int id)
 {
-    var eTag = GetETag();
-    Response.SetETagHeader(eTag);
+    var item = await LoadItem(id);
+    Response.SetETagHeader(item.ETag);
+    return item;
 }
 ```
+
+### Backwards compatibility
+
+The static `ETagUtility` class was introduced in version 3.8.0, before that there `IETagUtilities` had to be used.  
+`IETagUtilities` is still available for backwards compatibility.

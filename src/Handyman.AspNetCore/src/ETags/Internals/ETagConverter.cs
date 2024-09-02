@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Handyman.AspNetCore.ETags.Internals
 {
@@ -7,12 +6,9 @@ namespace Handyman.AspNetCore.ETags.Internals
     {
         public string FromByteArray(byte[] bytes)
         {
-            if (bytes == null) throw new ArgumentNullException();
-            if (bytes.Length == 0) throw new ArgumentException();
+            ArgumentNullException.ThrowIfNull(bytes);
 
-            var strings = bytes.SkipWhile(x => x == 0).Select(x => x.ToString("x2"));
-
-            return $"W/\"{string.Join("", strings)}\"";
+            return ETagUtility.ToETag(bytes);
         }
     }
 }

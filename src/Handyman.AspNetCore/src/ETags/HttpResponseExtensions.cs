@@ -7,6 +7,13 @@ namespace Handyman.AspNetCore.ETags
     {
         public static void SetETagHeader(this HttpResponse response, string eTag)
         {
+            eTag = ETagUtility.ToETag(eTag);
+
+            if (!ETagUtility.IsValidETag(eTag))
+            {
+                ETagUtility.ThrowInvalidETagException();
+            }
+
             response.Headers[HeaderNames.ETag] = eTag;
         }
     }
