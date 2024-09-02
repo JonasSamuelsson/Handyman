@@ -1,7 +1,6 @@
-﻿namespace Handyman.AspNetCore.ETags
+﻿namespace Handyman.AspNetCore.ETags;
+
+public interface IETagConverter
 {
-    public interface IETagConverter
-    {
-        string FromByteArray(byte[] bytes);
-    }
+    string FromByteArray(byte[] bytes);
 }

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace Handyman.AspNetCore.ApiVersioning
+namespace Handyman.AspNetCore.ApiVersioning;
+
+public interface IApiVersionReader
 {
-    public interface IApiVersionReader
-    {
-        bool TryRead(HttpRequest httpRequest, out StringValues values);
-    }
+    bool TryRead(HttpRequest httpRequest, out StringValues values);
 }

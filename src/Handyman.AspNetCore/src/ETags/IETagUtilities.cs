@@ -1,8 +1,7 @@
-﻿namespace Handyman.AspNetCore.ETags
+﻿namespace Handyman.AspNetCore.ETags;
+
+public interface IETagUtilities
 {
-    public interface IETagUtilities
-    {
-        IETagComparer Comparer { get; }
-        IETagConverter Converter { get; }
-    }
+    IETagComparer Comparer { get; }
+    IETagConverter Converter { get; }
 }

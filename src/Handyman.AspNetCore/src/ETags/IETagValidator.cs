@@ -1,7 +1,6 @@
-﻿namespace Handyman.AspNetCore.ETags
+﻿namespace Handyman.AspNetCore.ETags;
+
+internal interface IETagValidator
 {
-    internal interface IETagValidator
-    {
-        bool IsValidETag(string candidate);
-    }
+    bool IsValidETag(string candidate);
 }

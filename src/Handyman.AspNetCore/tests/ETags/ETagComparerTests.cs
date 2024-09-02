@@ -2,18 +2,17 @@
 using Shouldly;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests.ETags
+namespace Handyman.AspNetCore.Tests.ETags;
+
+public class ETagComparerTests
 {
-    public class ETagComparerTests
+    [Theory]
+    [InlineData("*", "123", true)]
+    [InlineData("123", "*", true)]
+    [InlineData("123", "123", true)]
+    [InlineData("123", "321", false)]
+    public void ShouldCompareETags(string eTag1, string eTag2, bool result)
     {
-        [Theory]
-        [InlineData("*", "123", true)]
-        [InlineData("123", "*", true)]
-        [InlineData("123", "123", true)]
-        [InlineData("123", "321", false)]
-        public void ShouldCompareETags(string eTag1, string eTag2, bool result)
-        {
-            new ETagComparer().Equals(eTag1, eTag2).ShouldBe(result);
-        }
+        new ETagComparer().Equals(eTag1, eTag2).ShouldBe(result);
     }
 }

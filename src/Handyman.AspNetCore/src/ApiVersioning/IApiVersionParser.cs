@@ -1,7 +1,6 @@
-﻿namespace Handyman.AspNetCore.ApiVersioning
+﻿namespace Handyman.AspNetCore.ApiVersioning;
+
+public interface IApiVersionParser
 {
-    public interface IApiVersionParser
-    {
-        bool TryParse(string candidate, out IApiVersion version);
-    }
+    bool TryParse(string candidate, out IApiVersion version);
 }

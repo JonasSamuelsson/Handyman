@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Handyman.AspNetCore.ETags
+namespace Handyman.AspNetCore.ETags;
+
+[AttributeUsage(AttributeTargets.Parameter)]
+public class FromIfMatchHeaderAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Parameter)]
-    public class FromIfMatchHeaderAttribute : Attribute
-    {
-    }
 }

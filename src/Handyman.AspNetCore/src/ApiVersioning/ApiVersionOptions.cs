@@ -1,7 +1,6 @@
-﻿namespace Handyman.AspNetCore.ApiVersioning
+﻿namespace Handyman.AspNetCore.ApiVersioning;
+
+public class ApiVersionOptions
 {
-    public class ApiVersionOptions
-    {
-        public int InvalidApiVersionStatusCode { get; set; }
-    }
+    public int InvalidApiVersionStatusCode { get; set; }
 }

@@ -4,20 +4,19 @@ using Shouldly;
 using System.Linq;
 using Xunit;
 
-namespace Handyman.AspNetCore.Tests.ApiVersioning
+namespace Handyman.AspNetCore.Tests.ApiVersioning;
+
+public class ServiceCollectionExtensionsTests
 {
-    public class ServiceCollectionExtensionsTests
+    [Fact]
+    public void ShouldConfigureDefaultServices()
     {
-        [Fact]
-        public void ShouldConfigureDefaultServices()
-        {
-            var services = new ServiceCollection();
+        var services = new ServiceCollection();
 
-            services.AddApiVersioning();
+        services.AddApiVersioning();
 
-            var reader = services.Single(x => x.ServiceType == typeof(IApiVersionReader));
-            reader.ImplementationType.ShouldBe(typeof(QueryStringApiVersionReader));
-            reader.Lifetime.ShouldBe(ServiceLifetime.Singleton);
-        }
+        var reader = services.Single(x => x.ServiceType == typeof(IApiVersionReader));
+        reader.ImplementationType.ShouldBe(typeof(QueryStringApiVersionReader));
+        reader.Lifetime.ShouldBe(ServiceLifetime.Singleton);
     }
 }

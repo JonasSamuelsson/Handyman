@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace Handyman.AspNetCore.ETags.Internals
+namespace Handyman.AspNetCore.ETags.Internals;
+
+internal class PreconditionFailedException : Exception
 {
-    internal class PreconditionFailedException : Exception { }
 }

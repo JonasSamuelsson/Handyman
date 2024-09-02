@@ -1,31 +1,30 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Threading.Tasks;
 
-namespace Handyman.AspNetCore.ETags.Internals.Middleware
+namespace Handyman.AspNetCore.ETags.Internals.Middleware;
+
+internal class PreconditionFailedExceptionHandlerMiddleware : IMiddleware
 {
-    internal class PreconditionFailedExceptionHandlerMiddleware : IMiddleware
+    private const int StatusCode = StatusCodes.Status412PreconditionFailed;
+    private static readonly string Details = ReasonPhrases.GetReasonPhrase(StatusCode);
+
+    private readonly ProblemDetailsResponseWriter _problemDetailsResponseWriter;
+
+    public PreconditionFailedExceptionHandlerMiddleware(ProblemDetailsResponseWriter problemDetailsResponseWriter)
     {
-        private const int StatusCode = StatusCodes.Status412PreconditionFailed;
-        private static readonly string Details = ReasonPhrases.GetReasonPhrase(StatusCode);
+        _problemDetailsResponseWriter = problemDetailsResponseWriter;
+    }
 
-        private readonly ProblemDetailsResponseWriter _problemDetailsResponseWriter;
-
-        public PreconditionFailedExceptionHandlerMiddleware(ProblemDetailsResponseWriter problemDetailsResponseWriter)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    {
+        try
         {
-            _problemDetailsResponseWriter = problemDetailsResponseWriter;
+            await next(context).ConfigureAwait(false);
         }
-
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        catch (PreconditionFailedException)
         {
-            try
-            {
-                await next(context).ConfigureAwait(false);
-            }
-            catch (PreconditionFailedException)
-            {
-                await _problemDetailsResponseWriter.WriteResponse(context, StatusCode, Details).ConfigureAwait(false);
-            }
+            await _problemDetailsResponseWriter.WriteResponse(context, StatusCode, Details).ConfigureAwait(false);
         }
     }
 }
