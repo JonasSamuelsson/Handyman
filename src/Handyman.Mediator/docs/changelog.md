@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 12.0.0 - 2024-11-13
+
+* Change `IRequestHandlerExperimentObserver` to `IRequestHandlerExperimentObserver<TRequest, TResponse>`, to allow for different observers per request type.
+
 ## 11.4.0 - 2023-11-16
 
 * Added `EventFilterToggleAttribute` constructor overloads.
