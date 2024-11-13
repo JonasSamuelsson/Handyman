@@ -12,9 +12,9 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
     {
         private readonly IRequestHandler<TRequest, TResponse> _baselineHandler;
         private readonly List<IRequestHandler<TRequest, TResponse>> _experimentalHandlers;
-        private readonly List<IRequestHandlerExperimentObserver> _observers;
+        private readonly List<IRequestHandlerExperimentObserver<TRequest, TResponse>> _observers;
 
-        public RequestHandlerExperimentHandler(IRequestHandler<TRequest, TResponse> baselineHandler, List<IRequestHandler<TRequest, TResponse>> experimentalHandlers, List<IRequestHandlerExperimentObserver> observers)
+        public RequestHandlerExperimentHandler(IRequestHandler<TRequest, TResponse> baselineHandler, List<IRequestHandler<TRequest, TResponse>> experimentalHandlers, List<IRequestHandlerExperimentObserver<TRequest, TResponse>> observers)
         {
             _baselineHandler = baselineHandler;
             _experimentalHandlers = experimentalHandlers;
@@ -34,7 +34,7 @@ namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
             var baselineExecution = executions.Single(x => x.Handler == _baselineHandler);
             var experimentalExecutions = executions.Where(x => x != baselineExecution).ToList();
 
-            var experiment = new RequestHandlerExperiment<TRequest, TResponse>
+            var experiment = new Experiment<TRequest, TResponse>
             {
                 BaselineExecution = baselineExecution,
                 CancellationToken = cancellationToken,

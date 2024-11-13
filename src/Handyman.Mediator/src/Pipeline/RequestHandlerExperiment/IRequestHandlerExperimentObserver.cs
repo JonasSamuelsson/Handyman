@@ -2,9 +2,9 @@
 
 namespace Handyman.Mediator.Pipeline.RequestHandlerExperiment
 {
-    public interface IRequestHandlerExperimentObserver
+    public interface IRequestHandlerExperimentObserver<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
-        Task Observe<TRequest, TResponse>(RequestHandlerExperiment<TRequest, TResponse> experiment)
-            where TRequest : IRequest<TResponse>;
+        Task Observe(Experiment<TRequest, TResponse> experiment);
     }
 }
