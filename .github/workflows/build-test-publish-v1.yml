@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup dnet
+      - name: setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
