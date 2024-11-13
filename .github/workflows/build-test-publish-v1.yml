@@ -27,18 +27,13 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: setup .net 6.x
-        uses: actions/setup-dotnet@v3
+      - name: setup dnet
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "6.x"
-      - name: setup .net 8.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: "8.x"
-      - name: setup .net 9.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: "9.x"
+          dotnet-version: |
+            6.x
+            8.x
+            9.x
       - name: restore main project
         run: dotnet restore "${{ inputs.mainProjectPath }}"
       - name: build main project
