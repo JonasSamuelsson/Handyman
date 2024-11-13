@@ -31,14 +31,14 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "6.x"
-      - name: setup .net 7.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: "7.x"
       - name: setup .net 8.x
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "8.x"
+      - name: setup .net 9.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "9.x"
       - name: restore main project
         run: dotnet restore "${{ inputs.mainProjectPath }}"
       - name: build main project
