@@ -1,5 +1,11 @@
 # Handyman.AspNetCore changelog
 
+## 4.0.0 - 2024-11-13
+
+* Add `net9.0` TFM.
+* Remove `net7.0` TFM.
+* Remove `net6.0` TFM.
+
 ## 3.8.0 - 2024-09-02
 
 * Add static `ETagUtility` class.
