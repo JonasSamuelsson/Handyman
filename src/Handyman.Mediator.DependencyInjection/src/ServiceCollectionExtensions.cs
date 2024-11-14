@@ -84,7 +84,7 @@ namespace Handyman.Mediator.DependencyInjection
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilter<,>), tryAddEnumerable);
                 _.ConfigureConcreteClassesOf(typeof(IRequestFilterToggle), tryAdd);
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandler<,>), tryAddEnumerable);
-                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentObserver), tryAddEnumerable);
+                _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentObserver<,>), tryAddEnumerable);
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandlerExperimentToggle), tryAdd);
                 _.ConfigureConcreteClassesOf(typeof(IRequestHandlerToggle), tryAdd);
                 _.ConfigureConcreteClassesOf(typeof(IToggle), tryAdd);

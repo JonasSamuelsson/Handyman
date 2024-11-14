@@ -1,5 +1,15 @@
 # Handyman.Mediator.DependencyInjection changelog
 
+## 6.0.0 - 2024-11-14
+
+* Add `net9.0` TFM.
+* Remove `net7.0` TFM.
+* Remove `net6.0` TFM.
+* Package upgrades
+  * [Handyman.DependencyInjection 3.0.0](../../Handyman.DependencyInjection/docs/changelog.md#300---2024-11-13)
+  * [Handyman.Mediator 12.0.0](../../Handyman.Mediator/docs/changelog.md#1200---2024-11-13)
+  * Microsoft.SourceLink.GitHub 8.0.0
+
 ## 5.7.0 - 2023-12-11
 
 * Package upgrades
