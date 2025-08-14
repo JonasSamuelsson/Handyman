@@ -12,7 +12,6 @@
    <ItemGroup>
       <PackageReference Include="Handyman.DependencyInjection" Version="3.0.0" />
       <PackageReference Include="Handyman.Mediator" Version="12.0.0" />
-      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
    </ItemGroup>
 
 </Project>
