@@ -1,22 +1,21 @@
 <Project>
    <PropertyGroup>
-      <!-- project -->
       <LangVersion>latest</LangVersion>
+      <IncludeSymbols>true</IncludeSymbols>
       <SymbolPackageFormat>snupkg</SymbolPackageFormat>
    </PropertyGroup>
 
    <PropertyGroup>
-      <!-- nuget -->
+      <!-- nuget info -->
       <Authors>Jonas Samuelsson</Authors>
       <Company />
       <Product>Handyman</Product>
-      <PackageLicense>https://github.com/JonasSamuelsson/Handyman/blob/master/LICENSE</PackageLicense>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <PackageProjectUrl>https://github.com/JonasSamuelsson/Handyman</PackageProjectUrl>
       <RepositoryUrl>https://github.com/JonasSamuelsson/Handyman</RepositoryUrl>
    </PropertyGroup>
 
    <ItemGroup>
-      <!-- packages -->
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
          <PrivateAssets>all</PrivateAssets>
          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -3,10 +3,6 @@
    <PropertyGroup>
       <TargetFrameworks>net472;net8.0;net9.0</TargetFrameworks>
       <Version>3.0.0</Version>
-      
-      <!-- Builds symbol package (.snupkg) to distribute the PDB containing Source Link -->
-      <IncludeSymbols>true</IncludeSymbols>
-      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
    </PropertyGroup>
 
    <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
