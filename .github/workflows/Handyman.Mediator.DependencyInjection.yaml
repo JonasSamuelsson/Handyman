@@ -24,6 +24,5 @@ jobs:
       mainProjectPath: src/Handyman.Mediator.DependencyInjection/src/Handyman.Mediator.DependencyInjection.csproj
       testProjectPath: src/Handyman.Mediator.DependencyInjection/tests/Handyman.Mediator.DependencyInjection.Tests.csproj
       publish: ${{ github.event.inputs.publish }}
-      runsOn: windows-2022
     secrets:
       nuget: ${{ secrets.NUGET }}
