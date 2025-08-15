@@ -37,13 +37,15 @@ namespace Handyman.Mediator.Tests.Pipeline.EventHandlerToggle
         }
 
         [EventHandlerToggle(typeof(ToggleEnabledEventHandler), ToggleDisabledHandlerTypes = new[] { typeof(ToggleDisabledEventHandler) }, Name = "test", Tags = new[] { "foo" })]
-        private class Event : IEvent { }
+        private class Event : IEvent
+        {
+        }
 
         private class ToggleEnabledEventHandler : SyncEventHandler<Event>
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Event @event, CancellationToken cancellationToken)
+            public override void Handle(Event @event, CancellationToken cancellationToken)
             {
                 Executed = true;
             }
@@ -53,7 +55,7 @@ namespace Handyman.Mediator.Tests.Pipeline.EventHandlerToggle
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Event @event, CancellationToken cancellationToken)
+            public override void Handle(Event @event, CancellationToken cancellationToken)
             {
                 Executed = true;
             }

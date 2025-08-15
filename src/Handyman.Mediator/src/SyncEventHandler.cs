@@ -11,6 +11,6 @@ namespace Handyman.Mediator
             return Task.CompletedTask;
         }
 
-        protected abstract void Handle(TEvent @event, CancellationToken cancellationToken);
+        public abstract void Handle(TEvent @event, CancellationToken cancellationToken);
     }
 }

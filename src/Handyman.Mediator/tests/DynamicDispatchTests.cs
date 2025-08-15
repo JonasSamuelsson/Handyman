@@ -20,7 +20,9 @@ namespace Handyman.Mediator.Tests
             await dynamicMediator.Publish(@event, CancellationToken.None);
         }
 
-        private class Event : IEvent { }
+        private class Event : IEvent
+        {
+        }
 
         [Fact]
         public void ShouldThrowIfEventDoesNotImplementIEvent()
@@ -46,11 +48,13 @@ namespace Handyman.Mediator.Tests
             (await dynamicMediator.Send(request, CancellationToken.None)).ShouldBe("success");
         }
 
-        private class Request : IRequest<string> { }
+        private class Request : IRequest<string>
+        {
+        }
 
         private class RequestHandler : SyncRequestHandler<Request, string>
         {
-            protected override string Handle(Request request, CancellationToken cancellationToken) => "success";
+            public override string Handle(Request request, CancellationToken cancellationToken) => "success";
         }
 
         [Fact]
@@ -75,6 +79,8 @@ namespace Handyman.Mediator.Tests
             Should.Throw<InvalidCastException>(() => dynamicMediator.Send(request, CancellationToken.None));
         }
 
-        private class FailRequest : IRequest<int>, IRequest<string> { }
+        private class FailRequest : IRequest<int>, IRequest<string>
+        {
+        }
     }
 }

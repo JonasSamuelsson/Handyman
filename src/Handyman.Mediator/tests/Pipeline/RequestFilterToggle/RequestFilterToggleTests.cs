@@ -40,7 +40,9 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestFilterToggle
         }
 
         [RequestFilterToggle(typeof(ToggleEnabledRequestFilter), ToggleDisabledFilterTypes = new[] { typeof(ToggleDisabledRequestFilter) }, Name = "test", Tags = new[] { "foo" })]
-        private class Request : IRequest<object> { }
+        private class Request : IRequest<object>
+        {
+        }
 
         private class ToggleEnabledRequestFilter : IRequestFilter<Request, object>
         {
@@ -80,7 +82,7 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestFilterToggle
 
         private class RequestHandler : SyncRequestHandler<Request, object>
         {
-            protected override object Handle(Request request, CancellationToken cancellationToken)
+            public override object Handle(Request request, CancellationToken cancellationToken)
             {
                 return null;
             }

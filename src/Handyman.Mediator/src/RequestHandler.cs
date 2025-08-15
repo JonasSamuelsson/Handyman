@@ -13,6 +13,6 @@ namespace Handyman.Mediator
             return Void.Instance;
         }
 
-        protected abstract Task Handle(TRequest request, CancellationToken cancellationToken);
+        public abstract Task Handle(TRequest request, CancellationToken cancellationToken);
     }
 }

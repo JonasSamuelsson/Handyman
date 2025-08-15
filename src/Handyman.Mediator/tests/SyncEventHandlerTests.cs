@@ -17,11 +17,13 @@ namespace Handyman.Mediator.Tests
             await mediator.Publish(new Event());
         }
 
-        private class Event : IEvent { }
+        private class Event : IEvent
+        {
+        }
 
         private class EventHandler : SyncEventHandler<Event>
         {
-            protected override void Handle(Event @event, CancellationToken cancellationToken)
+            public override void Handle(Event @event, CancellationToken cancellationToken)
             {
             }
         }

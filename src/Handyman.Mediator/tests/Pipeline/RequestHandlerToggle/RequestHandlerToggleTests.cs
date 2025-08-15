@@ -37,13 +37,15 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestHandlerToggle
         }
 
         [RequestHandlerToggle(typeof(ToggleEnabledRequestHandler), ToggleDisabledHandlerTypes = new[] { typeof(ToggleDisabledRequestHandler) }, Name = "test", Tags = new[] { "foo" })]
-        private class Request : IRequest<object> { }
+        private class Request : IRequest<object>
+        {
+        }
 
         private class ToggleEnabledRequestHandler : SyncRequestHandler<Request, object>
         {
             public bool Executed { get; set; }
 
-            protected override object Handle(Request request, CancellationToken cancellationToken)
+            public override object Handle(Request request, CancellationToken cancellationToken)
             {
                 Executed = true;
                 return null;
@@ -54,7 +56,7 @@ namespace Handyman.Mediator.Tests.Pipeline.RequestHandlerToggle
         {
             public bool Executed { get; set; }
 
-            protected override object Handle(Request request, CancellationToken cancellationToken)
+            public override object Handle(Request request, CancellationToken cancellationToken)
             {
                 Executed = true;
                 return null;

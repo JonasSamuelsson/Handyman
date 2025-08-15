@@ -109,7 +109,9 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class Event : IEvent { }
+        private class Event : IEvent
+        {
+        }
 
         private class EventFilter : IEventFilter<Event>
         {
@@ -134,7 +136,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Event @event, CancellationToken cancellationToken)
+            public override void Handle(Event @event, CancellationToken cancellationToken)
             {
                 Executed = true;
             }

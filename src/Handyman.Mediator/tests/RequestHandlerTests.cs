@@ -35,11 +35,13 @@ namespace Handyman.Mediator.Tests
             (await mediator.Send(new StringRequest())).ShouldBe("success");
         }
 
-        private class VoidRequest : IRequest { }
+        private class VoidRequest : IRequest
+        {
+        }
 
         private class AsyncVoidHandler : RequestHandler<VoidRequest>
         {
-            protected override Task Handle(VoidRequest request, CancellationToken cancellationToken)
+            public override Task Handle(VoidRequest request, CancellationToken cancellationToken)
             {
                 return Task.CompletedTask;
             }
@@ -47,16 +49,18 @@ namespace Handyman.Mediator.Tests
 
         private class SyncVoidHandler : SyncRequestHandler<VoidRequest>
         {
-            protected override void Handle(VoidRequest request, CancellationToken cancellationToken)
+            public override void Handle(VoidRequest request, CancellationToken cancellationToken)
             {
             }
         }
 
-        private class StringRequest : IRequest<string> { }
+        private class StringRequest : IRequest<string>
+        {
+        }
 
         private class SyncHandler : SyncRequestHandler<StringRequest, string>
         {
-            protected override string Handle(StringRequest request, CancellationToken cancellationToken)
+            public override string Handle(StringRequest request, CancellationToken cancellationToken)
             {
                 return "success";
             }

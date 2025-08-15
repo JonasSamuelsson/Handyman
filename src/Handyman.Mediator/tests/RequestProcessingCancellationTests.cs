@@ -1,5 +1,4 @@
-﻿using Handyman.Mediator.Pipeline;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
 using System.Threading;
@@ -68,7 +67,7 @@ namespace Handyman.Mediator.Tests
             var mediator = new Mediator(services.BuildServiceProvider());
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
-            .Message.ShouldBe("oce");
+                .Message.ShouldBe("oce");
 
             filter.Executed.ShouldBeTrue();
             handler.Executed.ShouldBeFalse();
@@ -91,7 +90,7 @@ namespace Handyman.Mediator.Tests
             var mediator = new Mediator(services.BuildServiceProvider());
 
             (await Should.ThrowAsync<Exception>(Exec(() => mediator.Send(new Request(), cts.Token))))
-            .Message.ShouldBe("oce");
+                .Message.ShouldBe("oce");
 
             filter1.Executed.ShouldBeTrue();
             filter2.Executed.ShouldBeFalse();
@@ -110,7 +109,9 @@ namespace Handyman.Mediator.Tests
             }
         }
 
-        private class Request : IRequest { }
+        private class Request : IRequest
+        {
+        }
 
         private class RequestFilter : IRequestFilter<Request, Void>
         {
@@ -135,7 +136,7 @@ namespace Handyman.Mediator.Tests
         {
             public bool Executed { get; set; }
 
-            protected override void Handle(Request request, CancellationToken cancellationToken)
+            public override void Handle(Request request, CancellationToken cancellationToken)
             {
                 Executed = true;
             }

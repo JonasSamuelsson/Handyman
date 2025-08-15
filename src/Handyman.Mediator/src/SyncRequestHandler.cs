@@ -12,7 +12,7 @@ namespace Handyman.Mediator
             return Task.FromResult(Void.Instance);
         }
 
-        protected abstract void Handle(TRequest request, CancellationToken cancellationToken);
+        public abstract void Handle(TRequest request, CancellationToken cancellationToken);
     }
 
     public abstract class SyncRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
@@ -24,6 +24,6 @@ namespace Handyman.Mediator
             return Task.FromResult(Handle(request, cancellationToken));
         }
 
-        protected abstract TResponse Handle(TRequest request, CancellationToken cancellationToken);
+        public abstract TResponse Handle(TRequest request, CancellationToken cancellationToken);
     }
 }

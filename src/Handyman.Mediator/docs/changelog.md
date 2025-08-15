@@ -3,6 +3,7 @@
 ## 13.0.0 - 2025-08-15
 
 * Added `net8.0` & `net9.0` TFMs.
+* Made abstract `Handle` method in event & request handler base classes public.
 
 ## 12.0.0 - 2024-11-13
 
