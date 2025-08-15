@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
 		<PackageId>Handyman.Azure.Functions</PackageId>
 		<Authors>Jonas Samuelsson</Authors>
 		<Version>1.0.1</Version>

@@ -2,7 +2,6 @@
 
    <PropertyGroup>
       <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
-      <LangVersion Condition="'$(TargetFramework)' == 'net472'">8.0</LangVersion>
    </PropertyGroup>
 
    <PropertyGroup>

@@ -1,6 +1,7 @@
 <Project>
    <PropertyGroup>
       <!-- project -->
+      <LangVersion>latest</LangVersion>
       <SymbolPackageFormat>snupkg</SymbolPackageFormat>
    </PropertyGroup>
 
@@ -15,6 +16,7 @@
    </PropertyGroup>
 
    <ItemGroup>
+      <!-- packages -->
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
          <PrivateAssets>all</PrivateAssets>
          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
