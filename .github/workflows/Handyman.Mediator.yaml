@@ -24,6 +24,5 @@ jobs:
       mainProjectPath: src/Handyman.Mediator/src/Handyman.Mediator.csproj
       testProjectPath: src/Handyman.Mediator/tests/Handyman.Mediator.Tests.csproj
       publish: ${{ github.event.inputs.publish }}
-      runsOn: windows-2022
     secrets:
       nuget: ${{ secrets.NUGET }}
