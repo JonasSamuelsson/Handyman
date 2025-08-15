@@ -32,26 +32,28 @@ namespace Handyman.Mediator.Pipeline.WhenAnyRequestHandler
 
                 if (task.Status != TaskStatus.RanToCompletion)
                 {
-                    if (exceptions == null)
-                    {
-                        exceptions = new List<Exception>();
-                    }
-
-                    exceptions.Add(task.Exception);
+                    exceptions ??= new List<Exception>();
+                    exceptions.Add(task.Exception!);
                     tasks.Remove(task);
                     continue;
                 }
 
                 if (exceptions != null)
                 {
+                    // ReSharper disable once PossiblyMistakenUseOfCancellationToken
                     await HandleExceptions(exceptions, cancellationToken).WithGloballyConfiguredAwait();
                 }
 
+#if NET8_0_OR_GREATER
+                await cts.CancelAsync();
+#else
                 cts.Cancel();
+#endif
+
                 return task.Result;
             }
 
-            throw new AggregateException(exceptions);
+            throw new AggregateException(exceptions!);
         }
 
         private async Task HandleExceptions(List<Exception> exceptions, CancellationToken cancellationToken)

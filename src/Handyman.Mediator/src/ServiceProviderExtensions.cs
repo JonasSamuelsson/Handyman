@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Handyman.Mediator
 {
@@ -17,15 +16,14 @@ namespace Handyman.Mediator
             throw new InvalidOperationException(message);
         }
 
-        [return: MaybeNull]
-        public static T GetService<T>(this IServiceProvider serviceProvider)
+        public static T? GetService<T>(this IServiceProvider serviceProvider)
         {
-            return (T)serviceProvider.GetService(typeof(T));
+            return (T?)serviceProvider.GetService(typeof(T));
         }
 
         public static IEnumerable<object> GetServices(this IServiceProvider serviceProvider, Type type)
         {
-            return (IEnumerable<object>)serviceProvider.GetService(typeof(IEnumerable<>).MakeGenericType(type));
+            return (IEnumerable<object>)serviceProvider.GetService(typeof(IEnumerable<>).MakeGenericType(type))!;
         }
 
         public static IEnumerable<T> GetServices<T>(this IServiceProvider serviceProvider)

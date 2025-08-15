@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 13.0.0 - 2025-08-15
+
+* Added `net8.0` & `net9.0` TFMs.
+
 ## 12.0.0 - 2024-11-13
 
 * Change `IRequestHandlerExperimentObserver` to `IRequestHandlerExperimentObserver<TRequest, TResponse>`, to allow for different observers per request type.

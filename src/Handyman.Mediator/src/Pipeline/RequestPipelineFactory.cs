@@ -21,7 +21,8 @@ namespace Handyman.Mediator.Pipeline
         private static PipelineFactory CreateFactory(Type requestType, Type responseType)
         {
             var pipelineFactoryType = typeof(PipelineFactory<,>).MakeGenericType(requestType, responseType);
-            return (PipelineFactory)Activator.CreateInstance(pipelineFactoryType);
+            var instance = Activator.CreateInstance(pipelineFactoryType);
+            return (PipelineFactory)(instance ?? throw new InvalidOperationException($"Can't create instance of {pipelineFactoryType.FullName}."));
         }
 
         private abstract class PipelineFactory
@@ -36,6 +37,7 @@ namespace Handyman.Mediator.Pipeline
                 .Cast<IRequestPipelineBuilder>()
                 .OrderBy(PipelineBuilderComparer.GetOrder)
                 .ToListOptimized();
+
             private static readonly RequestPipeline<TRequest, TResponse> DefaultPipeline = new DefaultRequestPipeline<TRequest, TResponse>();
 
             internal override object CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)

@@ -1,6 +1,4 @@
-﻿using Handyman.Mediator.Pipeline;
-using Lamar;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,23 +15,22 @@ namespace Handyman.Mediator.Tests
 
             var testContext = new TestContext();
 
-            var container = new Container(services =>
-            {
-                services.AddSingleton(testContext);
-                services.AddTransient(typeof(IEventFilter<>), typeof(Filter1<>));
-                services.AddTransient(typeof(IEventFilter<>), typeof(Filter2<>));
-            });
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(testContext)
+                .AddTransient(typeof(IEventFilter<>), typeof(Filter1<>))
+                .AddTransient(typeof(IEventFilter<>), typeof(Filter2<>))
+                .BuildServiceProvider();
 
-            await new Mediator(container).Publish(new Event());
+            await new Mediator(serviceProvider).Publish(new Event());
 
             testContext.ExecutedFilters.ShouldBe(new[] { "Filter1" });
         }
 
-        private class Event : IEvent, IMarker1 { }
+        private class Event : IEvent, IMarker1;
 
-        private interface IMarker1 { }
+        private interface IMarker1;
 
-        private interface IMarker2 { }
+        private interface IMarker2;
 
         private class TestContext
         {

@@ -20,7 +20,8 @@ namespace Handyman.Mediator.Pipeline
         private static PipelineFactory CreatePipelineFactory(Type eventType)
         {
             var pipelineFactoryType = typeof(PipelineFactory<>).MakeGenericType(eventType);
-            return (PipelineFactory)Activator.CreateInstance(pipelineFactoryType);
+            var instance = Activator.CreateInstance(pipelineFactoryType);
+            return (PipelineFactory)(instance ?? throw new InvalidOperationException($"Can't create instance of {pipelineFactoryType.FullName}."));
         }
 
         private abstract class PipelineFactory
@@ -34,6 +35,7 @@ namespace Handyman.Mediator.Pipeline
                 .Cast<IEventPipelineBuilder>()
                 .OrderBy(PipelineBuilderComparer.GetOrder)
                 .ToListOptimized();
+
             private static readonly EventPipeline DefaultPipeline = new DefaultEventPipeline<TEvent>(MediatorDefaults.EventHandlerExecutionStrategy);
 
             internal override EventPipeline CreatePipeline(MediatorOptions options, IServiceProvider serviceProvider)

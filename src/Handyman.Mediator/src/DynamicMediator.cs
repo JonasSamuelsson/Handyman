@@ -34,7 +34,8 @@ namespace Handyman.Mediator
         {
             var responseType = GetResponseType(requestType);
             var dynamicSenderType = typeof(DynamicSender<>).MakeGenericType(responseType);
-            return (DynamicSender)Activator.CreateInstance(dynamicSenderType);
+            var instance = Activator.CreateInstance(dynamicSenderType);
+            return (DynamicSender)(instance ?? throw new InvalidOperationException($"Can't create instance of {dynamicSenderType.FullName}."));
         }
 
         private static Type GetResponseType(Type requestType)
