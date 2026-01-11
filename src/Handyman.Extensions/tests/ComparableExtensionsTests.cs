@@ -85,29 +85,4 @@ public class ComparableExtensionsTests
         }
     }
 
-    [Fact]
-    public void Clamp()
-    {
-        1.Clamp(2, 4).ShouldBe(2);
-        2.Clamp(2, 4).ShouldBe(2);
-        3.Clamp(2, 4).ShouldBe(3);
-        4.Clamp(2, 4).ShouldBe(4);
-        5.Clamp(2, 4).ShouldBe(4);
-
-        1.Clamp(4, 2).ShouldBe(2);
-        2.Clamp(4, 2).ShouldBe(2);
-        3.Clamp(4, 2).ShouldBe(3);
-        4.Clamp(4, 2).ShouldBe(4);
-        5.Clamp(4, 2).ShouldBe(4);
-    }
-
-    [Fact]
-    public void ClampShouldThrowIfAnyParameterIsNull()
-    {
-        string @null = null;
-
-        Should.Throw<ArgumentNullException>(() => @null.Clamp("", ""));
-        Should.Throw<ArgumentNullException>(() => "".Clamp(@null, ""));
-        Should.Throw<ArgumentNullException>(() => "".Clamp("", @null));
-    }
 }

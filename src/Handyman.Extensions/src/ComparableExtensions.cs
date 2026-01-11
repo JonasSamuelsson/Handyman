@@ -4,20 +4,6 @@ namespace Handyman.Extensions;
 
 public static class ComparableExtensions
 {
-    public static T Clamp<T>([NotNull] this T value, [NotNull] T lower, [NotNull] T upper) where T : IComparable<T>
-    {
-        if (value == null) throw new ArgumentNullException(nameof(value));
-        if (lower == null) throw new ArgumentNullException(nameof(lower));
-        if (upper == null) throw new ArgumentNullException(nameof(upper));
-
-        Order(ref lower, ref upper);
-
-        return value.CompareTo(lower) == -1
-            ? lower
-            : (upper.CompareTo(value) == -1
-                ? upper
-                : value);
-    }
 
     public static bool IsInRange<T>([NotNull] this T value, [NotNull] T lower, [NotNull] T upper) where T : IComparable<T>
     {

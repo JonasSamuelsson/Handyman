@@ -71,45 +71,10 @@ public static class EnumerableExtensions
         return TimeSpan.FromTicks(source.Sum(x => x.Ticks));
     }
 
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
-    {
-        var random = new Random();
-
-        var array = source.ToArray();
-
-        for (var i = array.Length; i > 1; i--)
-        {
-            var j = random.Next(i);
-            var temp = array[j];
-            array[j] = array[i - 1];
-            array[i - 1] = temp;
-        }
-
-        return array;
-    }
-
-    public static ISet<T> ToSet<T>(this IEnumerable<T> source)
-    {
-        return source.ToSet(EqualityComparer<T>.Default);
-    }
-
-    public static ISet<T> ToSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer)
-    {
-        return new HashSet<T>(source, comparer);
-    }
-
     public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
     {
         return source as IReadOnlyList<T> ?? source.ToArray();
     }
-
-#if NETFRAMEWORK
-    public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> source, int count)
-    {
-        var list = source.ToReadOnlyList();
-        return list.Take(list.Count - count);
-    }
-#endif
 
     public static IEnumerable<T> SkipLastWhile<T>(this IEnumerable<T> source, Func<T, bool> predicate)
     {
@@ -121,14 +86,6 @@ public static class EnumerableExtensions
         return list.SkipLast(i - 1);
     }
 
-#if NETFRAMEWORK
-    public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int count)
-    {
-        var list = source.ToReadOnlyList();
-        return list.Skip(list.Count - count);
-    }
-#endif
-
     public static IEnumerable<T> TakeLastWhile<T>(this IEnumerable<T> source, Func<T, bool> predicate)
     {
         var list = source.ToReadOnlyList();
@@ -138,22 +95,6 @@ public static class EnumerableExtensions
                 break;
         return list.TakeLast(i - 1);
     }
-
-#if NETFRAMEWORK
-    public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunkSize)
-    {
-        var buffer = new List<T>(chunkSize);
-        foreach (var item in source)
-        {
-            buffer.Add(item);
-            if (buffer.Count != chunkSize) continue;
-            yield return buffer;
-            buffer = new List<T>(chunkSize);
-        }
-
-        if (buffer.Count != 0) yield return buffer;
-    }
-#endif
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
     {
@@ -347,21 +288,6 @@ public static class EnumerableExtensions
     public static Task<Task<TResult>> WhenAny<TResult>(this IEnumerable<Task<TResult>> tasks)
     {
         return Task.WhenAny(tasks);
-    }
-
-    public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)
-    {
-        foreach (var item in source)
-        {
-            if (!predicate.Invoke(item))
-                continue;
-
-            value = item;
-            return true;
-        }
-
-        value = default;
-        return false;
     }
 
     public static bool TryGetLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)

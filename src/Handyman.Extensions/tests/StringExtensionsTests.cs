@@ -10,13 +10,6 @@ public class StringExtensionsTests
     }
 
     [Fact]
-    public void ShouldCheckIfStringContainsValue()
-    {
-        "Hello World".Contains("lo wo", StringComparison.InvariantCulture).ShouldBe(false);
-        "Hello World".Contains("lo wo", StringComparison.InvariantCultureIgnoreCase).ShouldBe(true);
-    }
-
-    [Fact]
     public void ShouldCheckIfStringIsNull()
     {
         ((string)null).IsNull().ShouldBe(true);

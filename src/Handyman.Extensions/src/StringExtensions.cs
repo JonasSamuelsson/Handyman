@@ -17,11 +17,6 @@ public static class StringExtensions
         return string.Join(separator, strings);
     }
 
-    public static bool Contains(this string s, string value, StringComparison comparison)
-    {
-        return s.IndexOf(value, comparison) != -1;
-    }
-
     public static bool IsEmpty(this string s)
     {
         return !s.IsNull() && s.Length == 0;
@@ -86,7 +81,7 @@ public static class StringExtensions
 
     public static string Reverse(this string s)
     {
-        return new string(s.ToCharArray().Reverse().ToArray());
+        return new string(System.Linq.Enumerable.Reverse(s.ToCharArray()).ToArray());
     }
 
     public static T ToEnum<T>(this string s, IgnoreCase? ignoreCase = null) where T : struct

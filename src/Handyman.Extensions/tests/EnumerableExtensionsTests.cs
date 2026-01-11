@@ -129,40 +129,6 @@ public class EnumerableExtensionsTests
     }
 
     [Fact]
-    public void ShouldShuffle()
-    {
-        var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        var shuffled = numbers.Shuffle().ToArray();
-        shuffled.ShouldNotBe(numbers);
-        shuffled.OrderBy(x => x).ShouldBe(numbers);
-    }
-
-    [Fact]
-    public void ShouldCreateSetFromEnumerable()
-    {
-        var numbers = new[] { 1, 2, 3 };
-        var set = numbers.ToSet();
-        set.ShouldBeAssignableTo<ISet<int>>();
-        set.ShouldBe(numbers);
-    }
-
-    [Fact]
-    public void ShouldCreateSetWithCustomComparerFromEnumerable()
-    {
-        var strings = new[] { "one", "oNe", "ONE" };
-        var set = strings.ToSet(StringComparer.OrdinalIgnoreCase);
-        set.Count.ShouldBe(1);
-        strings.ShouldAllBe(s => set.Contains(s));
-    }
-
-    [Fact]
-    public void ShouldSkipLast()
-    {
-        var ints = new[] { 1, 2, 3, 4, 5 };
-        ints.SkipLast(2).ShouldBe(new[] { 1, 2, 3 });
-    }
-
-    [Fact]
     public void ShouldSkipLastWhile()
     {
         var ints = new[] { 1, 2, 3, 4, 5 };
@@ -170,28 +136,10 @@ public class EnumerableExtensionsTests
     }
 
     [Fact]
-    public void ShouldTakeLast()
-    {
-        var ints = new[] { 1, 2, 3, 4, 5 };
-        ints.TakeLast(2).ShouldBe(new[] { 4, 5 });
-    }
-
-    [Fact]
     public void ShouldTakeLastWhile()
     {
         var ints = new[] { 1, 2, 3, 4, 5 };
         ints.TakeLastWhile(i => i == 5).ShouldBe(new[] { 5 });
-    }
-
-    [Fact]
-    public void ShouldChunkToFixedChunkSize()
-    {
-        var ints = new[] { 1, 2, 3, 4, 5 };
-        var chunks = ints.Chunk(2).ToList();
-        chunks.Count.ShouldBe(3);
-        chunks[0].ShouldBe(new[] { 1, 2 });
-        chunks[1].ShouldBe(new[] { 3, 4 });
-        chunks[2].ShouldBe(new[] { 5 });
     }
 
     [Fact]
@@ -457,17 +405,6 @@ public class EnumerableExtensionsTests
         tcs2.SetResult(null);
 
         task.IsCompleted.ShouldBeTrue();
-    }
-
-    [Theory]
-    [InlineData(0, false, null)]
-    [InlineData(1, true, "11")]
-    [InlineData(2, true, "12")]
-    public void ShouldTryGetFirst(int i, bool result, string expectedValue)
-    {
-        var items = new[] { "11", "12", "21", "22" };
-        items.TryGetFirst(s => s.Contains(i.ToString()), out var value).ShouldBe(result);
-        value.ShouldBe(expectedValue);
     }
 
     [Theory]
