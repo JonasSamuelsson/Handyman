@@ -1,17 +1,27 @@
 # Handyman.DependencyInjection changelog
 
+## 4.0.0 - 2024-11-13
+
+* Add `net10.0` TFM.
+* Remove `net472` TFM.
+* Package upgrades
+  * `net8.0`
+    * Microsoft.Extensions.DependencyInjection 8.0.1
+  * `net9.0`
+    * Microsoft.Extensions.DependencyInjection 9.0.11
+
 ## 3.0.0 - 2024-11-13
 
 * Add `net9.0` TFM.
-* Remove `.net7.0` TFM.
-* Remove `.net6.0` TFM.
+* Remove `net7.0` TFM.
+* Remove `net6.0` TFM.
 * Package upgrades
-  * `.net8.0`
+  * `net8.0`
     * Microsoft.Extensions.DependencyInjection 8.0.1
 
 ## 2.7.0 - 2023-11-23
 
-* Add `.net8.0` TFM.
+* Add `net8.0` TFM.
 * Package upgrades
   * Microsoft.SourceLink.GitHub 8.0.0
 
