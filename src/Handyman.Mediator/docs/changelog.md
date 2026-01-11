@@ -1,5 +1,9 @@
 # Handyman.Mediator changelog
 
+## 13.1.0 - 2026-01-11
+
+* Added `net10.0` TFM.
+
 ## 13.0.0 - 2025-08-15
 
 * Added `net8.0` & `net9.0` TFMs.

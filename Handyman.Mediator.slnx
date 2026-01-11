@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="src/Handyman.DependencyInjection/src/Handyman.DependencyInjection.csproj" />
+  <Project Path="src/Handyman.DependencyInjection/tests/Handyman.DependencyInjection.Tests.csproj" />
+  <Project Path="src/Handyman.Mediator.DependencyInjection/src/Handyman.Mediator.DependencyInjection.csproj" />
+  <Project Path="src/Handyman.Mediator.DependencyInjection/tests/Handyman.Mediator.DependencyInjection.Tests.csproj" />
+  <Project Path="src/Handyman.Mediator/samples/MediatorSamples/MediatorSamples.csproj" />
+  <Project Path="src/Handyman.Mediator/src/Handyman.Mediator.csproj" />
+  <Project Path="src/Handyman.Mediator/tests/Handyman.Mediator.Tests.csproj" />
+</Solution>
