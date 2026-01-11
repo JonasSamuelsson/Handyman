@@ -1,5 +1,9 @@
 # Handyman.AspNetCore changelog
 
+## 4.1.0 - 2026-01-11
+
+* Add `net10.0` TFM.
+
 ## 4.0.0 - 2024-11-13
 
 * Add `net9.0` TFM.
