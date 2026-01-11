@@ -1,6 +1,6 @@
 # Handyman.DependencyInjection changelog
 
-## 4.0.0 - 2024-11-13
+## 4.0.0 - 2026-01-11
 
 * Add `net10.0` TFM.
 * Remove `net472` TFM.
