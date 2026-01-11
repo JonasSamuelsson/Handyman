@@ -1,5 +1,12 @@
 # Handyman.Mediator.DependencyInjection changelog
 
+## 7.1.0 - 2026-01-11
+
+* Add `net10.0` TFM.
+* Package upgrades
+   * [Handyman.DependencyInjection 4.0.0](../../Handyman.DependencyInjection/docs/changelog.md#400---2026-01-11)
+   * [Handyman.Mediator 13.1.0](../../Handyman.Mediator/docs/changelog.md#1310---2026-01-11)
+
 ## 7.0.0 - 2025-08-15
 
 * Add `net8.0` & `net9.0` TFMs.
