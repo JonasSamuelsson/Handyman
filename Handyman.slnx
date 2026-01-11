@@ -1,7 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
-    <File Path="handyman.snk" />
     <File Path="src/Directory.Build.props" />
   </Folder>
   <Project Path="src/Handyman.AspNetCore/src/Handyman.AspNetCore.csproj" />
