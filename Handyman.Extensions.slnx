@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Handyman.Extensions/src/Handyman.Extensions.csproj" />
+  <Project Path="src/Handyman.Extensions/tests/Handyman.Extensions.Tests.csproj" />
+</Solution>

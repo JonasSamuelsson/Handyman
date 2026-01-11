@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Handyman.DataContractValidator/src/Handyman.DataContractValidator.csproj" />
+  <Project Path="src/Handyman.DataContractValidator/tests/Handyman.DataContractValidator.Tests.csproj" />
+</Solution>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Handyman.AspNetCore/src/Handyman.AspNetCore.csproj" />
+  <Project Path="src/Handyman.AspNetCore/tests/Handyman.AspNetCore.Tests.csproj" />
+</Solution>
