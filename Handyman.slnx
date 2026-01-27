@@ -3,18 +3,32 @@
     <File Path=".editorconfig" />
     <File Path="src/Directory.Build.props" />
   </Folder>
-  <Project Path="src/Handyman.AspNetCore/src/Handyman.AspNetCore.csproj" />
-  <Project Path="src/Handyman.AspNetCore/tests/Handyman.AspNetCore.Tests.csproj" />
-  <Project Path="src/Handyman.DataContractValidator/src/Handyman.DataContractValidator.csproj" />
-  <Project Path="src/Handyman.DataContractValidator/tests/Handyman.DataContractValidator.Tests.csproj" />
-  <Project Path="src/Handyman.DependencyInjection/src/Handyman.DependencyInjection.csproj" />
-  <Project Path="src/Handyman.DependencyInjection/tests/Handyman.DependencyInjection.Tests.csproj" />
-  <Project Path="src/Handyman.Extensions/src/Handyman.Extensions.csproj" />
-  <Project Path="src/Handyman.Extensions/tests/Handyman.Extensions.Tests.csproj" />
-  <Project Path="src/Handyman.Mediator.DependencyInjection/src/Handyman.Mediator.DependencyInjection.csproj" />
-  <Project Path="src/Handyman.Mediator.DependencyInjection/tests/Handyman.Mediator.DependencyInjection.Tests.csproj" />
-  <Project Path="src/Handyman.Mediator/src/Handyman.Mediator.csproj" />
-  <Project Path="src/Handyman.Mediator/tests/Handyman.Mediator.Tests.csproj" />
-  <Project Path="src/Handyman.Tools.Outdated/src/Handyman.Tools.Outdated.csproj" />
-  <Project Path="src/Handyman.Tools.Outdated/tests/Handyman.Tools.Outdated.Tests.csproj" />
+  <Folder Name="/AspNetCore/">
+    <Project Path="src/Handyman.AspNetCore/src/Handyman.AspNetCore.csproj" />
+    <Project Path="src/Handyman.AspNetCore/tests/Handyman.AspNetCore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/DataContractValidator/">
+    <Project Path="src/Handyman.DataContractValidator/src/Handyman.DataContractValidator.csproj" />
+    <Project Path="src/Handyman.DataContractValidator/tests/Handyman.DataContractValidator.Tests.csproj" />
+  </Folder>
+  <Folder Name="/DependencyInjection/">
+    <Project Path="src/Handyman.DependencyInjection/src/Handyman.DependencyInjection.csproj" />
+    <Project Path="src/Handyman.DependencyInjection/tests/Handyman.DependencyInjection.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Extensions/">
+    <Project Path="src/Handyman.Extensions/src/Handyman.Extensions.csproj" />
+    <Project Path="src/Handyman.Extensions/tests/Handyman.Extensions.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Mediator.DependencyInjection/">
+    <Project Path="src/Handyman.Mediator.DependencyInjection/src/Handyman.Mediator.DependencyInjection.csproj" />
+    <Project Path="src/Handyman.Mediator.DependencyInjection/tests/Handyman.Mediator.DependencyInjection.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Mediator/">
+    <Project Path="src/Handyman.Mediator/src/Handyman.Mediator.csproj" />
+    <Project Path="src/Handyman.Mediator/tests/Handyman.Mediator.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tools.Outdated/">
+    <Project Path="src/Handyman.Tools.Outdated/src/Handyman.Tools.Outdated.csproj" />
+    <Project Path="src/Handyman.Tools.Outdated/tests/Handyman.Tools.Outdated.Tests.csproj" />
+  </Folder>
 </Solution>
