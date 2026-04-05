@@ -409,6 +409,17 @@ public class EnumerableExtensionsTests
 
     [Theory]
     [InlineData(0, false, null)]
+    [InlineData(1, true, "11")]
+    [InlineData(2, true, "12")]
+    public void ShouldTryGetFirst(int i, bool result, string expectedValue)
+    {
+        var items = new[] { "11", "12", "21", "22" };
+        items.TryGetFirst(s => s.Contains(i.ToString()), out var value).ShouldBe(result);
+        value.ShouldBe(expectedValue);
+    }
+
+    [Theory]
+    [InlineData(0, false, null)]
     [InlineData(1, true, "21")]
     [InlineData(2, true, "22")]
     public void ShouldTryGetLast(int i, bool result, string expectedValue)

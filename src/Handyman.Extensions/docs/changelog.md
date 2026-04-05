@@ -1,7 +1,10 @@
 # Handyman.Extensions changelog
 
-## 3.0.0 - 2026-01-11
+## 3.1.0 - 2026-04-05
 
+* Restore `TryGetFirst<T>`
+
+## 3.0.0 - 2026-01-11
 
 * Add net8.0, net9.0 TFMs
 * Remove net472, net48, net6.0, net7.0 TFMs

@@ -290,6 +290,21 @@ public static class EnumerableExtensions
         return Task.WhenAny(tasks);
     }
 
+    public static bool TryGetFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)
+    {
+        foreach (var item in source)
+        {
+            if (!predicate.Invoke(item))
+                continue;
+
+            value = item;
+            return true;
+        }
+
+        value = default;
+        return false;
+    }
+
     public static bool TryGetLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T value)
     {
         foreach (var item in source.Reverse())
