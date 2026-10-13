@@ -12,11 +12,4 @@
       <PackageTags>mediator request response message command query event notification</PackageTags>
    </PropertyGroup>
 
-   <ItemGroup>
-      <PackageReference Include="PolySharp" Version="1.15.0">
-         <PrivateAssets>all</PrivateAssets>
-         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-   </ItemGroup>
-
 </Project>
