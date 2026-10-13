@@ -6,6 +6,10 @@
    </PropertyGroup>
 
    <PropertyGroup>
+      <DefineConstants Condition="'$(GITHUB_ACTIONS)' != 'True'">$(DefineConstants);USE_PROJECT_REFS</DefineConstants>
+   </PropertyGroup>
+
+   <PropertyGroup>
       <!-- nuget info -->
       <Authors>Jonas Samuelsson</Authors>
       <Company />

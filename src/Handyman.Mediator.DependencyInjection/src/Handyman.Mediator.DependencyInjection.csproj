@@ -7,6 +7,13 @@
 
    <ItemGroup>
       <PackageReference Include="Handyman.DependencyInjection" Version="4.0.0" />
+   </ItemGroup>
+
+   <ItemGroup Condition="$(DefineConstants.Contains('USE_PROJECT_REFS'))">
+      <ProjectReference Include="..\..\Handyman.Mediator\src\Handyman.Mediator.csproj" />
+   </ItemGroup>
+
+   <ItemGroup Condition="!$(DefineConstants.Contains('USE_PROJECT_REFS'))">
       <PackageReference Include="Handyman.Mediator" Version="13.1.0" />
    </ItemGroup>
 

@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="src/Directory.Build.props" />
+  </Folder>
   <Folder Name="/DependencyInjection/">
     <Project Path="src/Handyman.DependencyInjection/src/Handyman.DependencyInjection.csproj" />
     <Project Path="src/Handyman.DependencyInjection/tests/Handyman.DependencyInjection.Tests.csproj" />

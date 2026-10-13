@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="src/Directory.Build.props" />
+  </Folder>
   <Project Path="src/Handyman.DuckTyping/benchmarks/Handyman.DuckTyping.Benchmarks.csproj" />
   <Project Path="src/Handyman.DuckTyping/src/Handyman.DuckTyping.csproj" />
   <Project Path="src/Handyman.DuckTyping/test/Handyman.DuckTyping.Tests.csproj" />

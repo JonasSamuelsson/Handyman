@@ -7,8 +7,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains('USE_PROJECT_REFS'))">
+    <ProjectReference Include="..\..\..\Handyman.Mediator.DependencyInjection\src\Handyman.Mediator.DependencyInjection.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="!$(DefineConstants.Contains('USE_PROJECT_REFS'))">
     <PackageReference Include="Handyman.Mediator.DependencyInjection" Version="5.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
   </ItemGroup>
